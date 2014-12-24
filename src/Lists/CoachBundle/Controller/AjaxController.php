@@ -342,13 +342,15 @@ class AjaxController extends BaseController
         $coaches = $userRepository->findBy(array('id' => $i));
 
         $result = [];
-        foreach ($coaches as $coach) {
-            $result[] = array(
-                'id' => $coach->getId(),
-                'value' => $coach->getId(),
-                'name' => $coach->__toString(),
-                'text' => $coach->__toString()
-            );
+        if ($coaches) {
+            foreach ($coaches as $coach) {
+                $result[] = array(
+                    'id' => $coach->getId(),
+                    'value' => $coach->getId(),
+                    'name' => $coach->__toString(),
+                    'text' => $coach->__toString()
+                );
+            }
         }
 
         return new JsonResponse($result);
@@ -378,13 +380,15 @@ class AjaxController extends BaseController
         $organizations = $organizationRepository->findBy(array('id' => $i));
 
         $result = [];
-        foreach ($organizations as $organization) {
-            $result[] = array(
-                            'id' => $organization->getId(),
-                            'value' => $organization->getId(),
-                            'name' => $organization->getName(),
-                            'text' => $organization->getName()
-            );
+        if ($organizations) {
+            foreach ($organizations as $organization) {
+                $result[] = array(
+                                'id' => $organization->getId(),
+                                'value' => $organization->getId(),
+                                'name' => $organization->getName(),
+                                'text' => $organization->getName()
+                );
+            }
         }
 
         return new JsonResponse($result);
@@ -414,13 +418,15 @@ class AjaxController extends BaseController
         $cities = $cityRepository->findBy(array('id' => $i));
 
         $result = [];
-        foreach ($cities as $city) {
-            $result[] = array(
-                            'id' => $city->getId(),
-                            'value' => $city->getId(),
-                            'name' => $city->getName(),
-                            'text' => $city->getName()
-            );
+        if ($cities) {
+            foreach ($cities as $city) {
+                $result[] = array(
+                                'id' => $city->getId(),
+                                'value' => $city->getId(),
+                                'name' => $city->getName(),
+                                'text' => $city->getName()
+                );
+            }
         }
 
         return new JsonResponse($result);
@@ -441,13 +447,15 @@ class AjaxController extends BaseController
         $inds = $indRepository->getMembers($searchText);
 
         $result = [];
-        foreach ($inds as $ind) {
-            $result[] = array(
-                            'id' => $ind->getId(),
-                            'value' => $ind->getId(),
-                            'name' => $ind->__toString(),
-                            'text' => $ind->__toString()
-            );
+        if ($inds) {
+            foreach ($inds as $ind) {
+                $result[] = array(
+                                'id' => $ind->getId(),
+                                'value' => $ind->getId(),
+                                'name' => $ind->__toString(),
+                                'text' => $ind->__toString()
+                );
+            }
         }
 
         return new JsonResponse($result);
@@ -478,13 +486,15 @@ class AjaxController extends BaseController
         $deps = $depRepository->findBy(array('id' => $i));
 
         $result = [];
-        foreach ($deps as $dep) {
-            $result[] = array(
-                            'id' => $dep->getId(),
-                            'value' => $dep->getId(),
-                            'name' => $dep->getName(),
-                            'text' => $dep->getName()
-            );
+        if ($deps) {
+            foreach ($deps as $dep) {
+                $result[] = array(
+                                'id' => $dep->getId(),
+                                'value' => $dep->getId(),
+                                'name' => $dep->getName(),
+                                'text' => $dep->getName()
+                );
+            }
         }
 
         return new JsonResponse($result);
