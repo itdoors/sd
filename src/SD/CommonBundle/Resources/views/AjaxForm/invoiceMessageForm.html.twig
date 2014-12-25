@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="form-group{% if form.file.vars.errors|length %} has-error{% endif %}">
                                     {{ form_label(form.file, 'Scan document'|trans, {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.file, {'attr' : {'class' : 'form-control', 'placeholder': 'Scan document', 'accept' : 'application/pdf'} } ) }}
+                                    {{ form_widget(form.file, {'attr' : {'class' : 'form-control', 'placeholder': 'Scan document', 'accept' : 'application/pdf, image/jpeg'} } ) }}
                                     {{ form_errors(form.file) }}
                                 </div>
 
