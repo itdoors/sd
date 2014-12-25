@@ -9,6 +9,12 @@ Lists\OrganizationBundle\Entity\Bank:
             generator:
                 strategy: IDENTITY
     fields:
+        guid:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                comment: guid из 1С
         name:
             type: string
             length: 255
