@@ -1322,13 +1322,19 @@ class HandlingController extends BaseController
                 $data->setUser($user);
                 $data->setHandling($newHandling);
 
-                $file = $form['file']->getData();
-
-                if ($file) {
-                    $data->upload();
-                }
+                
 
                 $em->persist($data);
+                $file = $form['file']->getData();
+                if ($file) {
+                    if (!empty($file)) {
+                        $handlingMessageFile = new \Lists\HandlingBundle\Entity\HandlingMessageFile();
+                        $handlingMessageFile->setHandlingMessage($data);
+                        $handlingMessageFile->setFileTemp($file);
+                        $handlingMessageFile->upload();
+                        $em->persist($handlingMessageFile);
+                    }
+                }
 
                 // Insert future
                 $type = $this->getDoctrine()
