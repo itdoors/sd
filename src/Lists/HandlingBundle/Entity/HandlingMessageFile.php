@@ -145,11 +145,11 @@ class HandlingMessageFile
     {
         $dir = __DIR__ . '/../../../../web/uploads/handling_message';
         if (!is_dir($dir)) {
-            mkdir($dir, 775);
+            mkdir($dir, 0775);
         }
         $dir .= DIRECTORY_SEPARATOR . $this->getHandlingMessage()->getHandling()->getId();
         if (!is_dir($dir)) {
-            mkdir($dir, 775);
+            mkdir($dir, 0775);
         }
 
         return 'uploads'. DIRECTORY_SEPARATOR
@@ -190,7 +190,8 @@ class HandlingMessageFile
         $fileExtension = $this->getFileTemp()->getClientOriginalExtension();
         $newFileName = md5(microtime());
         $filepath = $newFileName . '.' . $fileExtension;
-        $this->getFileTemp()->move($this->getUploadRootDir(), $filepath);
+        $dir = $this->getUploadRootDir();
+        $this->getFileTemp()->move($dir, $filepath);
         $this->setFile($filepath);
         $this->fileTemp = null;
     }
