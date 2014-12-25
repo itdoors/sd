@@ -192,7 +192,7 @@ class OrganizationService
     /**
      * addCronError
      * 
-     * @param Bank $bank
+     * @param Bank    $bank
      * @param string  $status
      * @param string  $reason
      * @param string  $descript

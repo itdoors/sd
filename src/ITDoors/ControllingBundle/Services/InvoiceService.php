@@ -265,6 +265,7 @@ class InvoiceService
         return $invoiceNew;
     }
     /**
+     * addActs
      * 
      * @param Invoice $invoiceNew
      * @param string  $acts

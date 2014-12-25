@@ -105,7 +105,9 @@ class PayMasterService
             'tab' => 'new',
             'url' => $this->router->generate('it_doors_pay_master_tab'),
             'text' => $this->translator->trans(
-                ($access->canSeeAll() ? 'Received' : 'Unpaid'), array (), 'ITDoorsPayMasterBundle'
+                ($access->canSeeAll() ? 'Received' : 'Unpaid'),
+                array (),
+                'ITDoorsPayMasterBundle'
             )
         );
         if ($access->canSeeAll()) {

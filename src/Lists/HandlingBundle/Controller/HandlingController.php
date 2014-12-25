@@ -1322,8 +1322,6 @@ class HandlingController extends BaseController
                 $data->setUser($user);
                 $data->setHandling($newHandling);
 
-                
-
                 $em->persist($data);
                 $file = $form['file']->getData();
                 if ($file) {
