@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Bank
 {
-
     /**
      * @var integer
      */
@@ -130,5 +129,33 @@ class Bank
     public function getCurrentAccounts ()
     {
         return $this->currentAccounts;
+    }
+
+    /**
+     * @var string
+     */
+    private $guid;
+
+    /**
+     * Set guid
+     *
+     * @param string $guid
+     *
+     * @return Bank
+     */
+    public function setGuid ($guid)
+    {
+        $this->guid = $guid;
+
+        return $this;
+    }
+    /**
+     * Get guid
+     *
+     * @return string 
+     */
+    public function getGuid ()
+    {
+        return $this->guid;
     }
 }
