@@ -109,36 +109,46 @@
                     
                     {% if tab == 'new' or tab == 'payment' %}
                     <td>
-                        {% if (access.canRemove and entity.isAcceptance is null) or  entity.creator == app.user %}
-                            <a class="ajax-delete fa fa-trash-o"
-                                title="{% trans %}Delete{% endtrans %}"
-                                href="javascript:;"
-                                data-url="{{ path('it_doors_pay_master_ajax_remove', { id:entity.id })}}"
-                                data-params=''
-                            ></a><br><br>
-                        {% endif %}
-                        
-                        
-                        {% if access.canChangeStatus  or  (entity.creator == app.user)%}
-                        <a class="payMasterStatus" href="#" id="status" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.status ? entity.status.id : '' }}" data-original-title="{% trans %}Enter status{% endtrans %}">
-                        {% endif %}
-                            {{ entity.status}}
-                        {% if access.canChangeStatus %}
-                        </a>
-                        {% endif %}
-                        <br><br>
-                        
-                        {% if access.canChangeToPay %}
-                        <a class="payMasterToPay" href="#" id="toPay" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.toPay }}" data-original-title="{% trans %}Enter to pay{% endtrans %}">
-                        {% endif %}
-                            {% if entity.toPay == true %}
-                                {% trans %}To pay{% endtrans %}
-                            {% else %}
-                                {% trans %}Mark for payment{% endtrans %}
-                            {% endif %}
-                        {% if access.canChangeToPay %}
-                        </a>
-                        {% endif %}
+                        <table>
+                            <tr>
+                                <td>
+                                    {% if (access.canRemove  or  entity.creator == app.user) and entity.isAcceptance is null %}
+                                        <a class="ajax-delete fa fa-trash-o"
+                                        title="{% trans %}Delete{% endtrans %}"
+                                        href="javascript:;"
+                                        data-url="{{ path('it_doors_pay_master_ajax_remove', { id:entity.id })}}"
+                                        data-params=''
+                                        ></a>
+                                    {% endif %}
+                                </td>
+                            <tr>
+                            <tr>
+                                <td>
+                                    {% if access.canChangeStatus  or  (entity.creator == app.user)%}
+                                    <a class="payMasterStatus" href="#" id="status" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.status ? entity.status.id : '' }}" data-original-title="{% trans %}Enter status{% endtrans %}">
+                                    {% endif %}
+                                        {{ entity.status}}
+                                    {% if access.canChangeStatus %}
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {% if access.canChangeToPay %}
+                                    <a class="payMasterToPay" href="#" id="toPay" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.toPay }}" data-original-title="{% trans %}Enter to pay{% endtrans %}">
+                                    {% endif %}
+                                        {% if entity.toPay == true %}
+                                            {% trans %}To pay{% endtrans %}
+                                        {% else %}
+                                            {% trans %}Mark for payment{% endtrans %}
+                                        {% endif %}
+                                    {% if access.canChangeToPay %}
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     {% endif %}
                     

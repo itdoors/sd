@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Lists\OrganizationBundle\Entity\BankCron;
 use Lists\OrganizationBundle\Entity\Bank;
+use Lists\OrganizationBundle\Entity\OrganizationCurrentAccount;
 
 /**
  * OrganizationService class
@@ -115,30 +116,6 @@ class OrganizationService
         $em->flush();
     }
     /**
-     * findFile
-     * 
-     * @param string $directory
-     * 
-     * @return boolean
-     */
-    private function findFile ($directory)
-    {
-        $fileName = false;
-
-        $dh = opendir($directory);
-        if ($dh) {
-            while (($file = readdir($dh)) !== false) {
-                if (filetype($directory . $file) == 'file') {
-                    $fileName = $file;
-                    continue;
-                }
-            }
-            closedir($dh);
-        }
-
-        return $fileName;
-    }
-    /**
      * parserFile
      *
      * @param InputInterface  $input
@@ -168,7 +145,7 @@ class OrganizationService
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
 
-                    $this->savejson($input, $output, $json->banks);
+                    $this->savejson($input, $output, $json);
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     $em->flush();
                     if (!is_dir($directory . 'old')) {
@@ -188,6 +165,30 @@ class OrganizationService
 
             return 'File not found in derictory ' . "\n" . $directory;
         }
+    }
+    /**
+     * findFile
+     * 
+     * @param string $directory
+     * 
+     * @return boolean
+     */
+    private function findFile ($directory)
+    {
+        $fileName = false;
+
+        $dh = opendir($directory);
+        if ($dh) {
+            while (($file = readdir($dh)) !== false) {
+                if (filetype($directory . $file) == 'file') {
+                    $fileName = $file;
+                    continue;
+                }
+            }
+            closedir($dh);
+        }
+
+        return $fileName;
     }
     /**
      * addCronError
@@ -226,12 +227,12 @@ class OrganizationService
      */
     private function savejson (InputInterface $input, OutputInterface $output, $json)
     {
-        $count = count($json);
         $countBank = 0;
         $em = $this->container->get('doctrine')->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
-
-        foreach ($json as $key => $bank) {
+        $banks = $json->banks;
+        $count = count($banks);
+        foreach ($banks as $key => $bank) {
 
             if ($countBank == 1000) {
                 $em->flush();
@@ -245,9 +246,31 @@ class OrganizationService
             );
             $this->saveBank($input, $output, $bank);
 
-            $json[$key] = null;
-            unset($json[$key]);
+            $banks[$key] = null;
+            unset($banks[$key]);
         }
+        $output->writeln('Banks end');
+        $countAcc = 0;
+        $accLists = $json->accLists;
+        $countAccAll = count($accLists);
+        foreach ($accLists as $key => $acc) {
+
+            if ($countAcc == 1000) {
+                $em->flush();
+                $em->clear();
+                $countAcc = 0;
+            }
+            ++$countAcc;
+
+            $output->writeln(
+                $countAcc." ~ ".number_format(memory_get_usage()/8000000, 0, ',', ' ')."MB ~ more: ".($countAccAll - $key)
+            );
+            $this->saveAcc($input, $output, $acc);
+
+            $accLists[$key] = null;
+            unset($accLists[$key]);
+        }
+        $output->writeln('AccLists end');
         $output->writeln('Cron successfully');
     }
     /**
@@ -285,5 +308,42 @@ class OrganizationService
         $em->persist($object);
 
         return $object;
+    }
+    /**
+     * saveAcc
+     * 
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param object          $acc
+     */
+    private function saveAcc (InputInterface $input, OutputInterface $output, $acc)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $bank = $em->getRepository('ListsOrganizationBundle:Bank')->findOneBy(array ('guid' => trim($acc->bankGuid)));
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->findOneBy(array ('edrpou' => trim($acc->edrpou)));
+        $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
+        $currentAccount = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
+            ->findOneBy(array (
+                'bank' => $bank,
+                'organization' => $organization,
+                'typeAccount' => $type,
+                'name' => $acc->accNumber
+            ));
+        if (!$bank) {
+            $output->writeln('Bank - guid: "'.trim($acc->bankGuid).'" - not found');
+        }
+        if (!$organization) {
+            $output->writeln('Organization - edrpou: "'.trim($acc->edrpou).'" - not found');
+        }
+        if ($bank && $organization && !$currentAccount) {
+            $output->writeln('Add current account - number: "'.trim($acc->accNumber).'" -create new');
+            $object = new OrganizationCurrentAccount();
+            $object->setBank($bank);
+            $object->setOrganization($organization);
+            $object->setName($acc->accNumber);
+            $object->setTypeAccount($type);
+            $em->persist($object);
+            $em->flush();
+        }
     }
 }

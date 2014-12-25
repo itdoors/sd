@@ -3,5 +3,5 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
         file:
             - File:
                 maxSize: 2M
-                mimeTypes: [application/pdf]
-                mimeTypesMessage: "This file is not a valid PDF"
+                mimeTypes: [application/pdf, image/jpeg ]
+                mimeTypesMessage: "This file is not a valid PDF or JPEG"
