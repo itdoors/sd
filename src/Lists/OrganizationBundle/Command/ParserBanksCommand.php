@@ -7,17 +7,14 @@
 namespace Lists\OrganizationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
-use Lists\HandlingBundle\Entity\HandlingUser;
-use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
- * Class DeleteCommand
+ * Class ParserBanksCommand
  */
-class ParserBanks extends ContainerAwareCommand
+class ParserBanksCommand extends ContainerAwareCommand
 {
 
     /**
@@ -47,7 +44,7 @@ class ParserBanks extends ContainerAwareCommand
     {
         $parser = $this->getContainer()->get('lists_organization.service');
 
-        $res = $parser->parserFile();
+        $res = $parser->parserFile($input, $output);
 
         $output->writeln($res);
     }

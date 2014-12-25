@@ -264,7 +264,14 @@ class InvoiceService
 
         return $invoiceNew;
     }
-    private function addActs ($invoiceNew, $acts)
+    /**
+     * 
+     * @param Invoice $invoiceNew
+     * @param string  $acts
+     *
+     * @return string
+     */
+    private function addActs (Invoice $invoiceNew, $acts)
     {
         $summa = 0;
         $em = $this->container->get('doctrine')->getManager();

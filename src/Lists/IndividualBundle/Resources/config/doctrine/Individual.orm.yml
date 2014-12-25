@@ -57,11 +57,4 @@ Lists\IndividualBundle\Entity\Individual:
     manyToMany:
         actions:
             targetEntity: Lists\CoachBundle\Entity\Action
-            joinTable:
-                name: coach_action_individual
-                joinColumns:
-                    individual_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    coach_action_id:
-                        referencedColumnName: id
+            mappedBy: individuals

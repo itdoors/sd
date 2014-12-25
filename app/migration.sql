@@ -1395,3 +1395,856 @@ ALTER TABLE pay_master DROP is_rejected;
 ALTER TABLE pay_master ADD to_pay BOOLEAN DEFAULT NULL;
 COMMENT ON COLUMN pay_master.to_pay IS 'Отметка на оплату';
 -- prod +++++
+ALTER TABLE bank ADD guid VARCHAR(255) NOT NULL;
+COMMENT ON COLUMN bank.guid IS 'guid из 1С';
+CREATE TABLE bank_cron (id SERIAL NOT NULL, bank_id BIGINT DEFAULT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, status VARCHAR(64) NOT NULL, description TEXT NOT NULL, reason VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_BDAD527611C8FB41 ON bank_cron (bank_id);
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ ВАТ АСТРА БАНК, м. Київ', '380548', '82680965-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БТА БАНК", м. Київ', '321723', '82680967-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БМ БАНК", м. Київ', '380913', '82680969-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Київ', '320564', '82680971-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІРЕУС БАНК МКБ", м. Київ', '300658', '82680975-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕНКОМБАНК", м. Київ', '320876', '82680977-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СВЕДБАНК", м. Київ', '300164', '8268097f-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРСИББАНК", м. Харків', '351005', '82680981-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНДУСТРІАЛБАНК", м. Дніпропетровськ', '307189', '37247006-7a4b-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "КИЇВСЬКА РУСЬ", м. Київ', '319092', '6b45e334-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Полтава', '331401', '6b45e33b-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УНІВЕРСАЛ БАНК", м. Київ', '322001', 'a40258f0-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Одеса', '328209', 'd2c55832-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКБ БАЗИС", м. Харків', '351599', 'e0145878-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Київ', '320304', 'e0145892-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "ЧОРН.БАНК РОЗВ.ТА РЕК", м. Сімферополь', '384577', 'eabe3d20-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРОКРЕДИТ БАНК", м. Київ', '320984', 'f8c734cb-a329-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Iвано-Франківськ', '336677', '01e08e4b-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТПРОМБАНК", м. Київ', '300863', '0c09b3eb-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ПЕТРОКОММЕРЦ-УКРАЇНА", м. Київ', '300120', '0c09b402-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДОНЕЦЬКІЙ ОБЛАСТІ, м. Донецьк', '834016', '17adef5e-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АЛЬФА-БАНК", м. Київ', '300346', '17adef67-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ФОРУМ", м. Київ', '322948', '17adef80-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Київ', '321842', '23332c42-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРОФІН БАНК", м. Донецьк', '334594', '350da839-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Київ', '380805', '8268097b-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЦРУ Фінанси та кредит", м. Київ', '300937', '4ad64492-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РОЗРАХУНКОВИЙ ЦЕНТР", м. Київ', '320649', '82680979-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СБЕРБАНК РОСІЇ", м. Київ', '320627', '8268097d-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ ВТБ БАНК, м. Київ', '321767', '8268096b-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УКРСОЦБАНК", м. Одеса', '328016', '4ad6449b-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК КРЕДИТ ДНІПРО", м. Дніпропетровськ', '305749', '583aba01-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Донецьк', '335496', '583aba17-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРЕКСІМБАНК", м. Київ', '322313', '663c8ab6-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Сімферополь', '324805', '663c8ad5-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Київ', '300335', '663c8aed-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Донецьк', '394040', '70955f6e-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УСБ", м. Київ', '322012', '70955f7f-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ГОЛ.УПР. ПАТ ПІБ В ДОНЕЦ.ОБЛ", м. Донецьк', '334635', '791fabd6-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АГРОКОМБАНК", м. Київ', '322302', '8e3c9eab-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Суми', '337546', '8e3c9ebd-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Херсон', '352770', '8e3c9ed3-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Дніпропетровськ', '305299', '9f5399cd-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ДОНГОРБАНК", м. Донецьк', '334970', '9f5399e7-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Львів', '325774', '9f539a04-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Львів', '325321', 'ab3a9717-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Херсон', '352479', 'ab3a9730-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "ПОЛТАВА-БАНК", м. Полтава', '331489', 'b54be546-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "УКРГАЗПРОМБАНК", м. Київ', '320843', 'b54be552-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Кіровоград', '323624', 'ca3b8b80-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДОБАНК", м. Львів', '325365', 'ca3b8b99-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЗАЛІЗНИЧНЕ ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.КИЇВ", м. Київ', '322153', 'ca3b8ba0-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "МЕТАБАНК", м. Запоріжжя', '313582', 'd36a5a30-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "МТБ", м. Іллічівськ', '328168', 'df587e78-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Київ', '322904', 'df587e7f-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "МЕГАБАНК", м. Харків', '351629', 'df587e88-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Одеса', '328351', 'ec9930cc-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Хмельницький', '315966', 'ec9930cf-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Київ', '320230', 'ec9930d2-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНГ БАНК УКРАЇНА", м. Київ', '300539', 'ec9930d9-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК", м. Київ', '300131', 'ec9930de-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СІТІБАНК", м. Київ', '300584', 'ec9930e6-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДОБАНК", м. Львів', '325912', 'ec9930e9-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЗРУ Фінанси та кредит", м. Запоріжжя', '313731', 'ec9930ec-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ЛЬВІВ", м. Львів', '325633', 'ec9930ef-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Дніпродзержинська', '305965', 'f049d3aa-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУ ДКУ у Київській області, м. Київ', '821018', 'f049d3b4-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Черкаській області, м. Черкаси', '854018', 'f049d3bc-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Днiпропетровськ', '305653', 'f049d3bf-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Львів', '325570', 'f049d3c2-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Луганськ', '304007', 'f049d3c7-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Тернопіль', '338501', 'f049d3ca-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Сімферополь', '324021', 'f049d3d1-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Донецьк', '334862', 'f049d3d8-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "IНДЕКС-БАНК", м. Дніпропетровськ', '307015', 'f049d3db-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СЕБ БАНК", м. Київ', '300175', 'f049d3e0-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК Національні інвестиції", м. Київ', '300498', 'f049d3e7-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УКРСОЦБАНК", м. Харків', '351016', 'f7164850-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНДЕКС-БАНК", м. Київ', '300614', 'f7164853-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Запоріжжя', '313827', 'f7164856-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПрАТ "СВЕДБАНК ІНВЕСТ", м. Київ', '320650', 'f7164859-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Київ', '320382', 'f716485d-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРАВЕКС-БАНК", м. Київ', '321983', 'f7164873-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('HБУ Львівс.інститут БС УБС (м.Київ), м.Львів', '399067', 'f7164877-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У МИКОЛАЇВСЬКІЙ ОБЛАСТІ, м. Миколаїв', '826013', 'f716487e-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Дніпропетровськ', '306458', 'f7164883-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Херсон', '352639', 'f716488b-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "ЕКСПРЕС-БАНК", м. Львів', '325956', 'f716488e-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '804013', 'f7164895-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "ІНТЕГРАЛ", м. Київ', '320735', '314dd430-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Київ', '320241', 'f716489c-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РОДОВІД БАНК", м. Київ', '321712', '171dc60d-bc07-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Хмельницький', '315609', 'f71648a8-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Київ', '300711', 'f71648af-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЗРУ Фінанси та кредит", м. Львів', '325923', 'f71648b8-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Сімферополь', '384436', 'f71648be-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УКРСОЦБАНК", м. Сімферополь', '324010', '00fcac0a-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "ДІАМАНТБАНК", м. Київ', '320854', '00fcac12-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "НОВИЙ", м. Дніпропетровськ', '305062', '00fcac17-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "БГ БАНК", м. Київ', '320995', '00fcac2d-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Ужгород', '312378', '00fcac3b-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Кіровоград', '323583', '00fcac3f-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Ужгород', '312345', '00fcac44-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УКРСОЦБАНК", м. Львів', '325019', '00fcac50-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "УКРКОМУНБАНК", м. Луганськ', '304988', '00fcac59-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Рівне', '333368', '00fcac5e-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "ПІВДЕНКОМБАНК", м. Кривий Ріг', '306889', '00fcac63-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРЕКСІМБАНК", м. Ужгород', '312226', '00fcac6b-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Одеса', '328704', '00fcac71-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Луцьк', '303440', '00fcac78-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСIМБАНК", м. Дніпропетровськ', '305675', '00fcac7e-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Рівне', '333391', '0b5f0a06-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Хмельницький', '315405', '0b5f0a1a-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Черкаси', '354347', '0b5f0a20-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЛЬВІВ", м. Львів', '325268', '0b5f0a2f-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНДУСТРІАЛБАНК", м. Запоріжжя', '313849', '0b5f0a37-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "МЕРКУРІЙ", м. Харків', '351663', '0b5f0a40-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('Управління ДК в АРК, м. Сімферополь', '824026', '0b5f0a4f-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "УКРБІЗНЕСБАНК", м. Донецьк', '334969', '0b5f0a64-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КФС "КБ Експобанк", м. Київ', '322421', '314dd40a-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ СЕВАСТОПОЛЬСЬКА ФІЛІЯ ПАТ КБ"ПРИВАТБАНК", м. Севастополь', '324935', '0b5f0a81-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ЧЕРКАСИ", м. Черкаси', '354091', '152ff890-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "ІНДЕКС-БАНК", м. Львів', '325279', '152ff8a4-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Iвано-Франківськ', '336462', '152ff8b4-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "КРЕДОБАНК", м. Луцьк', '303224', '152ff8c7-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Запоріжжя', '313399', '152ff8d5-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Харків', '350589', '152ff8db-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Одеса', '328191', '152ff8de-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КФС "ХАРКІВСЬКЕ РУ", м. Харків', '351964', '152ff8f0-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ Путіловська філія ПАТ ПІБв, м. Донецьк', '334914', '152ff8f7-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТПРОМБАНК", м. Львів', '385305', '152ff906-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРИМСЬКЕ ЦЕНТРАЛЬНЕ ВІД.ПАТ ПІБ", м. Сімферополь', '324430', '206687d6-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПЕРШИЙ ІНВЕСТИЦІЙНИЙ БАНК", м. Київ', '300506', '206687e2-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Київ', '322755', '206687e8-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УСБ", м. Київ', '300023', '206687eb-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Харків', '350385', '206687f6-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Донецьк', '335076', '206687fd-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДОБАНК", м. Сімферополь', '324913', '274871ae-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Київ', '320917', '274871b6-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ ПАТ Банк "Морський", м. Севастополь', '324742', '274871c3-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Луганськ', '304289', '274871c8-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Харків', '351823', '274871cb-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЛІВОБЕРЕЖНЕ ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.КИЇВ", м. Київ', '322119', '274871ce-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Львів', '325718', '274871d6-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Харків', '351533', '274871e4-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Черкаси', '354411', '274871ec-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ГРАНТ", м. Київ', '322788', '27487203-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КОНТРАКТ", м. Київ', '322465', '27487206-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ГРАНТ", м. Харків', '351607', '314dd3ed-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КФС "КБ Експобанк", м. Київ', '322294', '314dd3f2-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "Фінанси та кредит", м. Кривий Ріг', '305835', '314dd40d-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ У ТЕРНОПІЛЬСЬКІЙ ОБЛ, м. Тернопіль', '838012', '314dd438-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Сімферополь', '384016', '314dd443-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Харківській області, м. Харків', '851011', '314dd448-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Кривий Рiг', '305750', '314dd465-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКБ БАНК", м. Кременчук', '331100', '314dd468-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Тернопіль', '338783', '314dd46b-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Херсон', '352093', '3aa065e3-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКБ БАЗИС", м. Харків', '351760', '3aa065ed-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "КРЕДОБАНК", м. Київ', '321897', '3aa06602-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Пустомити', '385231', '3aa0660a-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРАЇНСЬКИЙ ПРОФЕСІЙНИЙ БАНК", м. Київ', '300205', '3aa0660d-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Кіровоград', '323538', '3aa0661e-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "УСБ", м. Донецьк', '334011', '3aa06645-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ У ХМЕЛЬНИЦЬКІЙ ОБЛАСТІ, м. Хмельницький', '815013', '3aa06654-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Чернівці', '356464', '45e7a59a-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Чернігів', '353348', '45e7a59d-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "МОТОР-БАНК", м. Запоріжжя', '313009', '2233c487-2f8e-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КІБ КРЕДІ АГРІКОЛЬ", м. Київ', '300379', '58ddd964-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Вінниця', '302689', 'b0456ee8-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЛЕГБАНК", м. Київ', '300056', 'c4339736-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРЕКСІМБАНК", м. Харків', '351618', 'cc6cd3bd-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Луганськ', '304665', 'ea37d646-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Луганськ', '364393', 'ea37d656-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Чернівці', '356282', 'fdffd8ed-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Луганськ', '304193', '1d0f1b8c-a32d-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Донецьк', '335537', '29e4cd1f-a7ad-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІЕЙБІ БАНК", м. Київ', '380537', '67459569-a7af-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКТАБАНК", м. Дніпропетровськ', '307394', '67459570-a7af-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПФБ", м. Київ', '320906', '2f2c49b5-4721-11e1-9d95-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРУ Фінанси та кредит", м. Полтава', '331832', '42dfb0a1-a931-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Київ', '380764', '2c421fe4-56d8-11e1-b7dc-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КИЇВСЬКЕ МІСЬКЕ ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК", м. Київ', '322250', '42dfb0b8-a931-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "Фінанси та кредит", м. Харків', '350697', '42dfb0bb-a931-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "СТАРОКИЇВСЬКИЙ", м. Київ', '321477', '42dfb0bf-a931-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Київ', '380333', '439300b2-a932-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АРКАДА", м. Київ', '322335', '439300b7-a932-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ДЕЛЬТА БАНК", м. Київ', '380236', 'af6273f6-ab91-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "ЕНЕРГОБАНК", м. Київ', '300272', 'af6273fc-ab91-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УніКредит Банк"', '303536', '57e423b7-ad1b-11e0-8c94-001d608fc1f7');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Запоріжжя', '313623', '8604f542-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІМЕКСБАНК", м. Миколаїв', '326825', '8604f546-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Сімферополь', '308111', '8604f54b-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "МТБ", м. Херсон', '342285', '8604f555-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ Акордбанк", м. Київ', '380634', '8604f559-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Донецьк', '335106', '8604f55b-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ОДЕСА", м. Одеса', '328135', '8604f55d-ae05-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "ПІВДЕННИЙ", м. Запоріжжя', '313753', 'd776d4a0-aece-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ЗОЛОТІ ВОРОТА", м. Харків', '351931', 'd776d4a2-aece-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК НАЦІОНАЛЬНИЙ КРЕДИТ", м. Київ', '320702', 'b136352c-b105-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "УКРІНБАНК", м. Львів', '325826', 'b1363541-b105-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Суми', '337483', 'c8cbebf2-b751-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Донецьк', '334851', 'c8cbec02-b751-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Ялта', '384522', 'c8cbec04-b751-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ЖИТОМИР", м. Житомир', '311056', '78ca6131-b753-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК БОГУСЛАВ", м. Київ', '380322', 'c714581e-b754-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЕРСТЕ БАНК", м. Київ', '380009', '42dfb09e-a931-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Сімферополь', '384652', '4926ff52-b828-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ФОРТУНА-БАНК", м. Київ', '300904', '173fcf87-b8f4-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПТБ", м. Київ', '380388', 'dc39037f-48c1-11e1-9577-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '805012', '173fcf99-b8f4-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЗЛАТОБАНК", м. Київ', '380612', '21d72170-b9cc-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ФІНБАНК", м. Одеса', '328685', '073615d4-f587-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Хмельницький', '315858', '171dc606-bc07-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Миколаїв', '326739', '171dc60b-bc07-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПЛЮС БАНК", м. Івано-Франківськ', '336310', '04cb39e9-bda5-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Хмельницький', '315784', 'b2e6cc12-be61-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ХАРКІВ", м. Харків', '351458', '70599406-c184-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТПРОМБАНК", м. Дніпропетровськ', '306890', '39ecd77e-c26f-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СХІДНО-ПРОМИСЛОВИЙ КОМЕРЦІЙНИЙ БАНК", м. Луганськ', '304706', '648dedaf-c3e5-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ОРУ Фінанси та кредит", м. Одеса', '328823', '90e67c85-c7d8-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Миколаїв', '326803', '2d5b5e23-c89a-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РЕАЛ БАНК", м. Лисичанськ', '304524', 'aca8c2a5-cee4-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РЕГІОН-БАНК", м. Харків', '351254', '3aac5b6d-d21c-11e0-978e-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Одеса', '328618', '3aac5b74-d21c-11e0-978e-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ХЕРСОН", м. Херсон', '352286', '55e43a10-d398-11e0-9ea7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "ЮНЕКС", м. Київ', '322539', '6af4facb-d478-11e0-9ea7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Львів', '385532', 'e496bc33-daa6-11e0-bb11-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КОМЕРЦІЙНИЙ БАНК", м. Київ', '380980', 'e4204451-ddd4-11e0-a726-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '825014', '09881a06-de96-11e0-a726-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ ХРЕЩАТИК", м. Київ', '300670', 'c82dded9-e02a-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Харків', '350761', '99d70f38-e28f-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Харків', '351834', '6927df7f-e5a6-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК КІПРУ", м. Київ', '320940', '4926ff63-b828-11e0-8bcd-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Луганськ', '304632', '2e907bfd-e805-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Дніпропетровськ', '305578', '309ce55c-e8d7-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "УКРІНБАНК", м. Київ', '300250', '20d1ee08-ea60-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ЧЕРНІГІВ", м. Чернігів', '353456', '4db0f0aa-ef12-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Сімферополь', '324786', '71b6081f-f0ab-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Львів', '325978', 'c12b5776-f3e3-11e0-a5ee-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДОБУ", м. Київ', '300465', '10ede60d-f633-11e0-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КЛІРИНГОВИЙ ДІМ", м. Київ', '300647', '10ede61a-f633-11e0-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЄКБ", м. Дніпропетровськ', '307349', '10ede626-f633-11e0-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СИГМАБАНК", м. Дніпропетровськ', '307305', '94a3f67b-f8ae-11e0-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ЗОЛОТІ ВОРОТА", м. Київ', '300238', 'a9a03d0f-0520-11e1-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНДУСТРІАЛБАНК", м. Львів', '385424', '1e325474-1024-11e1-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕНКОМБАНК", м. Діпропетровськ', '305266', 'd9532508-11b2-11e1-b0a3-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "МІСТО БАНК", м. Київ', '380593', 'b6e0eee6-1409-11e1-b0a3-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК М.ЗАПОРІЖЖЯ", м. Запоріжжя', '313355', 'b6e0eef6-1409-11e1-b0a3-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Чернігів', '353586', '0db217d6-14d7-11e1-b0a3-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Київ', '380269', 'af716c55-1a56-11e1-b785-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Рівне', '333681', 'ca062441-1cb6-11e1-b785-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВБР", м. Київ', '380719', 'ca062443-1cb6-11e1-b785-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Запоріжжя', '313957', '83a03f9b-2a1c-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Рівненській області, м. Рівне', '833017', '83a03fb3-2a1c-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЕРДЕ БАНК", м. Київ', '380667', '2785dac0-2d6a-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Маріуполь', '335429', 'aeef7a43-305c-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "Бізнес Стандарт", м. Київ', '339500', 'd130ae6d-3125-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК РУСКИЙ СТАНДАРТ", м. Київ', '380418', '9681fd83-31ee-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ ПІВДЕНКОМБАНК", м. Донецьк', '335946', '9681fd8f-31ee-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "НАДРА", м. Київ', '320003', '1cca5db7-35da-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Луганськ', '304795', 'fa5067c9-3770-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНДУСТРІАЛБАНК", м. Київ', '320962', 'fa5067cd-3770-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ТОВ "УНІКОМБАНК", м. Харків', '350006', '1f19825b-3c25-11e1-a992-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТПРОМБАНК", м. Донецьк', '335593', 'e9b8c922-3db2-11e1-841f-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСIМБАНК", м. Донецьк', '334817', 'caca3341-458c-11e1-9d95-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКСУ у Полтавській області', '831019', '1e942a68-34e8-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКООПСПІЛКА", м. Львів', '325815', 'c6d08362-53b7-11e1-b7dc-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УHІВ. Філія ПАТ УніКредит Банк у м.Києві', '300744', '82680983-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "Д-М БАНК", м. Київ', '380689', '350850dc-5c5a-11e1-a03d-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКБ БАНК", м. Донецьк', '335764', '4f7f0c6d-5eb3-11e1-a03d-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ФІНЕКСБАНК", м. Київ', '380311', '4f7f0c71-5eb3-11e1-a03d-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЄВРОБАНК", м. Київ', '380355', '4f7f0c75-5eb3-11e1-a03d-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ДРУ", м. Донецьк', '335816', 'c87d1453-6823-11e1-bbbd-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ВІННИЦЯ", м. Вінниця', '302571', '8826e245-71a0-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІМЕКСБАНК", м. Київ', '300766', '8cdbdec4-7746-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ ФСевастопольське міське відділен ВАТОщад, м. Севастополь', '384027', 'cb958001-7977-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "УКРІНБАНК", м. Київ', '300142', 'f3c314c9-7d5a-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ТЕРРА БАНК", м. Київ', '380601', 'c0b42af3-7ee4-11e1-8e27-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Рівне', '333539', 'b46ad977-8853-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Iвано-Франківськ', '336688', 'b46ad97b-8853-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Чернівці', '356271', 'c7d9aa58-89ef-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПУМБ", м. Львів', '385350', '668f4b22-8dd7-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ УФС", м. Донецьк', '377777', '668f4b28-8dd7-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ТРАСТ", м. Київ', '380474', 'b9a42c3f-8e9a-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Закарпатській області, м. Ужгород', '812016', '8e5ac51c-94fb-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ТАВРИКА", м. Київ', '300788', '27c5f917-9810-11e1-8016-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Сумській області, м. Суми', '837013', 'b60f69a5-9feb-11e1-8f28-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КОНВЕРСБАНК", м. Київ', '339339', 'b60f69a9-9feb-11e1-8f28-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Миколаїв', '326610', '39deee38-a30f-11e1-8f28-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('HБУ Головне управління по м.Києву та облаті', '321024', 'decdb31c-a49e-11e1-8f28-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Донецьк', '335678', '6de8c34c-b391-11e1-ba76-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "А-БАНК", м. Дніпропетровськ', '307770', 'd4348f9b-c660-11e1-ae45-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ІНВЕСТИЦІЙ ТА ЗАОЩАДЖЕНЬ", м. Київ', '380281', 'f976ef18-cb1a-11e1-ae45-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "УКРІНБАНК", м. Одеса', '328696', 'f976ef1c-cb1a-11e1-ae45-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КЛІРИНГОВІЙ ДІМ", м. Сімферополь', '384920', 'f44e0842-da14-11e1-84e2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПОЛІКОМБАНК", м. Чернігів', '353100', '9af5e555-dc89-11e1-84e2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТПРОМБАНК", м. Луцьк', '303741', '488c39ae-ed1a-11e1-a576-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КОМЕРЦІЙНИЙ БАНК", м. Київ', '380054', '488c39e1-ed1a-11e1-a576-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Львів', '325796', '0ccc1bf2-f1a0-11e1-a576-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "КАПІТАЛ", м. Донецьк', '334828', 'c86da372-f80c-11e1-a963-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВІДДІЛЕННЯ ПАТ ПРОМІНВЕСТБАНК В М.ЛУГАНСЬК", м. Луганськ', '304308', 'b819495d-022e-11e2-a963-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ У ЖИТОМИРСЬКІЙ ОБЛАСТІ, м. Житомир', '811039', 'b81949ca-022e-11e2-a963-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ДРРУ Фінанси та кредит", м. Дніпропетровськ', '307231', 'e103d22e-0874-11e2-b7c3-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Краматорськ', '335548', '785d2df0-1dad-11e2-93f1-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КИЇВСІТІ", м. Київ', '380775', '554bad95-1e71-11e2-93f1-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ Ф-я ВАТ "Укрексімбанк", Севастополь, м. Севастополь', '384986', 'e71336b0-2d7c-11e2-93f1-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Херсон', '352640', 'e71336b9-2d7c-11e2-93f1-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСIМБАНК", м. Кривий Ріг', '305589', '942e7ff1-442f-11e2-93f6-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АК "КБ ПРОМЕКОНОМБАНК", м. Донецьк', '334992', '2f23ef31-45c7-11e2-93f6-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК Фінанси та кредит", м. Луганськ', '304717', '46840ad1-5fbb-11e2-93f9-005056c00008');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІМЕКСБАНК", м. Одеса', '388584', '354083a9-849b-11e2-9400-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКБ Київ", м. Київ', '322498', '1fe07b24-a80e-11e2-9178-5404a6ecc3a4');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('"КРЕДИТВЕСТ БАНК", м. Київ', '380441', '98fc4d2b-b0b3-11e2-ba82-5404a6ecc3a4');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ Актив-банк", м. Київ', '300852', '1fe07b26-a80e-11e2-9178-5404a6ecc3a4');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ОКСІ БАНК", м. Львів', '325990', '94cf1585-c207-11e2-b644-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ДЕРЖАВНІЙ КАЗНАЧЕЙСЬКІЙ СЛУЖБІ УКРАЇНИ, м. Києва', '820172', '4e1e7fd9-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АКЦІОНЕРНИЙ КОМЕРЦІЙНИЙ ПРОМИСЛОВО-ІНВЕСТИЦІЙНИЙ БАНК", м. Київ', '300012', '81274cf4-ac50-11e0-89d7-001fd0d31498');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУ ОЩАДНИЙ БАНК УКРАЇНИ, м. Київ', '322669', '0b5f0a54-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БРОКБІЗНЕСБАНК", м. Київ', '300249', 'd36a5a4c-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЕКСПРЕС-БАНК", м. Київ', '322959', '20668806-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПуАТ "СЕБ Банк"', '300175', 'c763466b-ffb7-11e0-abf2-003048635795');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ФАМІЛЬНИЙ", м. Донецьк', '334840', '7e3aed1f-cf5e-11e2-b39d-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "КИЇВСЬКА РУСЬ", м. Львів', '385543', '059c81c8-d1b3-11e2-b39d-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Запоріжжя', '313979', '1986f6f9-dd81-11e2-999f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК, м. Iвано-Франківськ', '836014', 'db4bce4f-dd95-11e2-999f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Вінницькій області, м. Вінниця', '802015', 'db4bce53-dd95-11e2-999f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РЕАЛ БАНК", м. Харків', '351588', '7c2c9753-e7b0-11e2-999f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ХК БАНК", м. Дніпропетровськ', '307123', '17cf5ea3-eac1-11e2-856b-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Суми', '337568', 'e4d9b740-edee-11e2-856b-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "УКРЕКСІМБАНК", м. Черкаси', '354789', '349c5a68-eebd-11e2-856b-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Херсон', '352457', '349c5a6a-eebd-11e2-856b-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПФБ", м. Кременчук', '331768', '55e3bc13-f2a1-11e2-856b-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК  У  ВОЛИНСЬКІЙ ОБЛАСТІ, м.м.Луцьк', '803014', '6a4acba6-f5fc-11e2-b2e1-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "КБ Глобус", м. Київ', '380526', 'e8f349b7-1072-11e3-8b1d-005056937580');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КРЕДИТ ЄВРОПА БАНК", м. Київ', '380366', '02c6e13e-30b4-11e3-953c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '813015', 'cf33c963-3bba-11e3-94f0-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "ДЕРЖАВНИЙ ОЩАДНИЙ БАНК УКРАЇНИ", м. Дніпропетровськ', '305482', '8a47ac0d-420c-11e3-94f0-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('HБУ Господарсько-експлуат. управління НБУ, м. Київ', '399261', 'baa80cac-47a1-11e3-99f7-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ФІНРОСТБАНК", м. Одеса', '328599', 'e0301f60-528b-11e3-9769-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РАДИКАЛ БАНК", с. Петропавлівська Борщагівка', '319111', '83733e0c-5e48-11e3-b6ba-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('КБ "ОЛІМПІЙСЬКА УКРАЇНА", м. Київ', '322324', '003b84e6-63e9-11e3-b6ba-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКООПСПІЛКА", м. Київ', '322625', '7ef81feb-6edb-11e3-b6ba-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ВіЕс Банк", м. Львів', '325213', '82680985-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АКБ "КБ ІНВЕСТБАНК", м. Одеса', '328094', '1382a5c2-93fd-11e3-a605-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Донецьк', '377012', '657a2320-9ebc-11e3-a605-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КОМІНВЕСТБАНК", м. Ужгород', '312248', '77fd9440-9f88-11e3-a605-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЄВРОГАЗБАНК", м. Київ', '380430', '018321dd-0bec-11e3-b47f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СБЕРБАНК РОСІЇ", м. Київ', '320627', '4f8b7de3-1ec5-11e3-a110-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ОТП БАНК", м. Київ', '300528', '4f8b7ddf-1ec5-11e3-a110-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "Укргазбанк", м. Київ', '320478', '8268096e-a235-11e0-9eaf-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '018321e4-0bec-11e3-b47f-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "РОЗРАХУНКОВИЙ ЦЕНТР", м. Київ', '320649', '7262004e-4862-11e3-99f7-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "ЄВРОГАЗБАНК"', '380430', 'a4eb0b79-454f-11e3-94f0-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДОНЕЦЬКІЙ ОБЛАСТІ, м. Донецьк', '834016', '9d5dc887-47ab-11e3-99f7-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРСИББАНК", м. Харків', '351005', 'a73677ae-51b5-11e3-9769-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СБЕРБАНК РОСІЇ", м. Київ', '320627', 'a73677b2-51b5-11e3-9769-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АБ "Укргазбанк", м. Київ', '320478', '0b5f0a61-a32c-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ОТП БАНК", м. Київ', '300528', 'd36a5a3e-a32a-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('АТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Київ', '380805', 'b117d9a2-b34b-11e3-9446-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ОД ПАТ "РАЙФФАЙЗЕН БАНК АВАЛЬ", м. Миколаїв', '326182', '01d61a61-b8c8-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ Земельний Капітал", м. Дніпропетровськ', '305880', '42b65455-c150-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'ac533efb-c156-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', 'ac533efc-c156-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', 'ac533efd-c156-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', 'ac533f06-c156-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', 'b24fa894-c156-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'd17df1c3-c15a-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', 'd17df1c4-c15a-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', 'd17df1c5-c15a-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', 'd17df1c6-c15a-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', 'd96e8a74-c15a-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'c6ba6135-c15d-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', 'c6ba6136-c15d-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', 'c6ba6137-c15d-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', 'c6ba6138-c15d-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', 'd00aa18e-c15d-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРАЙМ-БАНК", м. Київ', '300669', '018bcc97-c471-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПІВДЕННИЙ", м. Луганськ', '304999', 'b5c0a199-cbb8-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "КБ Преміум", м. Київ', '339555', '08c6a927-d048-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУ ДКСУ М.КИЄВІ, м. Київ', '820019', 'f049d3b7-a32b-11e0-a6d3-000423d81302');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ЄКБ", м. Дніпропетровськ', '305987', 'e9ea8e16-d42e-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', '0e096a7d-d45b-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '0e096a7e-d45b-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', '0e096a7f-d45b-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', '0e096a80-d45b-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', '240b969d-d45b-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', '818aa747-d468-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '818aa748-d468-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', '818aa749-d468-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', '818aa74a-d468-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', '97b62df1-d468-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ЛУГАНСЬКІЙ ОБЛАСТІ, м. Луганськ', '000804', '7bad644f-d46c-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '7bad6450-d46c-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('УДК У ДНІПРОПЕТ.ОБЛ, м. Дніпропетровськ', '000805', '7bad6451-d46c-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Запорізькій області, м. Запоріжжя', '000813', '7bad6452-d46c-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДКУ у Львівській області, м. Львів', '000825', '7bad6453-d46c-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '6b9f163d-d518-11e3-9604-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРИВАТБАНК", м. Житомир', '311744', '63e0237c-fc3f-11e3-85a4-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ВАТ "СТАНДАРТ", м. Київ', '380690', 'cb3b6fcc-fd15-11e3-85a4-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АРТЕМ-БАНК", м. Київ', '300885', '5fd18600-0d86-11e4-85a4-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "УКРЕКСІМБАНК", м. Вінниця', '302429', '536ecd68-123b-11e4-9312-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ПРАВЕКС-БАНК", м. Київ', '380838', '38b0a56b-1404-11e4-9312-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '495040a5-194c-11e4-bba7-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "СЕБ КОРПОРАТИВНИЙ БАНК", м. Київ', '380797', 'af4288b2-1956-11e4-bba7-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '9e8ee9cb-2eb3-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '920f78fc-2eb7-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'e256b3cd-2eb8-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'c824aa96-2eb9-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'c54a97c5-2f66-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '6868c54b-2f81-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "ІНТЕРКРЕДИТБАНК", м. Дніпропетровськ', '307424', 'e57dfe21-340b-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК ВЕЛЕС", м. Київ', '322799', 'de93219e-34ec-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '641ca893-38d2-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'ce92532c-4a01-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '7ae2e936-4a0a-11e4-870c-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "БАНК СІЧ", м. Київ', '380816', 'b684f729-5b59-11e4-a742-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '5a5c7b1f-61bd-11e4-a742-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '456f2afa-6449-11e4-a742-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АВАНТ-БАНК", м. Київ', '380708', '62e0294e-6f21-11e4-847d-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', 'b7d2dae6-7a67-11e4-92ae-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ГУДК У М.КИЄВІ, м. Київ', '000820', '43b0c9e6-7a6c-11e4-92ae-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('ПАТ "АБ "РАДАБАНК", м. Дніпропетровськ', '306500', '9082f2d2-81df-11e4-92ae-ac162d8baeeb');
+INSERT INTO "public".bank ("name", mfo, guid) 
+	VALUES ('HБУ УНІВЕРСИТЕТ БАНКІВ.СПРАВИ НБУ, М.КИЇВ, м. Київ', '399391', 'faa6ba8b-89bb-11e4-92ae-ac162d8baeeb');
+-- prod +++++

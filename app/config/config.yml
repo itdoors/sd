@@ -22,6 +22,7 @@ parameters:
     project.web.dir: '%project.dir%/web'
     log.file.path: "%project.dir%/log.txt"
     1C.file.path: "%project.dir%/app/share/1c/debt/"
+    1C.file.path.bank: "%project.dir%/app/share/1c/bank/"
     email.file.path: "%project.dir%/web/uploads/email/"
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
