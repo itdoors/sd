@@ -117,6 +117,9 @@ class UserController extends BaseController
         $isCurrentUser = $id == $this->getUser()->getId();
 
         $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
+        if (!$isAdmin && $item == $this->getUser()) {
+            $isAdmin = true;
+        }
 
         /** @var UserService $service */
         $service = $this->container->get($this->service);
