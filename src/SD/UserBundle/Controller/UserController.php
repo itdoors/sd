@@ -335,7 +335,7 @@ class UserController extends BaseController
             try {
                 $user = $form->getData();
                 $formData = $request->request->get($form->getName());
-                $user->setBirthday(new \DateTime($formData['birthday']));
+//                $user->setBirthday(new \DateTime($formData['birthday']));
                 $user->setEnabled(true);
 
 

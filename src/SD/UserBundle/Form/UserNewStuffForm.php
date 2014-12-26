@@ -51,9 +51,9 @@ class UserNewStuffForm extends AbstractType
                 'constraints' => new NotBlank()
             ))
             ->add('middleName')
-            ->add('birthday', 'text', array(
-                'required' => false,
-            ))
+//            ->add('birthday', 'text', array(
+//                'required' => false,
+//            ))
             ->add('username')
             ->add('email')
             ->add('userPosition', 'entity', array(
