@@ -404,7 +404,7 @@
                                                         {% trans %}Inside phone{% endtrans %} 
                                                     </td>
                                                     <td>
-                                                        {% if isAdmin or app.user.id == item.ids %}
+                                                        {% if isAdmin or app.user.id == item.id %}
                                                             <a href="#" id="phoneInside" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phoneInside{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
                                                                 {{ item.phoneInside }}
                                                             </a>
