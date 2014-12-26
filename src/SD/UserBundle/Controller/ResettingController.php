@@ -114,7 +114,7 @@ class ResettingController extends BaseController
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('sd_user_show', arrya('id' => $user->getId()));
+                $url = $this->generateUrl('sd_user_show', array('id' => $user->getId()));
                 $response = new RedirectResponse($url);
             }
 
