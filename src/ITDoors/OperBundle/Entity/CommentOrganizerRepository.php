@@ -23,12 +23,14 @@ class CommentOrganizerRepository extends EntityRepository
             ->addSelect('d.address as departmentAddress')
             ->addSelect('organizer.startDatetime as startDatetime')
             ->addSelect('organizer.endDatetime as endDatetime')
+            ->addSelect('m.name as mpk')
             ->addSelect('CONCAT(CONCAT(u.lastName, \' \'), u.firstName) as userName')
             ->addSelect('comment.value as commentValue')
             ->addSelect('comment.createDatetime as commentDate')
             ->leftJoin('comment.organizer', 'organizer')
             ->leftJoin('comment.user', 'u')
             ->leftJoin('organizer.department', 'd')
+            ->leftJoin('d.mpks', 'm')
             ->leftJoin('d.organization', 'o')
             ->leftJoin('organizer.type', 't');
 
