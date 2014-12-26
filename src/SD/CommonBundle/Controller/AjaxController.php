@@ -1755,9 +1755,9 @@ class AjaxController extends BaseFilterController
      */
     public function userSaveAction()
     {
-        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
-            return false;
-        }
+//        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            return false;
+//        }
         $translator = $this->get('translator');
 
         $pk = $this->get('request')->request->get('pk');
