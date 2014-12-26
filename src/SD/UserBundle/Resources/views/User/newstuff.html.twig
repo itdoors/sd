@@ -139,13 +139,6 @@
                             {{ form_errors(form.userPosition) }}
                         {% endif %}
                     </div>
-                    <div class="form-group col-md-4{% if form.position.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.position, 'Position description', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Enter position description"}}) }}
-                        {% if form.position.vars.errors|length %}
-                            {{ form_errors(form.position) }}
-                        {% endif %}
-                    </div>
                    
                 </div>
 
