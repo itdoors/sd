@@ -174,7 +174,7 @@ class UserController extends BaseController
 
         $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
         if (!$isAdmin) {
-            $isAdmin = $item == $this->getUser();
+            $isAdmin = $item['id'] == $this->getUser()->getId();
         }
 
         /** @var EntityManager $em */
