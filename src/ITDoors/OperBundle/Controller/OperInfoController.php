@@ -149,6 +149,9 @@ class OperInfoController extends BaseFilterController
         $transHeader = $translator->trans('id', array(), $transNamespace);
         $phpExcelObject->getActiveSheet()
             ->setCellValueByColumnAndRow($col++, $str, $transHeader);
+        $transHeader = $translator->trans('mpk', array(), $transNamespace);
+        $phpExcelObject->getActiveSheet()
+            ->setCellValueByColumnAndRow($col++, $str, $transHeader);
         $transHeader = $translator->trans('Mpk', array(), $transNamespace);
         $phpExcelObject->getActiveSheet()
             ->setCellValueByColumnAndRow($col++, $str, $transHeader);
@@ -237,6 +240,19 @@ class OperInfoController extends BaseFilterController
 
                 $content .= '['.$selfOrganizationName.', '.$activeName.']';
                 if ($newMpk != end($mpks)) {
+                    $content .= ', ';
+                }
+
+            }
+            $phpExcelObject->getActiveSheet()->setCellValueByColumnAndRow($col++, $str, $content);
+
+            $content = '';
+            foreach ($mpks as $key => $newMpk) {
+                $name = $newMpk->getName();
+
+                $content = $name;
+
+                if ($newMpk != end($mpks) && count($mpks)>1) {
                     $content .= ', ';
                 }
 
