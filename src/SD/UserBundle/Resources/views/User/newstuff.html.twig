@@ -123,6 +123,21 @@
                             {{ form_errors(form.companystructure) }}
                         {% endif %}
                     </div>
+                      <div class="form-group col-md-4{% if form.plainPassword.first.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.first, 'New password', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder': "New password"}}) }}
+                        {% if form.plainPassword.first.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.first) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.plainPassword.second.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.second, 'Password again', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder': "Password again"}}) }}
+                        {% if form.plainPassword.second.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.second) }}
+                        {% endif %}
+                    </div>
                     
                     <div class="form-group col-md-4{% if form.userPosition.vars.errors|length %} has-error{% endif %}">
                         {{ form_label(form.userPosition, 'Enter position', {'attr': {'class': 'control-label'}}) }}

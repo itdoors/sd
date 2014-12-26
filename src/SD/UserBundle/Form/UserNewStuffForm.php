@@ -62,7 +62,14 @@ class UserNewStuffForm extends AbstractType
                 'empty_value' => '',
                 'required' => true,
                 'property' => 'name'
-            ));
+            ))
+            ->add('plainPassword', 'repeated', array(
+                'type' => 'password',
+                'options' => array('translation_domain' => 'SDUserBundle'),
+                'first_options' => array('label' => 'form.new_password'),
+                'second_options' => array('label' => 'form.new_password_confirmation'),
+                'invalid_message' => 'fos_user.password.mismatch',
+        ));
 
         // Stuff
         $builder
