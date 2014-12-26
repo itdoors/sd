@@ -117,9 +117,6 @@ class UserController extends BaseController
         $isCurrentUser = $id == $this->getUser()->getId();
 
         $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
-        if (!$isAdmin && $item == $this->getUser()) {
-            $isAdmin = true;
-        }
 
         /** @var UserService $service */
         $service = $this->container->get($this->service);
@@ -176,6 +173,9 @@ class UserController extends BaseController
         $tab = $this->getTab($namespace);
 
         $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
+        if (!$isAdmin) {
+            $isAdmin = $item == $this->getUser();
+        }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
