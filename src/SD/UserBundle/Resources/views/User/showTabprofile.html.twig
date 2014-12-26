@@ -264,7 +264,7 @@
                                                     {% trans %}Position{% endtrans %}
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
+                                                    {% if isAdmin or app.user.id == item.id %}
                                                         <a href="#" id="userPosition" data-type="select" {#data-value="{{ item.locked }}"#} data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Choose position{% endtrans %}" data-original-title="{% trans %}Choose position{% endtrans %}">
                                                             {{ item.userPositionName }}
                                                         </a>
