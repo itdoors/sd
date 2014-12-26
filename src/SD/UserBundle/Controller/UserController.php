@@ -13,6 +13,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * UserController
