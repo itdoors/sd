@@ -162,7 +162,21 @@ resetting:
             
     new_password: Введите новый пароль
     new_password_confirmation: Подтвердите пароль
-    
+user:
+    add:
+        email:
+            subject: Вам открыли доступ
+            message: |
+                Приветствуем, %username%!
+
+                Вам открыт доступ. Но Вам нужно указать свой пароль пройдя по ссылке:
+
+                %confirmationUrl%
+
+                Если переход по ссылке не работает, скопируйте и вставьте ссылку в адресную строку браузера.
+
+        new_password: Введите новый пароль
+        new_password_confirmation: Подтвердите пароль
 Email or username: Email либо логин
 Add new resposible: Добавить отвественого
 Claim type: Тип претензии
@@ -178,3 +192,4 @@ chrome: по ссылке
 Choose position: Выберите должность
 Position description: Описание должности
 Enter position description: Введите описание должности
+Mobile phone: Мобильный телефон

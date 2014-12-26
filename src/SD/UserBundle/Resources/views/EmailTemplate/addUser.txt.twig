@@ -1,0 +1,15 @@
+{% trans_default_domain 'SDUserBundle' %}
+{% block subject %}
+    {% autoescape false %}
+    {{ 'user.add.email.subject'|trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape 'html' %}
+        {{ 'user.add.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {% endautoescape %}
+{% endblock %}

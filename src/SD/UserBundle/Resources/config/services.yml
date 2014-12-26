@@ -9,6 +9,7 @@ parameters:
     sd_user.form.stuff.department.class: SD\UserBundle\Form\StuffDepartmentForm
     sd_user_contactinfo.form.class: SD\UserBundle\Form\UserContactinfoForm
     sd_user.service.class: SD\UserBundle\Services\UserService
+    sd_user.add.user.email.template: 'SDUserBundle:EmailTemplate:addUser.txt.twig'
 
 services:
     sd_user.repository:
