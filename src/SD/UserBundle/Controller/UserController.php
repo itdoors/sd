@@ -349,15 +349,12 @@ class UserController extends BaseController
                 $stuff = new Stuff();
 
                 $stuff->setUser($user);
-                $stuff->setMobilephone($formData['mobilephone']);
+                $stuff->setMobilephone('');
                 if ($companystructure) {
                     $stuff->setCompanystructure($companystructure);
                 }
-                if (!empty($formData['hiredate'])) {
-                    $stuff->setDateHire(new \DateTime($formData['hiredate']));
-                }
-                $stuff->setEducation($formData['education']);
-                $stuff->setIssues($formData['issues']);
+                $stuff->setEducation('');
+                $stuff->setIssues('');
                 $stuff->setStuffclass('stuff');
 
                 $em->persist($stuff);

@@ -124,29 +124,6 @@
                         {% endif %}
                     </div>
 
-                    <div class="form-group col-md-4{% if form.plainPassword.first.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.plainPassword.first, 'New password', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder': "New password"}}) }}
-                        {% if form.plainPassword.first.vars.errors|length %}
-                            {{ form_errors(form.plainPassword.first) }}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group col-md-4{% if form.plainPassword.second.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.plainPassword.second, 'Password again', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder': "Password again"}}) }}
-                        {% if form.plainPassword.second.vars.errors|length %}
-                            {{ form_errors(form.plainPassword.second) }}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group col-md-4{% if form.mobilephone.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.mobilephone, 'Mobile Phone', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.mobilephone, {'attr' : {'class' : 'form-control', 'placeholder': "Mobile Phone"}}) }}
-                        {% if form.mobilephone.vars.errors|length %}
-                            {{ form_errors(form.mobilephone) }}
-                        {% endif %}
-                    </div>
                     <div class="form-group col-md-4{% if form.companystructure.vars.errors|length %} has-error{% endif %}">
                         {{ form_label(form.companystructure, 'Select subdivision', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.companystructure,   {'attr' : {'class' : 'form-control', 'placeholder': "Select subdivision"}}) }}
@@ -154,14 +131,7 @@
                             {{ form_errors(form.companystructure) }}
                         {% endif %}
                     </div>
-                    <div class="form-group col-md-4{% if form.hiredate.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.hiredate, 'Enter date hire', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.hiredate, {'attr' : {'class' : 'form-control datapicer-class', 'placeholder': "Enter date hire"}}) }}
-                        {{ block('date_widget') }}
-                        {% if form.hiredate.vars.errors|length %}
-                            {{ form_errors(form.hiredate) }}
-                        {% endif %}
-                    </div>
+                    
                     <div class="form-group col-md-4{% if form.userPosition.vars.errors|length %} has-error{% endif %}">
                         {{ form_label(form.userPosition, 'Enter position', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.userPosition, {'attr' : {'class' : 'form-control', 'placeholder': "Enter position"}}) }}
@@ -176,20 +146,7 @@
                             {{ form_errors(form.position) }}
                         {% endif %}
                     </div>
-                    <div class="form-group col-md-4{% if form.education.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.education, 'Enter education', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.education, {'attr' : {'class' : 'form-control', 'placeholder': "Enter education"}}) }}
-                        {% if form.education.vars.errors|length %}
-                            {{ form_errors(form.education) }}
-                        {% endif %}
-                    </div>
-                    <div class="form-group col-md-4{% if form.issues.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.issues, 'Enter issues', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.issues, {'attr' : {'class' : 'form-control', 'placeholder': "Enter issues"}}) }}
-                        {% if form.issues.vars.errors|length %}
-                            {{ form_errors(form.issues) }}
-                        {% endif %}
-                    </div>
+                   
                 </div>
 
                 <div class="form-actions">
