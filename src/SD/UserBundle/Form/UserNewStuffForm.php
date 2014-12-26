@@ -89,6 +89,7 @@ class UserNewStuffForm extends AbstractType
             ))
             ->add('issues', 'textarea', array(
                 'mapped' => false,
+                'required' => false,
                 'constraints' => new NotBlank()
             ))
             ->add('companystructure', 'entity', array(
