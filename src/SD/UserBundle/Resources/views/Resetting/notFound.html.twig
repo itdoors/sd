@@ -1,0 +1,15 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% block title %}
+   {% trans %}Changed password{% endtrans %}
+{% endblock %}
+{% block fos_user_content %}
+<div class="row">
+        <div class="col-md-12">
+            <div class="tab-content ajax-tab-holder">
+                <div class="note note-danger">
+                    <h4 class="block">{% trans %}Token not found{% endtrans %}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock fos_user_content %}

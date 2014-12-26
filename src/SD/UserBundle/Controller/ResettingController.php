@@ -97,7 +97,8 @@ class ResettingController extends BaseController
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            $this->render('SDUserBundle:Resetting:notFound.html.twig');
+            //throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
         $event = new GetResponseUserEvent($user, $request);
