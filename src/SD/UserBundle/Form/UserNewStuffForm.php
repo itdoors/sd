@@ -54,6 +54,13 @@ class UserNewStuffForm extends AbstractType
             ->add('birthday', 'text')
             ->add('username')
             ->add('email')
+            ->add('userPosition', 'entity', array(
+                'mapped' => false,
+                'class' => 'SDUserBundle:Position',
+                'empty_value' => '',
+                'required' => true,
+                'property' => 'name'
+            ))
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
                 'options' => array('translation_domain' => 'SDUserBundle'),
