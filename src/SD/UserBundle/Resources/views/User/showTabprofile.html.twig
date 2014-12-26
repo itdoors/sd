@@ -273,15 +273,15 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% if isAdmin %}
+                                            {% if isAdmin or app.user.id == item.id %}
                                                 <tr>                                                                                                
                                                     <td class="hidden-xs">
                                                         {% trans %}Position description{% endtrans %}
                                                     </td>
                                                     <td>
-                                                            <a href="#" id="position" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter position description{% endtrans %}" data-original-title="{% trans %}Enter position description{% endtrans %}">
-                                                                {{ item.position }}
-                                                            </a>
+                                                        <a href="#" id="position" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter position description{% endtrans %}" data-original-title="{% trans %}Enter position description{% endtrans %}">
+                                                            {{ item.position }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>                                                                                                
@@ -289,9 +289,9 @@
                                                         {% trans %}Last name{% endtrans %} 
                                                     </td>
                                                     <td>
-                                                            <a href="#" id="lastName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter last name{% endtrans %}" data-original-title="{% trans %}Enter last name{% endtrans %}">
-                                                                {{ item.lastName }}
-                                                            </a>
+                                                        <a href="#" id="lastName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter last name{% endtrans %}" data-original-title="{% trans %}Enter last name{% endtrans %}">
+                                                            {{ item.lastName }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>                                                                                                
@@ -299,9 +299,9 @@
                                                         {% trans %}First Name{% endtrans %} 
                                                     </td>
                                                     <td>
-                                                            <a href="#" id="firstName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter first name{% endtrans %}" data-original-title="{% trans %}Enter first name{% endtrans %}">
-                                                                {{ item.firstName }}
-                                                            </a>
+                                                        <a href="#" id="firstName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter first name{% endtrans %}" data-original-title="{% trans %}Enter first name{% endtrans %}">
+                                                            {{ item.firstName }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>                                                                                                
@@ -309,9 +309,9 @@
                                                         {% trans %}Middle Name{% endtrans %} 
                                                     </td>
                                                     <td>
-                                                            <a href="#" id="middleName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter middle name{% endtrans %}" data-original-title="{% trans %}Enter middle name{% endtrans %}">
-                                                                {{ item.middleName }}
-                                                            </a>
+                                                        <a href="#" id="middleName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter middle name{% endtrans %}" data-original-title="{% trans %}Enter middle name{% endtrans %}">
+                                                            {{ item.middleName }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             
@@ -361,7 +361,7 @@
                                                     {% trans %}Email{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
+                                                    {% if isAdmin or app.user.id == item.id %}
                                                         <a href="#" id="email" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter email{% endtrans %}" data-original-title="{% trans %}Enter email{% endtrans %}">
                                                             {{ item.email }}
                                                         </a>
@@ -459,14 +459,14 @@
                                                     {% trans %}Education{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
+                                                    {% if isAdmin or app.user.id == item.id %}
                                                         <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter education{% endtrans %}">{{ item.education }}</a>
                                                     {% else %}
                                                         {{ item.education }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% if isAdmin %}
+                                            {% if isAdmin or app.user.id == item.id %}
                                             <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Enter issues{% endtrans %} 
