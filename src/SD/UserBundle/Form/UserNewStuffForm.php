@@ -75,7 +75,7 @@ class UserNewStuffForm extends AbstractType
         $builder
             ->add('mobilephone', 'text', array(
                 'mapped' => false,
-                'constraints' => new NotBlank()
+                'required' => false
             ))
             ->add('hiredate', 'text', array(
                 'mapped' => false,
