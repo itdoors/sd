@@ -426,7 +426,7 @@
                                                 </td>
                                             </tr>
                                             {% endif %}
-                                             {% if isAdmin %}
+                                             {% if isAdmin or app.user.id == item.id%}
                                              <tr>                                                                                                
                                                 <td class="hidden-xs">
                                                     {% trans %}Birthday{% endtrans %} 
