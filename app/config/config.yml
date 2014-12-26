@@ -208,4 +208,5 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
 
-gregwar_image: ~
+gregwar_image:
+    cache_dir:  cache
