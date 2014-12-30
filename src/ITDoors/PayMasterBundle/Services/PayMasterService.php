@@ -100,7 +100,8 @@ class PayMasterService
      */
     public function addPayMasterBankFormDefaults(Form $form, $defaults)
     {
-        $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')->find((int) $defaults['organizationId']);
+        $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')
+            ->find((int) $defaults['organizationId']);
 
         $form
             ->add('organizationId', 'hidden', array(

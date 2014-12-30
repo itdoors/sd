@@ -129,7 +129,8 @@ class ResettingController extends BaseController
             }
 
             $dispatcher->dispatch(
-                FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response)
+                FOSUserEvents::RESETTING_RESET_COMPLETED,
+                new FilterUserResponseEvent($user, $request, $response)
             );
 
             return $response;
