@@ -110,6 +110,14 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
             joinColumn:
                 name: current_account_id
                 referencedColumnName: id
+        bank:
+            targetEntity: Lists\OrganizationBundle\Entity\Bank
+            inversedBy: null
+            options:
+                comment: Банк с которого будет произведена оплата
+            joinColumn:
+                name: bank_id
+                referencedColumnName: id
     manyToMany:
         mpks:
             targetEntity: Lists\MpkBundle\Entity\Mpk

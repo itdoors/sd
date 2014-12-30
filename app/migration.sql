@@ -2362,3 +2362,6 @@ INSERT INTO "public".organization_current_account (type_id, organization_id, ban
 	VALUES (2, 2590, 216, '260067522', 1);
 
 -- prod +++++++++++
+ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- prod ----

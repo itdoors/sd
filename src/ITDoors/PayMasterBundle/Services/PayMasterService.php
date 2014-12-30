@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * PayMasterService class
@@ -85,6 +86,59 @@ class PayMasterService
             if (empty($isAcceptance)) {
                 $payMaster->setReason($reason);
             }
+            $this->em->persist($payMaster);
+            $this->em->flush();
+        }
+    }
+    /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+      * 
+      * @return Form $form
+     */
+    public function addPayMasterBankFormDefaults(Form $form, $defaults)
+    {
+        $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')->find((int) $defaults['organizationId']);
+
+        $form
+            ->add('organizationId', 'hidden', array(
+                'mapped' => false
+            ))
+            ->add('bank', 'entity', array(
+                'class'=>'Lists\OrganizationBundle\Entity\Bank',
+                'empty_value' => '',
+                'required' => true,
+                'query_builder' => function (EntityRepository $er) use ($organization) {
+
+                    return $er->createQueryBuilder('b')
+                        ->leftJoin('b.currentAccounts', 'c')
+                        ->leftJoin('c.organization', 'o')
+                        ->where('o.id = :organization')
+                        ->setParameter(':organization', $organization)
+                        ->orderBy('b.name', 'ASC');
+                }
+            ));
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function savePayMasterBankForm (Form $form, Request $request, $params)
+    {
+        $access = $this->checkAccess($this->getUser());
+        $data = $form->getData();
+        $bank = $this->em->getRepository('ListsOrganizationBundle:Bank')->find($data['bank']);
+        $payMaster = $this->em->getRepository('ITDoorsPayMasterBundle:PayMaster')->find($data['payMasterId']);
+        if (!$access->canEditBank() || $payMaster->getBank() != '') {
+            throw new Exception('No access', 403);
+        }
+        if ($bank && $payMaster) {
+            $payMaster->setBank($bank);
             $this->em->persist($payMaster);
             $this->em->flush();
         }

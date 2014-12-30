@@ -3,6 +3,7 @@ parameters:
 
     it_doors_pay_master.new.form.class: ITDoors\PayMasterBundle\Form\PayMasterNewForm
     it_doors_pay_master.acceptance.form.class: ITDoors\PayMasterBundle\Form\PayMasterAcceptanceForm
+    it_doors_pay_master.bank.form.class: ITDoors\PayMasterBundle\Form\PayMasterBankForm
 
 services:
     it_doors_pay_master.service:
@@ -29,3 +30,11 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: payMasterAcceptanceForm }
+    it_doors_pay_master.bankForm:
+        class: %it_doors_pay_master.bank.form.class%
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: payMasterBankForm }

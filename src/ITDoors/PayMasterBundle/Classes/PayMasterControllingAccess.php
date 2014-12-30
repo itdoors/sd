@@ -35,4 +35,11 @@ class PayMasterControllingAccess extends BasicPayMasterAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canEditBank ()
+    {
+        return true;
+    }
 }

@@ -36,23 +36,7 @@
         });
         {% endif %}
     });
-</script>
-
-<div id="form_modal_payMasterAcceptance" class="modal" role="basic" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">{% trans %}Acceptance{% endtrans %}</h4>
-            </div>
-            <div class="modal-body">
-                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-</div>
-                                    
+</script>                                    
                         
 <div class="navigation" style="overflow: hidden;">
     {{ ajax_paginator_render(
@@ -78,6 +62,9 @@
                 <th>{% trans %}Date of receipt{% endtrans %}</th>
                 <th>{% trans %}Date of invoice{% endtrans %}</th>
                 <th>{% trans %}Payer{% endtrans %}</th>
+                {% if tab == 'payment' %}
+                <th>{% trans %}Bank{% endtrans %}</th>
+                {% endif %}
                 <th>{% trans %}Customer{% endtrans %}</th>
                 <th>{% trans %}Provider{% endtrans %}</th>
                 <th>{% trans %}Representation{% endtrans %}</th>
@@ -164,6 +151,15 @@
                     <td>{{ entity.createDatetime is empty ? '' : entity.createDatetime|date("d.m.y") }}</td>
                     <td>{{ entity.invoiceDate is empty ? '' : entity.invoiceDate|date("d.m.y") }}</td>
                     <td>{{ entity.payer  }}</td>
+                    {% if tab == 'payment' %}
+                    <td>
+                        {% if access.canEditBank and entity.bank is null and entity.isAcceptance == true  %}
+                            {{ include ('ITDoorsPayMasterBundle:Button:bank.html.twig')}}
+                        {% else %}
+                            {{ entity.bank }}
+                        {% endif %}
+                    </td>
+                    {% endif %}
                     <td>{{ entity.customers|join(', ')  }}</td>
                     <td>{{ entity.contractor }}</td>
                     <td>{{ entity.creator.stuff ? entity.creator.stuff.companystructure : '' }}</td>

@@ -31,4 +31,8 @@ interface PayMasterAccessInterface
      * @return bool
      */
     public function canChangeToPay();
+    /**
+     * @return bool
+     */
+    public function canEditBank();
 }

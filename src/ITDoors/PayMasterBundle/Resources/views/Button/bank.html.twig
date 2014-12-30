@@ -1,33 +1,33 @@
-<a class="btn green" id="acceptance-add-btn-{{entity.id}}" href="#" data-toggle="modal">
-    {% trans from 'ITDoorsPayMasterBundle' %}Acceptance{% endtrans %}
+<a class="btn green" id="bank-add-btn-{{entity.id}}" href="#" data-toggle="modal">
+    {% trans from 'ITDoorsPayMasterBundle' %}Bank{% endtrans %}
 </a>
 {{ ajax_form_render_btn({
-   'selector' : '#acceptance-add-btn-'~ entity.id,
-   'formType' : 'payMasterAcceptanceForm',
+   'selector' : '#bank-add-btn-'~ entity.id,
+   'formType' : 'payMasterBankForm',
    'successFunctions' : {
        'table_tab' : 'ITDoorsAjax.updateList'
    },
    'serviceDefault' : {
        'alias' : 'it_doors_pay_master.service',
-       'method' : 'addPayMasterAcceptanceFormDefaults'
+       'method' : 'addPayMasterBankFormDefaults'
    },
    'serviceSave' : {
        'alias' : 'it_doors_pay_master.service',
-       'method' : 'savePayMasterAcceptanceForm'
+       'method' : 'savePayMasterBankForm'
    },
    'defaults' : {
-       'payMasterId' : entity.id
+       'payMasterId' : entity.id,
+       'organizationId' : entity.payer.id,
    },
-   'target' : '#form_modal_payMasterAcceptance',
-   'html' : 'ITDoorsPayMasterBundle:Form:payMasterAcceptanceForm.html.twig'
+   'target' : '#form_modal_payMasterBank',
+   'html' : 'ITDoorsPayMasterBundle:Form:payMasterBankForm.html.twig'
 }) }}
-
-<div id="form_modal_payMasterAcceptance" class="modal" role="basic" aria-hidden="true">
+<div id="form_modal_payMasterBank" class="modal" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">{% trans %}Acceptance{% endtrans %}</h4>
+                <h4 class="modal-title">{% trans %}Bank{% endtrans %}</h4>
             </div>
             <div class="modal-body">
                 <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>

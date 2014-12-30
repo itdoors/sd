@@ -670,4 +670,32 @@ class PayMaster
     {
         return $this->toPay;
     }
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Bank
+     */
+    private $bank;
+
+    /**
+     * Set bank
+     *
+     * @param \Lists\OrganizationBundle\Entity\Bank $bank
+     *
+     * @return PayMaster
+     */
+    public function setBank (\Lists\OrganizationBundle\Entity\Bank $bank = null)
+    {
+        $this->bank = $bank;
+
+        return $this;
+    }
+    /**
+     * Get bank
+     *
+     * @return \Lists\OrganizationBundle\Entity\Bank 
+     */
+    public function getBank ()
+    {
+        return $this->bank;
+    }
 }

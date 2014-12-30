@@ -51,4 +51,11 @@ class BasicPayMasterAccess implements PayMasterAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canEditBank ()
+    {
+        return false;
+    }
 }

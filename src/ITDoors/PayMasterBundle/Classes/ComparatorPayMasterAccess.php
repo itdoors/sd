@@ -95,4 +95,17 @@ class ComparatorPayMasterAccess extends BasicPayMasterAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canEditBank ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canEditBank()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

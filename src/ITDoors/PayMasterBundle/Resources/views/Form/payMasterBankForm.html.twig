@@ -1,0 +1,56 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% trans_default_domain 'ITDoorsPayMasterBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#payMasterBankForm_bank').select2();
+    });
+</script>
+<div class="modal-dialog">
+   _ <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{% trans %}Bank{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row ">
+                
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('it_doors_ajax_form'),
+                    'attr' : {
+                    'method' : 'POST',
+                    'class' : 'itdoors-ajax-form',
+                    'novalidate': 'novalidate'
+                }
+                }) }}
+                <div class="form-body">
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.bank.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.bank, 'Bank', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.bank, { 'attr' : {'class' : 'form-control','placeholder': "Enter bank"} }) }}
+                            {{ form_errors(form.bank) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                            {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
+                        </div>
+
+                        <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
