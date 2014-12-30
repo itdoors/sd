@@ -1289,4 +1289,42 @@ class TaskController extends Controller
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function printAction($id) {
+        //$id = 1081;
+
+        $taskUserRole = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->find($id);
+        $user = $this->getUser();
+        if ($taskUserRole->getUser() != $user) {
+
+            return $this->render('SDTaskBundle:Task:noTaskAccess.html.twig', array());
+        }
+
+        $info = $this->getTaskUserRoleInfo($id);
+
+        $idTask = $taskUserRole->getTask()->getId();
+
+        $commentRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Comment');
+
+        $comments = $commentRepository->findBy(array (
+            'model' => 'Task',
+            'modelId' => $idTask
+        ), array (
+            'createDatetime' => 'DESC'
+        ));
+
+        $info['comments'] = $comments;
+
+        $info['taskUserRole'] = $taskUserRole;
+
+        return $this->render('SDTaskBundle:Task:taskPrint.html.twig', $info);
+    }
 }

@@ -1,0 +1,81 @@
+{% trans_default_domain 'SDTaskBundle' %}
+
+
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css') }}" rel="stylesheet" type="text/css" />
+
+
+<h3 align="center">{{ taskUserRole.task.title }}</h3>
+<br>
+<p>{{ taskUserRole.task.description|raw }}</p>
+
+<br>
+<div style="float: right;">
+    <b>{% trans %}End date{% endtrans %}</b>: <br>
+    {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+    'taskEndDates': taskUserRole.task.taskEndDates,
+    'stage': taskUserRole.task.stage
+    }) }}
+</div>
+
+<b>{% trans %}Controller{% endtrans %}</b>:
+{% if taskUserRoleController is defined and taskUserRoleController|length %}
+    {% for controller in taskUserRoleController %}
+        {{ controller.user }}
+        {% if controller.isViewed !=true %}
+            <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+        {% endif %}
+        <br>
+    {% endfor %}
+{% endif %}
+
+<br><br>
+<b>{% trans %}Author{% endtrans %}</b>:
+{% if taskUserRoleAuthor is defined and taskUserRoleAuthor|length %}
+    {% for author in taskUserRoleAuthor %}
+        {{ author.user }}
+    {% endfor %}
+{% endif %}
+
+            {% if taskUserRoleMatcher is defined and taskUserRoleMatcher|length %}
+                <br>
+                <b>{% trans %}Matcher{% endtrans %}</b>:
+                {% for key,matcher in taskUserRoleMatcher %}
+                    {{ matcher.user }}
+                    {% if matcher.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% else %}
+                        {% if matchingInfo[key] == 'none' %}
+                            <span style="color: red; font-size: smaller;">({% trans %}Not signed yet{% endtrans %})</span>
+                        {% elseif matchingInfo[key] == 'refused' %}
+                            <span style="color: red; font-size: smaller;">({% trans %}Refused sign up{% endtrans %})</span>
+                        {% elseif matchingInfo[key] == 'agree' %}
+                            <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if taskUserRoleViewer is defined and taskUserRoleViewer|length %}
+                <br>
+                <b>{% trans %}Viewer{% endtrans %}</b>:
+                {% for viewer in taskUserRoleViewer %}
+                    {{ viewer.user }}
+                    {% if viewer.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+<br><br>
+</div>
+
+<script>
+    window.print();
+</script>
