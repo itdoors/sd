@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Currency
 {
+
     /**
      * @var integer
      */
@@ -24,59 +25,56 @@ class Currency
      */
     private $code;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set shortName
      *
      * @param string $shortName
+     *
      * @return Currency
      */
-    public function setShortName($shortName)
+    public function setShortName ($shortName)
     {
         $this->shortName = $shortName;
-    
+
         return $this;
     }
-
     /**
      * Get shortName
      *
      * @return string 
      */
-    public function getShortName()
+    public function getShortName ()
     {
         return $this->shortName;
     }
-
     /**
      * Set code
      *
      * @param integer $code
+     *
      * @return Currency
      */
-    public function setCode($code)
+    public function setCode ($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
-
     /**
      * Get code
      *
      * @return integer 
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->code;
     }

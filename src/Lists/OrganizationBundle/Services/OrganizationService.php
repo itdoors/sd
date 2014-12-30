@@ -264,7 +264,8 @@ class OrganizationService
             ++$countAcc;
 
             $output->writeln(
-                $countAcc." ~ ".number_format(memory_get_usage()/8000000, 0, ',', ' ')."MB ~ more: ".($countAccAll - $key)
+                $countAcc." ~ ".number_format(memory_get_usage()/8000000, 0, ',', ' ').
+                "MB ~ more: ".($countAccAll - $key)
             );
             $this->saveAcc($input, $output, $acc);
 
@@ -321,9 +322,11 @@ class OrganizationService
     {
         $em = $this->container->get('doctrine')->getManager();
         $bank = $em->getRepository('ListsOrganizationBundle:Bank')->findOneBy(array ('guid' => trim($acc->bankGuid)));
-        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->findOneBy(array ('edrpou' => trim($acc->edrpou)));
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->findOneBy(array ('edrpou' => trim($acc->edrpou)));
         $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
-        $currency = $em->getRepository('ListsOrganizationBundle:Currency')->findOneBy(array ('code' => trim($acc->currencyCode)));
+        $currency = $em->getRepository('ListsOrganizationBundle:Currency')
+            ->findOneBy(array ('code' => trim($acc->currencyCode)));
         $currentAccount = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
             ->findOneBy(array (
                 'currency' => $currency,

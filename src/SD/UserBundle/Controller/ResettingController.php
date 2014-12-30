@@ -83,7 +83,12 @@ class ResettingController extends BaseController
         );
     }
     /**
-     * Reset user password
+     * resetAction
+     * 
+     * @param Request $request
+     * @param string  $token
+     *
+     * @return RedirectResponse
      */
     public function resetAction(Request $request, $token)
     {
@@ -98,7 +103,6 @@ class ResettingController extends BaseController
 
         if (null === $user) {
             return $this->render('SDUserBundle:Resetting:notFound.html.twig');
-            //throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
         $event = new GetResponseUserEvent($user, $request);
@@ -124,7 +128,9 @@ class ResettingController extends BaseController
                 $response = new RedirectResponse($url);
             }
 
-            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+            $dispatcher->dispatch(
+                FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response)
+            );
 
             return $response;
         }
