@@ -248,7 +248,7 @@ class OperInfoController extends BaseFilterController
 
             $content = '';
             foreach ($mpks as $key => $newMpk) {
-                $name = $newMpk->getName();
+                $name = $newMpk->getName().'';
 
                 $content = $name;
 
