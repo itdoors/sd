@@ -347,7 +347,7 @@ class DogovorRepository extends EntityRepository
             ->addSelect('d.filepath as filepath')
             ->addSelect('d.paymentDeferment')
             ->addSelect('d.delayComment')
-            ->addSelect('delayType.shortName as delayTypeName')
+            ->addSelect('delayType.name as delayTypeName')
             ->addSelect('d.prolongation as prolongation')
             ->addSelect('d.prolongationTerm as prolongationTerm')
             ->addSelect('d.startdatetime as startdatetime')

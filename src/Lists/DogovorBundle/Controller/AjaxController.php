@@ -56,7 +56,7 @@ class AjaxController extends Controller
         $result = array();
 
         foreach ($objects as $object) {
-            $text = $object->getShortName();
+            $text = $object->getName();
             $id = $object->getId();
             $result[] =  array(
                 'id' => $id,
