@@ -531,8 +531,8 @@
             <div class="col-md-12" >
                 {% if access.canEditDescription %}
 
-                    <div id="description_div">
-                        <span id="description_text" style="white-space: pre-line">{{ taskUserRole.task.description|raw }}</span>
+                    <div id="description_div" style="overflow-x: scroll;">
+                        <span id="description_text" style="white-space: pre-line;">{{ taskUserRole.task.description|raw }}</span>
                         <span id="description_edit_text">
                             <br><br>
                             <a href="#">{% trans %}Edit description{% endtrans %} <i class="fa fa-edit"></i></a>
@@ -557,7 +557,9 @@
                     </script>
 #}
                 {% else %}
+                    <div style="overflow: auto;">
                     {{ taskUserRole.task.description|raw }}
+                    </div>
                 {% endif %}
                 <br><br>
             </div>
