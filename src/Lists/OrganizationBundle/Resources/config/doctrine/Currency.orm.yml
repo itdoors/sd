@@ -1,0 +1,23 @@
+Lists\OrganizationBundle\Entity\Currency:
+    type: entity
+    table: currency
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        shortName:
+            type: string
+            length: 64
+            nullable: false
+            column: short_name
+            options:
+                comment: Краткое название валюты
+        code:
+            type: integer
+            nullable: false
+            unique: true
+            options:
+                comment: Код валюты

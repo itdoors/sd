@@ -132,7 +132,6 @@ class OrganizationCurrentAccount
     {
         return $this->bank;
     }
-
     /**
      * __toString
      * 
@@ -141,5 +140,33 @@ class OrganizationCurrentAccount
     public function __toString ()
     {
         return $this->getName();
+    }
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Currency
+     */
+    private $currency;
+
+    /**
+     * Set currency
+     *
+     * @param \Lists\OrganizationBundle\Entity\Currency $currency
+     *
+     * @return OrganizationCurrentAccount
+     */
+    public function setCurrency (\Lists\OrganizationBundle\Entity\Currency $currency = null)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+    /**
+     * Get currency
+     *
+     * @return \Lists\OrganizationBundle\Entity\Currency 
+     */
+    public function getCurrency ()
+    {
+        return $this->currency;
     }
 }

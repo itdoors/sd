@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Lists\OrganizationBundle\Entity\BankCron;
 use Lists\OrganizationBundle\Entity\Bank;
 use Lists\OrganizationBundle\Entity\OrganizationCurrentAccount;
+use Lists\OrganizationBundle\Entity\Currency;
 
 /**
  * OrganizationService class
@@ -322,13 +323,23 @@ class OrganizationService
         $bank = $em->getRepository('ListsOrganizationBundle:Bank')->findOneBy(array ('guid' => trim($acc->bankGuid)));
         $organization = $em->getRepository('ListsOrganizationBundle:Organization')->findOneBy(array ('edrpou' => trim($acc->edrpou)));
         $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
+        $currency = $em->getRepository('ListsOrganizationBundle:Currency')->findOneBy(array ('code' => trim($acc->currencyCode)));
         $currentAccount = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
             ->findOneBy(array (
+                'currency' => $currency,
                 'bank' => $bank,
                 'organization' => $organization,
                 'typeAccount' => $type,
                 'name' => $acc->accNumber
             ));
+        if (!$currency) {
+            $output->writeln('currency - code: "'.trim($acc->currencyCode).'" - create new');
+            $currency = new Currency();
+            $currency->setCode(trim($acc->currencyCode));
+            $currency->setShortName(trim($acc->currencyName));
+            $em->persist($currency);
+            $em->flush();
+        }
         if (!$bank) {
             $output->writeln('Bank - guid: "'.trim($acc->bankGuid).'" - not found');
         }
@@ -336,8 +347,9 @@ class OrganizationService
             $output->writeln('Organization - edrpou: "'.trim($acc->edrpou).'" - not found');
         }
         if ($bank && $organization && !$currentAccount) {
-            $output->writeln('Add current account - number: "'.trim($acc->accNumber).'" -create new');
+            $output->writeln('Add current account - number: "'.trim($acc->accNumber).'" - create new');
             $object = new OrganizationCurrentAccount();
+            $object->setCurrency($currency);
             $object->setBank($bank);
             $object->setOrganization($organization);
             $object->setName($acc->accNumber);

@@ -34,6 +34,13 @@ Lists\OrganizationBundle\Entity\OrganizationCurrentAccount:
             joinColumn:
                 name: bank_id
                 referencedColumnName: id
+        currency:
+            targetEntity: Currency
+            inversedBy: null
+            nullable: false
+            joinColumn:
+                name: currency_id
+                referencedColumnName: id
     uniqueConstraints:
         unique_organization_current_account_idx:
-          columns: [ name, organization_id, bank_id ]
+          columns: [name, organization_id, bank_id, currency_id]

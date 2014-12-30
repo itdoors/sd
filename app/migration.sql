@@ -2248,3 +2248,117 @@ INSERT INTO "public".bank ("name", mfo, guid)
 INSERT INTO "public".bank ("name", mfo, guid) 
 	VALUES ('HБУ УНІВЕРСИТЕТ БАНКІВ.СПРАВИ НБУ, М.КИЇВ, м. Київ', '399391', 'faa6ba8b-89bb-11e4-92ae-ac162d8baeeb');
 -- prod +++++
+CREATE TABLE currency (id BIGSERIAL NOT NULL, short_name VARCHAR(64) NOT NULL, code INT NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN currency.short_name IS 'Краткое название валюты';
+COMMENT ON COLUMN currency.code IS 'Код валюты';
+ALTER TABLE organization_current_account ADD currency_id BIGINT DEFAULT NULL;
+DROP INDEX unique_organization_current_account_idx;
+ALTER TABLE organization_current_account ADD CONSTRAINT FK_85A323F438248176 FOREIGN KEY (currency_id) REFERENCES currency (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_85A323F438248176 ON organization_current_account (currency_id);
+CREATE UNIQUE INDEX unique_organization_current_account_idx ON organization_current_account (name, organization_id, bank_id, currency_id);
+ALTER TABLE bank_cron ADD CONSTRAINT FK_BDAD527611C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE UNIQUE INDEX UNIQ_6956883F77153098 ON currency (code);
+
+INSERT INTO "public".currency (short_name, code) 
+	VALUES ('грн', 980);
+INSERT INTO "public".currency (short_name, code) 
+	VALUES ('USD', 840);
+INSERT INTO "public".currency (short_name, code) 
+	VALUES ('EUR', 978);
+INSERT INTO "public".currency (short_name, code) 
+	VALUES ('PLN', 985);
+INSERT INTO "public".currency (short_name, code) 
+	VALUES ('RUB', 643);
+
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 1891, 364, '26004196728', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 1754, 364, '26008196735', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 1754, 364, '26042196735', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 14, '26009000801901', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 15, '26009011001449', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 16, '2600901032047', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 43, '26007301019835', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 43, '26042010019835', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 367, '260093017275', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 367, '260433017275', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 195, '26004274613001', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 195, '26004274613001', 2);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 195, '26004274613001', 3);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 18, '26006009100048', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 19, '26009013343001', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 41, '26009060294537', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 39, '26004153553', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 42, '26001013001698', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 20, '26005000640601', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 21, '26009192039600', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 282, '26005010005786', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 357, '26002000010910', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 21, '26054192039600', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 223, '26153300096801', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 192, '26003001304681', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 357, '29248000000253', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 21, '26009192039600', 4);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 247, '26000066779001', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 367, '260063017275', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 216, '29244809996333', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 331, '29096620349277', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 40, '26002016663601', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 43, '26007301019835', 3);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 191, '26107260200005', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 364, '260093017275', 2);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 216, '260093101', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 394, '37122001006047', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 216, '260093101', 5);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 364, '260093017275', 3);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 216, '2600326315', 5);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 191, '26000260200094', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 75, '26008200799003', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 23, 351, '26003300427278', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 2590, 367, '2600330123940', 1);
+INSERT INTO "public".organization_current_account (type_id, organization_id, bank_id, "name", currency_id) 
+	VALUES (2, 2590, 216, '260067522', 1);
+
+-- prod +++++++++++
