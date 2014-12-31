@@ -32,7 +32,11 @@ class OrganizationUserFilterFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', 'text')
+            ->add('user', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control'
+                )
+            ))
             ->add('organizationId', 'hidden')
             ->add('submit', 'submit');
     }

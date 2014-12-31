@@ -67,6 +67,13 @@
                         $(val).uniform();
                 });
             });
+        $('.all-checkbox').uniform();
+        $.each($('input[name="departmens[]"]'), function(key, val){
+            $(val).uniform();
+        });
+        $.each($('input[name="organizations[]"]'), function(key, val){
+            $(val).uniform();
+        });
     });
 </script>
 {% if organizations|length > 0 %}
@@ -109,7 +116,6 @@
 </div>
 {% endif %}
 {% if departmens|length > 0 %}
-<div class="table-responsive col-md-12">
     <div class="portlet box green">
         <div class="portlet-title">
             <div class="caption">
@@ -143,11 +149,12 @@
             </table>
         </div>
     </div>
-</div>
 {% endif %}
 {% if organizations|length > 0 or departmens|length > 0 %}
-<div class="table-responsive col-md-6">
-    <input id="userTo" value="">
-    <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Transfer{% endtrans %}</button>
-</div>
+    <div class="col-md-3">
+        <input id="userTo" class="form-control" value="">
+    </div>
+    <div class="col-md-9">
+        <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Transfer{% endtrans %}</button>
+    </div>
 {% endif %}
