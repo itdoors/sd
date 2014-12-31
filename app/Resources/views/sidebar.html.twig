@@ -841,6 +841,16 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% if is_granted('ROLE_HRADMIN') %}
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_department_appointment')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('lists_department_appointment') }}" title="{% trans %}Appointment{% endtrans %}">
+                            <i class="fa fa-building"></i>
+                            {% trans %}Appointment{% endtrans %}
+                        </a>
+                    </li>
+                    {% endif %}
                     {% if is_granted('ROLE_COACH') or is_granted('ROLE_COACHADMIN') %}
                     <li{% if
                              path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_coach_index')

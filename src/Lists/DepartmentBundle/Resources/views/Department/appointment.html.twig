@@ -1,0 +1,35 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsDepartmentBundle' %}
+{% block title %}{% trans %}Appointment departments{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="" title="{% trans %}Appointment departments{% endtrans %}">{% trans %}Appointment departments{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Appointment departments{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    В разработке
+    {#{ ajax_filter_render('organizationUserFilterForm', nameSpaceDepartment, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }#}
+{% endblock %}

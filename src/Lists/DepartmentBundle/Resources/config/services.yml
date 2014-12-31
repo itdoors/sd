@@ -8,6 +8,8 @@ parameters:
     lists_departmentPeople.repository.class: Lists\DepartmentBundle\Entity\DepartmentPeopleRepository
     lists_departmentPeople.repository.entity: Lists\DepartmentBundle\Entity\DepartmentPeople
     lists_department.department.form.class: Lists\DepartmentBundle\Form\DepartmentForm
+    
+    lists_department.service.class: Lists\DepartmentBundle\Services\DepartmentService
 services:
     lists_department.repository:
         class: %lists_department.repository.class%
@@ -34,3 +36,6 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: departmentForm }
+            
+    lists_department.service:
+        class: %lists_department.service.class%

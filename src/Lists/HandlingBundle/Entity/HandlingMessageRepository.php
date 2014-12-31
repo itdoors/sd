@@ -74,30 +74,31 @@ class HandlingMessageRepository extends EntityRepository
             ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME);
         if ($manager) {
-            $q->andWhere('hm.user in (:managers)')
-                ->setParameter(':managers', $manager);
+            $q->andWhere('hm.user in (:managers)')->setParameter(':managers', $manager);
         }
-        $q = $q
-            ->orderBy('hm.createdate')
-            ->getQuery()
-            ->getResult();
+        $res = $q->orderBy('hm.createdate')->getQuery()->getResult();
 
-        if (!sizeof($q)) {
+        if (!sizeof($res)) {
             return array();
         }
 
-        $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')
-            ->getList();
+        $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')->getList();
 
         $result = array();
 
-        foreach ($q as $handlingMessage) {
+        foreach ($res as $handlingMessage) {
             if (!isset ( $result[$handlingMessage->getUserId()] )) {
                 $result[$handlingMessage->getUserId()] = array();
                 $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
                 $result[$handlingMessage->getUserId()]['actions'] = array();
+                $result[$handlingMessage->getUserId()]['count'] =
+                    $this->createQueryBuilder('hm')
+                    ->select('count(hm.id) as countAction, t.name as typeAction')
+                    ->leftJoin('hm.type', 't')
+                    ->where('hm.user = :userId')->setParameter(':userId', $handlingMessage->getUserId())
+                    ->groupBy('t.name')
+                    ->getQuery()->getResult();
             }
-
             $result[$handlingMessage->getUserId()]['actions'][] = $handlingMessage;
         }
 

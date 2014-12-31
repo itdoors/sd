@@ -35,7 +35,7 @@
                     <div class="col-md-12">
                         <div class="form-group{% if form.bank.vars.errors|length %} has-error{% endif %}">
                             {{ form_label(form.bank, 'Bank', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.bank, { 'attr' : {'class' : 'form-control','placeholder': "Enter bank"} }) }}
+                            {{ form_errors(form.bank) }}
                             {{ form_errors(form.bank) }}
                         </div>
                     </div>

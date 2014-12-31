@@ -50,8 +50,14 @@
         <tbody>
         {% for result in results %}
             <tr>
-                <td colspan="4">{{ result.user }}</td>
+                <td colspan="2" rowspan="{{ (result.count|length) +1}}" style="vertical-align: middle">{{ result.user }}</td>
             </tr>
+            {% for actionCount in result.count %}
+                <tr>
+                    <td >{{ actionCount.typeAction }}</td>
+                    <td >{{ actionCount.countAction}}</td>
+                </tr>
+            {% endfor %}
             {% for action in result.actions %}
                 <tr>
                     <td>{{ action.id }}</td>

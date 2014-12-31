@@ -158,7 +158,7 @@ class DepartmentsRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getFilteredDepartments($filters, $allowedDepartments, $type = 'data')
+    public function getFilteredDepartments($filters, $allowedDepartments = false, $type = 'data')
     {
         if ($type == 'data') {
             $sql = $this->getAllDepartmentsBuilder();

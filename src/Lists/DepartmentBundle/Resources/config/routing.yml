@@ -1,0 +1,3 @@
+lists_department_appointment:
+    pattern:  /lists/department/appointment
+    defaults: { _controller: ListsDepartmentBundle:Department:appointment }
