@@ -18,46 +18,51 @@ class DepartmentController extends Controller
      */
     public function appointmentAction ()
     {
-        $em = $this->getDoctrine()->getManager();
         $service = $this->get('lists_department.service');
-        $serviceITDoors = $this->get('itdoors_common.base.service');
         $access = $service->checkAccess($this->getUser());
 
         if (!$access->canUse()) {
             throw new Exception('No Access', 403);
         }
         $nameSpaceDepartment = $this->nameSpaceDepartment.'_appointment';
-        $filters = $serviceITDoors->getFilters($nameSpaceDepartment);
-        $departmens = array();
-//        if (empty($filters) || empty($filters['user'])) {
-//            $filters['isFired'] = 'No fired';
-//            $departmens = array();
-//        } else {
-//            /** @var \Doctrine\ORM\Query */
-//            $departments = $em->getRepository('ListsDepartmentBundle:Department')->getFilteredDepartments($filters);
-//
-//            $userId = $filters['user'];
-//
-//                /** @var \SD\UserBundle\Entity\User $user */
-//                $user = $em->getRepository('SDUserBundle:User')->find($userId);
-//
-//                $stuffDepartmensQuery = $user->getStuff()->getStuffDepartments(array(''));
-//                $organizations = array();
-//                foreach ($stuffDepartmensQuery as $stuff) {
-//                    $departments = $stuff->getDepartments();
-//                    $organizations[$departments->getOrganizationId()][$departments->getId()] = $departments;
-//                }
-//                /* order by organization */
-//                foreach ($organizations as $organization) {
-//                    foreach ($organization as $key => $dep) {
-//                        $departmensQuery[$key] = $dep;
-//                    }
-//                }
-//        }
-
+        
         return $this->render('ListsDepartmentBundle:Department:appointment.html.twig', array (
                 'nameSpaceDepartment' => $nameSpaceDepartment,
                 'access' => $access
+        ));
+    }
+    /**
+     * appointmentListAction
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function appointmentListAction ()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $service = $this->get('lists_department.service');
+        $serviceITDoors = $this->get('it_doors_ajax.base_filter_service');
+        $access = $service->checkAccess($this->getUser());
+        $claimtypes = $em->getRepository('SDUserBundle:Claimtype')->findAll();
+
+        if (!$access->canUse()) {
+            throw new Exception('No Access', 403);
+        }
+        $nameSpaceDepartment = $this->nameSpaceDepartment.'_appointment';
+        $filters = $serviceITDoors->getFilters($nameSpaceDepartment);
+        $departments = array();
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $departments = array();
+        } else {
+            $departments = $em->getRepository('ListsDepartmentBundle:Departments')->getFilteredDepartments($filters)->getResult();
+        }
+
+        return $this->render('ListsDepartmentBundle:Department:appointmentList.html.twig', array (
+                'nameSpaceDepartment' => $nameSpaceDepartment,
+                'departments' => $departments,
+                'access' => $access,
+                'filters' => $filters,
+                'claimtypes' => $claimtypes
         ));
     }
 }

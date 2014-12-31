@@ -1,0 +1,158 @@
+{% trans_default_domain 'ListsDepartmentBundle' %}
+{% if departments|length > 0 %}
+<script>
+    $(document).ready(function(){
+        $('#TransferSubmit').on('click', function(){
+            
+            var _this = this;
+            var departmens = $('input[name="departmens[]"]:checked').map(function(){
+                    return $(this).val();
+                }).toArray();
+            var typeOrganization = $('#typeOrganization').val();
+            var userRole = $('#userRole').val();
+            var userIds = $('#userTo').val();
+            if (typeOrganization == ''){ alert('Укажите тип организации');return false;};
+            if (userRole == ''){ alert('Укажите роль');return false;};
+            if (userIds == ''){ alert('Укажите менеджера');return false;};
+            if (departmens == ''){ alert('Выберите отделение'); return false;};
+            $(this).attr('disabled', true);
+            var blockupdate = $('#datatable_ajax');
+             $.ajax({
+                type: 'POST',
+                url: "{{ url('lists_department_ajax_save_appointment') }}",
+                dataType: 'json',
+                data: {
+                    departmens: departmens,
+                    userIds: userIds,
+                    userRole: userRole,
+                    typeOrganization: typeOrganization
+                },
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI(blockupdate);
+                },
+                success: function(json) {
+                    ITDoorsAjax.unblockUI(blockupdate);
+                    if (json.success) {
+                        $.ajax({
+                        type: 'POST',
+                        url: blockupdate.data('url'),
+                        success: function(response) {
+                            blockupdate.html(response);
+                            ITDoorsAjax.unblockUI(blockupdate);
+                        }
+                    });
+                    }else if(json.error){
+                        $(_this).removeAttr('disabled');
+                        alert(json.error);
+                    }
+                }
+            });
+        });
+        $('#userTo').select2({
+            placeholder: "{% trans %}Select manager{% endtrans %}",
+            width: '100%',
+            minimumInputLength: 2,
+            multiple: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('#userRole').select2({
+            placeholder: "{% trans %}Select role{% endtrans %}",
+            width: '100%',
+            minimumInputLength: 0,
+            data:[{id:'kurator',text:'kurator'},{id:'staff',text:'staff'}]
+        });
+        $('#typeOrganization').select2({
+            placeholder: "{% trans %}Select type organization{% endtrans %}",
+            width: '100%',
+            minimumInputLength: 0,
+            multiple: true,
+            data:
+            [
+                {% for key,claimtype in claimtypes %}
+                        {% if key > 0 %},{% endif %}{id:'{{claimtype.id}}',text:'{{claimtype.name}}'}
+                {%endfor %}
+            ]
+        });
+        $('.all-checkbox').change(function(){
+            var name = $(this).data('name');
+            $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
+            $.each($('input[name="'+name+'[]"]'), function(key, val){
+                $(val).uniform();
+            });
+        });
+        $('.all-checkbox').uniform();
+        $.each($('input[name="departmens[]"]'), function(key, val){
+            $(val).uniform();
+        });
+    });
+</script>
+<div class="col-md-12">
+    <div class="portlet box green">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-edit"></i>
+                {% trans %}Departments{% endtrans %} 
+            </div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Departmens{% endtrans %} "></a></div>
+        </div>
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" data-name="departmens" class="all-checkbox"></th>
+                        <th>{% trans %}MPK{% endtrans %} </th>
+                        <th>{% trans %}City{% endtrans %} </th>
+                        <th>{% trans %}Address{% endtrans %} </th>
+                        <th>{% trans %}Organization{% endtrans %} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in departments %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td><input type="checkbox" class="departmens"  name="departmens[]" value="{{ item.id|e }}"></td>
+                            <td>{{ item.mpk|e }}</td>
+                            <td>{{ item.cityName|e }}</td>
+                            <td>{{ item.address|e }}</td>
+                            <td>{{ item.organizationName|e }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if departments|length > 0 %}
+            <div class="row">
+                <div class="col-md-4">
+                    <input id="userTo" value="">
+                </div>
+                <div class="col-md-4">
+                    <input id="userRole" class="form-control" value="">
+                </div>
+                <div class="col-md-4">
+                    <input id="typeOrganization" class="form-control" value="{% for key,claimtype in claimtypes %}{% if key > 0 %},{% endif %}{{claimtype.id}}{% endfor %}">
+                </div>
+                <div class="table-responsive col-md-12 margin-top-10">
+                    <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Appoint{% endtrans %}</button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if filters.isFired is defined or filters|length == 0 %}
+    <div class="note note-danger">
+        <h4 class="block">{% trans from 'ITDoorsControllingBundle' %}Please enter at least one parameter in the filter{% endtrans %}</h4>
+    </div>
+{% endif %}

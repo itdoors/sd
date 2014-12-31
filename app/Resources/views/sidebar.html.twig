@@ -770,7 +770,9 @@
                     </ul>
                 </li>
             {% endif %}
-            <li{% if 
+            <li{% if
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_department_appointment')
+                or
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_companystructure_employees')
                 or
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')

@@ -28,8 +28,14 @@
 {% endblock %}
 
 {% block body %}
-    В разработке
-    {#{ ajax_filter_render('organizationUserFilterForm', nameSpaceDepartment, {
+    {{ ajax_filter_render('DepartmentFilterFormType', nameSpaceDepartment, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
-    }) }#}
+    }) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('lists_department_appointment_list') }}">
+                {{ render(controller('ListsDepartmentBundle:Department:appointmentList')) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

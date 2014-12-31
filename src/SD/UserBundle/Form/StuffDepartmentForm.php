@@ -49,6 +49,9 @@ class StuffDepartmentForm extends AbstractType
                 'mapped' => false
             ))
             ->add('userkey', 'choice', array(
+                'attr' => array(
+                    'class' => 'form-control can-be-reseted submit-field',
+                ),
                 'choices' => array(
                     'kurator' => 'kurator',
                     'stuff' => 'stuff'

@@ -14,7 +14,7 @@ filtered from _MAX_ total entries: всего записей _MAX_
 MPK: МПК
 Name: Наименование
 City: Город
-Address: Адресс
+Address: Адрес
 Type: Тип
 Date: Дата
 Description: Заметки
@@ -36,3 +36,8 @@ Enter value: Введите значение
 
 Appointment departments: Назначение отделений
 Dashboard: Рабочий стол
+Appoint: Назначить
+Departments: Отделения
+Select manager: Выберите менеджера
+Select role: Выберите роль
+Select type organization: Выберите тип организации
