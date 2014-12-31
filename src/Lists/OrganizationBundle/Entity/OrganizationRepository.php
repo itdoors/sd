@@ -582,7 +582,7 @@ class OrganizationRepository extends EntityRepository
     public function searchSelfOrganization ($q)
     {
         $sql = $this->createQueryBuilder('o')
-            ->leftJoin('o.role', 'l')
+            ->leftJoin('o.lookup', 'l')
             ->where('lower(o.name) LIKE :q')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->andWhere('l.lukey = :key')
