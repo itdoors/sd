@@ -67,41 +67,20 @@
                 	
                 	$('#download').unbind();
                 	$('#download').click(function(){
-                		$.ajax({
-                			url: "{{ url('sd_user_stat_download') }}",
-                		    type: 'GET',
-                		    dataType: 'json',
-                            data: {
-                                users: users,
-                                start: start.unix(),
-                                end: end.unix()
-                            },
-                		    beforeSend: function () {
-                            	SD.blockUI($('#chart_4'));
-                            },
-                            complete: function(data) {
-                    		    console.log('succes');
-                		    	SD.unblockUI($('#chart_4'));
-                		    }
-                		});
-                		function insertParam(key, value)
-                		{
-                		    key = encodeURI(key); value = encodeURI(value);
-                		    var kvp = document.location.search.substr(1).split('&');
-                		    var i=kvp.length; var x; while(i--) 
-                		    {
-                		        x = kvp[i].split('=');
-                		        if (x[0]==key)
-                		        {
-                		            x[1] = value;
-                		            kvp[i] = x.join('=');
-                		            break;
-                		        }
-                		    }
-                		    if(i<0) {kvp[kvp.length] = [key,value].join('=');}
-                		    //this will reload the page, it's likely better to store this until finished
-                		    document.location.search = kvp.join('&'); 
-                		}
+                    	var url = '{{ url('sd_user_stat_download') }}';
+                    	var ids = [];
+
+                    	for (i=0; i<users.length; i++) {
+                    	    ids.push(users[i].id);
+                    	}
+                        ids = ids.join(',');
+                    	
+                    	url += '?';
+                    	url += encodeURI('users') + '=' + encodeURI(ids) + '&';
+                    	url += encodeURI('start') + '=' + encodeURI(start.unix()) + '&';
+                    	url += encodeURI('end') + '=' + encodeURI(end.unix());
+
+                    	window.location = url;
                 	});
                 }
             });

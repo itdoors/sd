@@ -262,6 +262,8 @@ class UserStatisticController extends BaseController
 
     /**
      * Executes downloadStatistic action
+     * 
+     * @param Request $request
      *
      * @return string
      */
@@ -274,7 +276,7 @@ class UserStatisticController extends BaseController
         $end = (new \DateTime)->setTimestamp($request->get('end'));
         $start = (new \DateTime)->setTimestamp($request->get('start'));
 
-        $users = $request->get('users');
+        $users = explode(',', $request->get('users'));
         if ($users) {
             foreach ($users as $userId) {
                 $qb = $em->createQueryBuilder();
@@ -282,7 +284,7 @@ class UserStatisticController extends BaseController
                     ->select('SUM(TIMESTAMPDIFF(MINUTE, ulr.logedIn, ulr.logedOut)) as online')
                     ->addSelect('COUNT(ulr.logedIn) as total')
                     ->from('SDUserBundle:UserLoginRecord', 'ulr')
-                    ->where($qb->expr()->eq('ulr.user', $userId['id']))
+                    ->where($qb->expr()->eq('ulr.user', $userId))
                     ->andWhere($qb->expr()->gt('ulr.logedIn', ':start'))
                     ->andWhere($qb->expr()->lt('ulr.logedOut', ':end'))
                     ->setParameters(array(
@@ -320,13 +322,13 @@ class UserStatisticController extends BaseController
         $str = 1;
         $col = 0;
 
-        $transHeader = $translator->trans('Name', array(), $transNamespace);
+        $transHeader = $translator->trans('First name', array(), $transNamespace);
         $phpExcelObject->getActiveSheet()
             ->setCellValueByColumnAndRow($col++, $str, $transHeader);
         $transHeader = $translator->trans('Online', array(), $transNamespace);
         $phpExcelObject->getActiveSheet()
             ->setCellValueByColumnAndRow($col++, $str, $transHeader);
-        $transHeader = $translator->trans('Total', array(), $transNamespace);
+        $transHeader = $translator->trans('Logins total', array(), $transNamespace);
         $phpExcelObject->getActiveSheet()
             ->setCellValueByColumnAndRow($col++, $str, $transHeader);
 
@@ -334,10 +336,13 @@ class UserStatisticController extends BaseController
             $col = 0;
             ++$str;
 
+            $time = $record['online'];
+            $timeString = intval($time/60) . ' ч ' . (int) $time%60 . ' мин';
+
             $phpExcelObject->getActiveSheet()
                            ->setCellValueByColumnAndRow($col++, $str, $record['name']);
             $phpExcelObject->getActiveSheet()
-                           ->setCellValueByColumnAndRow($col++, $str, $record['online']);
+                           ->setCellValueByColumnAndRow($col++, $str, $timeString);
             $phpExcelObject->getActiveSheet()
                            ->setCellValueByColumnAndRow($col++, $str, $record['total']);
 
@@ -350,7 +355,7 @@ class UserStatisticController extends BaseController
         $phpExcelObject->getActiveSheet()->freezePane('AB2');
         $phpExcelObject->getActiveSheet()->setTitle('Statistic');
 
-        $fileName = 'Statistic';
+        $fileName = 'Statistic_' . $start->format('Y-m-d_H:i') . '—' . $end->format('Y-m-d_H:i');
         $writer = $this->container->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
         $response = $this->container->get('phpexcel')->createStreamedResponse($writer);
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
