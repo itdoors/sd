@@ -27,7 +27,7 @@ var SD = (function() {
     {
         this.params = $.extend(defaults, options);
 
-        this.params.loadingImgPath = this.params.assetsDir + '/templates/metronic/img/ajax-loading.gif';
+        this.params.loadingImgPath = this.params.assetsDir + 'templates/metronic/img/ajax-loading.gif';
 
         this.initAjaxForm();
 
