@@ -71,12 +71,13 @@ class HandlingMessageRepository extends EntityRepository
             ->where('hm.createdate >= :createdateFrom')
             ->andWhere('hm.createdate <= :createdateTo')
             ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.type', 't')
             ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME);
         if ($manager) {
             $q->andWhere('hm.user in (:managers)')->setParameter(':managers', $manager);
         }
-        $res = $q->orderBy('hm.createdate')->getQuery()->getResult();
+        $res = $q->orderBy('t.name, hm.createdate')->getQuery()->getResult();
 
         if (!sizeof($res)) {
             return array();
@@ -92,17 +93,34 @@ class HandlingMessageRepository extends EntityRepository
                 $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
                 $result[$handlingMessage->getUserId()]['actions'] = array();
                 $result[$handlingMessage->getUserId()]['count'] =
-                    $this->createQueryBuilder('hm')
-                    ->select('count(hm.id) as countAction, t.name as typeAction')
-                    ->leftJoin('hm.type', 't')
-                    ->where('hm.user = :userId')->setParameter(':userId', $handlingMessage->getUserId())
-                    ->groupBy('t.name')
-                    ->getQuery()->getResult();
+                    $this->getAdvancedCountResult($from, $to, $handlingMessage->getUserId());
             }
             $result[$handlingMessage->getUserId()]['actions'][] = $handlingMessage;
         }
 
         return $result;
+    }
+    /**
+     * @param datetime $from
+     * @param datetime $to
+     * @param string   $userId
+     *
+     * @return array
+     */
+    public function getAdvancedCountResult($from, $to, $userId)
+    {
+        return $this->createQueryBuilder('hm')
+                    ->select('count(hm.id) as countAction, t.name as typeAction')
+                    ->leftJoin('hm.type', 't')
+                    ->where('hm.user = :userId')
+                    ->andWhere('hm.createdate >= :createdateFrom')
+                    ->andWhere('hm.createdate <= :createdateTo')
+                    ->setParameter(':userId', $userId)
+                    ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
+                    ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
+                    ->groupBy('t.name')
+                    ->orderBy('t.name')
+                    ->getQuery()->getResult();
     }
 
     /**

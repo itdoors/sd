@@ -357,6 +357,9 @@ class UserController extends BaseController
                 $stuff->setEducation('');
                 $stuff->setIssues('');
                 $stuff->setStuffclass('stuff');
+                $status = $em->getRepository('ListsLookupBundle:Lookup')
+                    ->findOneBy(array('lukey' => 'worked'));
+                $stuff->setStatus($status);
 
                 $em->persist($stuff);
 

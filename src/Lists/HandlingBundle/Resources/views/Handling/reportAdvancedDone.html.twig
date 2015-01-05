@@ -35,7 +35,16 @@
 
 
 {% block body %}
-
+<script>
+    $(document).ready(function(){
+        $('.toggle-show').on('click', function(){
+            var objects = $('.'+$(this).data('class'));
+            $(this).text(objects.is(':visible') ? '+' : '-');
+            objects.toggle('visible');
+            
+        });
+    });
+</script>
     {% trans_default_domain 'ListsHandlingBundle' %}
 <div class="table-scrollable">
     <table class="table table-striped table-bordered table-advance table-hover" id="report-activity-content">
@@ -50,16 +59,23 @@
         <tbody>
         {% for result in results %}
             <tr>
-                <td colspan="2" rowspan="{{ (result.count|length) +1}}" style="vertical-align: middle">{{ result.user }}</td>
+                <td colspan="4" style="vertical-align: middle">{{ result.user }}</td>
             </tr>
-            {% for actionCount in result.count %}
-                <tr>
-                    <td >{{ actionCount.typeAction }}</td>
-                    <td >{{ actionCount.countAction}}</td>
-                </tr>
-            {% endfor %}
+            {% set actionName = null %}
             {% for action in result.actions %}
-                <tr>
+                {% if actionName != action.type %}
+                    {% set actionName = action.type %}
+                    {% for actionCount in result.count %}
+                        {% if action.type.name == actionCount.typeAction %}
+                            <tr>
+                                <td><a style="" href="#" class="toggle-show" data-class="{{ result.user.id }}-{{ action.type.id }}">+</a></td>
+                                <td colspan="2"></td>
+                                <td>{{ actionCount.typeAction }} ({{ actionCount.countAction}})</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <tr class="{{ result.user.id }}-{{ action.type.id }}" style="display:none">                    
                     <td>{{ action.id }}</td>
                     <td><a href="{{ path('lists_handling_show', { id : action.handling.id }) }}" title="{% trans %}Show Handling{% endtrans %}">{{ action.handling.organization }}</a></td>
                     <td>{{ action.createdate | date('H:i d.m.Y') }}</td>

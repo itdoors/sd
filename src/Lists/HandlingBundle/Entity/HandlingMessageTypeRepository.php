@@ -21,6 +21,7 @@ class HandlingMessageTypeRepository extends EntityRepository
     {
         if (!self::$list) {
             $handlingMessageTypes = self::createQueryBuilder('hmt')
+                ->orderBy('hmt.name')
                 ->getQuery()
                 ->getResult();
 
