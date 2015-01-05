@@ -96,3 +96,7 @@ sd_user_find_inactive_users:
 sd_user_keep_alive:
     pattern:  /user/keepAlive
     defaults: { _controller: SDUserBundle:UserStatistic:keepAlive }
+    
+sd_user_stat_download:
+    pattern:  /user/stat_download
+    defaults: { _controller: SDUserBundle:UserStatistic:downloadStatistic }
