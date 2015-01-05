@@ -538,8 +538,8 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $officially = $request->request->get('officially');
-        $fromTime = $request->request->get('fromTime');
-        $toTime = $request->request->get('toTime');
+        $fromTime = str_replace(array('<font>', '</font>'),'', $request->request->get('fromTime'));
+        $toTime = str_replace(array('<font>', '</font>'),'', $request->request->get('toTime'));
         $idTimeGrafik = $request->request->get('idTimeGrafik');
         $idReplacement = $request->request->get('idReplacement');
 
