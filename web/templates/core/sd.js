@@ -15,8 +15,8 @@ var SD = (function() {
         daterangeEndClass: 'sd-daterange-end',
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
-        assetsDir: 'templates/metronic/img/ajax-loading.gif',
-        loadingImgPath: ''
+        assetsDir: '',
+        loadingImgPath: 'templates/metronic/img/ajax-loading.gif'
     };
 
     function SD(){
@@ -322,8 +322,9 @@ var SD = (function() {
         if (el.height() <= 400) {
             centerY = true;
         }
+        var urlImg = selfSD.params.loadingImgPath == undefined ? 'templates/metronic/img/ajax-loading.gif' : selfSD.params.loadingImgPath;
         el.block({
-            message: '<img src="' + selfSD.params.loadingImgPath + '" align="">',
+            message: '<img src="' + urlImg + '" align="">',
             centerY: centerY != undefined ? centerY : true,
             css: {
                 top: '10%',
