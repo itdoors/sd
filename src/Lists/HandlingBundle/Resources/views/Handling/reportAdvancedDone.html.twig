@@ -41,7 +41,7 @@
             var objects = $('.'+$(this).data('class'));
             $(this).text(objects.is(':visible') ? '+' : '-');
             objects.toggle('visible');
-            
+            return false;
         });
     });
 </script>
