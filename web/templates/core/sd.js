@@ -16,7 +16,7 @@ var SD = (function() {
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
         assetsDir: '',
-        loadingImgPath: '/templates/metronic/img/ajax-loading.gif'
+        loadingImgPath: 'templates/metronic/img/ajax-loading.gif'
     };
 
     function SD(){
