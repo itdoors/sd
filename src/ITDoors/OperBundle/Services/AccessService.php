@@ -4,6 +4,9 @@ namespace ITDoors\OperBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container;
+use SD\UserBundle\Entity\User;
+use \Doctrine\Common\Collections\ArrayCollection;
+use Lists\CompanystructureBundle\Entity\Companystructure;
 
 /**
  * Class AccessService
@@ -122,5 +125,44 @@ class AccessService
         $canEdit = !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
+    }
+
+    /**
+     * Finds all departments allowed for $user
+     * 
+     * @param User $user
+     * 
+     * @return array
+     */
+    public function getAllowedDepartmentsForUser (User $user)
+    {
+        $canEdit = !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
+
+        return $canEdit;
+    }
+
+    /**
+     * Recursive Companystructure fetcher
+     *
+     * @param Companystructure  $parent
+     * @param ArrayCollection   $parentChildren
+     *
+     * @return ArrayCollection
+     */
+    private function fetchAllChildren(Companystructure $parent, $parentChildren = null)
+    {
+        if ($parentChildren == null) {
+            $parentChildren = new ArrayCollection();
+        }
+        if ($parent->getChildren()->count() > 0) {
+            foreach ($parent->getChildren() as $child) {
+                $this->fetchAllChildren($child, $parentChildren);
+            }
+            $parentChildren->add($parent);
+        } else {
+            $parentChildren->add($parent);
+        }
+
+        return $parentChildren;
     }
 }
