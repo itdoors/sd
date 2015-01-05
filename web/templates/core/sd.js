@@ -16,7 +16,7 @@ var SD = (function() {
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
         assetsDir: '',
-        loadingImgPath: 'templates/metronic/img/ajax-loading.gif'
+        loadingImgPath: '/templates/metronic/img/ajax-loading.gif'
     };
 
     function SD(){
@@ -27,7 +27,7 @@ var SD = (function() {
     {
         this.params = $.extend(defaults, options);
 
-        this.params.loadingImgPath = this.params.assetsDir + 'templates/metronic/img/ajax-loading.gif';
+        this.params.loadingImgPath = this.params.assetsDir + '/templates/metronic/img/ajax-loading.gif';
 
         this.initAjaxForm();
 
@@ -322,7 +322,7 @@ var SD = (function() {
         if (el.height() <= 400) {
             centerY = true;
         }
-        var urlImg = selfSD.params.loadingImgPath == undefined ? 'templates/metronic/img/ajax-loading.gif' : selfSD.params.loadingImgPath;
+        var urlImg = selfSD.params.loadingImgPath == undefined ? '/templates/metronic/img/ajax-loading.gif' : selfSD.params.loadingImgPath;
         el.block({
             message: '<img src="' + urlImg + '" align="">',
             centerY: centerY != undefined ? centerY : true,
