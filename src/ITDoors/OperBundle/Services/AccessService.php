@@ -136,7 +136,8 @@ class AccessService
      */
     public function getAllowedDepartmentsForUser (User $user)
     {
-        $canEdit = !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
+        $this->em->g
+        $user->getStuff();
 
         return $canEdit;
     }
