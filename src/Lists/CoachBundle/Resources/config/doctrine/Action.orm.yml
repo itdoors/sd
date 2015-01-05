@@ -18,6 +18,7 @@ Lists\CoachBundle\Entity\Action:
     manyToMany:
         individuals:
             targetEntity: Lists\IndividualBundle\Entity\Individual
+            inversedBy: actions
             joinTable:
                 name: coach_action_individual
                 joinColumns:
