@@ -381,6 +381,7 @@ class OrganizationController extends BaseController
      */
     public function organizationTransferForUserAction(Request $request)
     {
+        $translator = $this->container->get('translator');
         $namespase = $this->filterNamespace.'.transfer';
         $filters = $this->getFilters($namespase);
 
@@ -389,8 +390,12 @@ class OrganizationController extends BaseController
         $organizationIds = $request->get('organizations');
         $departmensIds = $request->get('departmens');
 
-        if (empty($userIdOld) || empty($userId) || (empty($organizationIds) && empty($departmensIds))) {
-            return new Response(json_encode(array('error' => 'error data')));
+        if (empty($userIdOld)) {
+            return new Response(json_encode(array('error' => $translator->trans('Enter user', array (), 'ListsOrganizationBundle'))));
+        } elseif (empty($userId)) {
+            return new Response(json_encode(array('error' => $translator->trans('Enter user for polovatelya', array (), 'ListsOrganizationBundle'))));
+        } elseif (empty($organizationIds) && empty($departmensIds)) {
+            return new Response(json_encode(array('error' => $translator->trans('Select object', array (), 'ListsOrganizationBundle'))));
         }
         $em = $this->getDoctrine()->getManager();
         /** @var \SD\UserBundle\Entity\User $u */
