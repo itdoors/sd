@@ -65,4 +65,11 @@ class BasicHandlingAccess implements HandlingAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canExportReportToExcel ()
+    {
+        return false;
+    }
 }

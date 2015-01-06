@@ -16,6 +16,10 @@ lists_handling_show:
     requirements:
         type: my|''
 
+lists_handling_export_report_to_excel:
+    pattern:  /lists/handling/export/report/to/excel
+    defaults: { _controller: ListsHandlingBundle:Handling:exportReportToExcel }
+
 lists_handling_export_excel:
     pattern:  /lists/handling/export/excel
     defaults: { _controller: ListsHandlingBundle:Handling:exportExcel }

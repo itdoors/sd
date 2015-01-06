@@ -39,4 +39,8 @@ interface HandlingAccessInterface
      * @return bool
      */
     public function canExportToExelAll();
+    /**
+     * @return bool
+     */
+    public function canExportReportToExcel();
 }

@@ -21,4 +21,11 @@ class ReportHandlingAccess extends BasicHandlingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canExportReportToExcel ()
+    {
+        return true;
+    }
 }

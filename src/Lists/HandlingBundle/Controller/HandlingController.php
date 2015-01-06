@@ -13,6 +13,8 @@ use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class HandlingController
@@ -506,6 +508,9 @@ class HandlingController extends BaseController
         if (!sizeof($data)) {
             return $this->redirect($this->generateUrl('lists_handling_report_advanced_range'));
         }
+        $nameSpaceReport = $this->filterNamespace.'_report';
+        $session = $this->get('session');
+        $session->set($nameSpaceReport, json_encode($data));
 
         $from = new \DateTime($data['from']);
         $to = new \DateTime('23:59:59 '.$data['to']);
@@ -521,48 +526,14 @@ class HandlingController extends BaseController
         /** @var HandlingMessageRepository $handlingMessageRepository */
         $results = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
 
-        $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')
-            ->getList();
-
         return $this->render('ListsHandlingBundle:Handling:reportAdvancedDone.html.twig', array(
                 'results' => $results,
-                'types' => $types,
                 'from' => $from,
                 'to' => $to
             ));
 
     }
-
     /**
-     * Executes list action for dashboard
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-//    public function listAction()
-//    {
-//        // Get organization filter
-//        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
-//        $handlingRepository = $this->getDoctrine()
-//            ->getRepository('ListsHandlingBundle:Handling');
-//
-//        $filters['progressNOT'] = 100;
-//        $filters['chanceNOT'] = array(0, 100);
-//        $filters['isClosed'] = 'FALSE';
-//
-//        /** @var \Doctrine\ORM\Query $handlingQuery */
-//        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
-//
-//        $pagination = $handlingQuery->getResult();
-//
-//        /** @var \Knp\Component\Pager\Paginator $paginator */
-//
-//        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
-//                'pagination' => $pagination,
-//                'baseRoutePrefix' => $this->baseRoutePrefix,
-//                'baseTemplate' => $this->baseTemplate,
-//            ));
-//    }
-     /**
      * Renders organizationUsers list
      * 
      * @return \Symfony\Component\HttpFoundation\Response
@@ -589,7 +560,175 @@ class HandlingController extends BaseController
         /** @var \Doctrine\ORM\Query $handlingQuery */
         $handlingQuery = $handlingRepository->getAllForExport($userId, $filters);
 
-        $response = $this->exportToExcelAction($handlingQuery);
+        $response = $this->exportToExcel($handlingQuery);
+
+        return $response;
+    }
+    /**
+     * exportReportToExcel
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportReportToExcelAction()
+    {
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($user);
+
+        if ($access->canExportReportToExcel()) {
+            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+        }
+        $nameSpaceReport = $this->filterNamespace.'_report';
+        $session = $this->get('session');
+        $data = json_decode($session->get($nameSpaceReport), true);
+
+        $from = new \DateTime($data['from']);
+        $to = new \DateTime('23:59:59 '.$data['to']);
+        $managers = null;
+        if (isset($data['manager'])) {
+            $managers = $data['manager'];
+        }
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
+        $handlingMessageRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessage');
+
+        $actions = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
+
+        $response = $this->exportReportToExcel($actions);
+
+        return $response;
+    }
+    /**
+     * Renders Excel
+     *
+     * @param array $actions
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportReportToExcel ($actions)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("Actions")
+            ->setLastModifiedBy("SD")
+            ->setTitle("Handling")
+            ->setSubject("Handling")
+            ->setDescription("Handling message list")
+            ->setKeywords("Handling")
+            ->setCategory("Handling");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1', $translator->trans('ID', array (), 'ListsHandlingBundle'))
+            ->setCellValue('B1', $translator->trans('Organization', array (), 'ListsHandlingBundle'))
+            ->setCellValue('C1', $translator->trans('Date', array (), 'ListsHandlingBundle'))
+            ->setCellValue('D1', $translator->trans('View action', array (), 'ListsHandlingBundle'));
+        $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+        $linkStyleArray = array (
+            'font' => array (
+                'color' => array ('rgb' => '0000FF'),
+                'underline' => 'single'
+            )
+        );
+
+        $str = 1;
+        foreach ($actions as $result) {
+            ++$str;
+            $col = 0;
+
+            $phpExcelObject->getActiveSheet()->mergeCells('A' . $str . ':D' . $str);
+            $phpExcelObject->getActiveSheet()
+                ->setCellValue('A'.$str, $result['user']->getFirstName() . ' '.$result['user']->getLastName());
+            $actionName = null;
+            foreach ($result['actions'] as $action) {
+                if ($actionName != $action->getType()->getId()) {
+                    $actionName = $action->getType()->getId();
+                    foreach ($result['count'] as $actionCount) {
+                        $col = 0;
+                        if ($action->getType()->getName() == $actionCount['typeAction']) {
+                            ++$str;
+                            $phpExcelObject->getActiveSheet()->setCellValue(
+                                'D'.$str,
+                                $actionCount['typeAction']. '('.$actionCount['countAction'].')'
+                            );
+                            $phpExcelObject->getActiveSheet()->mergeCells('A' . ($str) . ':C' . $str);
+                        }
+                        
+                        $phpExcelObject->getActiveSheet()
+                            ->setCellValueByColumnAndRow($col, ++$str, $action->getId());
+                        $phpExcelObject->getActiveSheet()
+                            ->setCellValueByColumnAndRow(++$col, $str, $action->getHandling()->getOrganization()->getName());
+                        $phpExcelObject->getActiveSheet()
+                            ->setCellValueByColumnAndRow(
+                                ++$col,
+                                $str,
+                                $action->getCreatedate()->format('d.m.Y H:i')
+                            );
+                        $phpExcelObject->getActiveSheet()
+                            ->setCellValueByColumnAndRow(
+                                ++$col,
+                                $str,
+                                $action->getType()->getName()
+                            );
+                    }
+                }
+            }
+        }
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(6);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(60);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C' . $str)->applyFromArray($linkStyleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A2:D' . $str)->getAlignment()->setWrapText(true);
+   
+        $styleArray = array (
+            'borders' => array (
+                'outline' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                    'color' => array ('argb' => '000000')
+                ),
+                'inside' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array ('argb' => '000000')
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:D' . $str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:A' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:D1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:D1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('B2:D' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:D' . $str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false); //off line
+        $phpExcelObject->getActiveSheet()->setTitle('Handling');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=handlingMessage.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
 
         return $response;
     }
@@ -600,7 +739,7 @@ class HandlingController extends BaseController
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function exportToExcelAction ($handlings)
+    protected function exportToExcel ($handlings)
     {
         /** @var Translator $translator */
         $translator = $this->container->get('translator');

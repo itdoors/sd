@@ -121,4 +121,17 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canExportReportToExcel ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canExportReportToExcel()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

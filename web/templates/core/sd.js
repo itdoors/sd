@@ -305,7 +305,7 @@ var SD = (function() {
                 },
                 success: function (response)
                 {
-                    if (response.error) {
+                    if (response && response.error) {
                         alert(response.error);
                         parentElement.css('opacity', '1.0');
                     } else {
