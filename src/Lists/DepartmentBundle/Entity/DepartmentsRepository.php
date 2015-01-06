@@ -292,6 +292,8 @@ class DepartmentsRepository extends EntityRepository
             if (count($allowedDepartments)>0) {
                 $sql->andWhere('d.id in (:idsDepartments)');
                 $sql->setParameter(':idsDepartments', $allowedDepartments);
+            } else {
+                $sql->andWhere('d.id < 0');
             }
         } else {
             $sql->andWhere('d.id < 0');
