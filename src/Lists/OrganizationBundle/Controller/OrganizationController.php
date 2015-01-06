@@ -451,7 +451,7 @@ class OrganizationController extends BaseController
                     $stuffDepartmentOld = $em
                     ->getRepository('SDUserBundle:StuffDepartments')
                     ->findBy(array (
-                        'stuff' => $stuffOld,
+                        'stuff' => $stuff,
                         'departments' => $department,
                         'claimtypes' => $stuffDepartment->getClaimtypes(),
                     ));
