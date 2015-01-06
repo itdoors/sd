@@ -4,6 +4,11 @@ namespace ITDoors\OperBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container;
+use SD\UserBundle\Entity\User;
+use \Doctrine\Common\Collections\ArrayCollection;
+use Lists\CompanystructureBundle\Entity\Companystructure;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use SD\UserBundle\Entity\StuffDepartments;
 
 /**
  * Class AccessService
@@ -122,5 +127,70 @@ class AccessService
         $canEdit = !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
+    }
+
+    /**
+     * Finds all departments allowed for $user
+     * 
+     * @param User $user
+     * @param bool $activeStatus
+     * 
+     * @return array
+     */
+    public function getAllowedDepartmentsForUser (User $user, $activeStatus = true)
+    {
+        $selfStuff = $user->getStuff();
+
+        $companyStructures = $this->em
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->findBy(array('stuffId' => $selfStuff));
+
+        $departmentIds = [];
+
+        if ($companyStructures) {
+            $nodes = [];
+            foreach ($companyStructures as $companyStructure) {
+                $nodes = array_merge($nodes, $this->fetchAllChildren($companyStructure)->toArray());
+            }
+
+            $departmentIds = $this->em
+                ->getRepository('SDUserBundle:Stuff')
+                ->findDepatrmentsByCompanystructures(array_unique($nodes), $activeStatus);
+        }
+
+        $selfDepartments = $this->em
+            ->getRepository('SDUserBundle:Stuff')
+            ->findDepatrmentsByStuff($selfStuff, $activeStatus);
+
+        if ($selfDepartments) {
+            $departmentIds = array_merge($departmentIds, $selfDepartments);
+        }
+
+        return array_unique($departmentIds);
+    }
+
+    /**
+     * Recursive Companystructure fetcher
+     *
+     * @param Companystructure  $parent
+     * @param ArrayCollection   $resultArray
+     *
+     * @return ArrayCollection
+     */
+    private function fetchAllChildren(Companystructure $parent, $resultArray = null)
+    {
+        if ($resultArray == null) {
+            $resultArray = new ArrayCollection();
+        }
+        if ($parent->getChildren()->count() > 0) {
+            foreach ($parent->getChildren() as $child) {
+                $this->fetchAllChildren($child, $resultArray);
+            }
+            $resultArray->add($parent);
+        } else {
+            $resultArray->add($parent);
+        }
+
+        return $resultArray;
     }
 }
