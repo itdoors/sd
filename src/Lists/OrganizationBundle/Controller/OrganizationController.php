@@ -393,7 +393,7 @@ class OrganizationController extends BaseController
         if (empty($userIdOld)) {
             return new Response(json_encode(array('error' => $translator->trans('Enter user', array (), 'ListsOrganizationBundle'))));
         } elseif (empty($userId)) {
-            return new Response(json_encode(array('error' => $translator->trans('Enter user for polovatelya', array (), 'ListsOrganizationBundle'))));
+            return new Response(json_encode(array('error' => $translator->trans('Specify the user to assign', array (), 'ListsOrganizationBundle'))));
         } elseif (empty($organizationIds) && empty($departmensIds)) {
             return new Response(json_encode(array('error' => $translator->trans('Select object', array (), 'ListsOrganizationBundle'))));
         }
