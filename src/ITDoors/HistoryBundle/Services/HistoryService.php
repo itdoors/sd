@@ -43,6 +43,9 @@ class HistoryService
         if (!$user) {
             $user = $em->getRepository('SDUserBundle:User')->find(0);
         }
+        if (!$user) {
+            throw new Exception('User not found');
+        }
         
 
         $query = "
