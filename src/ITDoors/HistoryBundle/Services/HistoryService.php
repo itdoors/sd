@@ -40,7 +40,9 @@ class HistoryService
         $userId = 0;
         if ($this->container->get('security.context')->getToken()) {
             $user = $this->container->get('security.context')->getToken()->getUser();
-            $userId = $user->getId();
+            if (method_exists($user, 'getId')) {
+                $userId = $user->getId();
+            }
         }
         if (!$user) {
             $user = $em->getRepository('SDUserBundle:User')->find(0);
