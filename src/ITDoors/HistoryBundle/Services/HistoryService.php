@@ -37,8 +37,10 @@ class HistoryService
         $em = $this->container->get('doctrine')->getManager();
         $db = $em->getConnection();
         $user = null;
+        $userId = 0;
         if ($this->container->get('security.context')->getToken()) {
             $user = $this->container->get('security.context')->getToken()->getUser();
+            $userId = $user->getId();
         }
         if (!$user) {
             $user = $em->getRepository('SDUserBundle:User')->find(0);
@@ -54,7 +56,7 @@ class HistoryService
                     (model_name, model_id, field_name, old_value, value, createdatetime, more, action, params, user_id)
                 VALUES 
                     (:modelName, :modelId, :fieldName, :oldValue, :value, '"
-            . (date('Y-m-d H:i:s')) . "', :more, :action, :params, " . $user->getId() . ")";
+            . (date('Y-m-d H:i:s')) . "', :more, :action, :params, " . $userId . ")";
         $stmt = $db->prepare($query);
         $params = array (
             ':modelId' => $data['modelId'],
