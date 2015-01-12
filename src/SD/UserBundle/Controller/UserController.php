@@ -251,6 +251,32 @@ class UserController extends BaseController
     }
 
     /**
+     * Renders Roles tab at user profile
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function showUserGroupsAndRolesAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $userRepository = $this->get('sd_user.repository');
+        $user = $userRepository->find($id);
+        $groups = $em->getRepository('SDUserBundle:Group')->findAll();
+        
+        $userService = $this->container->get($this->service);
+        $data = $userService->getGroupsAndRolesForUser($user);
+// var_dump($this->container->getParameter('security.role_hierarchy.roles'));die;
+        return $this->render('SDUserBundle:User:rolesList.html.twig', array(
+                'groups' => $groups,
+                'roles' => $data['roles'],
+                'userGroups' => $data['groups'],
+                'userRoles' => $data['roles']
+        ));
+    }
+
+    /**
      * Executes new action
      *
      * @param Request $request

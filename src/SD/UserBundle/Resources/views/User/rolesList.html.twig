@@ -1,0 +1,76 @@
+{% trans_default_domain 'SDUserBundle' %}
+<div class="portlet box blue">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-edit"></i>{% trans %}User Groups{% endtrans %}
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body">
+        <table  class="table table-striped table-hover table-bordered dataTable no-footer">
+            <thead>
+                <tr>
+                    <th width="80%" role="columnheader" rowspan="1" colspan="1">{% trans %}Group{% endtrans %}</th>
+                    <th width="20%" role="columnheader" rowspan="1" colspan="1">{% trans %}Edit{% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                <tr>
+                    <td>{{ group.name }}</td>
+                    <td>
+                        <input name="groups[]" type="checkbox" class="checkboxes" {% if group in userGroups %}checked="true"{% endif %} disabled="disabled" value="{{ group.id }}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</div>
+</div>
+<div class="portlet box blue">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-edit"></i>{% trans %}User Roles{% endtrans %}
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body">
+        <table  class="table table-striped table-hover table-bordered dataTable no-footer">
+            <thead>
+                <tr>
+                    <th width="80%" role="columnheader" rowspan="1" colspan="1">{% trans %}Role{% endtrans %}</th>
+{#                     <th width="20%" role="columnheader" rowspan="1" colspan="1">{% trans %}Edit{% endtrans %}</th>#}
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                <tr>
+                    <td>{{ role }}</td>
+{#                     <td>#}
+{#                         <input name="roles[]" type="checkbox" class="checkboxes" disabled="disabled" value="{{ role }}">#}
+{#                     </td>#}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</div>
+</div>
+
+<script>
+    $(document).ready(function(){
+    	$('.checkboxes, .group-checkable').uniform();
+        $('.group-checkable').change(function(){
+            var name = $(this).data('name');
+            $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
+            $.each($('input[name="'+name+'[]"]'), function(key, val){
+                    $(val).uniform();
+            });
+        });
+    });
+</script>

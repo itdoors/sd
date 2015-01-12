@@ -69,6 +69,10 @@ sd_user_show_login_history:
     pattern:  /user/loginHistory/{id}
     defaults: { _controller: SDUserBundle:UserStatistic:showLoginHistory }
     
+sd_user_show_groups_and_roles:
+    pattern:  /user/groups_and_roles/{id}
+    defaults: { _controller: SDUserBundle:UserStatistic:showUserGroupsAndRoles }
+    
 sd_user_active_users:
     pattern:  /users/online
     defaults: { _controller: SDUserBundle:UserStatistic:activeUsers }
