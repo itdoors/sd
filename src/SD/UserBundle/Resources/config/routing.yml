@@ -39,6 +39,10 @@ sd_user_change_password_form:
 sd_user_resetting_send_email:
     pattern:  /resetting/user/send-email
     defaults: { _controller: SDUserBundle:Resetting:sendEmail }
+    
+sd_user_assign_group_or_role:
+    pattern:  /user/send-email
+    defaults: { _controller: SDUserBundle:User:assignGroupOrRole }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
@@ -68,6 +72,10 @@ fos_user_upload_photo:
 sd_user_show_login_history:
     pattern:  /user/loginHistory/{id}
     defaults: { _controller: SDUserBundle:UserStatistic:showLoginHistory }
+    
+sd_user_show_groups_and_roles:
+    pattern:  /user/groups_and_roles/{id}
+    defaults: { _controller: SDUserBundle:UserStatistic:showUserGroupsAndRoles }
     
 sd_user_active_users:
     pattern:  /users/online

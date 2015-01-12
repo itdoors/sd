@@ -251,6 +251,70 @@ class UserController extends BaseController
     }
 
     /**
+     * Renders Roles tab at user profile
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function showUserGroupsAndRolesAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $userRepository = $this->get('sd_user.repository');
+        $user = $userRepository->find($id);
+        $groups = $em->getRepository('SDUserBundle:Group')->findAll();
+
+        $userService = $this->container->get($this->service);
+        $data = $userService->getGroupsAndRolesForUser($user);
+
+        return $this->render('SDUserBundle:User:rolesList.html.twig', array(
+                'userId' => $id,
+                'groups' => $groups,
+                'roles' => $data['roles'],
+                'userGroups' => $data['groups'],
+                'userRoles' => $data['roles']
+        ));
+    }
+
+    /**
+     * Ajax user roles and groups editing
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function assignGroupOrRoleAction(Request $request)
+    {
+        $id = $request->get('id');
+        $action = $request->get('action');
+        $value = $request->get('value');
+        $checked = $request->get('checked') == 'true';
+
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+
+        $userRepository = $this->get('sd_user.repository');
+        $user = $userRepository->find($id);
+
+        $groupRepository = $em->getRepository('SDUserBundle:Group');
+
+        switch ($action) {
+            case 'groups':
+                $group = $groupRepository->find($value);
+                $checked ? $user->addGroup($group) : $user->removeGroup($group);
+                $um->updateUser($user);
+                break;
+
+            case 'roles':
+                //NOP
+                break;
+        }
+
+        return new Response();
+    }
+
+    /**
      * Executes new action
      *
      * @param Request $request
