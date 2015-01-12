@@ -39,6 +39,10 @@ sd_user_change_password_form:
 sd_user_resetting_send_email:
     pattern:  /resetting/user/send-email
     defaults: { _controller: SDUserBundle:Resetting:sendEmail }
+    
+sd_user_assign_group_or_role:
+    pattern:  /user/send-email
+    defaults: { _controller: SDUserBundle:User:assignGroupOrRole }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
