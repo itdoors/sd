@@ -2365,3 +2365,7 @@ INSERT INTO "public".organization_current_account (type_id, organization_id, ban
 ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
 ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- prod ----
+
+CREATE TABLE position_group (position_id BIGINT NOT NULL, group_id INT NOT NULL, PRIMARY KEY(position_id, group_id));
+CREATE INDEX IDX_E100A018DD842E46 ON position_group (position_id);
+CREATE INDEX IDX_E100A018FE54D947 ON position_group (group_id);

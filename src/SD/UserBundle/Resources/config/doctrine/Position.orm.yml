@@ -14,4 +14,6 @@ SD\UserBundle\Entity\Position:
             length: 255
             nullable: true
             column: name
-            
+    manyToMany:
+        groups:
+            targetEntity: Group

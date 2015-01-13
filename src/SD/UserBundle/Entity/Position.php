@@ -53,4 +53,65 @@ class Position
     {
         return $this->name;
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $groups;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add groups
+     *
+     * @param \SD\UserBundle\Entity\Group $group
+     * 
+     * @return Position
+     */
+    public function addGroup(\SD\UserBundle\Entity\Group $group)
+    {
+        $this->groups[] = $group;
+
+        return $this;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \SD\UserBundle\Entity\Group $groups
+     */
+    public function removeGroup(\SD\UserBundle\Entity\Group $groups)
+    {
+        $this->groups->removeElement($groups);
+    }
+
+    /**
+     * Set groups
+     *
+     * @param \Doctrine\Common\Collections\Collection $groups
+     *
+     * @return Position
+     */
+    public function setGroups(\Doctrine\Common\Collections\Collection $groups)
+    {
+        $this->groups = $groups;
+
+        return $this;
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
 }
