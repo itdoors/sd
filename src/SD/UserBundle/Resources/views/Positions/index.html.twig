@@ -13,7 +13,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
         </li>
         <li>
-            <a href="{{ path('lists_coach_index') }}" title="{% trans %}Positions{% endtrans %}">{% trans %}Positions{% endtrans %}</a>
+            <a href="{{ path('sd_user_positions_groups') }}" title="{% trans %}Positions{% endtrans %}">{% trans %}Positions{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -29,8 +29,6 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins//select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
 {% endblock %}
 
 {% block body %}
