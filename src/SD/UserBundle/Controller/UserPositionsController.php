@@ -59,17 +59,7 @@ class UserPositionsController extends BaseController
             //Some error message...
         }
 
-        $result = [];
-        foreach ($groups as $group) {
-            $result[] = array(
-                'id' => $group->getId(),
-                'value' => $group->getId(),
-                'name' => $group->getName(),
-                'text' => $group->getName()
-            );
-        }
-
-        return new JsonResponse($result);
+        return new JsonResponse();
     }
 
     /**
@@ -112,10 +102,10 @@ class UserPositionsController extends BaseController
         $result = [];
         foreach ($groups as $group) {
             $result[] = array(
-                            'id' => $group->getId(),
-                            'value' => $group->getId(),
-                            'name' => $group->getName(),
-                            'text' => $group->getName()
+                'id' => $group->getId(),
+                'value' => $group->getId(),
+                'name' => $group->getName(),
+                'text' => $group->getName()
             );
         }
 
