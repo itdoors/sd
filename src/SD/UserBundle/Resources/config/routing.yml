@@ -43,6 +43,22 @@ sd_user_resetting_send_email:
 sd_user_assign_group_or_role:
     pattern:  /user/send-email
     defaults: { _controller: SDUserBundle:User:assignGroupOrRole }
+    
+sd_user_positions_groups:
+    pattern:  /user/positions
+    defaults: { _controller: SDUserBundle:UserPositions:index }
+    
+sd_user_ajax_groups_by_ids:
+    pattern:  /user/groups_by_ids
+    defaults: { _controller: SDUserBundle:UserPositions:groupsByIds }
+    
+sd_user_ajax_groups:
+    pattern:  /user/groups
+    defaults: { _controller: SDUserBundle:UserPositions:groups }
+    
+sd_user_ajax_position_save_groups:
+    pattern:  /user/position/save groups
+    defaults: { _controller: SDUserBundle:UserPositions:saveGroups }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"

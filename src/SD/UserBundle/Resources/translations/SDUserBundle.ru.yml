@@ -25,6 +25,7 @@ Enter position: Введите должность
 Filter: Фильтр
 Clear Filter: Очистить фильтр
 Position: Должность
+Positions: Должности
 First name: Имя
 First Name: Имя
 Last name: Фамилия
@@ -198,6 +199,7 @@ Token not found: Ссылка устаревшая
 
 Groups and Roles: Группы и роли
 User Groups: Группы
+Add group: Добавить группу
 User Roles: Роли
 Group: Группа
 Edit: Изменить

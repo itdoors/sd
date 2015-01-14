@@ -30,6 +30,11 @@ class Companystructure
     private $name;
 
     /**
+     * @ORM\Column(name="is_hidden", type="boolean")
+     */
+    private $is_hidden;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $mpk;
