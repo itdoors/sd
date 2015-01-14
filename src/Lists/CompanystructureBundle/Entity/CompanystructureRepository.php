@@ -165,4 +165,52 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $result;
     }
+
+    // @codingStandardsIgnoreStart
+    /**
+     * @see getChildrenQuery
+     */
+    public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        $qb = $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode);
+        if (!$withHidden)
+            $qb->andWhere($qb->expr()->eq('node.is_hidden', 'false'));
+    
+        return $qb->getQuery();
+    }
+
+    /**
+     * @see getChildren
+     */
+    public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        $q = $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+
+        return $q->getResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildren($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->children($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+    // @codingStandardsIgnoreEnd
 }

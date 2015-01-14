@@ -1,5 +1,5 @@
-CREATE SEQUENCE fos_group_id_seq INCREMENT BY 1 MINVALUE 0 START 0;
 CREATE SEQUENCE fos_user_id_seq INCREMENT BY 1 MINVALUE 0 START 0;
+CREATE SEQUENCE fos_group_id_seq INCREMENT BY 1 MINVALUE 0 START 0;
 CREATE SEQUENCE handling_service_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE SEQUENCE team_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE TABLE fos_group (id INT NOT NULL, name VARCHAR(255) NOT NULL, roles TEXT NOT NULL, PRIMARY KEY(id));
@@ -2369,3 +2369,8 @@ ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) 
 CREATE TABLE position_group (position_id BIGINT NOT NULL, group_id INT NOT NULL, PRIMARY KEY(position_id, group_id));
 CREATE INDEX IDX_E100A018DD842E46 ON position_group (position_id);
 CREATE INDEX IDX_E100A018FE54D947 ON position_group (group_id);
+
+alter table companystructure add is_hidden boolean default false;
+update companystructure set is_hidden = true where id = 7 or id = 23;
+update companystructure set name = 'Восточное отделение' where id = 24;
+update stuff set companystructure_id = 24 where companystructure_id = 23;
