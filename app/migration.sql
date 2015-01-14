@@ -2374,3 +2374,12 @@ alter table companystructure add is_hidden boolean default false;
 update companystructure set is_hidden = true where id = 7 or id = 23;
 update companystructure set name = 'Восточное отделение' where id = 24;
 update stuff set companystructure_id = 24 where companystructure_id = 23;
+
+insert into position (name) values ('Опердиректор Украины');
+insert into position (name) values ('Кладовщик');
+insert into position (name) values ('Главный инженер');
+insert into position (name) values ('Инженер');
+insert into position (name) values ('Юрист консульт');
+insert into position (name) values ('Менеджер по продажам');
+insert into position (name) values ('Администратор продаж');
+insert into position (name) values ('Специалист фин контролинга');
