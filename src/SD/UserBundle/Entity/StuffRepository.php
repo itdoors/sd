@@ -34,4 +34,65 @@ class StuffRepository extends EntityRepository
                 ->orderBy('u.lastName')
                 ->getQuery()->getResult();
     }
+
+    /**
+     * findDepatrmentsByCompanystructures
+     *
+     * @param array $companystructures
+     * @param bool  $activeStatus
+     *
+     * @return array
+     */
+    public function findDepatrmentsByCompanystructures($companystructures, $activeStatus)
+    {
+        $ids = $this->createQueryBuilder('s')
+                ->select('DISTINCT IDENTITY(sd.departments)')
+                ->join('s.companystructure', 'c')
+                ->join('s.stuffDepartments', 'sd')
+                ->join('sd.departments', 'd')
+                ->join('d.status', 'st')
+                ->where('c in (:companystructures)')
+                ->andWhere('st.id =:status')
+                ->setParameter(':companystructures', $companystructures)
+                ->setParameter(':status', $activeStatus ? 1 : 2)
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $result = [];
+        foreach ($ids as $id) {
+            $result[] = $id['1'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * findDepatrmentsByStuff
+     *
+     * @param array $stuff
+     * @param bool  $activeStatus
+     *
+     * @return array
+     */
+    public function findDepatrmentsByStuff($stuff, $activeStatus)
+    {
+        $ids = $this->createQueryBuilder('s')
+            ->select('DISTINCT IDENTITY(sd.departments)')
+            ->join('s.stuffDepartments', 'sd')
+            ->join('sd.departments', 'd')
+            ->join('d.status', 'st')
+            ->where('s.id =:id')
+            ->andWhere('st.id =:status')
+            ->setParameter(':id', $stuff->getId())
+            ->setParameter(':status', $activeStatus ? 1 : 2)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $result = [];
+        foreach ($ids as $id) {
+            $result[] = $id['1'];
+        }
+
+        return $result;
+    }
 }
