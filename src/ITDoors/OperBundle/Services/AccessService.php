@@ -51,8 +51,10 @@ class AccessService
 
             return false;
         } elseif ($checkOper) {
+            return $this->getAllowedDepartmentsForUser($user);
 
             /** @var  $stuff \SD\UserBundle\Entity\Stuff */
+/*
             $stuff = $this->container->get('doctrine')
                 ->getRepository('SDUserBundle:Stuff')
                 ->findOneBy(array ('user' => $idUser));
@@ -76,7 +78,6 @@ class AccessService
 
             $idDepartmentsAllowed = array ();
 
-            /** @var  $stuffDepartment \SD\UserBundle\Entity\StuffDepartments */
             foreach ($stuffDepartments as $stuffDepartment) {
                 $departmentsAllowed = $stuffDepartment->getDepartments();
 
@@ -93,7 +94,7 @@ class AccessService
             }
             $idDepartmentsAllowed = array_unique($idDepartmentsAllowed);
 
-            return $idDepartmentsAllowed;
+            return $idDepartmentsAllowed;*/
         } else {
             return array ();
         }
