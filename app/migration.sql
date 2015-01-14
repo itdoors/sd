@@ -2383,3 +2383,13 @@ insert into position (name) values ('Юрист консульт');
 insert into position (name) values ('Менеджер по продажам');
 insert into position (name) values ('Администратор продаж');
 insert into position (name) values ('Специалист фин контролинга');
+insert into position (name) values ('Бухгалтер');
+insert into position (name) values ('Главный бухгалтер');
+insert into position (name) values ('Начальник отдела кадров');
+insert into position (name) values ('Инспектор отдела кадров');
+insert into position (name) values ('Ассистент дирекции');
+insert into position (name) values ('Водитель-курьер');
+insert into position (name) values ('Менеджер по персоналу');
+
+update news_companystructure set companystructure_id = 24 where companystructure_id = 23;
+update invoice_companystructure set companystructure_id = 24 where companystructure_id = 23;
