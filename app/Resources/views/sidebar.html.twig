@@ -815,7 +815,7 @@
                             <span class="title">{% trans %}Stuff{% endtrans %}</span>
                         </a>
                     </li>
-                    {% if is_granted('ROLE_SUPERVISOR') or is_granted('ROLE_TIMEONLINE_VIEVER') %}
+                    {% if is_granted('ROLE_SUPERVISOR') or is_granted('ROLE_TIMEONLINE_VIEWER') %}
                     <li{% if
                              path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_positions_groups')
                         %} class="active"{% endif %}>
