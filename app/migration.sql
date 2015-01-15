@@ -2393,3 +2393,13 @@ insert into position (name) values ('Менеджер по персоналу');
 
 update news_companystructure set companystructure_id = 24 where companystructure_id = 23;
 update invoice_companystructure set companystructure_id = 24 where companystructure_id = 23;
+
+CREATE TABLE deputy (id BIGSERIAL NOT NULL, forStuff_id BIGINT DEFAULT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_28FA6B9F2401F346 ON deputy (forStuff_id);
+ALTER TABLE deputy ADD CONSTRAINT FK_28FA6B9F2401F346 FOREIGN KEY (forStuff_id) REFERENCES stuff (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE TABLE deputy_stuff (deputy_id BIGINT NOT NULL, stuff_id BIGINT NOT NULL, PRIMARY KEY(deputy_id, stuff_id));
+CREATE INDEX IDX_E2E17F34B6F93BB ON deputy_stuff (deputy_id);
+CREATE INDEX IDX_E2E17F3950A1740 ON deputy_stuff (stuff_id);
+ALTER TABLE deputy_stuff ADD CONSTRAINT FK_E2E17F34B6F93BB FOREIGN KEY (deputy_id) REFERENCES deputy (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE deputy_stuff ADD CONSTRAINT FK_E2E17F3950A1740 FOREIGN KEY (stuff_id) REFERENCES stuff (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;

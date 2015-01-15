@@ -38,7 +38,7 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
-                ->leftJoin('u.stuff', 'stuff')
+                ->join('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
     /**

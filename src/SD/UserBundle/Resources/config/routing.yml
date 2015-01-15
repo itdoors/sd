@@ -31,6 +31,14 @@ sd_user_new_stuff:
 sd_user_new:
     pattern:  /user/new
     defaults: { _controller: SDUserBundle:User:new }
+    
+sd_user_deputies:
+    pattern:  /user/deputies
+    defaults: { _controller: SDUserBundle:Deputies:index }
+    
+sd_user_deputies_save:
+    pattern:  /user/deputies/save
+    defaults: { _controller: SDUserBundle:Deputies:save }
 
 sd_user_change_password_form:
     pattern:  /user/change_password_form/{id}

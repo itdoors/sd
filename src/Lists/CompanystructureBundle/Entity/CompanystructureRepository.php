@@ -30,6 +30,39 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Searches all chiefs of all Companystructures
+     *
+     * @param bool $withHidden
+     *
+     * @return array
+     */
+    public function getAllChiefs($withHidden = false)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('c.stuffId')
+            ->addSelect('c.name')
+            ->addSelect('u.firstName')
+            ->addSelect('u.lastName')
+            ->addSelect('u.id')
+            ->addSelect('d as deputy')
+            ->join('SD\UserBundle\Entity\Stuff', 's', 'WITH', 'c.stuffId = s.id')
+            ->leftJoin('SD\UserBundle\Entity\Deputy', 'd', 'WITH', 'c.stuffId = d.forStuff')
+            ->join('s.user', 'u')
+            ->where($qb->expr()->isNotNull('c.stuffId'))
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery();
+
+        if (!$withHidden) {
+            $qb->andWhere($qb->expr()->eq('c.is_hidden', 'false'));
+        }
+
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
+    }
+
     /**
      * Returns results for interval future invoice
      * 

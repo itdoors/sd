@@ -58,4 +58,5 @@ security:
         - { path: ^/dashboard/blog/edit, role: ROLE_ARTICLEADMIN }
         - { path: ^/user/timeOnline, roles: 'ROLE_SUPERVISOR, ROLE_TIMEONLINE_VIEWER' }
         - { path: ^/training, roles: 'ROLE_COACH, ROLE_COACHADMIN' }
+        - { path: ^/user/deputies, roles: 'ROLE_SUPERVISOR, ROLE_HRADMIN' }
         

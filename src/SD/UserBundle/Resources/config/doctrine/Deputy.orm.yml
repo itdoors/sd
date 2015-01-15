@@ -1,0 +1,16 @@
+SD\UserBundle\Entity\Deputy:
+    type: entity
+    table: deputy
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToMany:
+        deputyStuffs:
+            targetEntity: Stuff
+    oneToOne:
+        forStuff:
+            targetEntity: Stuff

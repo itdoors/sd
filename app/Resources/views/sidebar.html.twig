@@ -779,6 +779,16 @@
                 or
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_transfer')
                 or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_positions_groups')
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_active_users')
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_time_online')
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_coach_index')
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_deputies')
+                or
                 (
                     app.request.attributes.get('_route_params').id is defined
                     and
@@ -822,6 +832,16 @@
                         <a href="{{ path('sd_user_positions_groups') }}" title="{% trans %}Positions{% endtrans %}">
                             <i class="icon-pencil"></i>
                             {% trans %}Positions{% endtrans %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_HRADMIN') %}
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_deputies')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('sd_user_deputies') }}" title="{% trans %}Deputies{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}Deputies{% endtrans %}
                         </a>
                     </li>
                     {% endif %}
