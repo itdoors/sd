@@ -163,6 +163,21 @@ class AccessService
             ->getRepository('SDUserBundle:Stuff')
             ->findDepatrmentsByStuff($selfStuff, $activeStatus);
 
+        $chiefs = $this->em
+            ->getRepository('SDUserBundle:Deputy')
+            ->findByDeputyStuff($selfStuff);
+
+        if ($chiefs) {
+            $chiefDepartments = [];
+            foreach ($chiefs as $chief) {
+                $chiefDepartments = array_merge(
+                    $this->getAllowedDepartmentsForUser($chief->getForStuff()->getUser()),
+                    $chiefDepartments
+                );
+            }
+            $departmentIds = array_merge($departmentIds, $chiefDepartments);
+        }
+
         if ($selfDepartments) {
             $departmentIds = array_merge($departmentIds, $selfDepartments);
         }

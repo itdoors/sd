@@ -1,4 +1,5 @@
 SD\UserBundle\Entity\Deputy:
+    repositoryClass: SD\UserBundle\Entity\DeputyRepository
     type: entity
     table: deputy
     fields:
