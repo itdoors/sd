@@ -1,3 +1,3 @@
 i_tdoors_file_access_get:
-    path:     /access/file
-    defaults: { _controller: ITdoorsFileAccessBundle:Default:getFile }
+    path:     /file_access/if_authenticated
+    defaults: { _controller: ITdoorsFileAccessBundle:Default:getFileIfAuthenticated }

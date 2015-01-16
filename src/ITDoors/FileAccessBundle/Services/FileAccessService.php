@@ -42,11 +42,18 @@ class FileAccessService
      *
      * @return File
      */
-    public function getFile($path)
+    public function getFileIfAuthenticated($path)
     {
-        $fullPath = $this->projectWebDir . $path
-        $file = new File($fullPath);
+        $securityContext = $this->container->get('security.context');
 
-        return $file;
+        // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $fullPath = $this->projectWebDir . $path
+            $file = new File($fullPath);
+
+            return $file;
+        } else {
+            return  null;
+        }
     }
 }

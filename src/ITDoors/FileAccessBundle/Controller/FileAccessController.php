@@ -21,21 +21,19 @@ class FileAccessController extends Controller
      *
      * @return string
      */
-    public function getFileAction(Request $request)
+    public function getFileIfAuthenticatedAction(Request $request)
     {
         $path = $request->get('path');
-        $securityContext = $this->container->get('security.context');
         $fileAccessService = $this->container->get('i_tdoors_file_access.service');
 
-        // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
-        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            try {
-                $response = BinaryFileResponse($fileAccessService->getFile($path));
+        try {
+            $response = BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path));
 
+            if ($response) {
                 return $response;
-            } catch (FileNotFoundException $e) {
-                throw new NotFoundHttpException('Sorry, there is no such file!');
             }
+        } catch (FileNotFoundException $e) {
+            throw new NotFoundHttpException('Sorry, there is no such file!');
         }
 
         return new RedirectResponse('/login');
