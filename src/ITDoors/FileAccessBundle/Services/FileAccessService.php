@@ -34,7 +34,7 @@ class FileAccessService
     }
 
     /**
-     * Returns file at given path
+     * Returns file at given path if authenticated
      * 
      * @param string $path
      * 
@@ -48,12 +48,38 @@ class FileAccessService
 
         // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
         if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $fullPath = $this->projectWebDir . $path
-            $file = new File($fullPath);
-
-            return $file;
+            return $this->getFile($path);
         } else {
             return  null;
         }
+    }
+
+    /**
+     * Returns file at given path if hasRole()
+     *
+     * @param string $path
+     * @param string $role
+     *
+     * @throws FileNotFoundException If the given path is not a file
+     *
+     * @return File
+     */
+    public function getFileIfHasRole($path, $role)
+    {
+        $securityContext = $this->container->get('security.context');
+
+        if ($securityContext->isGranted($role)) {
+            return $this->getFile($path);
+        } else {
+            return  null;
+        }
+    }
+
+    private function getFile($path)
+    {
+        $fullPath = $this->projectWebDir . $path
+        $file = new File($fullPath);
+
+        return $file;
     }
 }

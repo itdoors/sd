@@ -1,3 +1,7 @@
-i_tdoors_file_access_get:
-    path:     /file_access/if_authenticated
-    defaults: { _controller: ITdoorsFileAccessBundle:Default:getFileIfAuthenticated }
+it_doors_file_access_get_if_authenticated:
+    path:     /file_access_get/if_authenticated
+    defaults: { _controller: ITdoorsFileAccessBundle:FileAccess:getFileIfAuthenticated }
+    
+it_doors_file_access_get_if_has_role:
+    path:     /file_access_get/if_has_role
+    defaults: { _controller: ITdoorsFileAccessBundle:FileAccess:getFileIfHasRole }
