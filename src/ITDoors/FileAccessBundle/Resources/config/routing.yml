@@ -1,0 +1,3 @@
+#i_tdoors_file_access_homepage:
+#    path:     /hello/{name}
+#    defaults: { _controller: ITdoorsFileAccessBundle:Default:index }
