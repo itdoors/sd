@@ -44,7 +44,7 @@ class FileAccessService
      */
     public function getFile($path)
     {
-        $fullPath = $this->projectWebDir.'/uploads/'.$path
+        $fullPath = $this->projectWebDir . $path
         $file = new File($fullPath);
 
         return $file;
