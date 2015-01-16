@@ -4,4 +4,4 @@ parameters:
 services:
     i_tdoors_file_access.service:
         class: %i_tdoors_file_access.service.class%
-        arguments: [@service_container, %project.web.dir%]
+        arguments: [@service_container, %project.web.dir%, @doctrine.orm.entity_manager, @security.context]

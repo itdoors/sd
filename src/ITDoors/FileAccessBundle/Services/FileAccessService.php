@@ -4,33 +4,35 @@ namespace ITdoors\FileAccessBundle\Services;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\File\File;
+use ITdoors\FileAccessBundle\Entity\FileAccessRecord;
+use Doctrine\ORM\EntityManager;
 
 /**
  * FileAccessService
  */
 class FileAccessService
 {
-    /**
-     * @var Container $container
-     */
     protected $container;
-
-    /**
-     * @var string $projectWebDir
-     */
     protected $projectWebDir;
+    protected $em;
+    protected $securityContext;
 
     /**
      * __construct
      *
-     * @param Container $container
-     * @param string    $projectWebDir
+     * @param Container         $container
+     * @param string            $projectWebDir
+     * @param EntityManager     $em
+     * @param SecurityContext   $securityContext
      */
-    public function __construct (Container $container, $projectWebDir)
+    public function __construct ($container, $projectWebDir, $em, $securityContext)
     {
+        $this->em = $em;
         $this->container = $container;
         $this->projectWebDir = $projectWebDir;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -44,10 +46,8 @@ class FileAccessService
      */
     public function getFileIfAuthenticated($path)
     {
-        $securityContext = $this->container->get('security.context');
-
         // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
-        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->getFile($path);
         } else {
             return  null;
@@ -66,9 +66,7 @@ class FileAccessService
      */
     public function getFileIfHasRole($path, $role)
     {
-        $securityContext = $this->container->get('security.context');
-
-        if ($securityContext->isGranted($role)) {
+        if ($this->securityContext->isGranted($role)) {
             return $this->getFile($path);
         } else {
             return  null;
@@ -79,6 +77,17 @@ class FileAccessService
     {
         $fullPath = $this->projectWebDir . $path
         $file = new File($fullPath);
+
+        if ($file) {
+            $accessRecord = new FileAccessRecord(
+                $path,
+                'get',
+                new \DateTime(),
+                $this->securityContext->getToken()->getUser()
+            );
+            $this->em->persist($accessRecord);
+            $this->em->flush;
+        }
 
         return $file;
     }
