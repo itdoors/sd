@@ -28,7 +28,7 @@ class FileAccessController extends Controller
         $fileAccessService = $this->container->get('i_tdoors_file_access.service');
 
         try {
-            $response = BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path));
+            $response = new BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path));
 
             if ($response) {
                 return $response;
@@ -56,7 +56,7 @@ class FileAccessController extends Controller
         $fileAccessService = $this->container->get('i_tdoors_file_access.service');
 
         try {
-            $response = BinaryFileResponse($fileAccessService->getFileIfHasRoleAction($path, $role));
+            $response = new BinaryFileResponse($fileAccessService->getFileIfHasRole($path, $role));
 
             if ($response) {
                 return $response;

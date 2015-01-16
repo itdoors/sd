@@ -75,7 +75,7 @@ class FileAccessService
 
     private function getFile($path)
     {
-        $fullPath = $this->projectWebDir . $path
+        $fullPath = $this->projectWebDir . $path;
         $file = new File($fullPath);
 
         if ($file) {
@@ -86,7 +86,7 @@ class FileAccessService
                 $this->securityContext->getToken()->getUser()
             );
             $this->em->persist($accessRecord);
-            $this->em->flush;
+            $this->em->flush();
         }
 
         return $file;
