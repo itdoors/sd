@@ -38,17 +38,18 @@ class FileAccessService
     /**
      * Returns file at given path if authenticated
      * 
-     * @param string $path
+     * @param string  $path
+     * @param integer $timestamp
      * 
      * @throws FileNotFoundException If the given path is not a file
      *
      * @return File
      */
-    public function getFileIfAuthenticated($path)
+    public function getFileIfAuthenticated($path, $timestamp)
     {
         // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
         if ($this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->getFile($path);
+            return $this->getFile($path, $timestamp);
         } else {
             return  null;
         }
@@ -57,36 +58,51 @@ class FileAccessService
     /**
      * Returns file at given path if hasRole()
      *
-     * @param string $path
-     * @param string $role
+     * @param string  $path
+     * @param integer $timestamp
+     * @param string  $role
      *
      * @throws FileNotFoundException If the given path is not a file
      *
      * @return File
      */
-    public function getFileIfHasRole($path, $role)
+    public function getFileIfHasRole($path, $timestamp, $role)
     {
         if ($this->securityContext->isGranted($role)) {
-            return $this->getFile($path);
+            return $this->getFile($path, $timestamp);
         } else {
             return  null;
         }
     }
 
-    private function getFile($path)
+    private function getFile($path, $timestamp)
     {
         $fullPath = $this->projectWebDir . $path;
         $file = new File($fullPath);
 
         if ($file) {
-            $accessRecord = new FileAccessRecord(
-                $path,
-                'get',
-                new \DateTime(),
-                $this->securityContext->getToken()->getUser()
-            );
-            $this->em->persist($accessRecord);
-            $this->em->flush();
+            $date = new \DateTime();
+            $date->setTimestamp($timestamp);
+            $user = $this->securityContext->getToken()->getUser();
+
+            $accessRecord = $this->em->getRepository('ITdoorsFileAccessBundle:FileAccessRecord')
+                ->findOneBy(array(
+                                'path' => $path,
+                                'action' => 'get',
+                                'date' => $date,
+                                'user' => $user
+                ));
+
+            if (!$accessRecord) {
+                $accessRecord = new FileAccessRecord(
+                    $path,
+                    'get',
+                    $date,
+                    $user
+                );
+                $this->em->persist($accessRecord);
+                $this->em->flush();
+            }
         }
 
         return $file;

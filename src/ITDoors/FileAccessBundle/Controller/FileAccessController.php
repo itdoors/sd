@@ -25,10 +25,11 @@ class FileAccessController extends Controller
     public function getFileIfAuthenticatedAction(Request $request)
     {
         $path = $request->get('path');
+        $timestamp = $request->get('timestamp');
         $fileAccessService = $this->container->get('i_tdoors_file_access.service');
 
         try {
-            $response = new BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path));
+            $response = new BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path, $timestamp));
 
             if ($response) {
                 return $response;
@@ -52,11 +53,12 @@ class FileAccessController extends Controller
     public function getFileIfHasRoleAction(Request $request)
     {
         $path = $request->get('path');
+        $timestamp = $request->get('timestamp');
         $role = $request->get('role');
         $fileAccessService = $this->container->get('i_tdoors_file_access.service');
 
         try {
-            $response = new BinaryFileResponse($fileAccessService->getFileIfHasRole($path, $role));
+            $response = new BinaryFileResponse($fileAccessService->getFileIfHasRole($path, $timestamp, $role));
 
             if ($response) {
                 return $response;
