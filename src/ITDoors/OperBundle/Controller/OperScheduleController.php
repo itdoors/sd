@@ -68,7 +68,7 @@ class OperScheduleController extends BaseFilterController
         if ($id == 0) {
             /** @var AccessService $accessService */
             $accessService = $this->get('access.service');
-            $idDepartment = $accessService->getAllowedDepartmentsId();
+            $idDepartment = $accessService->getAllowedDepartmentsId(null, false);
         }
         if (is_array($idDepartment) || $idDepartment === false) {
             $departmentIsArray = true;

@@ -29,7 +29,7 @@ class OperInfoController extends BaseFilterController
 
         $this->addToSessionValues(
             'idDepartment',
-            $accessService->getAllowedDepartmentsId(),
+            $accessService->getAllowedDepartmentsId(null, false),
             'param',
             'oper.bundle.department'
         );
@@ -60,10 +60,10 @@ class OperInfoController extends BaseFilterController
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
 
-        $query = $repository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId());
+        $query = $repository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(null, false));
 
         $countDepartments = $repository
-            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(), "count")
+            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(null, false), "count")
             ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
@@ -99,12 +99,12 @@ class OperInfoController extends BaseFilterController
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
 
-        $query = $departmentsRepository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId());
+        $query = $departmentsRepository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(null, false));
 
         $paginator = $this->get('knp_paginator');
 
         $countDepartments = $departmentsRepository
-            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(), "count")
+            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(null, false), "count")
             ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);

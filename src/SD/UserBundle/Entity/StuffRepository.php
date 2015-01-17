@@ -82,11 +82,14 @@ class StuffRepository extends EntityRepository
             ->join('sd.departments', 'd')
             ->join('d.status', 'st')
             ->where('s.id =:id')
-            ->andWhere('st.id =:status')
             ->setParameter(':id', $stuff->getId())
-            ->setParameter(':status', $activeStatus ? 1 : 2)
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        ;
+        if ($activeStatus) {
+            $ids = $ids->andWhere('st.id =:status')
+                ->setParameter(':status', $activeStatus ? 1 : 2);
+        }
+            $ids = $ids->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $result = [];
         foreach ($ids as $id) {

@@ -36,7 +36,7 @@ class AccessService
      *
      * @return array|bool
      */
-    public function getAllowedDepartmentsId ($user = null)
+    public function getAllowedDepartmentsId ($user = null, $activeStatus = true)
     {
         if (!$user) {
             $user = $this->container->get('security.context')->getToken()->getUser();
@@ -51,7 +51,7 @@ class AccessService
 
             return false;
         } elseif ($checkOper) {
-            return $this->getAllowedDepartmentsForUser($user);
+            return $this->getAllowedDepartmentsForUser($user, $activeStatus);
 
             /** @var  $stuff \SD\UserBundle\Entity\Stuff */
 /*
