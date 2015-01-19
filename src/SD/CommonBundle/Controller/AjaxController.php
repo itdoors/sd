@@ -1783,10 +1783,6 @@ class AjaxController extends BaseFilterController
             }
         }
         if ($name == 'userPosition') {
-            $user = $this->getDoctrine()
-                ->getRepository('SDUserBundle:User')
-                ->find($pk);
-
             $value = $this->getDoctrine()
                 ->getRepository('SDUserBundle:Position')
                 ->find((int) $value);

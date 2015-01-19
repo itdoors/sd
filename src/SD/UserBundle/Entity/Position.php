@@ -114,4 +114,13 @@ class Position
     {
         return $this->groups;
     }
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return $this->getName();
+    }
 }
