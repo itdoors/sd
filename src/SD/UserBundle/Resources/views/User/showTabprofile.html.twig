@@ -75,7 +75,7 @@
             });
 
             $('#userPosition').editable({
-                url: '{{ path('sd_common_ajax_stuff_save') }}',
+                url: '{{ path('sd_common_ajax_user_save') }}',
                 source: '{{ path('sd_common_ajax_user_position_table') }}',
                 emptytext: '{% trans %}Enter value{% endtrans %}',
                 select2: {
