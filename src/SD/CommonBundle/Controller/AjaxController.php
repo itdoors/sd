@@ -1782,6 +1782,15 @@ class AjaxController extends BaseFilterController
                 $value = null;
             }
         }
+        if ($name == 'userPosition') {
+            $user = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find($pk);
+
+            $value = $this->getDoctrine()
+                ->getRepository('SDUserBundle:Position')
+                ->find((int) $value);
+        }
 
         $user->$methodSet($value);
 
@@ -1849,15 +1858,6 @@ class AjaxController extends BaseFilterController
             $value = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup:Stuff')
             ->find((int) $value);
-        }
-        if ($name == 'userPosition') {
-            $user = $this->getDoctrine()
-                ->getRepository('SDUserBundle:User')
-                ->find($pk);
-
-            $value = $this->getDoctrine()
-                ->getRepository('SDUserBundle:Position')
-                ->find((int) $value);
         }
         $user->$methodSet($value);
 
