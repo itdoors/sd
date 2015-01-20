@@ -1,0 +1,19 @@
+ITdoors\FileAccessBundle\Entity\FileAccessRecord:
+    type: entity
+    table: file_access_history
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        path:
+            type: string
+            length: 255
+        action:
+            type: string
+            length: 50
+        date:
+            type: datetime
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
