@@ -53,6 +53,8 @@ class UserService
                 'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
                 'text' => $translator->trans('Settings profile', array(), 'SDUserBundle')
             );
+        }
+        if ($options['isAdmin']) {
             $tabs['roles'] = array(
                 'blockupdate' => 'ajax-tab-holder',
                 'tab' => 'roles',

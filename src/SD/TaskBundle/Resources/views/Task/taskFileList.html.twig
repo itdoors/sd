@@ -1,6 +1,14 @@
 {% trans_default_domain 'SDTaskBundle' %}
 <script>
     $(document).ready(function(){
+    	$('.doclink').click(function(){
+        	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+        	url += '?';
+        	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+        	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+        	url += encodeURI('role') + '=' + encodeURI($(this).attr('role'));
+        	window.location = url;
+        });
         $('.deleteFile').die('click');
         $('.deleteFile').live('click', function(e){
             e.preventDefault();
@@ -49,7 +57,8 @@
                         </p>
                         <p class="todo-text-color">
                             <div class="col-md-10">
-                                <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a>
+{#                                 <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a>#}
+                                <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/task/{{ file.filepath }}">{{ file.name }}</a>
                             </div>
                             <div class="col-md-2">
                                 {% if access.canDeleteFile and file.user.id == app.user.id %}

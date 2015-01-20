@@ -135,6 +135,8 @@ class UserController extends BaseController
         } else {
             $options['settings'] = false;
         }
+        
+        $options['isAdmin'] = $isAdmin;
         $options['currentUser'] = $isCurrentUser;
         $tabs = $service->getTabs($options);
 

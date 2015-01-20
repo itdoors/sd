@@ -287,9 +287,8 @@
             <td>{% trans from 'messages' %}File{% endtrans %}</td>
             <td>
                 {% if dogovor.filepath %}
-                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
-                        {% trans %}See document{% endtrans %}
-                    </a>
+{#                     <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">{% trans %}See document{% endtrans %}</a>#}
+                    <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ dogovor.filepath }}">{% trans %}See document{% endtrans %}</a>
                 {% endif %}
                 {% if access.canEdit %}
                 <script>
@@ -303,7 +302,7 @@
                             },
                             done: function (e, data) {
                                 $(this).parents('td').find('a').remove();
-                                $(this).parents('td').prepend('<a target="_blank" href="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                                $(this).parents('td').prepend('<a href="javascript:;" class="doclink" timestamp="'+Date.now().getUnixTime()+'" value="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
                                 alert('{% trans %}Document is uploaded{% endtrans %}');
                                 $.each(data.result.files, function (index, file) {
                                    // $('<p/>').text(file.name).appendTo('#files');
@@ -315,6 +314,14 @@
                             }
                             }).prop('disabled', !$.support.fileInput)
                                 .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                        });
+                        $('.doclink').click(function(){
+                        	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+                        	url += '?';
+                        	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+                        	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+                        	url += encodeURI('role') + '=' + encodeURI($(this).attr('role'));
+                        	window.location = url;
                         });
                     });
                 </script>
