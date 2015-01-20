@@ -1,5 +1,5 @@
 i_tdoors_file_access:
-    resource: "@ITdoorsFileAccessBundle/Resources/config/routing.yml"
+    resource: "@ITDoorsFileAccessBundle/Resources/config/routing.yml"
     prefix:   /
 
 it_doors_pay_master:

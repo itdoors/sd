@@ -1,12 +1,12 @@
 <?php
 
-namespace ITdoors\FileAccessBundle\Services;
+namespace ITDoors\FileAccessBundle\Services;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\File\File;
-use ITdoors\FileAccessBundle\Entity\FileAccessRecord;
+use ITDoors\FileAccessBundle\Entity\FileAccessRecord;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -85,7 +85,7 @@ class FileAccessService
             $date->setTimestamp($timestamp);
             $user = $this->securityContext->getToken()->getUser();
 
-            $accessRecord = $this->em->getRepository('ITdoorsFileAccessBundle:FileAccessRecord')
+            $accessRecord = $this->em->getRepository('ITDoorsFileAccessBundle:FileAccessRecord')
                 ->findOneBy(array(
                                 'path' => $path,
                                 'action' => 'get',

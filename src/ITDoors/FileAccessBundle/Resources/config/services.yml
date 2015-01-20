@@ -1,5 +1,5 @@
 parameters:
-    i_tdoors_file_access.service.class: ITdoors\FileAccessBundle\Services\FileAccessService
+    i_tdoors_file_access.service.class: ITDoors\FileAccessBundle\Services\FileAccessService
 
 services:
     i_tdoors_file_access.service:

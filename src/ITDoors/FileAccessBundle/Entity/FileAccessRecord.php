@@ -1,6 +1,6 @@
 <?php
 
-namespace ITdoors\FileAccessBundle\Entity;
+namespace ITDoors\FileAccessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

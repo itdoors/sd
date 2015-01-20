@@ -1,4 +1,4 @@
-ITdoors\FileAccessBundle\Entity\FileAccessRecord:
+ITDoors\FileAccessBundle\Entity\FileAccessRecord:
     type: entity
     table: file_access_history
     id:

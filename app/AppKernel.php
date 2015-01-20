@@ -62,7 +62,7 @@ class AppKernel extends Kernel
             new ITDoors\GeoBundle\ITDoorsGeoBundle(),
             new ITDoors\PayMasterBundle\ITDoorsPayMasterBundle(),
             new Lists\CoachBundle\ListsCoachBundle(),
-            new ITdoors\FileAccessBundle\ITdoorsFileAccessBundle(),
+            new ITDoors\FileAccessBundle\ITDoorsFileAccessBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

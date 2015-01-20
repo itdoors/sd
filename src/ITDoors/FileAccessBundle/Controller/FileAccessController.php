@@ -1,6 +1,6 @@
 <?php
 
-namespace ITdoors\FileAccessBundle\Controller;
+namespace ITDoors\FileAccessBundle\Controller;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
