@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * FileAccessController
@@ -30,6 +31,10 @@ class FileAccessController extends Controller
 
         try {
             $response = new BinaryFileResponse($fileAccessService->getFileIfAuthenticated($path, $timestamp));
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $response->getFile()->getFilename()
+            );
 
             if ($response) {
                 return $response;
@@ -59,6 +64,10 @@ class FileAccessController extends Controller
 
         try {
             $response = new BinaryFileResponse($fileAccessService->getFileIfHasRole($path, $timestamp, $role));
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $response->getFile()->getFilename()
+            );
 
             if ($response) {
                 return $response;
