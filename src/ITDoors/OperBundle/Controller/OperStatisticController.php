@@ -179,13 +179,30 @@ class OperStatisticController extends Controller
 
         }
         $graph = json_encode($graph);
+        if (!$filters) {
+            $filters30Days = array();
+            $filters30Days['daterange']['end'] = new \DateTime();
+            $filters30Days['daterange']['start'] = new \DateTime();
+            $filters30Days['daterange']['start']->sub(new \DateInterval('P30D'));
 
+            $current30Days = $statisticRepo->getTotalVisitsCommented($filters30Days);
 
+            $filtersLast30Days['daterange']['end'] = new \DateTime();
+            $filtersLast30Days['daterange']['end']->sub(new \DateInterval('P31D'));
+            $filtersLast30Days['daterange']['start'] = new \DateTime();
+            $filtersLast30Days['daterange']['start']->sub(new \DateInterval('P61D'));
+
+            $last30Days = $statisticRepo->getTotalVisitsCommented($filtersLast30Days);
+            $comparingLast30Days = ($current30Days - $last30Days) / $last30Days * 100;
+        } else {
+            $comparingLast30Days = null;
+        }
         return array(
             'graph' => $graph,
             'totalVisits' => $totalVisits,
             'totalVisitsCommented' => $totalVisitsCommented,
-            'averagePerDay' => $averagePerDay
+            'averagePerDay' => $averagePerDay,
+            'comparingLast30Days' => $comparingLast30Days
         );
     }
 
