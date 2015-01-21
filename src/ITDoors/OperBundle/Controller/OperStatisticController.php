@@ -194,15 +194,18 @@ class OperStatisticController extends Controller
 
             $last30Days = $statisticRepo->getTotalVisitsCommented($filtersLast30Days);
             $comparingLast30Days = ($current30Days - $last30Days) / $last30Days * 100;
+            $difference30Days = $current30Days - $last30Days;
         } else {
             $comparingLast30Days = null;
+            $difference30Days = null;
         }
         return array(
             'graph' => $graph,
             'totalVisits' => $totalVisits,
             'totalVisitsCommented' => $totalVisitsCommented,
             'averagePerDay' => $averagePerDay,
-            'comparingLast30Days' => $comparingLast30Days
+            'comparingLast30Days' => $comparingLast30Days,
+            'difference30Days' => $difference30Days
         );
     }
 
