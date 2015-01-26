@@ -70,7 +70,8 @@
                 <td>{{ dogovor.summMonthVat }}</td>
 #}
                 <td>
-                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
+{#                     <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>#}
+                    <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ dogovor.filepath }}">{% trans %}File{% endtrans %}</a>
                 </td>
             </tr>
                 {% set headerDone = false %}
@@ -130,7 +131,8 @@
                                         <td>{{ dopDogovor.total }}</td>
 #}
                                         <td>
-                                            <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
+{#                                             <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>#}
+                                            <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ dopDogovor.filepath }}">{% trans %}File{% endtrans %}</a>
                                         </td>
                                     </tr>
                     {% endif %}
@@ -148,3 +150,16 @@
     </tbody>
 </table>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('.doclink').click(function(){
+        	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+        	url += '?';
+        	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+        	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+        	url += encodeURI('role') + '=' + encodeURI($(this).attr('role'));
+        	window.location = url;
+        });
+    });
+</script>

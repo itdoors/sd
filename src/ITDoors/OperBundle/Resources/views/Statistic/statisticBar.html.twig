@@ -67,10 +67,19 @@
             </div>
             <div class="details">
                 <div class="number">
-                    +XX%
+                    {% if comparingLast30Days is not empty %}
+                        {% if comparingLast30Days>0 %}+{% endif %}
+                        {{ comparingLast30Days|number_format(2) }}%
+                        {% if difference30Days is not empty %}
+                            {% if difference30Days>0 %}+{% endif %}
+                            <span style="font-size: smaller;">({{ difference30Days }})</span>
+                        {% endif %}
+                    {% else %}
+                        XX%
+                    {% endif %}
                 </div>
                 <div class="desc">
-                    {% trans %}Comparing to last month{% endtrans %}
+                    {% trans %}Comparing to last 30 days{% endtrans %}
                 </div>
             </div>
             {#

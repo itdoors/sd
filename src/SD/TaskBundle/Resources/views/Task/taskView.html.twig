@@ -8,9 +8,9 @@
 <script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
 {% endif %}
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $('#task_set_viewed').die('click')
-        $('#task_set_viewed').live('click', function(e){
+        $('#task_set_viewed').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_viewed');
             var sendData = {
@@ -20,7 +20,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -29,40 +29,40 @@
 
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
             })
         })
 
         $('.stageButton').die('click');
-        $('.stageButton').live('click', function(e){
+        $('.stageButton').live('click', function (e) {
             var stage = $(this).data('stage');
             //insertComment();
             updateTaskStage(stage);
         })
 
         $('#task_change_date').die('click');
-        $('#task_change_date').live('click', function(e){
+        $('#task_change_date').live('click', function (e) {
             $('#change_date_holder').toggle('blind', {}, 300)
         })
 
         $('#add_viewer_btn').die('click');
-        $('#add_viewer_btn').live('click', function(e){
+        $('#add_viewer_btn').live('click', function (e) {
             $('#add_viewer_holder').toggle('blind', {}, 300)
         })
 
         $('#cancel_add_viewer').die('click');
-        $('#cancel_add_viewer').live('click', function(e){
+        $('#cancel_add_viewer').live('click', function (e) {
             $('#add_viewer_holder').hide('blind', {}, 300)
         })
 
 
         $('.answerButton').die('click');
-        $('.answerButton').live('click', function(e){
+        $('.answerButton').live('click', function (e) {
             var answer = $(this).data('value');
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_answer_date');
@@ -70,13 +70,13 @@
             var sendData = {
                 'id': id,
                 'answer': answer,
-                'comment' : comment
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -86,10 +86,10 @@
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
 
@@ -97,7 +97,7 @@
         })
 
         $('.signUpButton').die('click');
-        $('.signUpButton').live('click', function(e){
+        $('.signUpButton').live('click', function (e) {
             var status = $(this).data('status');
 
             var id = $('#task_modal_info_holder').data('id');
@@ -107,13 +107,13 @@
             var sendData = {
                 'id': id,
                 'status': status,
-                'comment' : comment
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -122,10 +122,10 @@
 
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
 
@@ -134,7 +134,7 @@
 
 
         $('#add_viewer_submit').die('click');
-        $('#add_viewer_submit').live('click', function(e){
+        $('#add_viewer_submit').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_add_viewer');
 
@@ -143,13 +143,13 @@
 
                 var sendData = {
                     'id': id,
-                    'viewer' : viewer
+                    'viewer': viewer
                 }
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: sendData,
-                    success: function(data1) {
+                    success: function (data1) {
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
@@ -162,10 +162,10 @@
                             }
                         }
                     },
-                    beforeSend: function() {
+                    beforeSend: function () {
                         SD.blockUI($('#task_holder'));
                     },
-                    complete: function() {
+                    complete: function () {
                         SD.unblockUI($('#task_holder'));
                     }
 
@@ -178,7 +178,7 @@
 
 
         $('#task_add_resolution').die('click');
-        $('#task_add_resolution').live('click', function(e){
+        $('#task_add_resolution').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url-add_resolution');
             var comment = getComment();
@@ -190,7 +190,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -198,17 +198,17 @@
                         updateTask();
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
 
             })
         })
         $('.changeDateCalendar').die('click');
-        $('.changeDateCalendar').live('click', function(e){
+        $('.changeDateCalendar').live('click', function (e) {
             var value = $('#new_date_holder').val();
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_change_date');
@@ -223,7 +223,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -235,10 +235,10 @@
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
 
@@ -246,19 +246,19 @@
         })
 
         $('#description_edit_text').die('click');
-        $('#description_edit_text').live('click', function(e){
+        $('#description_edit_text').live('click', function (e) {
             $('#edit_description_div').removeClass('notDisplayed');
             $('#description_div').addClass('notDisplayed');
         })
 
         $('#cancel_edit_description').die('click');
-        $('#cancel_edit_description').live('click', function(e){
+        $('#cancel_edit_description').live('click', function (e) {
             $('#edit_description_div').addClass('notDisplayed');
             $('#description_div').removeClass('notDisplayed');
         })
 
         $('#save_edit_description').die('click');
-        $('#save_edit_description').live('click', function(e){
+        $('#save_edit_description').live('click', function (e) {
             var description = $('#wyswyg').code();
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_sd_task_editable');
@@ -275,7 +275,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -284,10 +284,10 @@
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
             })
@@ -315,7 +315,7 @@
                     type: 'POST',
                     url: url,
                     data: sendData,
-                    success: function(data1) {
+                    success: function (data1) {
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
@@ -330,7 +330,7 @@
 
         }
 
-        function updateTaskStage (stage) {
+        function updateTaskStage(stage) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_stage');
             var comment = getComment();
@@ -344,7 +344,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -353,16 +353,15 @@
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     SD.blockUI($('#task_holder'));
                 },
-                complete: function() {
+                complete: function () {
                     SD.unblockUI($('#task_holder'));
                 }
 
             })
         }
-
 
 
         function updateTask() {
@@ -381,7 +380,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -393,11 +392,12 @@
                 }
             })
         }
-/*
-        Metronic.initSlimScroll('.scroller');
-*/
+
+        /*
+         Metronic.initSlimScroll('.scroller');
+         */
         $('#new_date_holder').datetimepicker({
-            minView:1,
+            minView: 1,
             rtl: Metronic.isRTL(),
             autoclose: true,
             format: "dd.mm.yyyy hh:ii",
@@ -406,7 +406,7 @@
             minuteStep: 30,
             weekStart: 1,
             startDate: new Date()
-        }).on('changeDate', function(date){
+        }).on('changeDate', function (date) {
             console.log('_____')
             var newDate = new Date(date.date.setMinutes(0));
             console.log(newDate)
@@ -420,13 +420,13 @@
             ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                 url: "{{ path('sd_task_list_stuff') }}",
                 dataType: 'json',
-                data: function(term, page) {
+                data: function (term, page) {
                     return {
                         query: term,
                         q: term
                     };
                 },
-                results: function(data, page) {
+                results: function (data, page) {
                     return {
                         results: data
                     };
@@ -440,7 +440,7 @@
             lang: 'ru-RU',
             'disableDragAndDrop': true,
             'disableLinkTarget': true,
-            'onblur': function(){
+            'onblur': function () {
                 /*
                  $('.wyswyg').text($('.textear-edit').code());
                  */
@@ -458,6 +458,9 @@
                 //['help', ['help']] //no help button
             ]
         }).code($('#description_text').html());
+        {% endif %}
+        {% if updateTaskItemsId > 0 %}
+            updateTaskListsItems({{ updateTaskItemsId }});
         {% endif %}
 
     })

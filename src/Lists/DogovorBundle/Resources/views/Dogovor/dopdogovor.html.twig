@@ -4,6 +4,14 @@
     $(document).ready(function(){
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
     });
+    $('.doclink').click(function(){
+    	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+    	url += '?';
+    	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+    	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+    	url += encodeURI('role') + '=' + encodeURI($(this).attr('role'));
+    	window.location = url;
+    });
 </script>
 
 <div class="table-toolbar">

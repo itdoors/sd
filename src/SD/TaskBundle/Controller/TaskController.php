@@ -142,9 +142,16 @@ class TaskController extends Controller
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->find($id);
         $user = $this->getUser();
+
+        $updateTaskItemsId = false;
         if ($taskUserRole->getUser() != $user) {
 
             return $this->render('SDTaskBundle:Task:noTaskAccess.html.twig', array());
+        } else {
+            if (!$taskUserRole->getIsViewed()) {
+                $this->setIsViewedTaskById($id);
+                $updateTaskItemsId = $taskUserRole->getTask()->getId();
+            }
         }
         $info = $this->getTaskUserRoleInfo($id);
         $idTask = $taskUserRole->getTask()->getId();
@@ -163,6 +170,8 @@ class TaskController extends Controller
         $info['comments'] = $comments;
 
         $info['taskUserRole'] = $taskUserRole;
+
+        $info['updateTaskItemsId'] = $updateTaskItemsId;
 
         $return = array();
         if ($json) {
@@ -385,6 +394,15 @@ class TaskController extends Controller
     public function setIsViewedTaskAction (Request $request)
     {
         $id = $request->request->get('id');
+
+        $this->setIsViewedTaskById($id);
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    private function setIsViewedTaskById($id) {
         $em = $this->getDoctrine()->getManager();
 
         $repository = $em->getRepository('SDTaskBundle:TaskUserRole');
@@ -412,10 +430,6 @@ class TaskController extends Controller
         $this->checkIfCanPerform($id);
         //end if performing
 
-
-        $return['success'] = 1;
-
-        return new Response(json_encode($return));
     }
     /**
      * @param int  $id
