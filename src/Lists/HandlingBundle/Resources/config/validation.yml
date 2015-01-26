@@ -8,3 +8,52 @@ Lists\HandlingBundle\Entity\Handling:
         createdate:
             - NotBlank: { groups: [new] }
             - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }
+
+Lists\HandlingBundle\Entity\ProjectGosTender:
+    properties:
+        vdz:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        advert:
+            - NotBlank: { groups: [edit] }
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [new, edit]
+        branch:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        typeOfProcedure:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        place:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        delivery:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        datetimeDeadline:
+            - NotBlank: { groups: [edit] }
+            - DateTime: { groups: [edit] }
+        datetimeOpening:
+            - NotBlank: { groups: [edit] }
+            - DateTime: { groups: [edit] }
+        software:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [new, edit]
+        isParticipation:
+            - NotBlank: { groups: [edit] }
+            - Choice:
+                 callback: getParticipations

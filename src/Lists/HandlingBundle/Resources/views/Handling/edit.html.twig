@@ -8,6 +8,39 @@
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
         {% if canEdit %}
+            {% if canEdit and tender %}
+                $('.editable-gos-tender').editable({
+                    url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
+                    pk: {{tender.id}}
+                });
+                $('#isParticipation').editable({
+                    url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
+                    pk: {{tender.id}},
+                    source: {{  tender.getParticipations|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }}
+                });
+                $('#kveds').editable({
+                    url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
+                    source: '{{ path('lists_organization_ajax_search_kved') }}',
+                    pk: {{tender.id}},
+                    select2: {
+                        multiple: true,
+                        width: '250px',
+                        minimumInputLength: 2,
+                        initSelection: function(element, callback) {
+                            return $.ajax({
+                                type: "GET",
+                                url: '{{ path('lists_organization_ajax_kved_by_ids') }}',
+                                dataType: 'json',
+                                data: { ids: element.val()},
+                                success: function(data){
+                                        callback(data);
+                                }
+                            });
+                    }
+                    }
+                });
+             
+            {% endif %}
 
             setProgress = function(response)
             {
@@ -363,6 +396,193 @@
                     {% endif %}
                 </td>
             </tr>
+            {% if tender %}
+                <tr>                
+                    <td>№ {% trans %}VDZ{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="vdz" data-type="text" data-placement="right" data-original-title=">№{% trans %}VDZ{% endtrans %}">
+                        {% endif %}
+                            {{ tender.vdz}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>№ {% trans %}Advert{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="advert" data-type="text" data-placement="right" data-original-title="{% trans %}Advert{% endtrans %}">
+                        {% endif %}
+                            {{ tender.advert}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>                
+                    <td>{% trans %}Branch{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="branch" data-type="text" data-placement="right" data-original-title="{% trans %}Branch{% endtrans %}">
+                        {% endif %}
+                            {{ tender.branch}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>{% trans %}Type of procedure{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="typeOfProcedure" data-type="text" data-placement="right" data-original-title="{% trans %}Type of procedure{% endtrans %}">
+                        {% endif %}
+                            {{ tender.typeOfProcedure}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>                
+                    <td>{% trans %}Place{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="place" data-type="text" data-placement="right" data-original-title="{% trans %}Place{% endtrans %}">
+                        {% endif %}
+                            {{ tender.place}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>{% trans %}Delivery{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="delivery" data-type="text" data-placement="right" data-original-title="{% trans %}Delivery{% endtrans %}">
+                        {% endif %}
+                            {{ tender.delivery}}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>                
+                    <td>{% trans %}Date deadline{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="datetimeDeadline" data-type="datetime" data-placement="right" data-original-title="{% trans %}Date deadline{% endtrans %}">
+                        {% endif %}
+                        {{ tender.datetimeDeadline is empty ? '' : tender.datetimeDeadline|date('d.m.Y H:i') }}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>{% trans %}Date opening{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="datetimeOpening" data-type="datetime" data-placement="right" data-original-title="{% trans %}Date opening{% endtrans %}">
+                        {% endif %}
+                            {{ tender.datetimeOpening is empty ? '' : tender.datetimeOpening|date('d.m.Y H:i') }}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans %}Participation{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a href="#" id="isParticipation" data-type="select" data-value="{{ tender.isParticipation ? '1' : '0' }}" data-placement="right" data-original-title="{% trans %}Participation{% endtrans %}">
+                        {% endif %}
+                            {{ tender.getParticipations[tender.isParticipation] |trans }}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>{% trans %}Reason{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="reason" data-type="textarea" data-placement="top" data-original-title="{% trans %}Reason{% endtrans %}">{% endif %}{{ tender.reason }}{% if access.canEdit %}</a>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans %}Participants{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="participants" data-type="textarea" data-value="{{  tender.participants  }}" data-placement="top" data-original-title="{% trans %}Participants{% endtrans %}">{% endif %}{{ tender.participants }}{% if access.canEdit %}</a>{% endif %}
+                    </td>
+                    <td>{% trans %}Winners{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="winners" data-type="textarea" data-placement="top" data-original-title="{% trans %}Winners{% endtrans %}">{% endif %}{{ tender.winners }}{% if access.canEdit %}</a>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans %}Software{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="software" data-type="text" data-placement="right" data-original-title="{% trans %}Software{% endtrans %}">
+                        {% endif %}
+                        {{ tender.software }}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    
+                    <td>{% trans %}Kveds{% endtrans %}</td>
+                    <td>
+                        {% if access.canEdit %}
+                        <a href="#" id="kveds" data-type="select2" data-value="{% for key,kved in tender.kveds %}{% if key > 0 %},{% endif %}{{  kved.id  }}{% endfor %}" data-placement="top" data-original-title="{% trans %}Kveds{% endtrans %}">
+                        {% endif %}
+                        {{ tender.kveds|join('<br>')|raw }}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans %}Files{% endtrans %}</td>
+                    <td colspan="3">
+                        {% for file in handling.0.files %}
+                            <a href="" target="_blank"></a>
+                        {% endfor %}
+                        {% if access.canEdit %}
+                        <a class="editable-gos-tender" href="#" id="files" data-type="text" data-placement="right" data-original-title="{% trans %}Files{% endtrans %}">
+                        {% endif %}
+                        {% if access.canEdit %}
+                        </a>
+                        {% endif %}
+                         <script>
+                            $(document).ready(function(){
+                                $(function () {
+                                    $('#fileupload').fileupload({
+
+                                    dataType: 'json',
+                                    fail: function (e, data) {
+                                        alert('Error upload');
+                                    },
+                                    done: function (e, data) {
+                                        $(this).parents('td').prepend('<a target="_blank" href="'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                                        alert('{% trans %}Document is uploaded{% endtrans %}');
+                                       // $.each(data.result.files, function (index, file) {
+                                           // $('<p/>').text(file.name).appendTo('#files');
+
+                                       // });
+                                    },
+                                    add: function (e, data) {
+                                        if(confirm('{% trans %}Upload a new document{% endtrans %}?')){data.submit();}
+                                    }
+                                    }).prop('disabled', !$.support.fileInput)
+                                        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                });
+                            });
+                        </script>
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>{% trans %}Upload new document{% endtrans %}</span>
+                            <input id="fileupload" type="file" name="file" data-url="{{ path('lists_handling_ajax_upload_file', {'id': handling.0.id}) }}">
+                        </span>  
+                
+                    </td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>

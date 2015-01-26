@@ -128,6 +128,9 @@ Lists\HandlingBundle\Entity\Handling:
         handlingUsers:
           targetEntity: HandlingUser
           mappedBy: handling
+        files:
+          targetEntity: ProjectFile
+          mappedBy: project
     manyToOne:
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
@@ -183,17 +186,6 @@ Lists\HandlingBundle\Entity\Handling:
                     referencedColumnName: id
             orphanRemoval: false
     manyToMany:
-#        users:
-#            targetEntity: SD\UserBundle\Entity\User
-#            inversedBy: handlings
-#            joinTable:
-#              name: handling_user
-#              joinColumns:
-#                handling_id:
-#                  referencedColumnName: id
-#              inverseJoinColumns:
-#                user_id:
-#                  referencedColumnName: id
         handlingServices:
             targetEntity: HandlingService
             inversedBy: handlings

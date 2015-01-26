@@ -15,6 +15,7 @@ class HandlingAccessFactory
     public static function createAccess($roles)
     {
         $access = array();
+        $access[] = new BasicHandlingAccess();
         foreach ($roles as $role) {
             if ($role == 'sales_admin') {
                 $access[] = new SalesAdminHandlingAccess();
@@ -26,8 +27,8 @@ class HandlingAccessFactory
                 $access[] = new ManagerAccess();
             } elseif ($role == 'report') {
                 $access[] = new ReportHandlingAccess();
-            } else {
-                $access[] = new BasicHandlingAccess();
+            } elseif ($role == 'tender_admin') {
+                $access[] = new TenderAdminHandlingAccess();
             }
         }
 

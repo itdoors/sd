@@ -265,3 +265,21 @@ Planning: Запланированый
 Actual: Фактический
 Type: Тип
 Export to Excel: Експорт в Excel
+VDZ: ВДЗ
+Advert: Объявления
+Branch: Отрасль
+Type of procedure: Процедура закупки
+Place: Место
+Delivery: Cрок поставки
+This value should be of type integer: Значение должно быть целым числом
+Date deadline: Дата и время конечного срока
+Date opening: Дата и время раскрытия
+Software: Обеспечение
+Participation: Участие
+Yes: Да
+No: Нет
+Reason: Причина
+Participants: Участники
+Winners: Победители
+Kveds: Кведы
+Files: Файлы

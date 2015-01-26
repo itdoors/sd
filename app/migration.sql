@@ -2364,6 +2364,9 @@ INSERT INTO "public".organization_current_account (type_id, organization_id, ban
 -- prod +++++++++++
 ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
 ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699911C8FB41 ON pay_master (bank_id);
+COMMENT ON COLUMN pay_master.reason IS 'Причина отклонения';
+
 -- prod ----
 
 CREATE TABLE position_group (position_id BIGINT NOT NULL, group_id INT NOT NULL, PRIMARY KEY(position_id, group_id));
@@ -2403,3 +2406,60 @@ CREATE INDEX IDX_E2E17F34B6F93BB ON deputy_stuff (deputy_id);
 CREATE INDEX IDX_E2E17F3950A1740 ON deputy_stuff (stuff_id);
 ALTER TABLE deputy_stuff ADD CONSTRAINT FK_E2E17F34B6F93BB FOREIGN KEY (deputy_id) REFERENCES deputy (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE deputy_stuff ADD CONSTRAINT FK_E2E17F3950A1740 FOREIGN KEY (stuff_id) REFERENCES stuff (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+-- prod ???
+CREATE TABLE project_gos_tender (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, vdz VARCHAR(128) NOT NULL, advert INT NOT NULL, branch VARCHAR(128) NOT NULL, type_of_procedure VARCHAR(128) NOT NULL, place VARCHAR(128) NOT NULL, delivery VARCHAR(128) NOT NULL, datetime_deadline TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, datetime_opening TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, software VARCHAR(128) NOT NULL, is_participation BOOLEAN DEFAULT NULL, reason BOOLEAN DEFAULT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_4F4896C1166D1F9C ON project_gos_tender (project_id);
+COMMENT ON COLUMN project_gos_tender.vdz IS '№ ВДЗ';
+COMMENT ON COLUMN project_gos_tender.advert IS 'Объявления';
+COMMENT ON COLUMN project_gos_tender.branch IS 'Отрасль';
+COMMENT ON COLUMN project_gos_tender.type_of_procedure IS 'Процедура закупки';
+COMMENT ON COLUMN project_gos_tender.place IS 'Место';
+COMMENT ON COLUMN project_gos_tender.delivery IS 'Cрок поставки';
+COMMENT ON COLUMN project_gos_tender.datetime_deadline IS 'Дата и время конечного срока';
+COMMENT ON COLUMN project_gos_tender.datetime_opening IS 'Дата и время вскрытия';
+COMMENT ON COLUMN project_gos_tender.software IS 'Обеспечение';
+COMMENT ON COLUMN project_gos_tender.is_participation IS 'Участвуем или нет в тендере';
+COMMENT ON COLUMN project_gos_tender.reason IS 'Причина учистия или нет в тендере';
+COMMENT ON COLUMN project_gos_tender.datetime_deleted IS 'Дата и время удаления тендера';
+
+ALTER TABLE project_gos_tender ADD CONSTRAINT FK_4F4896C1166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A9A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A932C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender ALTER vdz DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER advert DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER branch DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER type_of_procedure DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER place DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER delivery DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER datetime_deadline DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER datetime_opening DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER software DROP NOT NULL;
+ALTER TABLE handling_type ADD alias VARCHAR(128) DEFAULT NULL;
+COMMENT ON COLUMN handling_type.alias IS 'Альтернативное уникальное название типа';
+COMMENT ON COLUMN handling_type.name IS 'Тип проекта';
+ALTER TABLE project_gos_tender ALTER reason TYPE TEXT;
+
+CREATE TABLE project_gos_tender__kved (project_gos_tender_id BIGINT NOT NULL, kved_id BIGINT NOT NULL, PRIMARY KEY(project_gos_tender_id, kved_id));
+CREATE INDEX IDX_B9C3B856A930DD36 ON project_gos_tender__kved (project_gos_tender_id);
+CREATE INDEX IDX_B9C3B856B530ADF6 ON project_gos_tender__kved (kved_id);
+
+ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856B530ADF6 FOREIGN KEY (kved_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE project_gos_tender ADD participants TEXT DEFAULT NULL;
+ALTER TABLE project_gos_tender ADD winners TEXT DEFAULT NULL;
+CREATE UNIQUE INDEX unique_project_gos_tender ON project_gos_tender (advert, datetime_deadline);
+COMMENT ON COLUMN project_gos_tender.participants IS 'Участники';
+COMMENT ON COLUMN project_gos_tender.winners IS 'Победители';
+COMMENT ON COLUMN project_gos_tender.datetime_opening IS 'Дата и время раскрытия';
+
+CREATE TABLE project_file (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, name VARCHAR(128) NOT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_B50EFE08166D1F9C ON project_file (project_id);
+COMMENT ON COLUMN project_file.name IS 'Название файла';
+COMMENT ON COLUMN project_file.shortText IS 'Краткое описание файла';
+COMMENT ON COLUMN project_file.create_datetime IS 'Дата создания файла';
+COMMENT ON COLUMN project_file.deleted_datetime IS 'Дата удаления файла';
+
+
+-- prod ----

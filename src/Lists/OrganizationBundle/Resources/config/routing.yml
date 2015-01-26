@@ -178,3 +178,13 @@ lists_organization_ajax_bank_name_and_mfo_by_id:
     pattern:  /lists/organization/ajax/bank/name_and_mfo_by_id
     defaults: { _controller: ListsOrganizationBundle:Ajax:bankNameAndMfoById }
     methods:   [GET]
+
+lists_organization_ajax_search_kved:
+    pattern:  /lists/organization/ajax/search/kved
+    defaults: { _controller: ListsOrganizationBundle:Ajax:kvedSearch }
+    methods:   [GET]
+
+lists_organization_ajax_kved_by_ids:
+    pattern:  /lists/organization/ajax/kved/by_ids
+    defaults: { _controller: ListsOrganizationBundle:Ajax:kvedByIds }
+    methods:   [GET]
