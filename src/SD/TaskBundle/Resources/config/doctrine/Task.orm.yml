@@ -12,6 +12,10 @@ SD\TaskBundle\Entity\Task:
             type: datetime
             nullable: true
             column: createdatetime
+        editedDate:
+            type: datetime
+            nullable: true
+            column: editeddatetime
         startDate:
             type: datetime
             nullable: true

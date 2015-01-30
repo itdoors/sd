@@ -7,7 +7,9 @@
 <!-- BEGIN HEAD -->
 
 {# itd=platform twig extension to log js errors #} {#{ itd_js_error_handler() }#}
+{#
 {% if app.environment == 'prod'%}{{ itd_js_error_handler() }}{% endif %}
+#}
 
 <head>
 <meta charset="utf-8" />

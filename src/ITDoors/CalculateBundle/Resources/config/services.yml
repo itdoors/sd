@@ -1,0 +1,7 @@
+parameters:
+    it_doors_calculate.service.class: ITDoors\CalculateBundle\Services\CalculateService
+
+services:
+    it_doors_calculate.service:
+        class: %it_doors_calculate.service.class%
+        arguments: [@doctrine]

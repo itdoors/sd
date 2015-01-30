@@ -1,3 +1,11 @@
+it_doors_api:
+    resource: "@ITDoorsApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_calculate:
+    resource: "@ITDoorsCalculateBundle/Resources/config/routing.yml"
+    prefix:   /
+
 i_tdoors_file_access:
     resource: "@ITDoorsFileAccessBundle/Resources/config/routing.yml"
     prefix:   /

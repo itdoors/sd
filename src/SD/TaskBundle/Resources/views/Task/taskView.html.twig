@@ -54,7 +54,15 @@
         $('#add_viewer_btn').live('click', function (e) {
             $('#add_viewer_holder').toggle('blind', {}, 300)
         })
+        $('#add_matcher_btn').die('click');
+        $('#add_matcher_btn').live('click', function (e) {
+            $('#add_matcher_holder').toggle('blind', {}, 300)
+        })
 
+        $('#cancel_add_matcher').die('click');
+        $('#cancel_add_matcher').live('click', function (e) {
+            $('#add_matcher_holder').hide('blind', {}, 300)
+        })
         $('#cancel_add_viewer').die('click');
         $('#cancel_add_viewer').live('click', function (e) {
             $('#add_viewer_holder').hide('blind', {}, 300)
@@ -143,7 +151,52 @@
 
                 var sendData = {
                     'id': id,
-                    'viewer': viewer
+                    'viewer': viewer,
+                    'role': 'viewer'
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function (data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            updateTask();
+                        } else {
+                            if (data.error == 'already_in_task') {
+                                alert('{% trans %}This user already taking part in task{% endtrans %}');
+                            } else {
+                                alert('error');
+                            }
+                        }
+                    },
+                    beforeSend: function () {
+                        SD.blockUI($('#task_holder'));
+                    },
+                    complete: function () {
+                        SD.unblockUI($('#task_holder'));
+                    }
+
+                })
+            } else {
+                alert('{% trans %}Choose coworker{% endtrans %}');
+            }
+
+        });
+
+        $('#add_matcher_submit').die('click');
+        $('#add_matcher_submit').live('click', function (e) {
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_add_viewer');
+
+            var viewer = $("#matcher_select").select2("val");
+            if (viewer) {
+
+                var sendData = {
+                    'id': id,
+                    'viewer': viewer,
+                    'role': 'matcher'
                 }
                 $.ajax({
                     type: 'POST',
@@ -433,6 +486,24 @@
                 }
             }
         });
+        $('#matcher_select').select2({
+            minimumInputLength: 0,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "{{ path('sd_task_list_stuff') }}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
         {% if access.canEditDescription %}
 
         $('#wyswyg').summernote({
@@ -479,14 +550,15 @@
 #}
     <!-- TASK HEAD -->
     <div class="form">
+{#
         <div class="form-group">
             <div class="col-md-8 col-sm-8">
                 <div class="todo-taskbody-user">
                     <img class="todo-userpic pull-left" src="{{ web_image(app.user.photo is not empty ? userprofiles_url ~ app.user.id ~ '/' ~ app.user.photo : userprofiles_url ~ 'no_avatar.png').resize(50, 50) }}" width="50px" height="50px">
                     <span class="todo-username pull-left">{{ taskUserRole.user }}</span>
-{#
+&#123;&#35;
                     <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs">&nbsp;edit&nbsp;</button>
-#}
+&#35;&#125;
                 </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -501,6 +573,7 @@
                 </div>
             </div>
         </div>
+#}
         <!-- END TASK HEAD -->
         <!-- TASK TITLE -->
         <div class="form-group">
@@ -674,6 +747,7 @@
                                 <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
                             {% endif %}
                         {% endif %}
+                        <br>
                     {% endfor %}
                 {% endif %}
 
@@ -818,7 +892,7 @@
         {% if access.canAddViewer %}
             <div class="form-group">
                 <div class="col-md-12">
-                    <div class="form-actions right todo-form-actions" >
+                    <div class="form-actions right todo-form-actions" style="margin-bottom: 0; padding-bottom: 0">
                         <button id="add_viewer_btn" class="btn btn-circle btn-sm green-haze">{% trans %}Add viewer{% endtrans %}</button>
                         <br><br>
                     <div id="add_viewer_holder" style="display: none;">
@@ -844,6 +918,35 @@
                 </div>
             </div>
         {% endif %}
+        {% if access.canAddMatcher %}
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="form-actions right todo-form-actions" >
+                    <button id="add_matcher_btn" class="btn btn-circle btn-sm green-haze">{% trans %}Add matcher{% endtrans %}</button>
+                    <br><br>
+                    <div id="add_matcher_holder" style="display: none;">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div id="matcher_select" style="width: 100%" {#data-placeholder="{% trans %}Choose coworker{% endtrans %}"#}>
+                                    {#<option selected></option>#}
+                                    {#
+                                                                        {% for user in usersCanBeViewed %}
+                                                                            <option value="{{ user.id }}">{{ user }}</option>
+                                                                        {% endfor %}
+                                    #}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-circle btn-sm btn-default" id="add_matcher_submit">{% trans %}Add{% endtrans %}</button>
+                                <button class="btn btn-circle btn-sm btn-default" id="cancel_add_matcher">{% trans %}Cancel{% endtrans %}</button>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     </div>
 

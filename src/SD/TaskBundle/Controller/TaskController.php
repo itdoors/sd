@@ -148,10 +148,11 @@ class TaskController extends Controller
 
             return $this->render('SDTaskBundle:Task:noTaskAccess.html.twig', array());
         } else {
-            if (!$taskUserRole->getIsViewed()) {
+            if (!$taskUserRole->getIsViewed() || $taskUserRole->getIsUpdated()) {
                 $this->setIsViewedTaskById($id);
                 $updateTaskItemsId = $taskUserRole->getTask()->getId();
             }
+
         }
         $info = $this->getTaskUserRoleInfo($id);
         $idTask = $taskUserRole->getTask()->getId();
@@ -418,6 +419,7 @@ class TaskController extends Controller
         if ($taskUserRolesAll) {
             foreach ($taskUserRolesAll as $tur) {
                 $tur->setIsViewed(true);
+                $tur->setIsUpdated(false);
                 $em->persist($tur);
             }
         } else {
@@ -546,6 +548,8 @@ class TaskController extends Controller
         $em->persist($task);
         $em->flush();
 
+        $this->setTaskUpdated($this->getUser(), $task);
+
         if ($stage == 'done' || $stage == 'undone' || $stage == 'closed') {
             $taskUserRolesEmail = $em->getRepository('SDTaskBundle:TaskUserRole')
                 ->findBy(array(
@@ -663,6 +667,8 @@ class TaskController extends Controller
 
         $this->checkIfCanPerform($id, true);
 
+        $this->setTaskUpdated($this->getUser(), $task);
+
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -724,6 +730,8 @@ class TaskController extends Controller
         );
 
         $this->sendEmail($taskUserRolePerformer, 'resolution', array('resolution' => $commentValue));
+
+        $this->setTaskUpdated($this->getUser(), $taskUserRole->getTask());
 
         $return['success'] = 1;
 
@@ -904,6 +912,8 @@ class TaskController extends Controller
         $em->persist($task);
         $em->flush();
 
+        $this->setTaskUpdated($this->getUser(), $task);
+
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -957,6 +967,8 @@ class TaskController extends Controller
         $this->insertComment($pk, $comment);
 
         $em->flush();
+
+        $this->setTaskUpdated($this->getUser(), $task);
 
         $return['success'] = 1;
 
@@ -1126,6 +1138,8 @@ class TaskController extends Controller
             }
         }
 
+        $this->setTaskUpdated($user, $task);
+
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -1182,7 +1196,14 @@ class TaskController extends Controller
     public function addViewerAction(Request $request)
     {
         $id = $request->request->get('id');
-        $idViewer = $request->request->get('viewer');
+        $idUser = $request->request->get('viewer');
+        $role = $request->request->get('role');
+
+        return $this->addTaskUserRole($id, $idUser, $role);
+    }
+
+    private function addTaskUserRole($idTaskUserRole, $idUser, $role) {
+        $id = $idTaskUserRole;
 
         $em = $this->getDoctrine()->getManager();
 
@@ -1190,16 +1211,16 @@ class TaskController extends Controller
 
         $task = $taskUserRole->getTask();
 
-        $userViewer = $em->getRepository('SDUserBundle:User')->find($idViewer);
-        $viewerRole = $em->getRepository('SDTaskBundle:Role')
+        $userAdd = $em->getRepository('SDUserBundle:User')->find($idUser);
+        $AddRole = $em->getRepository('SDTaskBundle:Role')
             ->findOneBy(array(
-                'name' => 'viewer',
+                'name' => $role,
                 'model' => 'task'
             ));
 
         $checkTaskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
             'task' => $task,
-            'user' => $userViewer
+            'user' => $userAdd
         ));
 
         if ($checkTaskUserRole) {
@@ -1209,23 +1230,25 @@ class TaskController extends Controller
             return new Response(json_encode($return));
         }
 
-        $taskUserRoleViewer = new TaskUserRole();
-        $taskUserRoleViewer->setUser($userViewer);
-        $taskUserRoleViewer->setRole($viewerRole);
-        $taskUserRoleViewer->setTask($task);
-        $taskUserRoleViewer->setIsViewed(false);
+        $taskUserRoleAdd = new TaskUserRole();
+        $taskUserRoleAdd->setUser($userAdd);
+        $taskUserRoleAdd->setRole($AddRole);
+        $taskUserRoleAdd->setTask($task);
+        $taskUserRoleAdd->setIsViewed(false);
+        $taskUserRoleAdd->setIsUpdated(false);
 
-        $em->persist($taskUserRoleViewer);
+        $em->persist($taskUserRoleAdd);
         $em->flush();
-        $em->refresh($taskUserRoleViewer);
+        $em->refresh($taskUserRoleAdd);
 
-        $this->sendEmail(array($taskUserRoleViewer), 'new');
+        $this->sendEmail(array($taskUserRoleAdd), 'new');
         //add comment
         $taskService = $this->get('task.service');
         $translator = $this->get('translator');
-        $commentValue = $translator->trans('Added viewer', array(), 'SDTaskBundle').': '.$userViewer;
+        $commentValue = $translator->trans('Added matcher', array(), 'SDTaskBundle').': '.$userAdd;
         $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
 
+        $this->setTaskUpdated($this->getUser(), $task);
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -1341,4 +1364,27 @@ class TaskController extends Controller
 
         return $this->render('SDTaskBundle:Task:taskPrint.html.twig', $info);
     }
+
+    private function setTaskUpdated($exceptUser, $task) {
+        $taskUserRoles = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->findBy(array(
+                'task' => $task
+            ));
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($taskUserRoles as $taskUserRole) {
+            $user = $taskUserRole->getUser();
+            if ($user != $exceptUser) {
+                $taskUserRole->setIsUpdated(true);
+                $em->persist($taskUserRole);
+            }
+        }
+
+        $task->setEditedDate(new \DateTime());
+        $em->persist($task);
+
+        $em->flush();
+    }
+
 }

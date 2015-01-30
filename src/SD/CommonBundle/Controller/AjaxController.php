@@ -2695,6 +2695,7 @@ class AjaxController extends BaseFilterController
         $formData = $request->request->get($form->getName());
 
         $data->setCreateDate(new \DateTime());
+        $data->setEditedDate(new \DateTime());
         $data->setAuthor($user);
         $data->setStartDate(new \DateTime($formData['startDate']));
 
@@ -2786,6 +2787,7 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setUser($user);
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(true);
+        $taskUserRole->setIsUpdated(false);
         $em->persist($taskUserRole);
         $em->flush();
 
@@ -2804,6 +2806,8 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setUser($performer);
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(false);
+        $taskUserRole->setIsUpdated(false);
+
         $em->persist($taskUserRole);
         $em->flush();
 
@@ -2822,6 +2826,8 @@ class AjaxController extends BaseFilterController
                 $taskUserRole->setUser($matcher);
                 $taskUserRole->setTask($data);
                 $taskUserRole->setIsViewed(false);
+                $taskUserRole->setIsUpdated(false);
+
                 $em->persist($taskUserRole);
                 $taskUserRolesEmail[] = $taskUserRole;
             }
@@ -2836,6 +2842,8 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setRole($controllerRole);
         $taskUserRole->setUser($controller);
         $taskUserRole->setTask($data);
+        $taskUserRole->setIsUpdated(false);
+
         if ($controller == $user) {
             $taskUserRole->setIsViewed(true);
         } else {
@@ -2852,17 +2860,6 @@ class AjaxController extends BaseFilterController
         $taskService->sendEmailInform($taskUserRolesEmail, 'new');
 
         return true;
-/*        }
-
-        return $this->render('SDCommonBundle:AjaxForm:taskForm1.html.twig', array(
-            'form' => $form->createView(),
-            'formName' => $formName,
-            'postFunction' => $postFunction,
-            'postTargetId' => $postTargetId,
-            'targetId' => $targetId,
-            'model' => $model,
-            'modelId' => $modelId,
-        ));*/
     }
 
 

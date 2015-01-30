@@ -59,6 +59,7 @@
                             <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
                         {% endif %}
                     {% endif %}
+                    <br>
                 {% endfor %}
             {% endif %}
 
@@ -74,6 +75,18 @@
                 {% endfor %}
             {% endif %}
 <br><br>
+<h4>{% trans %}Protocol{% endtrans %}</h4>
+<ul>
+    {% for comment in comments %}
+        <li style="padding: 5px;">
+            <p>
+                <span>{{ comment.user }}</span> &nbsp; <span>{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
+            </p>
+            <p  style="white-space: pre-line; ">{{ comment.value|raw  }} <br></p>
+        </li>
+    {% endfor %}
+</ul>
+
 </div>
 
 <script>

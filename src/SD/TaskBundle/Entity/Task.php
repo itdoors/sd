@@ -268,4 +268,32 @@ class Task
     {
         return $this->startDate;
     }
+    /**
+     * @var \DateTime
+     */
+    private $editedDate;
+
+
+    /**
+     * Set editedDate
+     *
+     * @param \DateTime $editedDate
+     * @return Task
+     */
+    public function setEditedDate($editedDate)
+    {
+        $this->editedDate = $editedDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get editedDate
+     *
+     * @return \DateTime 
+     */
+    public function getEditedDate()
+    {
+        return $this->editedDate;
+    }
 }

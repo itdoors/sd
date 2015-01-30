@@ -133,4 +133,32 @@ class TaskUserRole
     {
         return $this->isViewed;
     }
+    /**
+     * @var boolean
+     */
+    private $isUpdated;
+
+
+    /**
+     * Set isUpdated
+     *
+     * @param boolean $isUpdated
+     * @return TaskUserRole
+     */
+    public function setIsUpdated($isUpdated)
+    {
+        $this->isUpdated = $isUpdated;
+    
+        return $this;
+    }
+
+    /**
+     * Get isUpdated
+     *
+     * @return boolean 
+     */
+    public function getIsUpdated()
+    {
+        return $this->isUpdated;
+    }
 }

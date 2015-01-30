@@ -47,6 +47,10 @@
     </style>
     <script>
         $(document).ready(function(){
+
+            $('.page-sidebar-menu').addClass('page-sidebar-menu-closed');
+            $('body').addClass('page-sidebar-closed');
+
             $('.task-item').die('click')
             $('.task-item').live('click', function(e){
                 clearTaskContent();
@@ -101,6 +105,29 @@
 */
                 updateTaskList();
 
+
+            });
+
+            $('#toggle_list').die('click');
+            $('#toggle_list').bind('click', function(e){
+                e.preventDefault();
+                var value = $(this).data('value');
+                if (value) {
+                    $(this).data('value', 0);
+                    $("#task_list_holder").hide()
+                    //$("#task_list_holder").addClass('col-md-5 col-sm-4');
+                    $(this).text($(this).data('show_text'));
+
+                    $("#task_holder").removeClass();
+                    $("#task_holder").addClass('col-md-12 col-sm-12');
+                } else {
+                    $(this).data('value', 1);
+                    $(this).text($(this).data('hide_text'));
+                    $("#task_list_holder").show()
+                    $("#task_holder").removeClass();
+                    $("#task_holder").addClass('col-md-7 col-sm-8');
+
+                }
 
             })
 
@@ -376,6 +403,13 @@
             <span class="caption-subject font-green-sharp bold uppercase">
                 {% trans %}Tasks list{% endtrans %}
             </span>
+            <a class="btn btn-circle btn-sm btn-default" id="toggle_list" data-value="1"
+                    data-show_text="{% trans %}Show list{% endtrans %}"
+                    data-hide_text="{% trans %}Hide list{% endtrans %}"
+                    >
+                {% trans %}Hide list{% endtrans %}
+            </a>
+
             <span class="caption-helper">
                 <i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
             </span>
@@ -398,7 +432,7 @@
     <!-- end PROJECT HEAD -->
     <div class="portlet-body">
     <div class="row">
-    <div class="col-md-5 col-sm-4">
+    <div class="col-md-5 col-sm-4" id="task_list_holder">
         <div class="scroller" style="max-height: 600px; min-height: 500px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
             <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list" style="padding-top: 5px;">
 

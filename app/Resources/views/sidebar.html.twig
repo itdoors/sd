@@ -980,6 +980,14 @@
                                 <span class="title">{% trans %}My news{% endtrans %}</span>
                             </a>
             </li>
+            {% if is_granted('ROLE_SUPERVISOR') %}
+			<li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('it_doors_calculate_homepage') %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_calculate_homepage') }}">
+                                <i class="icon-calculator"></i>
+                                <span class="title">{% trans %}Calculator{% endtrans %}</span>
+                            </a>
+            </li>
+            {% endif %}
     </ul>
         <!-- END SIDEBAR MENU -->
     </div>

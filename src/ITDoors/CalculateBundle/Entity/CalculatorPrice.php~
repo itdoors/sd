@@ -1,0 +1,12 @@
+<?php
+
+namespace ITDoors\CalculateBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CalculatorPrice
+ */
+class CalculatorPrice
+{
+}
