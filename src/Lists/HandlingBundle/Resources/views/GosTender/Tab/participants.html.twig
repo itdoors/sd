@@ -18,7 +18,7 @@
                         <td>{{key+1}}</td>
                         <td>{{participant.participan}}</td>
                         <td>{{participant.summa|number_format(2, '.', ' ')}}</td>
-                        <td>{{participant.isWinner}}</td>
+                        <td>{{ participant.isWinner is not null ? participant.getChoiceList[participant.isWinner]|trans : '' }}</td>
                         <td>{{participant.reason}}</td>
                     <tr>
                 {% endfor %}

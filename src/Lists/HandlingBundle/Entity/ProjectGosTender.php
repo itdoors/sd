@@ -443,7 +443,6 @@ class ProjectGosTender
      */
     private $participans;
 
-
     /**
      * Add participans
      *

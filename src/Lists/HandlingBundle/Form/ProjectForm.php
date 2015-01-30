@@ -55,8 +55,26 @@ class ProjectForm extends AbstractType
                 'class' => 'ListsHandlingBundle:HandlingStatus',
                 'empty_value' => '',
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                        return $repository->createQueryBuilder('s')
-                            ->orderBy('s.sortorder', 'ASC');
+                    return $repository->createQueryBuilder('s')
+                        ->orderBy('s.sortorder', 'ASC');
+                },
+                'attr' => array(
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true
+                    ))
+                )
+            ))
+            ->add('handlingServices', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingService',
+                'empty_value' => '',
+                'multiple' => 'multiple',
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingServiceRepository $repository) {
+                    return $repository->createQueryBuilder('s')
+                        ->where('s.slug = :slug')
+                        ->setParameter(':slug', "gos_tender")
+                        ->orderBy('s.sortorder', 'ASC');
                 },
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',

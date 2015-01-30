@@ -13,6 +13,83 @@ use Symfony\Component\Validator\Constraints\File;
  */
 class AjaxController extends Controller
 {
+    /**
+     * handlingServicesSearchAction
+     * 
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function handlingServicesSearchAction(Request $request)
+    {
+        $searchText = $request->query->get('query');
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingServicesRepository $handlingServicesRepository */
+        $handlingServicesRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingService');
+
+        /** @var HandlingServices[] $handlingServices */
+        $handlingServices = $handlingServicesRepository->getGosTenderSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($handlingServices as $service) {
+            $id = $service->getId();
+            $string = $service->getName();
+
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * handlingServicesByIds
+     *
+     * @return string
+     */
+    public function handlingServicesByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('ids'));
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingServicesRepository $handlingServicesRepository */
+        $handlingServicesRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingService');
+
+        /** @var HandlingServices[] $handlingServices */
+        $handlingServices = $handlingServicesRepository
+            ->createQueryBuilder('hs')
+            ->where('hs.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($handlingServices as $service) {
+            $id = $service->getId();
+            $string = $service->getName();
+
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * editableProjectFileAction
+     * 
+     * @return Response
+     * @throws \Exception
+     */
     public function editableProjectFileAction()
     {
         $service = $this->get('lists_handling.service');

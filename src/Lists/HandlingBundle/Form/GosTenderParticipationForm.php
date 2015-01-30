@@ -67,8 +67,8 @@ class GosTenderParticipationForm extends AbstractType
                     'placeholder' => 'Select is acceptance',
                 ),
                 'choices' => array(
-                    '1' => 'Yes',
-                    '0' => 'No'
+                    true => 'Yes',
+                    false => 'No'
                     )
                 ))
             ->add('gosTender', 'entity', array(

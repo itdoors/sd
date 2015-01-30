@@ -43,7 +43,26 @@
                                         callback(data);
                                 }
                             });
+                        }
                     }
+                });
+                $('#handlingServices').editable({
+                    url: '{{ path('sd_common_ajax_handling_service_save') }}',
+                    source: '{{ path('lists_handling_ajax_handling_services_search') }}',
+                    select2: {
+                        multiple: true,
+                        width: '250px',
+                        initSelection: function(element, callback) {
+                            return $.ajax({
+                                type: "GET",
+                                url: '{{ path('lists_handling_ajax_handling_services_by_ids') }}',
+                                dataType: 'json',
+                                data: { ids: element.val()},
+                                success: function(data){
+                                        callback(data);
+                                }
+                            });
+                        }
                     }
                 });
 
@@ -108,15 +127,6 @@
 
                 setProgress(response);
             });
-
-            /*$('#handlingServices').editable({
-                url: '{{ path('sd_common_ajax_handling_service_save') }}',
-                source: {#{ handlingServices|json_encode|raw }#},
-                select2: {
-                    multiple: true,
-                    width: '250px'
-                }
-            });*/
 
            /* $('#isMarketing').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}',
@@ -251,13 +261,13 @@
             <tr> {# 6 #}
                 <td>{% trans %}Service offered{% endtrans %}</td>
                 <td>
-                    {#% if access.canEditGosTender %}
-                    <a href="#" id="handlingServices" data-type="select2" data-pk="{{ object.project.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-placeholder="{% trans %}Select Service Offered{% endtrans %}" data-original-title="{% trans %}Select Service Offered{% endtrans %}">
+                    {% if access.canEditGosTender %}
+                    <a href="#" id="handlingServices" data-type="select2" data-pk="{{ object.project.id }}" data-placement="right" data-value="{% for key,service in object.project.handlingServices %}{{ key > 0 ? ',' : ''}}{{ service.id }}{% endfor %}" data-placeholder="{% trans %}Select handlingServices Offered{% endtrans %}" data-original-title="{% trans %}Select Service Offered{% endtrans %}">
                     {% endif %}
-                        {{ handling.serviceList }}
+                        {{ object.project.handlingServices|join('<br>')|raw }}
                     {% if access.canEditGosTender %}
                     </a>
-                    {% endif %#}
+                    {% endif %}
                     <span class="help-block">Если предлагаемых услуг нет в списке - обратитесь к администратору.</span>
 
                 </td>

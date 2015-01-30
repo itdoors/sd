@@ -241,7 +241,6 @@ class ProjectGosTenderParticipan
     public static function getChoiceList ()
     {
         return array (
-            null => '',
             true => 'Yes',
             false => 'No'
         );

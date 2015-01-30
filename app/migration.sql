@@ -2478,5 +2478,25 @@ ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058B298820E FORE
 ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058BA930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_gos_tender_participan ADD datetime_create TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL;
 COMMENT ON COLUMN project_gos_tender_participan.datetime_create IS 'Дата и время добавления участника';
+UPDATE "public".handling_service SET "slug" = 'project' WHERE slug is null;
+
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (19, 'БУД Будівництво, будівельні матеріали та спецтехніка', 'gos_tender', 19, 19);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (20, 'КОМ Комп"ютери та оргтехніка, програмне забезпечення', 'gos_tender', 20, 20);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (21, 'КУЛ Господарчі товари та культурно-побутова продукція', 'gos_tender', 21, 21);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (22, 'ЛЕГ Легка промисловість', 'gos_tender', 22, 22);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (23, 'МЕБ Меблія', 'gos_tender', 23, 23);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (24, 'МЕД Медицина та соціальна сфера', 'gos_tender', 24, 24);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (25, 'НДР Наукові дослідження та розробки', 'gos_tender', 25, 25);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (26, 'НЕР Нерухомість та оренда', 'gos_tender', 26, 26);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (27, 'ПАЛ Енергетика, паливо, хімія', 'gos_tender', 27, 27);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (28, 'ППД Поліграфія, друкарська справа', 'gos_tender', 28, 28);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (29, 'ПСГ Сільське господарство', 'gos_tender', 29, 29);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (30, 'ПХП Харчова промисловість та громадське харчування', 'gos_tender', 30, 30);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (31, 'ТЕХ Технологічне обладнання, комплектуючі та матеріали', 'gos_tender', 31, 31);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (32, 'ТРЗ Транспортні засоби та комплектуючі, технічне обслуговування', 'gos_tender', 32, 32);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (33, 'ТРП Товари, роботи, послуги', 'gos_tender', 33, 33);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (34, 'МЕТ Метали та продукція металообробки', 'gos_tender', 34, 34);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (35, 'КПН Консалтингові послуги, навчання', 'gos_tender', 35, 35);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (36, 'ЖИТ Житлово-комунальне, побутове обслуговування та спецтехніка', 'gos_tender', 36, 36);
 
 -- prod ----

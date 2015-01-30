@@ -100,6 +100,15 @@ lists_handling_ajax_upload_file:
     defaults: { _controller: ListsHandlingBundle:Ajax:uploadFile }
     requirements:
         id: \d+
+        
+lists_handling_ajax_handling_services_search:
+    pattern:  /lists/handling/ajax/handling/services/search
+    defaults: { _controller: ListsHandlingBundle:Ajax:handlingServicesSearch}
+        
+lists_handling_ajax_handling_services_by_ids:
+    pattern:  /lists/handling/ajax/handling/services/by_ids
+    defaults: { _controller: ListsHandlingBundle:Ajax:handlingServicesByIds}
+
 # GosTenderController
 lists_project_gostender_create:
     pattern:  /lists/project/gostender/create
