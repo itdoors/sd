@@ -226,10 +226,10 @@ class InvoiceService
 
         $summaActs = $this->addActs($invoiceNew, $invoice->acts);
 
-        if ($summaPaymens >= $summaActs) {
+        $debtSum = round(($summaActs ? $summaActs : 0 )-($summaPaymens ? $summaPaymens : 0), 2);
+        if ($debtSum <= 0) {
             $invoiceNew->setDateFact($dateFact);
         }
-        $debtSum = round(($summaActs ? $summaActs : 0 )-($summaPaymens ? $summaPaymens : 0), 2);
         $invoiceNew->setDebitSum($debtSum >= 0 ? $debtSum : 0);
         echo ' debtSum: '.$debtSum .' ~ ';
 
