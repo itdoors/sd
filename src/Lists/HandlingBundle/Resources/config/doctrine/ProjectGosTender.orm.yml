@@ -79,16 +79,6 @@ Lists\HandlingBundle\Entity\ProjectGosTender:
             nullable: true
             options:
                 comment: Причина учистия или нет в тендере
-        participants:
-            type: text
-            nullable: true
-            options:
-                comment: Участники
-        winners:
-            type: text
-            nullable: true
-            options:
-                comment: Победители
         datetimeDeleted:
             type: datetime
             nullable: true
@@ -122,6 +112,10 @@ Lists\HandlingBundle\Entity\ProjectGosTender:
                 inverseJoinColumns:
                     kved_id:
                         referencedColumnName: id
+    oneToMany:
+        participans:
+          targetEntity: ProjectGosTenderParticipan
+          mappedBy: gosTender
     uniqueConstraints:
         unique_project_gos_tender:
             columns: [advert, datetime_deadline]

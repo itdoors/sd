@@ -5,55 +5,85 @@ Lists\HandlingBundle\Entity\HandlingMessage:
 
 Lists\HandlingBundle\Entity\Handling:
     properties:
+        organization:
+            - NotBlank: { groups: [new, createTender] }
         createdate:
             - NotBlank: { groups: [new] }
             - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }
-
+        budget:
+            - NotBlank: { groups: [new, createTender] }
 Lists\HandlingBundle\Entity\ProjectGosTender:
     properties:
         vdz:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         advert:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
+            - Lists\HandlingBundle\Validator\UniqueGosTender: { groups: [new, createTender] }
             - Range:
                 min: 0
                 max: 99999999999
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         branch:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         typeOfProcedure:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         place:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         delivery:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         datetimeDeadline:
-            - NotBlank: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
             - DateTime: { groups: [edit] }
         datetimeOpening:
-            - NotBlank: { groups: [edit] }
-            - DateTime: { groups: [edit] }
+            - NotBlank: { groups: [edit, createTender] }
+            - DateTime: { groups: [edit, createTender] }
         software:
             - NotBlank: { groups: [edit] }
             - Length: 
                 max: 128
-                groups: [new, edit]
+                groups: [new, edit, createTender]
         isParticipation:
             - NotBlank: { groups: [edit] }
             - Choice:
                  callback: getParticipations
+                 groups: [edit]
+        kveds:
+            - NotBlank: { groups: [edit, createTender] }
+Lists\HandlingBundle\Entity\ProjectFile:
+    properties:
+        shortText:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [edit]
+        name:
+            - File:
+                maxSize: 5M
+                mimeTypes:
+                    - application/pdf
+                    - application/vnd.ms-excel
+                    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                    - application/msword
+                    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                    
+Lists\HandlingBundle\Entity\ProjectGosTenderParticipan:
+    properties:
+        participan:
+            - NotBlank: { groups: [new] }
+        gosTender:
+            - NotBlank: { groups: [new] }

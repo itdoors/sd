@@ -1,0 +1,4 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% if access.canEditGosTender %}
+    {{ include ('ListsHandlingBundle:GosTender/Button:addParticipant.html.twig')}}
+{% endif %}

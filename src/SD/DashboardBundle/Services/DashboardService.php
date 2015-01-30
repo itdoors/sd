@@ -35,12 +35,12 @@ class DashboardService
     public function checkAccess(User $user)
     {
         $role = array();
-        $role[] = 'base';
+        $role[] = 'Basic';
         if ($user->hasRole('ROLE_SALES')) {
-            $role[] = 'sales';
+            $role[] = 'Sales';
         }
         if ($user->hasRole('ROLE_SALESADMIN')) {
-            $role[] = 'sales_admin';
+            $role[] = 'SalesAdmin';
         }
 
         return DashboardAccessFactory::createAccess($role);

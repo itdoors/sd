@@ -618,6 +618,7 @@ class Handling
      */
     public function __construct ()
     {
+        $this->createdatetime = new \DateTime();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
     /**
@@ -1180,5 +1181,60 @@ class Handling
     public function getFiles ()
     {
         return $this->files;
+    }
+
+    /**
+     * @var \DateTime
+     */
+    private $datetimeClosed;
+    /**
+     * Set datetimeClosed
+     *
+     * @param \DateTime $datetimeClosed
+     *
+     * @return Handling
+     */
+    public function setDatetimeClosed ($datetimeClosed)
+    {
+        $this->datetimeClosed = $datetimeClosed;
+
+        return $this;
+    }
+    /**
+     * Get datetimeClosed
+     *
+     * @return \DateTime 
+     */
+    public function getDatetimeClosed ()
+    {
+        return $this->datetimeClosed;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $closedUser;
+
+    /**
+     * Set closedUser
+     *
+     * @param \SD\UserBundle\Entity\User $closedUser
+     *
+     * @return Handling
+     */
+    public function setClosedUser(\SD\UserBundle\Entity\User $closedUser = null)
+    {
+        $this->closedUser = $closedUser;
+
+        return $this;
+    }
+
+    /**
+     * Get closedUser
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getClosedUser()
+    {
+        return $this->closedUser;
     }
 }

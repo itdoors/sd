@@ -5,7 +5,7 @@ namespace SD\DashboardBundle\Classes;
 /**
  * ComparatorDashboardAccess class
  */
-class ComparatorDashboardAccess extends DashboardBasicAccess
+class ComparatorDashboardAccess extends BasicDashboardAccess
 {
 
     protected $accesses;

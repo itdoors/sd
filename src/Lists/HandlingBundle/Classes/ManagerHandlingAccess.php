@@ -21,11 +21,4 @@ class ManagerHandlingAccess extends BasicHandlingAccess
     {
         return true;
     }
-    /**
-     * @return bool
-     */
-    public function canAddManager ()
-    {
-        return true;
-    }
 }

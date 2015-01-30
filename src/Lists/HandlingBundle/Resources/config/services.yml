@@ -10,11 +10,16 @@ parameters:
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.form.user.sales.admin.class: Lists\HandlingBundle\Form\HandlingUserSalesAdminFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
+    lists_handling.gos_tender.form.class: Lists\HandlingBundle\Form\GosTenderForm
+    lists_handling.project.form.class: Lists\HandlingBundle\Form\ProjectForm
+    lists_handling.gos_tender_participation.form.class: Lists\HandlingBundle\Form\GosTenderParticipationForm
+    lists_handling.project_gos_tender_participan.form.class: Lists\HandlingBundle\Form\ProjectGosTenderParticipanForm
 
     lists_handling.competitor.form.class: Lists\HandlingBundle\Form\HandlingCompetitorType
     lists_handling.dogovor.form.class: Lists\HandlingBundle\Form\HandlingDogovorType
 
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
+    lists_handling.unique_gos_tender.validator.class: Lists\HandlingBundle\Validator\UniqueGosTenderValidator
 
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
@@ -207,6 +212,14 @@ services:
             -
                 name: validator.constraint_validator
                 alias: createdate_range
+    unique_gos_tender_validator:
+        class: %lists_handling.unique_gos_tender.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            -
+                name: validator.constraint_validator
+                alias: unique_gos_tender
 
     lists_handling.form.handlingCompetitorType:
         class: %lists_handling.competitor.form.class%
@@ -219,3 +232,39 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingDogovorType }
+            
+    lists_handling.form.gosTenderForm:
+        class: %lists_handling.gos_tender.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: gosTenderForm }
+
+    lists_handling.form.projectForm:
+        class: %lists_handling.project.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectForm }
+
+    lists_handling.form.gosTenderParticipationForm:
+        class: %lists_handling.gos_tender_participation.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: gosTenderParticipationForm }
+
+    lists_handling.form.projectGosTenderParticipanForm:
+        class: %lists_handling.project_gos_tender_participan.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectGosTenderParticipanForm }

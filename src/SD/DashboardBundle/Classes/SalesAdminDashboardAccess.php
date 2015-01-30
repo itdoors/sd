@@ -5,7 +5,7 @@ namespace SD\DashboardBundle\Classes;
 /**
  * SalesAdminDashboardAccess class
  */
-class SalesAdminDashboardAccess extends DashboardBasicAccess
+class SalesAdminDashboardAccess extends BasicDashboardAccess
 {
     /**
      * @return bool

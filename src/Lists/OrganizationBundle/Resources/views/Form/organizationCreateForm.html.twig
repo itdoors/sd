@@ -1,0 +1,62 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{% trans %}New organization{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row ">
+                
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('lists_organization_ajax_create'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'id' : 'organizationCreateForm'
+                    }
+                }) }}
+                <div class="form-body">
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.name.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.name, 'Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.name, {'attr' : {'class' : 'form-control', 'placeholder': "Enter name"} }) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.shortname.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.shortname, 'Short name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.shortname, {'attr' : {'class' : 'form-control', 'placeholder': "Enter short name"} }) }}
+                            {{ form_errors(form.shortname) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.edrpou.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.edrpou, {'attr' : {'class' : 'form-control', 'placeholder': "Enter edrpou"} }) }}
+                            {{ form_errors(form.edrpou) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                            {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

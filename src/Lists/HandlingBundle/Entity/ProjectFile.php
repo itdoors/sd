@@ -10,10 +10,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class ProjectFile
 {
+    public function __construct ()
+    {
+        $this->setCreateDatetime(new \DateTime());
+    }
     /**
      * @var string
      */
-    private $path = 'uploads/projects/';
+    private $path = '/uploads/projects/';
     /**
      * @var integer
      */

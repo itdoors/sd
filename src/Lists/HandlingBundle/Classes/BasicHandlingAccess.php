@@ -72,4 +72,32 @@ class BasicHandlingAccess implements HandlingAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canCreateGosTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeGosTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditGosTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeParticipationInGosTander ()
+    {
+        return false;
+    }
 }

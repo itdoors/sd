@@ -1202,4 +1202,13 @@ class Organization
     {
         return $this->currentAccounts;
     }
+    /**
+     * Get currentAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEdrpouName()
+    {
+        return $this->getEdrpou().' | '. $this->getName();
+    }
 }

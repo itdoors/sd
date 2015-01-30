@@ -48,6 +48,10 @@ lists_organization_new:
     pattern:  /lists/organization/new
     defaults: { _controller: ListsOrganizationBundle:Organization:new }
 
+lists_organization_create:
+    pattern:  /lists/organization/create
+    defaults: { _controller: ListsOrganizationBundle:Organization:create }
+
 lists_organization_show:
     pattern:  /lists/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Organization:show }
@@ -188,3 +192,7 @@ lists_organization_ajax_kved_by_ids:
     pattern:  /lists/organization/ajax/kved/by_ids
     defaults: { _controller: ListsOrganizationBundle:Ajax:kvedByIds }
     methods:   [GET]
+    
+lists_organization_ajax_create:
+    pattern:  /lists/organization/ajax/create
+    defaults: { _controller: ListsOrganizationBundle:Ajax:create }

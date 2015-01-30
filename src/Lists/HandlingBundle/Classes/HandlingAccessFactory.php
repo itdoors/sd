@@ -1,6 +1,7 @@
 <?php
 
 namespace Lists\HandlingBundle\Classes;
+use Lists\HandlingBundle\Entity\Handling;
 
 /**
  * HandlingAccessFactory class
@@ -8,30 +9,26 @@ namespace Lists\HandlingBundle\Classes;
 class HandlingAccessFactory
 {
     /**
-     * @param mixed $roles
+     * createAccess
+     * 
+     * @param mixed    $roles
+     * @param Handling $handling
      *
-     * @return ComparatorDogovorAccess|BasicHandlingAccess
+     * @return ComparatorHandlingAccess
      */
-    public static function createAccess($roles)
+    public static function createAccess($roles, Handling $handling = null)
     {
         $access = array();
         $access[] = new BasicHandlingAccess();
         foreach ($roles as $role) {
-            if ($role == 'sales_admin') {
-                $access[] = new SalesAdminHandlingAccess();
-            } elseif ($role == 'manager_organization') {
+            if ($role == 'manager_organization') {
                 $access[] = new ManagerOrganizationAccess();
-            } elseif ($role == 'manager_project') {
-                $access[] = new ManagerHandlingAccess();
-            } elseif ($role == 'manager') {
-                $access[] = new ManagerAccess();
-            } elseif ($role == 'report') {
-                $access[] = new ReportHandlingAccess();
-            } elseif ($role == 'tender_admin') {
-                $access[] = new TenderAdminHandlingAccess();
+            } else {
+                $className = 'Lists\HandlingBundle\Classes\\'.$role.'HandlingAccess';
+                $access[] = new $className();            
             }
         }
 
-        return new ComparatorHandlingAccess($access);
+        return new ComparatorHandlingAccess($access, $handling);
     }
 }

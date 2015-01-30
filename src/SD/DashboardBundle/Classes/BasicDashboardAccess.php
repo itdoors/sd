@@ -5,9 +5,9 @@ namespace SD\DashboardBundle\Classes;
 use SD\DashboardBundle\Interfaces\DashboardAccessInterface;
 
 /**
- * DashboardBasicAccess class
+ * BasicDashboardAccess class
  */
-class DashboardBasicAccess implements DashboardAccessInterface
+class BasicDashboardAccess implements DashboardAccessInterface
 {
     /**
      * @return bool

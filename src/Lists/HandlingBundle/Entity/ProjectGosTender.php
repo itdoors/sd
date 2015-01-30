@@ -63,11 +63,6 @@ class ProjectGosTender
     /**
      * @var boolean
      */
-    private $isParticipation;
-
-    /**
-     * @var boolean
-     */
     private $reason;
 
     /**
@@ -288,28 +283,6 @@ class ProjectGosTender
         return $this->software;
     }
     /**
-     * Set isParticipation
-     *
-     * @param boolean $isParticipation
-     *
-     * @return ProjectGosTender
-     */
-    public function setIsParticipation ($isParticipation)
-    {
-        $this->isParticipation = $isParticipation;
-
-        return $this;
-    }
-    /**
-     * Get isParticipation
-     *
-     * @return boolean 
-     */
-    public function getIsParticipation ()
-    {
-        return $this->isParticipation;
-    }
-    /**
      * Set reason
      *
      * @param text $reason
@@ -423,17 +396,6 @@ class ProjectGosTender
     {
         return $this->kveds;
     }
-
-    /**
-     * @var string
-     */
-    private $participants;
-
-    /**
-     * @var string
-     */
-    private $winners;
-
     /**
      * Constructor
      */
@@ -442,47 +404,78 @@ class ProjectGosTender
         $this->kveds = new \Doctrine\Common\Collections\ArrayCollection();
     }
     /**
-     * Set participants
+     * @var boolean
+     */
+    private $isParticipation;
+
+    /**
+     * Set isParticipation
      *
-     * @param string $participants
+     * @param boolean $isParticipation
      *
      * @return ProjectGosTender
      */
-    public function setParticipants ($participants)
+    public function setIsParticipation ($isParticipation)
     {
-        $this->participants = $participants;
+        $this->isParticipation = $isParticipation;
 
         return $this;
     }
     /**
-     * Get participants
+     * Get isParticipation
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getParticipants ()
+    public function getIsParticipation ()
     {
-        return $this->participants;
+        return $this->isParticipation;
     }
     /**
-     * Set winners
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $participans;
+
+
+    /**
+     * Add participans
      *
-     * @param string $winners
+     * @param \Lists\HandlingBundle\Entity\ProjectGosTenderParticipan $participans
      *
      * @return ProjectGosTender
      */
-    public function setWinners ($winners)
+    public function addParticipan(\Lists\HandlingBundle\Entity\ProjectGosTenderParticipan $participans)
     {
-        $this->winners = $winners;
+        $this->participans[] = $participans;
 
         return $this;
     }
+
     /**
-     * Get winners
+     * Remove participans
      *
-     * @return string 
+     * @param \Lists\HandlingBundle\Entity\ProjectGosTenderParticipan $participans
      */
-    public function getWinners ()
+    public function removeParticipan(\Lists\HandlingBundle\Entity\ProjectGosTenderParticipan $participans)
     {
-        return $this->winners;
+        $this->participans->removeElement($participans);
+    }
+
+    /**
+     * Get participans
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParticipans()
+    {
+        return $this->participans;
+    }
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getAdvert();
     }
 }

@@ -161,6 +161,7 @@ class HandlingController extends BaseController
             if (!$tender) {
                 $tender = new ProjectGosTender();
                 $tender->setProject($project);
+                $tender->setIsParticipation(null);
                 $em->persist($tender);
                 $em->flush();
             }

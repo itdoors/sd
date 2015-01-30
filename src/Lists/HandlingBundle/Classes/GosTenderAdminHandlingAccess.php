@@ -3,14 +3,35 @@
 namespace Lists\HandlingBundle\Classes;
 
 /**
- * TenderAdminHandlingAccess class
+ * GosTenderAdminHandlingAccess class
  */
-class TenderAdminHandlingAccess extends BasicHandlingAccess
+class GosTenderAdminHandlingAccess extends BasicHandlingAccess
 {
     /**
      * @return bool
      */
-    public function canEdit ()
+    public function canCreateGosTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeGosTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditGosTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeParticipationInGosTander ()
     {
         return true;
     }

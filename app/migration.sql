@@ -2425,7 +2425,6 @@ COMMENT ON COLUMN project_gos_tender.software IS 'Обеспечение';
 COMMENT ON COLUMN project_gos_tender.is_participation IS 'Участвуем или нет в тендере';
 COMMENT ON COLUMN project_gos_tender.reason IS 'Причина учистия или нет в тендере';
 COMMENT ON COLUMN project_gos_tender.datetime_deleted IS 'Дата и время удаления тендера';
-
 ALTER TABLE project_gos_tender ADD CONSTRAINT FK_4F4896C1166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A9A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A932C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -2442,27 +2441,42 @@ ALTER TABLE handling_type ADD alias VARCHAR(128) DEFAULT NULL;
 COMMENT ON COLUMN handling_type.alias IS 'Альтернативное уникальное название типа';
 COMMENT ON COLUMN handling_type.name IS 'Тип проекта';
 ALTER TABLE project_gos_tender ALTER reason TYPE TEXT;
-
 CREATE TABLE project_gos_tender__kved (project_gos_tender_id BIGINT NOT NULL, kved_id BIGINT NOT NULL, PRIMARY KEY(project_gos_tender_id, kved_id));
 CREATE INDEX IDX_B9C3B856A930DD36 ON project_gos_tender__kved (project_gos_tender_id);
 CREATE INDEX IDX_B9C3B856B530ADF6 ON project_gos_tender__kved (kved_id);
-
 ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856B530ADF6 FOREIGN KEY (kved_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE project_gos_tender ADD participants TEXT DEFAULT NULL;
-ALTER TABLE project_gos_tender ADD winners TEXT DEFAULT NULL;
 CREATE UNIQUE INDEX unique_project_gos_tender ON project_gos_tender (advert, datetime_deadline);
-COMMENT ON COLUMN project_gos_tender.participants IS 'Участники';
-COMMENT ON COLUMN project_gos_tender.winners IS 'Победители';
 COMMENT ON COLUMN project_gos_tender.datetime_opening IS 'Дата и время раскрытия';
-
 CREATE TABLE project_file (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, name VARCHAR(128) NOT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_B50EFE08166D1F9C ON project_file (project_id);
 COMMENT ON COLUMN project_file.name IS 'Название файла';
 COMMENT ON COLUMN project_file.shortText IS 'Краткое описание файла';
 COMMENT ON COLUMN project_file.create_datetime IS 'Дата создания файла';
 COMMENT ON COLUMN project_file.deleted_datetime IS 'Дата удаления файла';
-
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".handling_type ("name", slug, sortorder, "alias") VALUES ('Електроные торги', NULL, 7, DEFAULT);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (18, 'Благоустройство', DEFAULT, 18, 18);
+ALTER TABLE handling ALTER createdate DROP NOT NULL;
+ALTER TABLE handling ADD closed_user_id INT DEFAULT NULL;
+ALTER TABLE handling ADD datetime_closed TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+ALTER TABLE handling ALTER createdatetime SET NOT NULL;
+ALTER TABLE handling ADD CONSTRAINT FK_BFF965780D8506 FOREIGN KEY (closed_user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_BFF965780D8506 ON handling (closed_user_id);
+COMMENT ON COLUMN handling.datetime_closed IS 'Дата закрытия проекта';
+COMMENT ON COLUMN handling.is_closed IS 'Статус проекта (закрыт, открыт)';
+ALTER TABLE handling_user ALTER handling_id SET NOT NULL;
+CREATE TABLE project_gos_tender_participan (id BIGSERIAL NOT NULL, participan_id BIGINT DEFAULT NULL, project_gos_tender_id BIGINT DEFAULT NULL, summa NUMERIC(10, 2) DEFAULT NULL, is_winner BOOLEAN DEFAULT NULL, reason TEXT DEFAULT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_C7FD058B298820E ON project_gos_tender_participan (participan_id);
+CREATE INDEX IDX_C7FD058BA930DD36 ON project_gos_tender_participan (project_gos_tender_id);
+CREATE UNIQUE INDEX unique_gos_tender_participan ON project_gos_tender_participan (participan_id, project_gos_tender_id);
+COMMENT ON COLUMN project_gos_tender_participan.summa IS 'Сумма';
+COMMENT ON COLUMN project_gos_tender_participan.is_winner IS 'Победитель';
+COMMENT ON COLUMN project_gos_tender_participan.reason IS 'Комментарий';
+COMMENT ON COLUMN project_gos_tender_participan.datetime_deleted IS 'Дата и время удаления участника';
+ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058B298820E FOREIGN KEY (participan_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058BA930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender_participan ADD datetime_create TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL;
+COMMENT ON COLUMN project_gos_tender_participan.datetime_create IS 'Дата и время добавления участника';
 
 -- prod ----

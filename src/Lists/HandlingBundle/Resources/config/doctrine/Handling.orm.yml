@@ -68,6 +68,14 @@ Lists\HandlingBundle\Entity\Handling:
             type: boolean
             nullable: true
             column: is_closed
+            options:
+                comment: Статус проекта (закрыт, открыт)
+        datetimeClosed:
+            type: datetime
+            nullable: true
+            column: datetime_closed
+            options:
+                comment: Дата закрытия проекта
         budgetClient:
             type: string
             length: 128
@@ -84,7 +92,7 @@ Lists\HandlingBundle\Entity\Handling:
             column: next_handling_date
         createdate:
             type: date
-            nullable: false
+            nullable: true
             column: createdate
         organization_id:
             type: integer
@@ -132,6 +140,18 @@ Lists\HandlingBundle\Entity\Handling:
           targetEntity: ProjectFile
           mappedBy: project
     manyToOne:
+        closedUser:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: closed_user_id
+                nullable: true
+                options:
+                    comment: Кто закрыл проект
+                referencedColumnName: id
+            orphanRemoval: false
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             cascade: {  }

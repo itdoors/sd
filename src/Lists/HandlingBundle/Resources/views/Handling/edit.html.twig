@@ -9,6 +9,9 @@
 
         {% if canEdit %}
             {% if canEdit and tender %}
+                $('.editable-project-file').editable({
+                    url: '{{ path('lists_handling_ajax_editable_project_file') }}'
+                });
                 $('.editable-gos-tender').editable({
                     url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
                     pk: {{tender.id}}
@@ -17,6 +20,11 @@
                     url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
                     pk: {{tender.id}},
                     source: {{  tender.getParticipations|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }}
+                });
+                $('#isParticipation').on('save', function(e, params) {
+                    if (params.newValue == 0){
+                        $('#reason').editable('show');
+                    }
                 });
                 $('#kveds').editable({
                     url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
@@ -51,7 +59,6 @@
                     targetProcess.css('width', response.handling.progress + '%');
                     targetProcess.find('span').html(response.handling.progressString);
                 }
-
             };
 
             $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
@@ -489,9 +496,9 @@
                     <td>{% trans %}Participation{% endtrans %}</td>
                     <td>
                         {% if access.canEdit %}
-                        <a href="#" id="isParticipation" data-type="select" data-value="{{ tender.isParticipation ? '1' : '0' }}" data-placement="right" data-original-title="{% trans %}Participation{% endtrans %}">
+                        <a href="#" id="isParticipation" data-type="select" data-value="{% if tender.isParticipation is not null %}{{ tender.isParticipation ? '1' : '0' }}{% endif %}" data-placement="right" data-original-title="{% trans %}Participation{% endtrans %}">
                         {% endif %}
-                            {{ tender.getParticipations[tender.isParticipation] |trans }}
+                            {% if tender.isParticipation is not null %}{{ tender.getParticipations[tender.isParticipation] |trans }}{% endif %}
                         {% if access.canEdit %}
                         </a>
                         {% endif %}
@@ -499,6 +506,9 @@
                     <td>{% trans %}Reason{% endtrans %}</td>
                     <td>
                         {% if access.canEdit %}
+                            {% if tender.reason is empty and tender.isParticipation == '0' %}<script>$(document).ready(function(){
+                               $('#reason').editable('show'); 
+                            });</script>{% endif %}
                         <a class="editable-gos-tender" href="#" id="reason" data-type="textarea" data-placement="top" data-original-title="{% trans %}Reason{% endtrans %}">{% endif %}{{ tender.reason }}{% if access.canEdit %}</a>{% endif %}
                     </td>
                 </tr>
@@ -541,14 +551,18 @@
                     <td>{% trans %}Files{% endtrans %}</td>
                     <td colspan="3">
                         {% for file in handling.0.files %}
-                            <a href="" target="_blank"></a>
+                            <div class="col-12">
+                            <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{% trans %}Document{% endtrans %}</a>
+                        
+                            {% if access.canEdit %}
+                            <a class="editable-project-file" data-pk="{{file.id}}" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}">
+                            {% endif %}
+                                {{ file.shortText}}
+                            {% if access.canEdit %}
+                            </a>
+                            {% endif %}
+                            </div>
                         {% endfor %}
-                        {% if access.canEdit %}
-                        <a class="editable-gos-tender" href="#" id="files" data-type="text" data-placement="right" data-original-title="{% trans %}Files{% endtrans %}">
-                        {% endif %}
-                        {% if access.canEdit %}
-                        </a>
-                        {% endif %}
                          <script>
                             $(document).ready(function(){
                                 $(function () {
@@ -556,18 +570,19 @@
 
                                     dataType: 'json',
                                     fail: function (e, data) {
-                                        alert('Error upload');
+                                        alert('Upload error');
                                     },
                                     done: function (e, data) {
-                                        $(this).parents('td').prepend('<a target="_blank" href="'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                                        var file = '<a target="_blank" href="'+data.result.file+'">{% trans %}Document{% endtrans %}</a>';
+                                        var shortText = ' <a class="editable-project-file-'+data.result.id+'" data-pk="'+data.result.id+'" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}"></a>';
+                                        $(this).parents('td').prepend('<div class="col-12">'+file+shortText+'</div>');
                                         alert('{% trans %}Document is uploaded{% endtrans %}');
-                                       // $.each(data.result.files, function (index, file) {
-                                           // $('<p/>').text(file.name).appendTo('#files');
-
-                                       // });
+                                        $('.editable-project-file-'+data.result.id).editable({
+                                            url: '{{ path('lists_handling_ajax_editable_project_file') }}'
+                                        });
                                     },
                                     add: function (e, data) {
-                                        if(confirm('{% trans %}Upload a new document{% endtrans %}?')){data.submit();}
+                                        if(confirm('{% trans %}Upload new document{% endtrans %}?')){data.submit();}
                                     }
                                     }).prop('disabled', !$.support.fileInput)
                                         .parent().addClass($.support.fileInput ? undefined : 'disabled');

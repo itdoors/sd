@@ -28,6 +28,8 @@ class OrganizationAccessFactory
                 $access[] = new SalesAdminOrganizationAccess();
             } elseif ($role == 'dogovor_admin') {
                 $access[] = new DogovorAdminOrganizationAccess();
+            } elseif ($role == 'GosTenderAdmin') {
+                $access[] = new GosTenderAdminOrganizationAccess();
             } else {
                 $access[] = new BasicOrganizationAccess();
             }

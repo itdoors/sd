@@ -26,11 +26,16 @@ class DefaultController extends Controller
         /** @var ControllingService $serviceControlling */
         $serviceControlling = $this->get('it_doors_controlling.service');
         $accessControlling = $serviceControlling->checkAccess($this->getUser());
+        
+        /** @var HandlingService $serviceProject */
+        $serviceProject = $this->get('lists_handling.service');
+        $accessProject = $serviceProject->checkAccess($this->getUser());
 
         return $this->render('SDDashboardBundle:Default:index.html.twig', array(
             'access' => $access,
             'accessDogovor' => $accessDogovor,
-            'accessControlling' => $accessControlling
+            'accessControlling' => $accessControlling,
+            'accessProject' => $accessProject
         ));
     }
     /**

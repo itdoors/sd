@@ -1,0 +1,118 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+<script>
+     function createOrganization(){
+            // get param
+            var data = {
+                'organizationCreateForm[name]': $('#{{ form.vars.name }}_participan').data('select2').search[0].value
+            };
+            // close select2
+            $('#{{ form.vars.name }}_participan').select2('close');
+            // load modal
+            $('body').modalmanager('loading');
+            var modalBlock = $('#form_modal_organization');
+            modalBlock.load('{{ path ('lists_organization_create') }}', data, function(){
+                modalBlock.modal();
+            });
+            // save organization
+            var $form = $('#organizationCreateForm');
+            $form.die('submit');
+            $form.live('submit', function(e){
+                e.preventDefault();
+                var self = $(this);
+                $(this).ajaxSubmit({
+                    dataType: 'json',
+                    beforeSend: function () {
+                        ITDoorsAjax.blockUI(self);
+                    },
+                    success: function(response) {
+                        ITDoorsAjax.unblockUI(self);
+                        var $target = $('#form_modal_organization');
+                        if (response.success) {
+                            $('#{{ form.vars.name }}_participan').select2('data', response.organization);
+                            modalBlock.modal('hide');
+                            return;
+                        }
+                        if (response.error) {
+                            $target.empty().html(response.html);
+                            return;
+                        }
+                    }
+                });
+            });
+        }
+    $(document).ready(function(){
+    });
+</script>
+<div id="form_modal_organization" class="modal" role="basic" aria-hidden="true"></div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{% trans %}Participation{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row ">
+                
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('it_doors_ajax_form'),
+                    'attr' : {
+                    'method' : 'POST',
+                    'class' : 'itdoors-ajax-form',
+                    'novalidate': 'novalidate'
+                }
+                }) }}
+                <div class="form-body">
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.participan.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.participan, 'Participan', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.participan, {'attr' : {'placeholder': "Select participan"} }) }}
+                            {{ form_errors(form.participan) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.isWinner.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.isWinner, 'Winner', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.isWinner, {'attr' : {'placeholder': "Select winner"} }) }}
+                            {{ form_errors(form.isWinner) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.summa.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.summa, 'Summa', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.summa, {'attr' : {'class' : 'form-control', 'placeholder': "Enter summa"} }) }}
+                            {{ form_errors(form.summa) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.reason.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.reason, 'Descriptrion', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.reason, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description"} }) }}
+                            {{ form_errors(form.reason) }}
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                            {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
+                        </div>
+
+                        <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,14 @@
 Lists\OrganizationBundle\Entity\Organization:
     properties:
         name:
-            - NotBlank: { groups: [new, edit] }
+            - NotBlank: { groups: [new, edit, create] }
+        shortname:
+            - NotBlank: { groups: [create] }
+            - Length:
+                max: 50
+                groups: [create]
+            
         edrpou:
-            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit]}
+            - NotBlank: { groups: [create] }
+            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit, create]}
+            
