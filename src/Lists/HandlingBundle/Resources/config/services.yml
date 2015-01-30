@@ -20,6 +20,7 @@ parameters:
 
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
     lists_handling.unique_gos_tender.validator.class: Lists\HandlingBundle\Validator\UniqueGosTenderValidator
+    lists_handling.unique_project_gos_tender_participan.validator.class: Lists\HandlingBundle\Validator\UniqueProjectGosTenderParticipanValidator
 
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
@@ -212,6 +213,7 @@ services:
             -
                 name: validator.constraint_validator
                 alias: createdate_range
+                
     unique_gos_tender_validator:
         class: %lists_handling.unique_gos_tender.validator.class%
         arguments:
@@ -220,6 +222,15 @@ services:
             -
                 name: validator.constraint_validator
                 alias: unique_gos_tender
+
+    unique_tender_gos_tender_participan_validator:
+        class: %lists_handling.unique_project_gos_tender_participan.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            -
+                name: validator.constraint_validator
+                alias: unique_project_gos_tender_participan
 
     lists_handling.form.handlingCompetitorType:
         class: %lists_handling.competitor.form.class%

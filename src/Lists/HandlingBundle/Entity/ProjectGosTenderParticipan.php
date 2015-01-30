@@ -233,4 +233,17 @@ class ProjectGosTenderParticipan
     {
         return $this->datetimeCreate;
     }
+    /**
+     * getParticipations
+     * 
+     * @return mixed[]
+     */
+    public static function getChoiceList ()
+    {
+        return array (
+            null => '',
+            true => 'Yes',
+            false => 'No'
+        );
+    }
 }

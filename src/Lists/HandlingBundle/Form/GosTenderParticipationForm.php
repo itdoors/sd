@@ -41,8 +41,9 @@ class GosTenderParticipationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-             ->add('participan', 'entity', array(
-                'class' => 'ListsOrganizationBundle:Organization',
+            ->add('participan', 'hidden_entity', array(
+                'entity' => 'ListsOrganizationBundle:Organization',
+                'data_class' => null,
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $this->router->generate('lists_organization_ajax_search'),
@@ -74,7 +75,7 @@ class GosTenderParticipationForm extends AbstractType
                 'class' => 'ListsHandlingBundle:ProjectGosTender'
                 )
             )
-            ->add('summa', 'number')
+            ->add('summa', 'text')
             ->add('reason', 'textarea')
             ->add('cancel', 'submit')
             ->add('submit', 'submit');

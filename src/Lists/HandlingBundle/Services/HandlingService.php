@@ -110,20 +110,15 @@ class HandlingService
     public function projectGosTenderParticipanFormDefaults(Form $form, $defaults)
     {
         /** @var EntityManager $em */
-//        $em = $this->container->get('doctrine.orm.entity_manager');
-////        $organizationId = (int) $defaults['participan'];
-////        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
-//        $gosTenderId = (int) $defaults['gosTender'];
-//        $gosTender = $em->getRepository('ListsHandlingBundle:ProjectGosTender')->find($gosTenderId);
-//        $form
-////            ->add('participan', 'entity', array(
-////                'class'=>'Lists\OrganizationBundle\Entity\Organization',
-////                'data' => $organization
-////            ))
-//            ->add('gosTender', 'hidden_entity', array(
-//                'entity'=>'Lists\HandlingBundle\Entity\ProjectGosTender',
-//                'data' => $gosTender
-//            ));
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $gosTenderId = (int) $defaults['gosTender'];
+        $gosTender = $em->getRepository('ListsHandlingBundle:ProjectGosTender')->find($gosTenderId);
+        $form
+            ->add('gosTender', 'hidden_entity', array(
+                'data_class' => null,
+                'entity'=>'Lists\HandlingBundle\Entity\ProjectGosTender',
+                'data' => $gosTender
+            ));
     }
     /**
      * Save form

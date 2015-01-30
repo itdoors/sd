@@ -9,7 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProjectGosTender
 {
-
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getAdvert();
+    }
     /**
      * @var integer
      */
@@ -468,14 +476,5 @@ class ProjectGosTender
     public function getParticipans()
     {
         return $this->participans;
-    }
-    /**
-     * __toString
-     * 
-     * @return string
-     */
-    public function __toString ()
-    {
-        return (string) $this->getAdvert();
     }
 }
