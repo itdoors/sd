@@ -152,19 +152,19 @@ class HandlingController extends BaseController
         $object = $handlingRepository->getHandlingShow($id);
         $project = $object[0];
         if ($project->isGosTender()) {
-            /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $tender */
-            $tender = $this->getDoctrine()
-                ->getRepository('ListsHandlingBundle:ProjectGosTender')
-                ->findOneBy(array(
-                    'project' => $project
-                ));
-            if (!$tender) {
-                $tender = new ProjectGosTender();
-                $tender->setProject($project);
-                $tender->setIsParticipation(null);
-                $em->persist($tender);
-                $em->flush();
-            }
+//            /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $tender */
+//            $tender = $this->getDoctrine()
+//                ->getRepository('ListsHandlingBundle:ProjectGosTender')
+//                ->findOneBy(array(
+//                    'project' => $project
+//                ));
+//            if (!$tender) {
+//                $tender = new ProjectGosTender();
+//                $tender->setProject($project);
+//                $tender->setIsParticipation(null);
+//                $em->persist($tender);
+//                $em->flush();
+//            }
         }
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
         $handling = $handlingRepository->find($id);
