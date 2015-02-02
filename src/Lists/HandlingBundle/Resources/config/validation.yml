@@ -86,15 +86,15 @@ Lists\HandlingBundle\Entity\ProjectFile:
 Lists\HandlingBundle\Entity\ProjectGosTenderParticipan:
     properties:
         participan:
-            - NotBlank: { groups: [new] }
-            - Lists\HandlingBundle\Validator\UniqueProjectGosTenderParticipan: { groups: [new] }
+            - NotBlank: { groups: [new, addParticipan] }
+            - Lists\HandlingBundle\Validator\UniqueProjectGosTenderParticipan: { groups: [new, addParticipan] }
         gosTender:
             - NotBlank: { groups: [new] }
         summa:
             - Range: 
                 min: 0
-                groups: [new, edit]
+                groups: [new, edit, addParticipan]
             - Length:
                 max: 11
-                groups: [new, edit]
+                groups: [new, edit, addParticipan]
             

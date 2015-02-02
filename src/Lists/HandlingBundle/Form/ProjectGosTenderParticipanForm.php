@@ -83,7 +83,7 @@ class ProjectGosTenderParticipanForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\HandlingBundle\Entity\ProjectGosTenderParticipan',
-            'validation_groups' => array('createTender'),
+            'validation_groups' => array('addParticipan'),
             'translation_domain' => 'ListsHandlingBundle'
         ));
     }
