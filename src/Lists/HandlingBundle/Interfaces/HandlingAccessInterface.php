@@ -43,4 +43,20 @@ interface HandlingAccessInterface
      * @return bool
      */
     public function canExportReportToExcel();
+    /**
+     * @return bool
+     */
+    public function canCreateGosTender();
+    /**
+     * @return bool
+     */
+    public function canSeeGosTender();
+    /**
+     * @return bool
+     */
+    public function canEditGosTender();
+    /**
+     * @return bool
+     */
+    public function canChangeParticipationInGosTander();
 }

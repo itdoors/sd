@@ -3928,16 +3928,18 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
 
-        $history = new History();
-        $history->setCreatedatetime(new \DateTime());
-        $history->setFieldName($name);
-        $history->setModelName('handling_user');
-        $history->setModelId($pk);
-        $history->setUser($this->getUser());
-        $history->setOldValue($object->$methodGet);
-        $history->setValue($value);
-        $history->setMore('change '.$name);
-        $em->persist($history);
+        if (method_exists($object, $methodGet)) {
+            $history = new History();
+            $history->setCreatedatetime(new \DateTime());
+            $history->setFieldName($name);
+            $history->setModelName('handling_user');
+            $history->setModelId($pk);
+            $history->setUser($this->getUser());
+            $history->setOldValue($object->$methodGet());
+            $history->setValue($value);
+            $history->setMore('change '.$name);
+            $em->persist($history);
+        }
 
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);

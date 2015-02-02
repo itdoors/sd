@@ -450,8 +450,16 @@ class OrganizationRepository extends EntityRepository
      */
     public function getSearchQuery($q, $organizationSignId = null)
     {
-        $sql = $this->createQueryBuilder('o')
-            ->where('lower(o.name) LIKE :q')
+        $sql = $this->createQueryBuilder('o');
+        $sql
+            ->where(
+                $sql->expr()->orX(
+                    $sql->expr()->like($sql->expr()->lower('o.name'), ':q'),
+                    $sql->expr()->like($sql->expr()->lower('o.shortname'), ':q'),
+                    $sql->expr()->like($sql->expr()->lower('o.edrpou'), ':q')
+                )
+                
+            )
             ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
 

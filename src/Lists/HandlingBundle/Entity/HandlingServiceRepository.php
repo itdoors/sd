@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class HandlingServiceRepository extends EntityRepository
 {
+    /**
+     * Searches bank by $q
+     *
+     * @param string  $q
+     *
+     * @return mixed[]
+     */
+    public function getGosTenderSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('hs');
+
+        $sql
+            ->where($sql->expr()->like('lower(hs.name)', ':q'))
+            ->andWhere('hs.slug = :slug')
+            ->setParameter(':slug', 'gos_tender')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
 }

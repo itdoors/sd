@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Lists\OrganizationBundle\Form\OrganizationCreateForm;
 
 /**
  * Class SalesAdminController
@@ -103,7 +105,7 @@ class OrganizationController extends BaseController
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function newAction (Request $request)
     {
@@ -149,6 +151,33 @@ class OrganizationController extends BaseController
         return $this->render('ListsOrganizationBundle:Organization:new.html.twig', array (
                 'filterForm' => $form->createView(),
                 'filterFormName' => $this->filterFormName
+        ));
+    }
+    /**
+     * Executes new action
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function createAction (Request $request)
+    {
+        $user = $this->getUser();
+
+        $service = $this->get('lists_organization.service');
+        $access = $service->checkAccess($user);
+
+        if (!$access->canAddOrganization()) {
+            throw new \Exception('No access');
+        }
+
+        $form = $this->createForm(new OrganizationCreateForm());
+
+        $form->handleRequest($request);
+
+
+        return $this->render('ListsOrganizationBundle:Form:organizationCreateForm.html.twig', array (
+                'form' => $form->createView()
         ));
     }
     /**

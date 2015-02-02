@@ -1,7 +1,6 @@
 <?php
 
 namespace SD\DashboardBundle\Classes;
-
 /**
  * DashboardAccessFactory class
  */
@@ -16,13 +15,8 @@ class DashboardAccessFactory
     {
         $access = array();
         foreach ($roles as $role) {
-            if ($role == 'sales') {
-                $access[] = new SalesDashboardAccess();
-            } elseif ($role == 'sales_admin') {
-                $access[] = new SalesAdminDashboardAccess();
-            } else {
-                $access[] = new DashboardBasicAccess();
-            }
+            $className = 'SD\DashboardBundle\Classes\\'.$role.'DashboardAccess';
+            $access[] = new $className();
         }
 
         return new ComparatorDashboardAccess($access);

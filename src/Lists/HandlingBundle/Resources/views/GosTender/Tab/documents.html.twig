@@ -1,0 +1,50 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+        
+<div class="col-md-12" id="documents">
+    {% for file in object.project.files %}
+            <div class="col-12">
+    <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{% trans %}Document{% endtrans %}</a>
+
+    {% if access.canEditGosTender %}
+        <a class="editable-project-file" data-pk="{{file.id}}" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}">
+        {% endif %}
+            {{ file.shortText}}
+        {% if access.canEdit %}
+        </a>
+        {% endif %}
+        </div>
+    {% endfor %}
+    {% if access.canEditGosTender %}
+     <script>
+        $(document).ready(function(){
+            $(function () {
+                $('#fileupload').fileupload({
+
+                dataType: 'json',
+                fail: function (e, data) {
+                    alert('Upload error');
+                },
+                done: function (e, data) {
+                    var file = '<a target="_blank" href="'+data.result.file+'">{% trans %}Document{% endtrans %}</a>';
+                    var shortText = ' <a class="editable-project-file-'+data.result.id+'" data-pk="'+data.result.id+'" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}"></a>';
+                    $(this).parents('#documents').prepend('<div class="col-12">'+file+shortText+'</div>');
+                    alert('{% trans %}Document is uploaded{% endtrans %}');
+                    $('.editable-project-file-'+data.result.id).editable({
+                        url: '{{ path('lists_handling_ajax_editable_project_file') }}'
+                    });
+                },
+                add: function (e, data) {
+                    if(confirm('{% trans %}Upload new document{% endtrans %}?')){data.submit();}
+                }
+                }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            });
+        });
+    </script>
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>{% trans %}Upload new document{% endtrans %}</span>
+        <input id="fileupload" type="file" name="file" data-url="{{ path('lists_handling_ajax_upload_file', {'id': object.project.id}) }}">
+    </span>  
+    {% endif %}
+</div>

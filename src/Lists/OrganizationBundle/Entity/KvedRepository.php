@@ -12,4 +12,34 @@ use Doctrine\ORM\EntityRepository;
  */
 class KvedRepository extends EntityRepository
 {
+    /**
+     * searchKved
+     * 
+     * @param string $searchText
+     * 
+     * @return mixed[]
+     */
+    function searchKved ($searchText)
+    {
+        $sql = $this->createQueryBuilder('k');
+        $sql->where($sql->expr()->like('k.code', $sql->expr()->lower(':q')))
+            ->setParameter(':q', '%'.$searchText . '%');
+
+        return $sql->getQuery()->getResult();
+    }
+    /**
+     * searchKved
+     * 
+     * @param mixed[] $ids
+     * 
+     * @return mixed[]
+     */
+    function kvedBuIds ($ids)
+    {
+        $sql = $this->createQueryBuilder('k');
+        $sql->where($sql->expr()->in('k.id', ':ids'))
+            ->setParameter(':ids', $ids);
+
+        return $sql->getQuery()->getResult();
+    }
 }

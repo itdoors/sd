@@ -9,11 +9,20 @@ Lists\HandlingBundle\Entity\HandlingType:
             nullable: false
             generator:
                 strategy: IDENTITY
+        alias:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            options:
+                comment: Альтернативное уникальное название типа 
         name:
             type: string
             length: 128
             fixed: false
             nullable: false
+            options:
+                comment: Тип проекта
         slug:
             type: string
             length: 128

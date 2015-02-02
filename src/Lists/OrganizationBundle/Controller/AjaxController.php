@@ -6,12 +6,75 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\OrganizationBundle\Form\OrganizationCreateForm;
 
 /**
  * Class AjaxController
  */
 class AjaxController extends BaseController
 {
+    /**
+     * Renders/validates ajax form
+     *
+     * @param Request $request
+     *
+     * @return string (json)
+     */
+    public function createAction(Request $request)
+    {
+        $result = array(
+            'error' => true,
+            'html' => '',
+            'success' => null,
+            'organization' => null
+        );
+        
+        $user = $this->getUser();
+
+        $service = $this->get('lists_organization.service');
+        $access = $service->checkAccess($user);
+
+        if (!$access->canAddOrganization()) {
+            throw new \Exception('No access');
+        }
+
+        $form = $this->createForm(new OrganizationCreateForm());
+
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+            $organization = $form->getData();
+
+            $user = $this->getUser();
+
+            $organization->setCreator($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($organization);
+
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array ('lukey' => 'manager_organization'));
+            $manager = new OrganizationUser();
+            $manager->setOrganization($organization);
+            $manager->setUser($user);
+            $manager->setRole($lookup);
+            $em->persist($manager);
+            $em->flush();
+            $result['success'] = true;
+            $result['error'] = false;
+            $result['organization'] = array(
+                'id' => $organization->getId(),
+                'text' => $organization->getEdrpouName()
+            );
+            
+        }
+        $result['html'] = $this->renderView('ListsOrganizationBundle:Form:organizationCreateForm.html.twig', array(
+            'form' => $form->createView()
+        ));
+
+        return new Response(json_encode($result));
+    }
     /**
      * Returns json ownership list depending search query
      * 
@@ -270,7 +333,7 @@ class AjaxController extends BaseController
         $result = array();
 
         foreach ($objects as $object) {
-            $text = $object->getShortname().' ('.$object->getName(). ')';
+            $text = $object->getEdrpou(). ' | ' .$object->getShortname().' ('.$object->getName(). ')';
             $id = $object->getId();
             $result[] =  array(
                 'id' => $id,
@@ -365,6 +428,37 @@ class AjaxController extends BaseController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function kvedByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('ids'));
+
+        /** @var \Lists\OrganizationBundle\Entity\KvedRepository $kvedRepository */
+        $kvedRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Kved');
+
+        /** @var Kveds[] $kveds */
+        $kveds = $kvedRepository->kvedBuIds($ids);
+
+        $result = array();
+
+        foreach ($kveds as $kved) {
+            $text = $kved->getCode().' - '.$kved->getName();
+            $id = $kved->getId();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json ownership list depending search query
@@ -417,6 +511,35 @@ class AjaxController extends BaseController
 
         foreach ($objects as $object) {
             $text = $object->getName();
+            $id = $object->getId();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json list kved search query
+     *
+     * @return string
+     */
+    public function kvedSearchAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Kved');
+
+        $objects = $repository->searchKved($searchText);
+           
+        $result = array();
+
+        foreach ($objects as $object) {
+            $text = $object->getCode() .' - '.$object->getName();
             $id = $object->getId();
             $result[] =  array(
                 'id' => $id,

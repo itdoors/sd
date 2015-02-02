@@ -2364,6 +2364,9 @@ INSERT INTO "public".organization_current_account (type_id, organization_id, ban
 -- prod +++++++++++
 ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
 ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699911C8FB41 ON pay_master (bank_id);
+COMMENT ON COLUMN pay_master.reason IS 'Причина отклонения';
+
 -- prod ----
 
 CREATE TABLE position_group (position_id BIGINT NOT NULL, group_id INT NOT NULL, PRIMARY KEY(position_id, group_id));
@@ -2408,7 +2411,6 @@ CREATE TABLE file_access_history (id SERIAL NOT NULL, user_id INT DEFAULT NULL, 
 CREATE INDEX IDX_72401305A76ED395 ON file_access_history (user_id);
 ALTER TABLE file_access_history ADD CONSTRAINT FK_72401305A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-
 CREATE TABLE calculator_price (id BIGSERIAL NOT NULL, calculator_item_id BIGINT DEFAULT NULL, value DOUBLE PRECISION NOT NULL, unit VARCHAR(20) NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_E4A557C0A9005098 ON calculator_price (calculator_item_id);
 CREATE TABLE calculator_item (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) DEFAULT '' NOT NULL, PRIMARY KEY(id));
@@ -2420,3 +2422,107 @@ CREATE INDEX IDX_C663BD63727ACA70 ON calculator_item (parent_id)
 
 ALTER TABLE task_user_role ADD is_updated BOOLEAN NOT NULL;
 ALTER TABLE task ADD editeddatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+-- prod ???
+CREATE TABLE project_gos_tender (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, vdz VARCHAR(128) NOT NULL, advert INT NOT NULL, branch VARCHAR(128) NOT NULL, type_of_procedure VARCHAR(128) NOT NULL, place VARCHAR(128) NOT NULL, delivery VARCHAR(128) NOT NULL, datetime_deadline TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, datetime_opening TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, software VARCHAR(128) NOT NULL, is_participation BOOLEAN DEFAULT NULL, reason BOOLEAN DEFAULT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_4F4896C1166D1F9C ON project_gos_tender (project_id);
+COMMENT ON COLUMN project_gos_tender.vdz IS '№ ВДЗ';
+COMMENT ON COLUMN project_gos_tender.advert IS 'Объявления';
+COMMENT ON COLUMN project_gos_tender.branch IS 'Отрасль';
+COMMENT ON COLUMN project_gos_tender.type_of_procedure IS 'Процедура закупки';
+COMMENT ON COLUMN project_gos_tender.place IS 'Место';
+COMMENT ON COLUMN project_gos_tender.delivery IS 'Cрок поставки';
+COMMENT ON COLUMN project_gos_tender.datetime_deadline IS 'Дата и время конечного срока';
+COMMENT ON COLUMN project_gos_tender.datetime_opening IS 'Дата и время вскрытия';
+COMMENT ON COLUMN project_gos_tender.software IS 'Обеспечение';
+COMMENT ON COLUMN project_gos_tender.is_participation IS 'Участвуем или нет в тендере';
+COMMENT ON COLUMN project_gos_tender.reason IS 'Причина учистия или нет в тендере';
+COMMENT ON COLUMN project_gos_tender.datetime_deleted IS 'Дата и время удаления тендера';
+ALTER TABLE project_gos_tender ADD CONSTRAINT FK_4F4896C1166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A9A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__organization ADD CONSTRAINT FK_AC77C8A932C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender ALTER vdz DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER advert DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER branch DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER type_of_procedure DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER place DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER delivery DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER datetime_deadline DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER datetime_opening DROP NOT NULL;
+ALTER TABLE project_gos_tender ALTER software DROP NOT NULL;
+ALTER TABLE handling_type ADD alias VARCHAR(128) DEFAULT NULL;
+COMMENT ON COLUMN handling_type.alias IS 'Альтернативное уникальное название типа';
+COMMENT ON COLUMN handling_type.name IS 'Тип проекта';
+ALTER TABLE project_gos_tender ALTER reason TYPE TEXT;
+CREATE TABLE project_gos_tender__kved (project_gos_tender_id BIGINT NOT NULL, kved_id BIGINT NOT NULL, PRIMARY KEY(project_gos_tender_id, kved_id));
+CREATE INDEX IDX_B9C3B856A930DD36 ON project_gos_tender__kved (project_gos_tender_id);
+CREATE INDEX IDX_B9C3B856B530ADF6 ON project_gos_tender__kved (kved_id);
+ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856A930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender__kved ADD CONSTRAINT FK_B9C3B856B530ADF6 FOREIGN KEY (kved_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE UNIQUE INDEX unique_project_gos_tender ON project_gos_tender (advert, datetime_deadline);
+COMMENT ON COLUMN project_gos_tender.datetime_opening IS 'Дата и время раскрытия';
+CREATE TABLE project_file (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, name VARCHAR(128) NOT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_B50EFE08166D1F9C ON project_file (project_id);
+COMMENT ON COLUMN project_file.name IS 'Название файла';
+COMMENT ON COLUMN project_file.shortText IS 'Краткое описание файла';
+COMMENT ON COLUMN project_file.create_datetime IS 'Дата создания файла';
+COMMENT ON COLUMN project_file.deleted_datetime IS 'Дата удаления файла';
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".handling_type ("name", slug, sortorder, "alias") VALUES ('Електроные торги', NULL, 7, DEFAULT);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (18, 'Благоустройство', DEFAULT, 18, 18);
+ALTER TABLE handling ALTER createdate DROP NOT NULL;
+ALTER TABLE handling ADD closed_user_id INT DEFAULT NULL;
+ALTER TABLE handling ADD datetime_closed TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+ALTER TABLE handling ALTER createdatetime SET NOT NULL;
+ALTER TABLE handling ADD CONSTRAINT FK_BFF965780D8506 FOREIGN KEY (closed_user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_BFF965780D8506 ON handling (closed_user_id);
+COMMENT ON COLUMN handling.datetime_closed IS 'Дата закрытия проекта';
+COMMENT ON COLUMN handling.is_closed IS 'Статус проекта (закрыт, открыт)';
+ALTER TABLE handling_user ALTER handling_id SET NOT NULL;
+CREATE TABLE project_gos_tender_participan (id BIGSERIAL NOT NULL, participan_id BIGINT DEFAULT NULL, project_gos_tender_id BIGINT DEFAULT NULL, summa NUMERIC(10, 2) DEFAULT NULL, is_winner BOOLEAN DEFAULT NULL, reason TEXT DEFAULT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_C7FD058B298820E ON project_gos_tender_participan (participan_id);
+CREATE INDEX IDX_C7FD058BA930DD36 ON project_gos_tender_participan (project_gos_tender_id);
+CREATE UNIQUE INDEX unique_gos_tender_participan ON project_gos_tender_participan (participan_id, project_gos_tender_id);
+COMMENT ON COLUMN project_gos_tender_participan.summa IS 'Сумма';
+COMMENT ON COLUMN project_gos_tender_participan.is_winner IS 'Победитель';
+COMMENT ON COLUMN project_gos_tender_participan.reason IS 'Комментарий';
+COMMENT ON COLUMN project_gos_tender_participan.datetime_deleted IS 'Дата и время удаления участника';
+ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058B298820E FOREIGN KEY (participan_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender_participan ADD CONSTRAINT FK_C7FD058BA930DD36 FOREIGN KEY (project_gos_tender_id) REFERENCES project_gos_tender (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_gos_tender_participan ADD datetime_create TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL;
+COMMENT ON COLUMN project_gos_tender_participan.datetime_create IS 'Дата и время добавления участника';
+UPDATE "public".handling_service SET "slug" = 'project' WHERE slug is null;
+
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (19, 'БУД Будівництво, будівельні матеріали та спецтехніка', 'gos_tender', 19, 19);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (20, 'КОМ Комп"ютери та оргтехніка, програмне забезпечення', 'gos_tender', 20, 20);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (21, 'КУЛ Господарчі товари та культурно-побутова продукція', 'gos_tender', 21, 21);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (22, 'ЛЕГ Легка промисловість', 'gos_tender', 22, 22);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (23, 'МЕБ Меблія', 'gos_tender', 23, 23);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (24, 'МЕД Медицина та соціальна сфера', 'gos_tender', 24, 24);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (25, 'НДР Наукові дослідження та розробки', 'gos_tender', 25, 25);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (26, 'НЕР Нерухомість та оренда', 'gos_tender', 26, 26);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (27, 'ПАЛ Енергетика, паливо, хімія', 'gos_tender', 27, 27);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (28, 'ППД Поліграфія, друкарська справа', 'gos_tender', 28, 28);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (29, 'ПСГ Сільське господарство', 'gos_tender', 29, 29);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (30, 'ПХП Харчова промисловість та громадське харчування', 'gos_tender', 30, 30);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (31, 'ТЕХ Технологічне обладнання, комплектуючі та матеріали', 'gos_tender', 31, 31);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (32, 'ТРЗ Транспортні засоби та комплектуючі, технічне обслуговування', 'gos_tender', 32, 32);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (33, 'ТРП Товари, роботи, послуги', 'gos_tender', 33, 33);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (34, 'МЕТ Метали та продукція металообробки', 'gos_tender', 34, 34);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (35, 'КПН Консалтингові послуги, навчання', 'gos_tender', 35, 35);
+INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (36, 'ЖИТ Житлово-комунальне, побутове обслуговування та спецтехніка', 'gos_tender', 36, 36);
+CREATE TABLE project_file_type (id BIGSERIAL NOT NULL, name VARCHAR(128) NOT NULL, "group" VARCHAR(64) NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN project_file_type.name IS 'Название типа документа';
+COMMENT ON COLUMN project_file_type."group" IS 'Группа документов';
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Документація конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Зміни до документації конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Акцепт ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender');
+ALTER TABLE project_file ADD type_id BIGINT DEFAULT NULL;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08C54C8C93 FOREIGN KEY (type_id) REFERENCES project_file_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_file ALTER name DROP NOT NULL;
+ALTER TABLE project_file ALTER create_datetime DROP NOT NULL;
+
+-- prod ----

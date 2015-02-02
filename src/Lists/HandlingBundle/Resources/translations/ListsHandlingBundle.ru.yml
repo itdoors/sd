@@ -23,7 +23,6 @@ Createdatetime: Дата создания
 LastHandlingDate: Последнее
 Create User: Кто создал
 Service offered: Предлагаемые услуги
-ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
 Select Service Offered: Выберите услуги
 Select offered services: Выберите предлагаемые услуги
@@ -55,7 +54,6 @@ Result Description: Описание результата
 Result description: Описание результата
 
 Enter Result Description: Введите описание результата
-Result: Результат
 Enter Result: Введите рузультат
 Select Handling Result: Выберите результат проекта
 Square: Площадь
@@ -265,3 +263,77 @@ Planning: Запланированый
 Actual: Фактический
 Type: Тип
 Export to Excel: Експорт в Excel
+VDZ: ВДЗ
+Advert: Объявления
+Branch: Отрасль
+Type of procedure: Процедура закупки
+Place: Место
+Contract time: Срок действия договора
+This value should be of type integer: Значение должно быть целым числом
+Date deadline: Дата и время конечного срока
+Date opening: Дата и время раскрытия
+Software: Обеспечение
+Participation: Участие
+Yes: Да
+No: Нет
+Reason: Причина
+Participants: Участники
+Winners: Победители
+Kveds: КВЕДы
+Files: Файлы
+Document: Документ
+Documents: Документы
+Short text: Краткое описание
+Upload new document: Загрузить новый документ
+Document is uploaded: Документ загружен
+Create gos. tender: Создать гос. тендер
+create gos. tender: создать гос. тендер
+Project: Проект
+Enter EDRPOU or name organization: Введите ЕДРПОУ или название организации
+Create date: Дата создания
+Project services: Предлагаемые услуги
+Budget: Бюджет
+Select status: Выберите статус
+Select project services: Выберите предлагаемые услуги
+Enter budget: Введите бюджет
+Enter description: Введите описание
+Enter square: Введите площадь
+Enter result: Введите результат
+Enter vdz: Введите ВДЗ
+Enter advert: Введите объявление
+Enter branch: Введите отрасль
+Enter type of procedure: Введите процедуру закупки
+Enter place: Введите место
+Enter contract time: Введите срок действия договора
+Select kveds: Выберите КВЕДы
+Enter participants: Введите участников
+Enter software: Введите обеспечение
+Datetime deadline: Дата и время подачи тендера
+Enter datetime deadline: Введите дату и время подачи тендера
+Datetime opening: Дата и время раскрытия тендера
+Enter datetime opening: Введите дату и время раскрытия тендера
+dd.mm.yyyy: дд.мм.гггг
+dd.mm.yyyy hh:mm: дд.мм.гггг чч:мм
+Expected value: Ожидаемая стоимость закупки
+List of tender: Список тендеров
+Projects: Проекты
+list of tenders: список тендеров
+Gos. tenders: Гос. тендера
+Gos. tender: Гос. тендер
+Customer: Заказчик
+Responsibility: Отвественный
+Project already suchestvuet: Проект уже добавлен
+show gos. tender: просмотр гос. тендера
+Tenders: Тендеры
+Select participation: Выберите статус участия в тендере
+Enter reason: Укажите причину
+Add participant: Добавить участника
+Participan: Участник
+Winner: Победитель
+Summa: Сумма
+Descriptrion: Описание
+Select winner: Укажите статус победителя
+Enter summa: Введите сумму
+Select participan: Выберите участника
+Select branch: Выберите отрасль
+Select handlingServices Offered: Выберите предлагаемые услуги

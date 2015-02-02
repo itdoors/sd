@@ -45,7 +45,7 @@ class CronDeleteCommand extends ContainerAwareCommand
         $arr = $cm->get();
         foreach ($arr as $key => $val) {
             $commentArray = explode(',', $val->getComment());
-            if (in_array($comment, $commentArray) || $val->getComment() == $comment) {
+            if ((in_array($comment, $commentArray) || $val->getComment() == $comment) && !empty($comment)) {
                 $cm->remove($key);
                 $res = 'Remove: ' . $key;
             }

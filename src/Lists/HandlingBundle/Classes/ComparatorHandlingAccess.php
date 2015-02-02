@@ -1,6 +1,8 @@
 <?php
 
 namespace Lists\HandlingBundle\Classes;
+use Lists\HandlingBundle\Entity\Handling;
+use Lists\HandlingBundle\Interfaces\HandlingAccessInterface;
 
 /**
  * ComparatorHandlingAccess class
@@ -9,13 +11,16 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
 {
 
     protected $accesses;
+    protected $handling;
 
     /**
-     * @param \Lists\HandlingBundle\Interfaces\HandlingAccessInterface[]   $accesses
+     * @param HandlingAccessInterface[] $accesses
+     * @param Handling                  $handling
      */
-    public function __construct($accesses)
+    public function __construct($accesses, Handling $handling = null)
     {
         $this->accesses = $accesses;
+        $this->handling = $handling;
     }
     /**
      * @return bool
@@ -128,6 +133,61 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
     {
         foreach ($this->accesses as $access) {
             if ($access->canExportReportToExcel()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateGosTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCreateGosTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeGosTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeGosTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditGosTender ()
+    {
+        if ($this->handling && $this->handling->getIsClosed()) {
+            return false;
+        }
+        foreach ($this->accesses as $access) {
+            if ($access->canEditGosTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeParticipationInGosTander ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canChangeParticipationInGosTander()) {
                 return true;
             }
         }

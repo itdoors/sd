@@ -3,21 +3,21 @@
 namespace Lists\HandlingBundle\Classes;
 
 /**
- * ManagerAccess class
+ * GosTenderHandlingAccess class
  */
-class ManagerAccess extends BasicHandlingAccess
+class GosTenderHandlingAccess extends BasicHandlingAccess
 {
     /**
      * @return bool
      */
-    public function canSee ()
+    public function canCreateGosTender ()
     {
         return true;
     }
     /**
      * @return bool
      */
-    public function canEdit ()
+    public function canSeeGosTender ()
     {
         return true;
     }

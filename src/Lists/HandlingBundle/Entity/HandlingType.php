@@ -7,6 +7,7 @@ namespace Lists\HandlingBundle\Entity;
  */
 class HandlingType
 {
+
     /**
      * @var integer
      */
@@ -27,11 +28,10 @@ class HandlingType
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
@@ -39,23 +39,21 @@ class HandlingType
      *
      * @return HandlingType
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set slug
      *
@@ -63,29 +61,27 @@ class HandlingType
      *
      * @return HandlingType
      */
-    public function setSlug($slug)
+    public function setSlug ($slug)
     {
         $this->slug = $slug;
 
         return $this;
     }
-
     /**
      * Get slug
      *
      * @return string
      */
-    public function getSlug()
+    public function getSlug ()
     {
         return $this->slug;
     }
-
     /**
      * __toStrong
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getName();
     }
@@ -102,30 +98,56 @@ class HandlingType
      *
      * @return HandlingType
      */
-    public function setSortorder($sortorder)
+    public function setSortorder ($sortorder)
     {
         $this->sortorder = $sortorder;
 
         return $this;
     }
-
     /**
      * Get sortorder
      *
      * @return integer
      */
-    public function getSortorder()
+    public function getSortorder ()
     {
         return $this->sortorder;
     }
-
     /**
      * @return array
      */
-    public function __sleep()
+    public function __sleep ()
     {
-        return array(
+        return array (
             'id',
         );
+    }
+
+    /**
+     * @var string
+     */
+    private $alias;
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     *
+     * @return HandlingType
+     */
+    public function setAlias ($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias ()
+    {
+        return $this->alias;
     }
 }

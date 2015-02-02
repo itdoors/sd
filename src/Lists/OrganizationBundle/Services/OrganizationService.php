@@ -70,6 +70,9 @@ class OrganizationService
         if ($user->hasRole('ROLE_DOGOVORADMIN')) {
             $role[] = 'dogovor_admin';
         }
+        if ($user->hasRole('ROLE_GOS_TENDER_ADMIN')) {
+            $role[] = 'GosTenderAdmin';
+        }
 
         return OrganizationAccessFactory::createAccess($role);
     }

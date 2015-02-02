@@ -15,6 +15,7 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Lists\HandlingBundle\Entity\ProjectGosTender;
 
 /**
  * Class HandlingController
@@ -139,6 +140,8 @@ class HandlingController extends BaseController
      */
     public function showAction ($id, $type)
     {
+        $em = $this->getDoctrine()->getManager();
+        $tender = null;
         /** @var BaseService $baseService */
         $baseService = $this->get('itdoors_common.base.service');
 
@@ -147,6 +150,22 @@ class HandlingController extends BaseController
 
         /** @var \Lists\HandlingBundle\Entity\Handling $object */
         $object = $handlingRepository->getHandlingShow($id);
+        $project = $object[0];
+        if ($project->isGosTender()) {
+//            /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $tender */
+//            $tender = $this->getDoctrine()
+//                ->getRepository('ListsHandlingBundle:ProjectGosTender')
+//                ->findOneBy(array(
+//                    'project' => $project
+//                ));
+//            if (!$tender) {
+//                $tender = new ProjectGosTender();
+//                $tender->setProject($project);
+//                $tender->setIsParticipation(null);
+//                $em->persist($tender);
+//                $em->flush();
+//            }
+        }
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
         $handling = $handlingRepository->find($id);
         /** @var \SD\UserBundle\Entity\User $user */
@@ -201,7 +220,8 @@ class HandlingController extends BaseController
                 'lookups' => $lookups,
                 'accessOrganization' => $accessOrganization,
                 'type' => $type,
-                'access' => $access
+                'access' => $access,
+                'tender' => $tender
         ));
     }
 
