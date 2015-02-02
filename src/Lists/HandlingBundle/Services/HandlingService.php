@@ -94,6 +94,8 @@ class HandlingService
                 $gosTender->setReason($reason);
                 $gosTender->getProject()
                     ->setCloser($this->container->get('security.context')->getToken()->getUser());
+                $gosTender->getProject()
+                    ->setReasonClosed('Не участвуем');
             } else {
                 $status = $em->getRepository('ListsHandlingBundle:HandlingStatus')
                     ->findOneBy(array('slug' => 'gos_tender', 'sortorder' => 8));
