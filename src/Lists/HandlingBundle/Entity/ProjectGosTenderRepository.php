@@ -84,4 +84,32 @@ class ProjectGosTenderRepository extends EntityRepository
 
         return $query->getSingleResult();
     }
+    /**
+     * getListForDate
+     * 
+     * @param integer $startTimestamp
+     * @param integer $endTimestamp
+     * @param User    $user
+     * 
+     * @return mixed[]
+     */
+    public function getListForDate ($startTimestamp, $endTimestamp, $user)
+    {
+        $res = $this->createQueryBuilder('t');
+
+        /** where */
+        $res->where('t.datetimeOpening >= :startTimestamp');
+        $res->andWhere('t.datetimeOpening <= :endTimestamp');
+        $res->setParameter(':startTimestamp', date('Y-m-d H:i:s', $startTimestamp))
+            ->setParameter(':endTimestamp', date('Y-m-d H:i:s', $endTimestamp));
+        if ($user) {
+            $res
+                ->innerJoin('t.project', 'p')
+                ->leftJoin('p.handlingUsers', 'hu')
+                ->andWhere('hu.user = :user')
+                ->setParameter(':user', $user);
+        }
+
+        return $res->getQuery()->getResult();
+    }
 }

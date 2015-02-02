@@ -42,11 +42,4 @@ class ManagerProjectHandlingAccess extends BasicHandlingAccess
     {
         return true;
     }
-    /**
-     * @return bool
-     */
-    public function canChangeParticipationInGosTander ()
-    {
-        return true;
-    }
 }

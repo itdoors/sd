@@ -2422,7 +2422,7 @@ CREATE INDEX IDX_C663BD63727ACA70 ON calculator_item (parent_id)
 
 ALTER TABLE task_user_role ADD is_updated BOOLEAN NOT NULL;
 ALTER TABLE task ADD editeddatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
--- prod ???
+-- prod +++
 CREATE TABLE project_gos_tender (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, vdz VARCHAR(128) NOT NULL, advert INT NOT NULL, branch VARCHAR(128) NOT NULL, type_of_procedure VARCHAR(128) NOT NULL, place VARCHAR(128) NOT NULL, delivery VARCHAR(128) NOT NULL, datetime_deadline TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, datetime_opening TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, software VARCHAR(128) NOT NULL, is_participation BOOLEAN DEFAULT NULL, reason BOOLEAN DEFAULT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
 CREATE UNIQUE INDEX UNIQ_4F4896C1166D1F9C ON project_gos_tender (project_id);
 COMMENT ON COLUMN project_gos_tender.vdz IS '№ ВДЗ';
@@ -2533,7 +2533,8 @@ ALTER TABLE project_file_type ADD alias VARCHAR(64) DEFAULT NULL;
 COMMENT ON COLUMN project_file_type.alias IS 'Альтернативное название документа';
 UPDATE "public".project_file_type SET "alias" = 'acceptance' WHERE id = 5;
 UPDATE "public".project_file_type SET "alias" = 'protocol_open' WHERE id = 3;
-ALTER TABLE project_file ADD user_id INT NOT NULL;
+ALTER TABLE project_file ADD user_id DROP NOT NULL;
 ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_B50EFE08A76ED395 ON project_file (user_id);
+ALTER TABLE project_file ALTER user_id DROP NOT NULL;
 -- prod +++

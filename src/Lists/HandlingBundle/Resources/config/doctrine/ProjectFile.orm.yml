@@ -64,7 +64,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
             inversedBy: null
             joinColumns:
                 user_id:
-                    nullable: false
+                    nullable: true
                     options:
                         comment: Кто загрузил файл
                     referencedColumnName: id
