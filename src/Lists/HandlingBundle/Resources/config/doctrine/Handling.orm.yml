@@ -21,9 +21,6 @@ Lists\HandlingBundle\Entity\Handling:
         createdatetime:
             type: datetime
             nullable: false
-        closedatetime:
-            type: datetime
-            nullable: true
         statusDescription:
             type: text
             nullable: true
@@ -76,6 +73,9 @@ Lists\HandlingBundle\Entity\Handling:
             column: datetime_closed
             options:
                 comment: Дата закрытия проекта
+        closedatetime:
+            type: datetime
+            nullable: true
         reasonClosed:
             type: text
             nullable: true

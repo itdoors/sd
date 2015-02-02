@@ -182,6 +182,15 @@ class ProjectFile
         return null === $this->getName() ? null : $this->getUploadRootDir() . '/' . $this->getName();
     }
     /**
+     * fileExists
+     *
+     * @return null|string
+     */
+    public function fileExists ()
+    {
+        return null === $this->getName() ? null : file_exists($this->getAbsolutePath());
+    }
+    /**
      * getWebPath
      *
      * @return null|string

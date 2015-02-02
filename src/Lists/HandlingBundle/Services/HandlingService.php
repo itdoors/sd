@@ -93,7 +93,7 @@ class HandlingService
             if (empty($isParticipation)) {
                 $gosTender->setReason($reason);
                 $gosTender->getProject()
-                    ->setClosedUser($this->container->get('security.context')->getToken()->getUser());
+                    ->setCloser($this->container->get('security.context')->getToken()->getUser());
             } else {
                 $status = $em->getRepository('ListsHandlingBundle:HandlingStatus')
                     ->findOneBy(array('slug' => 'gos_tender', 'sortorder' => 8));
@@ -143,6 +143,29 @@ class HandlingService
             $db = $em->getConnection();
             $stmt = $db->prepare('UPDATE "public".project_gos_tender_participan SET "is_winner" = NULL WHERE id = :id');
             $stmt->execute(array (':id' => $data->getId()));
+        }
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveCloseProjectForm (Form $form, Request $request, $params)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        $reasonClosed = $form->get('reasonClosed')->getData();
+        $projectId = $form->get('projectId')->getData();
+
+        $project = $em->getRepository('ListsHandlingBundle:Handling')->find($projectId);
+        if ($project) {
+            $project->setCloser($this->container->get('security.context')->getToken()->getUser());
+            $project->setReasonClosed($reasonClosed);
+            $em->persist($project);
+            $em->flush();
         }
     }
 }

@@ -895,6 +895,7 @@ class Handling
      */
     public function setCloser (\SD\UserBundle\Entity\User $closer = null)
     {
+        $this->setIsClosed(true);
         $this->closer = $closer;
 
         return $this;
@@ -1191,6 +1192,7 @@ class Handling
      * @var \DateTime
      */
     private $datetimeClosed;
+
     /**
      * Set datetimeClosed
      *
@@ -1213,6 +1215,7 @@ class Handling
     {
         return $this->datetimeClosed;
     }
+
     /**
      * @var \SD\UserBundle\Entity\User
      */
@@ -1225,48 +1228,47 @@ class Handling
      *
      * @return Handling
      */
-    public function setClosedUser(\SD\UserBundle\Entity\User $closedUser = null)
+    public function setClosedUser (\SD\UserBundle\Entity\User $closedUser = null)
     {
         $this->setIsClosed(true);
         $this->closedUser = $closedUser;
 
         return $this;
     }
-
     /**
      * Get closedUser
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getClosedUser()
+    public function getClosedUser ()
     {
         return $this->closedUser;
     }
+
     /**
      * @var string
      */
     private $reasonClosed;
 
-
     /**
      * Set reasonClosed
      *
      * @param string $reasonClosed
+     *
      * @return Handling
      */
-    public function setReasonClosed($reasonClosed)
+    public function setReasonClosed ($reasonClosed)
     {
         $this->reasonClosed = $reasonClosed;
 
         return $this;
     }
-
     /**
      * Get reasonClosed
      *
      * @return string 
      */
-    public function getReasonClosed()
+    public function getReasonClosed ()
     {
         return $this->reasonClosed;
     }

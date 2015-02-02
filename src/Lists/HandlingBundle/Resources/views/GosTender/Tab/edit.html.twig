@@ -189,10 +189,10 @@
                 <td style="width:35%">{{ object.id }}</td>
                 <td style="width:15%">{% trans %}Handling Status{% endtrans %}</td>
                 <td style="width:35%">
-                    {% if object.isParticipation is not null %}
+                    {%  if object.project.isClosed  == true or object.isParticipation is not null %}
                         {% if object.project.closedatetime %}
                             {% trans %}Closed{% endtrans %} ({{ object.project.closedatetime|date("d.m.y, H:i") }})<br>
-                            {{ object.project.closedUser }}
+                            {{ object.project.closer }}
                         {% else %}
                             {% if access.canEditGosTender %}
                             <a href="#" id="statusId" data-type="select" data-pk="{{ object.project.id }}" data-value="{{ object.project.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">

@@ -57,7 +57,7 @@ class CloseProjectForm extends AbstractType
                 if ($reasonClosed === null) {
                     $form->get('reasonClosed')->addError(
                         new FormError(
-                            $translator->trans('The field can not be empty', array(), 'ListsHandlingBundle')
+                            $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
                         )
                     );
                 } elseif (!$project) {
@@ -85,7 +85,7 @@ class CloseProjectForm extends AbstractType
                             'type' => $typeAcceptance,
                             'project' => $project
                         ));
-                    if (!$fileProtocolOpen) {
+                    if (!$fileProtocolOpen || $fileProtocolOpen && !$fileProtocolOpen->fileExists()) {
                         $form->addError(
                             new FormError(
                                 $translator->trans('Download please', array(), 'ListsHandlingBundle')
@@ -93,7 +93,7 @@ class CloseProjectForm extends AbstractType
                             )
                         );
                     }
-                    if (!$fileAcceptance) {
+                    if (!$fileAcceptance || $fileAcceptance && !$fileAcceptance->fileExists()) {
                         $form->addError(
                             new FormError(
                                 $translator->trans('Download please', array(), 'ListsHandlingBundle')
