@@ -1242,4 +1242,32 @@ class Handling
     {
         return $this->closedUser;
     }
+    /**
+     * @var string
+     */
+    private $reasonClosed;
+
+
+    /**
+     * Set reasonClosed
+     *
+     * @param string $reasonClosed
+     * @return Handling
+     */
+    public function setReasonClosed($reasonClosed)
+    {
+        $this->reasonClosed = $reasonClosed;
+
+        return $this;
+    }
+
+    /**
+     * Get reasonClosed
+     *
+     * @return string 
+     */
+    public function getReasonClosed()
+    {
+        return $this->reasonClosed;
+    }
 }

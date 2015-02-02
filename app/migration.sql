@@ -2527,4 +2527,12 @@ ALTER TABLE project_file ALTER create_datetime DROP NOT NULL;
 INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Cбор документов', 8, 'gos_tender', DEFAULT, NULL);
 INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Подача - раскрытие ', 9, 'gos_tender', DEFAULT, NULL);
 INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Подписание договора', 10, 'gos_tender', DEFAULT, NULL);
+ALTER TABLE handling ADD reason_closed TEXT DEFAULT NULL;
+COMMENT ON COLUMN handling.reason_closed IS 'Причина закрытия проекта';
+ALTER TABLE project_file_type ADD alias VARCHAR(64) DEFAULT NULL;
+COMMENT ON COLUMN project_file_type.alias IS 'Альтернативное название документа';
+UPDATE "public".project_file_type SET "alias" = 'acceptance' WHERE id = 5;
+UPDATE "public".project_file_type SET "alias" = 'protocol_open' WHERE id = 3;
+
+
 -- prod +++

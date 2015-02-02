@@ -9,6 +9,12 @@ Lists\HandlingBundle\Entity\ProjectFileType:
             generator:
                 strategy: IDENTITY
     fields:
+        alias:
+            type: string
+            length: 64
+            nullable: true
+            options:
+                comment: Альтернативное название документа
         name:
             type: string
             length: 128

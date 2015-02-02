@@ -76,6 +76,12 @@ Lists\HandlingBundle\Entity\Handling:
             column: datetime_closed
             options:
                 comment: Дата закрытия проекта
+        reasonClosed:
+            type: text
+            nullable: true
+            column: reason_closed
+            options:
+                comment: Причина закрытия проекта
         budgetClient:
             type: string
             length: 128

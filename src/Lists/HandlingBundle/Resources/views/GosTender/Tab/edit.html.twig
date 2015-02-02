@@ -208,6 +208,9 @@
                     {% else %}
                         {% trans %}New{% endtrans %}
                     {% endif %}
+                    {% if object.project.isClosed  != true %}
+                        {{ include ('ListsHandlingBundle:GosTender/Button:closeProject.html.twig', {item: object, edit : true})}}
+                    {% endif %}
                 </td>
             </tr>
             <tr> {# 2 #}

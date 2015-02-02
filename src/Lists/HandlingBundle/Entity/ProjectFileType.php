@@ -78,4 +78,32 @@ class ProjectFileType
     {
         return $this->group;
     }
+    /**
+     * @var string
+     */
+    private $alias;
+
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return ProjectFileType
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
 }

@@ -14,6 +14,7 @@ parameters:
     lists_handling.project.form.class: Lists\HandlingBundle\Form\ProjectForm
     lists_handling.gos_tender_participation.form.class: Lists\HandlingBundle\Form\GosTenderParticipationForm
     lists_handling.project_gos_tender_participan.form.class: Lists\HandlingBundle\Form\ProjectGosTenderParticipanForm
+    lists_handling.project_close.form.class: Lists\HandlingBundle\Form\CloseProjectForm
 
     lists_handling.competitor.form.class: Lists\HandlingBundle\Form\HandlingCompetitorType
     lists_handling.dogovor.form.class: Lists\HandlingBundle\Form\HandlingDogovorType
@@ -279,3 +280,12 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: projectGosTenderParticipanForm }
+            
+    lists_handling.form.closeProjectForm:
+        class: %lists_handling.project_close.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: closeProjectForm }
