@@ -91,6 +91,10 @@ lists_handling_ajax_editable_gos_tender:
     pattern:  /lists/handling/ajax/editable/gos_tender
     defaults: { _controller: ListsHandlingBundle:Ajax:editableGosTender }
     
+lists_handling_ajax_editable_gos_tender_participant:
+    pattern:  /lists/handling/ajax/editable/gos_tender_participant
+    defaults: { _controller: ListsHandlingBundle:Ajax:editableGosTenderParticipant }
+    
 lists_handling_ajax_editable_project_file:
     pattern:  /lists/handling/ajax/editable/project/file
     defaults: { _controller: ListsHandlingBundle:Ajax:editableProjectFile }
