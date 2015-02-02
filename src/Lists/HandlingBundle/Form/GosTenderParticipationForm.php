@@ -41,22 +41,7 @@ class GosTenderParticipationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participan', 'hidden_entity', array(
-                'entity' => 'ListsOrganizationBundle:Organization',
-                'data_class' => null,
-                'attr' => array(
-                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $this->router->generate('lists_organization_ajax_search'),
-                    'data-url-by-id' => $this->router->generate('lists_organization_ajax_organization_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'formatNoMatches'=> $this->translator->trans('Organization don`t found').
-                            ' <a href="#" onclick="createOrganization()">'.$this->translator->trans('Create').'</a>'
-                    ))
-                )
-            ))
-            ->add('isWinner', 'itdoors_choice', array(
+            ->add('isParticipation', 'itdoors_choice', array(
                 'required' => true,
                 'empty_value' => '',
                 'attr' => array(
@@ -67,18 +52,35 @@ class GosTenderParticipationForm extends AbstractType
                     'placeholder' => 'Select is acceptance',
                 ),
                 'choices' => array(
-                    true => 'Yes',
-                    false => 'No'
+                    '1' => 'Yes',
+                    '0' => 'No'
                     )
                 ))
-            ->add('gosTender', 'entity', array(
-                'class' => 'ListsHandlingBundle:ProjectGosTender'
-                )
-            )
-            ->add('summa', 'text')
-            ->add('reason', 'textarea')
-            ->add('cancel', 'submit')
-            ->add('submit', 'submit');
+            ->add('reason', 'textarea');
+
+        $translator = $this->translator;
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($translator) {
+                $form = $event->getForm();
+                $isAcceptance = $form->get('isParticipation')->getData();
+                $reason = $form->get('reason')->getData();
+
+                if ($isAcceptance === null) {
+                    $form->get('isParticipation')->addError(
+                        new FormError(
+                            $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
+                        )
+                    );
+                } elseif ($isAcceptance === 0 && empty($reason)) {
+                    $form->get('reason')->addError(
+                        new FormError(
+                            $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
+                        )
+                    );
+                }
+            }
+        );
     }
 
     /**
@@ -87,9 +89,8 @@ class GosTenderParticipationForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\ProjectGosTenderParticipan',
-            'translation_domain' => 'ListsHandlingBundle',
-            'validation_groups' => array('new')
+            'data_class' => null,
+            'translation_domain' => 'ListsHandlingBundle'
         ));
     }
 

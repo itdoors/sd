@@ -35,10 +35,10 @@ class ProjectGosTenderParticipanForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('organization', 'hidden_entity', array(
+         $builder
+            ->add('participan', 'hidden_entity', array(
                 'entity' => 'ListsOrganizationBundle:Organization',
-                'required' => true,
+                'data_class' => null,
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $this->router->generate('lists_organization_ajax_search'),
@@ -51,24 +51,29 @@ class ProjectGosTenderParticipanForm extends AbstractType
                     ))
                 )
             ))
-            ->add('status', 'entity', array(
-                'class' => 'ListsHandlingBundle:HandlingStatus',
+            ->add('isWinner', 'itdoors_choice', array(
+                'required' => true,
                 'empty_value' => '',
-                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                        return $repository->createQueryBuilder('s')
-                            ->orderBy('s.sortorder', 'ASC');
-                },
                 'attr' => array(
-                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'form-control can-be-reseted',
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true
-                    ))
+                        'minimumInputLength' => 0
+                    )),
+                    'placeholder' => 'Select is acceptance',
+                ),
+                'choices' => array(
+                    '1' => 'Yes',
+                    '0' => 'No'
+                    )
+                ))
+            ->add('gosTender', 'entity', array(
+                'class' => 'ListsHandlingBundle:ProjectGosTender'
                 )
-            ))
-            ->add('budget')
-            ->add('square')
-            ->add('description');
+            )
+            ->add('summa', 'text')
+            ->add('reason', 'textarea')
+            ->add('cancel', 'submit')
+            ->add('submit', 'submit');
     }
 
     /**
@@ -77,7 +82,7 @@ class ProjectGosTenderParticipanForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\Handling',
+            'data_class' => 'Lists\HandlingBundle\Entity\ProjectGosTenderParticipan',
             'validation_groups' => array('createTender'),
             'translation_domain' => 'ListsHandlingBundle'
         ));

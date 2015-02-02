@@ -92,10 +92,12 @@ class HandlingService
             $gosTender->setIsParticipation($isParticipation);
             if (empty($isParticipation)) {
                 $gosTender->setReason($reason);
-                $gosTender->getProject()->setIsClosed(true);
-                $gosTender->getProject()->setDatetimeClosed(new \DateTime());
                 $gosTender->getProject()
                     ->setClosedUser($this->container->get('security.context')->getToken()->getUser());
+            } else {
+                $status = $em->getRepository('ListsHandlingBundle:HandlingStatus')
+                    ->findOneBy(array('slug' => 'gos_tender', 'sortorder' => 8));
+                $gosTender->getProject()->setStatus($status);
             }
             $em->persist($gosTender);
             $em->flush();

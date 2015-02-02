@@ -211,21 +211,12 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group{% if form.project.status.vars.errors|length %} has-error{% endif %}">
-                                {{ form_label(form.project.status, 'Status', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.project.status, {'attr' : {'placeholder': "Select status"} }) }}
-                                {{ form_errors(form.project.status) }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group{% if form.project.budget.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.project.budget, 'Expected value', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.project.budget, {'attr' : {'class' : 'form-control', 'placeholder': "Enter budget"} }) }}
                                 {{ form_errors(form.project.budget) }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group{% if form.project.square.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.project.square, 'Square', {'attr': {'class': 'control-label'}}) }}
@@ -233,6 +224,8 @@
                                 {{ form_errors(form.project.square) }}
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group{% if form.project.handlingServices.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.project.handlingServices, 'Branch', {'attr': {'class': 'control-label'}}) }}
@@ -240,9 +233,7 @@
                                 {{ form_errors(form.project.handlingServices) }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group{% if form.project.description.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.project.description, 'Description', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.project.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description"} }) }}

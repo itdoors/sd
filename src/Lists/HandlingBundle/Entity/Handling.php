@@ -395,6 +395,7 @@ class Handling
      */
     public function setIsClosed ($isClosed)
     {
+        $this->setClosedatetime(new \DateTime());
         $this->isClosed = $isClosed;
 
         return $this;
@@ -1226,6 +1227,7 @@ class Handling
      */
     public function setClosedUser(\SD\UserBundle\Entity\User $closedUser = null)
     {
+        $this->setIsClosed(true);
         $this->closedUser = $closedUser;
 
         return $this;

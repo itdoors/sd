@@ -51,21 +51,6 @@ class ProjectForm extends AbstractType
                     ))
                 )
             ))
-            ->add('status', 'entity', array(
-                'class' => 'ListsHandlingBundle:HandlingStatus',
-                'empty_value' => '',
-                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                    return $repository->createQueryBuilder('s')
-                        ->orderBy('s.sortorder', 'ASC');
-                },
-                'attr' => array(
-                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true
-                    ))
-                )
-            ))
             ->add('handlingServices', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingService',
                 'empty_value' => '',

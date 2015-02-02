@@ -3,7 +3,7 @@
 </a>
 {{ ajax_form_render_btn({
     'selector' : '#participant-add-btn',
-    'formType' : 'gosTenderParticipationForm',
+    'formType' : 'projectGosTenderParticipanForm',
     'successFunctions' : {
         'list_participants' : 'ITDoorsAjax.updateList'
     },
@@ -19,7 +19,7 @@
         'gosTender' : object.id
     },
     'target' : '#form_modal_gosTenderParticipationForm',
-    'html' : 'ListsHandlingBundle:Form:gosTenderParticipationForm.html.twig'
+    'html' : 'ListsHandlingBundle:Form:projectGosTenderParticipationForm.html.twig'
 }) }}
 
 <div id="form_modal_gosTenderParticipationForm" class="modal" role="basic" aria-hidden="true">
