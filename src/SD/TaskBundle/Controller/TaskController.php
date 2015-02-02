@@ -551,10 +551,18 @@ class TaskController extends Controller
         $this->setTaskUpdated($this->getUser(), $task);
 
         if ($stage == 'done' || $stage == 'undone' || $stage == 'closed') {
+            $performerRole = $em->getRepository('SDTaskBundle:Role')
+                ->findOneBy(array(
+                    'name' => 'performer',
+                    'model' => 'task'
+                ));
+
             $taskUserRolesEmail = $em->getRepository('SDTaskBundle:TaskUserRole')
                 ->findBy(array(
-                    'task' => $task
+                    'task' => $task,
+                    'role' => $performerRole
                 ));
+
             $this->sendEmail($taskUserRolesEmail, 'close');
         }
         $return['success'] = 1;

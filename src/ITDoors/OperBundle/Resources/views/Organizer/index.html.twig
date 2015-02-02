@@ -461,7 +461,6 @@
 
                     return num;
                 }
-
                 var event = $('#current_organizer').data('current_organizer_event');
                 var id = event.id;
                 var startMinutesTotal = $("#slider-range").slider('values',0);
@@ -476,39 +475,44 @@
                 var startDate = new Date(startDate.setHours(startHours));
                 var startDate = new Date(startDate.setMinutes(startMinutes));
 
-                event.start = startDate;
+
 
                 var endDate = event.end;
                 var endDate = new Date(endDate.setHours(endHours));
                 var endDate = new Date(endDate.setMinutes(endMinutes));
 
-                event.end = endDate;
+                if (startDate.getTime() == endDate.getTime()) {
+                    alert('Дата начала посещения не должна быть одинаковой с датой окончания');
+                } else {
+                    event.start = startDate;
+                    event.end = endDate;
 
-                console.log(startDate);
-                console.log(endDate);
+                    console.log(startDate.getTime());
+                    console.log(endDate.getTime());
 
-                $('#calendar').fullCalendar('renderEvent', event, true);
+                    $('#calendar').fullCalendar('renderEvent', event, true);
 
-                SD.blockUI($('#moreInfoTpl'));
-                $.ajax({
-                    type: 'POST',
-                    url: $('#info_input').data('url_edit_event'),
-                    data: {
-                        id: id,
-                        start: startDate,
-                        end: endDate
-                    },
-                    success: function(data) {
-                        data = JSON.parse(data);
-                        if (data.success == 0) {
-                            alert('error');
-                        } else {
-                            $('#form_modal_more_info').modal('hide');
+                    SD.blockUI($('#moreInfoTpl'));
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#info_input').data('url_edit_event'),
+                        data: {
+                            id: id,
+                            start: startDate,
+                            end: endDate
+                        },
+                        success: function (data) {
+                            data = JSON.parse(data);
+                            if (data.success == 0) {
+                                alert('error');
+                            } else {
+                                $('#form_modal_more_info').modal('hide');
+                            }
+                            SD.unblockUI($('#moreInfoTpl'));
                         }
-                        SD.unblockUI($('#moreInfoTpl'));
-                    }
 
-                })
+                    })
+                }
 
             })
 
