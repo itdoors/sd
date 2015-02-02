@@ -72,6 +72,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
                 max: 128
                 groups: [edit]
         name:
+            - NotBlank: { groups: [add] }
             - File:
                 maxSize: 5M
                 mimeTypes:
@@ -80,6 +81,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
                     - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                     - application/msword
                     - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                groups: [add]
                     
 Lists\HandlingBundle\Entity\ProjectGosTenderParticipan:
     properties:

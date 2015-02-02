@@ -105,7 +105,7 @@ class HandlingService
             $em->flush();
         }
     }
-     /**
+    /**
      * Add form defaults depending on defaults)
      *
      * @param Form    $form
@@ -122,6 +122,25 @@ class HandlingService
                 'data_class' => null,
                 'entity'=>'Lists\HandlingBundle\Entity\ProjectGosTender',
                 'data' => $gosTender
+            ));
+    }
+    /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+     */
+    public function addDocumentFormDefaults(Form $form, $defaults)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $projectId = (int) $defaults['project'];
+        $project = $em->getRepository('ListsHandlingBundle:Handling')->find($projectId);
+        $form
+            ->add('project', 'hidden_entity', array(
+                'data_class' => null,
+                'entity'=>'Lists\HandlingBundle\Entity\Handling',
+                'data' => $project
             ));
     }
     /**
@@ -169,5 +188,23 @@ class HandlingService
             $em->persist($project);
             $em->flush();
         }
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveAddDocumentForm (Form $form, Request $request, $params)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $data = $form->getData();
+        $data->setFile($data->getName());
+        $data->upload();
+        $em->persist($data);
+        $em->flush();
+        
     }
 }
