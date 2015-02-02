@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class ProjectFile
 {
+
     /**
      * @var string
      */
@@ -288,5 +289,34 @@ class ProjectFile
     public function getType ()
     {
         return $this->type;
+    }
+
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $user;
+
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     *
+     * @return ProjectFile
+     */
+    public function setUser (\SD\UserBundle\Entity\User $user)
+    {
+        $this->setCreateDatetime(new \DateTime());
+        $this->user = $user;
+
+        return $this;
+    }
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getUser ()
+    {
+        return $this->user;
     }
 }

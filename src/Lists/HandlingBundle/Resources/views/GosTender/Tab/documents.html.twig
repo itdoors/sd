@@ -3,12 +3,8 @@
     {{ include ('ListsHandlingBundle:GosTender/Button:addDocument.html.twig')}}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('.editable-gos-tender-participant').editable({
-                url: '{{ path('lists_handling_ajax_editable_gos_tender_participant') }}'
-            });
-            $('#isWinner').editable({
-                url: '{{ path('lists_handling_ajax_editable_gos_tender_participant') }}',
-                source: {{  object.participans.0.getChoiceList|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }}
+            $('.editable-project-file').editable({
+                url: '{{ path('lists_handling_ajax_editable_project_file') }}'
             });
         });
     </script>
@@ -22,6 +18,8 @@
                 <th>{% trans %}Name{% endtrans %}</th>
                 <th>{% trans %}Document{% endtrans %}</th>
                 <th>{% trans %}Description{% endtrans %}</th>
+                <th>{% trans %}Author{% endtrans %}</th>
+                <th>{% trans %}Date upload{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +67,8 @@
                         </a>
                         {% endif %}
                     </td>
+                    <td>{{ file.user}}</td>
+                    <td>{{ file.createDatetime is empty ? '' : file.createDatetime|date('d.m.Y H:i') }}</td>
                 <tr>
             {% endfor %}
         </tbody>

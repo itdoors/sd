@@ -168,6 +168,19 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
     /**
      * @return bool
      */
+    public function canSeeListGosTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeListGosTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canEditGosTender ()
     {
         if ($this->handling && $this->handling->getIsClosed()) {
@@ -188,6 +201,19 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
     {
         foreach ($this->accesses as $access) {
             if ($access->canChangeParticipationInGosTander()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllGosTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAllGosTender()) {
                 return true;
             }
         }

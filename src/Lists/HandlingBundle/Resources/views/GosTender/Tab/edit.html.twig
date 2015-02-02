@@ -8,9 +8,6 @@
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
         {% if access.canEditGosTender %}
-                $('.editable-project-file').editable({
-                    url: '{{ path('lists_handling_ajax_editable_project_file') }}'
-                });
                 $('.editable-gos-tender').editable({
                     url: '{{ path('lists_handling_ajax_editable_gos_tender') }}',
                     pk: {{object.id}}
@@ -208,7 +205,7 @@
                     {% else %}
                         {% trans %}New{% endtrans %}
                     {% endif %}
-                    {% if object.project.isClosed  != true %}
+                    {% if object.project.isClosed  != true and access.canEditGosTender %}
                         {{ include ('ListsHandlingBundle:GosTender/Button:closeProject.html.twig', {item: object, edit : true})}}
                     {% endif %}
                 </td>
@@ -339,7 +336,7 @@
             <tr>
                 <td>{% trans %}Participation{% endtrans %} ({% trans %}Reason{% endtrans %})</td>
                 <td>
-                    {% if object.isParticipation is null and access.canEditGosTender %}
+                    {% if object.isParticipation is null and access.canChangeParticipationInGosTander %}
                     {{ include ('ListsHandlingBundle:GosTender/Button:isParticipation.html.twig', {item: object, edit : true})}}
                     {% endif %}
                     {% if object.isParticipation is not null %}{{ object.getParticipations[object.isParticipation] |trans }}{% if object.reason %} ({{ object.reason }}){% endif %}{% endif %}

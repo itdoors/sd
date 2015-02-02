@@ -56,5 +56,17 @@ Lists\HandlingBundle\Entity\ProjectFile:
                 type_id:
                     nullable: true
                     referencedColumnName: id
-            orphanRemoval: true
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    nullable: false
+                    options:
+                        comment: Кто загрузил файл
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

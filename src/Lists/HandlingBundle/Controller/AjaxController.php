@@ -92,11 +92,6 @@ class AjaxController extends Controller
      */
     public function editableProjectFileAction()
     {
-        $service = $this->get('lists_handling.service');
-        $access= $service->checkAccess($this->getUser());
-        if (!$access->canEditGosTender()) {
-            throw new \Exception('No access', 403);
-        }
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');
@@ -107,7 +102,11 @@ class AjaxController extends Controller
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:ProjectFile')
             ->find($pk);
-
+        $service = $this->get('lists_handling.service');
+        $access= $service->checkAccess($this->getUser(), $object->getProject());
+        if (!$access->canEditGosTender()) {
+            throw new \Exception('No access', 403);
+        }
         $object->$methodSet($value);
 
         $validator = $this->get('validator');
@@ -148,11 +147,6 @@ class AjaxController extends Controller
      */
     public function editableGosTenderParticipantAction()
     {
-        $service = $this->get('lists_handling.service');
-        $access= $service->checkAccess($this->getUser());
-        if (!$access->canEditGosTender()) {
-            throw new \Exception('No access', 403);
-        }
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');
@@ -163,6 +157,11 @@ class AjaxController extends Controller
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:ProjectGosTenderParticipan')
             ->find($pk);
+        $service = $this->get('lists_handling.service');
+        $access= $service->checkAccess($this->getUser(), $object->getGosTender()->getProject());
+        if (!$access->canEditGosTender()) {
+            throw $this->createAccessDeniedException();
+        }
         if ($name == 'summa') {
             $value = str_replace(',', '.', $value);
         }
@@ -207,11 +206,6 @@ class AjaxController extends Controller
      */
     public function editableGosTenderAction()
     {
-        $service = $this->get('lists_handling.service');
-        $access= $service->checkAccess($this->getUser());
-        if (!$access->canEdit()) {
-            throw new \Exception('No access', 403);
-        }
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');
@@ -222,7 +216,11 @@ class AjaxController extends Controller
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:ProjectGosTender')
             ->find($pk);
-
+        $service = $this->get('lists_handling.service');
+        $access= $service->checkAccess($this->getUser(), $object->getProject());
+        if (!$access->canEditGosTender()) {
+            throw $this->createAccessDeniedException();
+        }
         if (in_array($name, array('datetimeDeadline', 'datetimeOpening'))) {
             if (!empty($value)) {
                 $value = new \DateTime($value);
@@ -320,6 +318,7 @@ class AjaxController extends Controller
             }
             $projectFile->setFile($file);
             $projectFile->upload();
+            $projectFile->setUser($this->getUser());
             $em->persist($projectFile);
             $em->flush();
             

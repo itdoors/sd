@@ -16,11 +16,12 @@ class ProjectGosTenderRepository extends EntityRepository
     /**
      * getListGosTender
      * 
+     * @param User   $user
      * @param string $status active|closed
      *
      * @return Query
      */
-    public function getListGosTender($status)
+    public function getListGosTender($user, $status)
     {
 
         /** @var \Doctrine\ORM\QueryBuilder $sql */
@@ -42,6 +43,14 @@ class ProjectGosTenderRepository extends EntityRepository
         } elseif ($status == 'closed') {
             $sql->where('p.isClosed = true');
             $sqlCount->where('p.isClosed = true');
+        }
+        if ($user) {
+            $sql->leftJoin('p.handlingUsers', 'hu')
+                ->andWhere('hu.user = :user')
+                ->setParameter(':user', $user);
+            $sqlCount->leftJoin('p.handlingUsers', 'hu')
+                ->andWhere('hu.user = :user')
+                ->setParameter(':user', $user);
         }
         
 

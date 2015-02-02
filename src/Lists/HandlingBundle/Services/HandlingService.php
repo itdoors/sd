@@ -61,7 +61,7 @@ class HandlingService
         if ($user->hasRole('ROLE_GOS_TENDER')) {
             $role[] = 'GosTender';
         }
-        if ($user->hasRole('ROLE_GOS_DIRECTOR')) {
+        if ($user->hasRole('ROLE_GOS_TENDER_DIRECTOR')) {
             $role[] = 'GosTenderDirector';
         }
         if ($user->hasRole('ROLE_REPORT')) {
@@ -203,6 +203,7 @@ class HandlingService
         $data = $form->getData();
         $data->setFile($data->getName());
         $data->upload();
+        $data->setUser($this->container->get('security.context')->getToken()->getUser());
         $em->persist($data);
         $em->flush();
         

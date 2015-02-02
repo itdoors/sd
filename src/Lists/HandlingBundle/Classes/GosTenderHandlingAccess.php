@@ -17,7 +17,7 @@ class GosTenderHandlingAccess extends BasicHandlingAccess
     /**
      * @return bool
      */
-    public function canSeeGosTender ()
+    public function canSeeListGosTender ()
     {
         return true;
     }

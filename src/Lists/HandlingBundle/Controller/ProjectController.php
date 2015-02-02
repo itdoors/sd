@@ -93,7 +93,7 @@ class ProjectController extends Controller
         /** @var HandlingService $service */
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($this->getUser());
-        $method = 'canSee'.$this->nameConroller;
+        $method = 'canSeeList'.$this->nameConroller;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
@@ -116,9 +116,12 @@ class ProjectController extends Controller
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user);
 
-        $method = 'canSee'.$this->nameConroller;
+        $method = 'canSeeList'.$this->nameConroller;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
+        }
+        if ($access->canSeeAllGosTender()) {
+            $user = null;
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
 //        $filters = $baseFilter->getFilters($filterNamespace);
@@ -138,7 +141,7 @@ class ProjectController extends Controller
 
         $methodRepository = 'getList'.$this->nameConroller;
         /** @var \Doctrine\ORM\Query $query */
-        $query = $repository->$methodRepository();
+        $query = $repository->$methodRepository($user);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
@@ -177,7 +180,8 @@ class ProjectController extends Controller
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user, $object->getProject());
 
-        if (!$access->canSee()) {
+        $methodSee = 'canSee'.$this->nameConroller;
+        if (!$access->$methodSee()) {
             throw $this->createAccessDeniedException();
         }
         $organization = $object->getProject()->getOrganization();

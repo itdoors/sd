@@ -89,6 +89,13 @@ class BasicHandlingAccess implements HandlingAccessInterface
     /**
      * @return bool
      */
+    public function canSeeListGosTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canEditGosTender ()
     {
         return false;
@@ -97,6 +104,13 @@ class BasicHandlingAccess implements HandlingAccessInterface
      * @return bool
      */
     public function canChangeParticipationInGosTander ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllGosTender ()
     {
         return false;
     }

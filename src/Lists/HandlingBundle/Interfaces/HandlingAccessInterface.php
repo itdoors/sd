@@ -50,7 +50,15 @@ interface HandlingAccessInterface
     /**
      * @return bool
      */
+    public function canSeeAllGosTender();
+    /**
+     * @return bool
+     */
     public function canSeeGosTender();
+    /**
+     * @return bool
+     */
+    public function canSeeListGosTender();
     /**
      * @return bool
      */

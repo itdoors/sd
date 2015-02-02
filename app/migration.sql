@@ -2533,6 +2533,7 @@ ALTER TABLE project_file_type ADD alias VARCHAR(64) DEFAULT NULL;
 COMMENT ON COLUMN project_file_type.alias IS 'Альтернативное название документа';
 UPDATE "public".project_file_type SET "alias" = 'acceptance' WHERE id = 5;
 UPDATE "public".project_file_type SET "alias" = 'protocol_open' WHERE id = 3;
-
-
+ALTER TABLE project_file ADD user_id INT NOT NULL;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_B50EFE08A76ED395 ON project_file (user_id);
 -- prod +++

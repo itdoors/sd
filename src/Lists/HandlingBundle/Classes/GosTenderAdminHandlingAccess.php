@@ -35,4 +35,18 @@ class GosTenderAdminHandlingAccess extends BasicHandlingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeListGosTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllGosTender ()
+    {
+        return true;
+    }
 }

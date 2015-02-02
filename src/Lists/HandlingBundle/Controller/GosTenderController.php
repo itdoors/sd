@@ -117,7 +117,7 @@ class GosTenderController extends ProjectController
         /** @var HandlingService $service */
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($this->getUser());
-        $method = 'canSee'.$this->nameConroller;
+        $method = 'canSeeList'.$this->nameConroller;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
@@ -143,9 +143,12 @@ class GosTenderController extends ProjectController
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user);
 
-        $method = 'canSee'.$this->nameConroller;
+        $method = 'canSeeList'.$this->nameConroller;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
+        }
+        if ($access->canSeeAllGosTender()) {
+            $user = null;
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
 //        $filters = $baseFilter->getFilters($filterNamespace);
@@ -166,7 +169,7 @@ class GosTenderController extends ProjectController
 
         $methodRepository = 'getList'.$this->nameConroller;
         /** @var \Doctrine\ORM\Query $query */
-        $query = $repository->$methodRepository($status);
+        $query = $repository->$methodRepository($user, $status);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
