@@ -1143,6 +1143,9 @@ class Handling
      */
     public function isGosTender ()
     {
+        if (!$this->getType()) {
+            return false;
+        }
         return $this->getType()->getAlias() == 'gos_tender';
     }
 
