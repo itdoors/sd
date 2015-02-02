@@ -60,7 +60,11 @@
                 <li><a href="#tab_5" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="tab_0">{{  include('ListsHandlingBundle:GosTender:Tab/edit.html.twig') }}</div>
+                <div class="tab-pane active" id="tab_0">
+                    <div id="project_edit" data-url="{{ path('lists_project_gostender_edit', { id: object.id }) }}">
+                        {{ render(controller('ListsHandlingBundle:GosTender:edit', { id: object.id })) }}
+                    </div>
+                </div>
                 <div class="tab-pane" id="tab_1">{{  include('ListsHandlingBundle:GosTender:Tab/managers.html.twig') }}</div>
                 <div class="tab-pane" id="tab_2">{{  include('ListsHandlingBundle:GosTender:Tab/contacts.html.twig') }}</div>
                 <div class="tab-pane" id="tab_3">{{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }}</div>

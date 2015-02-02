@@ -147,3 +147,9 @@ lists_project_gostender_show_participants:
     defaults: { _controller: ListsHandlingBundle:GosTender:showParticipants }
     requirements:
         id: \d+
+
+lists_project_gostender_edit:
+    pattern:  /lists/project/gostender/edit/{id}
+    defaults: { _controller: ListsHandlingBundle:GosTender:edit }
+    requirements:
+        id: \d+

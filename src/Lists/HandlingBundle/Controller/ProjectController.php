@@ -194,4 +194,33 @@ class ProjectController extends Controller
                 'lookups' => $lookups
         ));
     }
+    /**
+     * Executes showParticipants
+     *
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editAction ($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $repository = $em->getRepository('ListsHandlingBundle:Project'.$this->nameConroller);
+        $methodGet = 'get'.$this->nameConroller;
+        $object = $repository->$methodGet($id);
+
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($user, $object->getProject());
+
+        if (!$access->canSee()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':Tab/edit.html.twig', array (
+                'object' => $object,
+                'access' => $access
+        ));
+    }
 }

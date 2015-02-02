@@ -1,11 +1,14 @@
 <a class="btn green" id="participation-add-btn-{{item.id}}" href="#" data-toggle="modal">
     {% trans from 'ListsHandlingBundle'%}Participation{% endtrans %}
 </a>
+{% if edit is defined %}
 {{ ajax_form_render_btn({
    'selector' : '#participation-add-btn-'~ item.id,
    'formType' : 'gosTenderParticipationForm',
    'successFunctions' : {
-       'gosTenderList' : 'ITDoorsAjax.updateList'
+        'project_edit' : 'ITDoorsAjax.updateList',
+        'list_participants' : 'ITDoorsAjax.updateList',
+        'list_documents' : 'ITDoorsAjax.updateList'
    },
    'serviceSave' : {
        'alias' : 'lists_handling.service',
@@ -17,7 +20,24 @@
    'target' : '#form_modal_gosTenderParticipationForm'~item.id,
    'html' : 'ListsHandlingBundle:Form:gosTenderParticipationForm.html.twig'
 }) }}
-
+{% else %}
+    {{ ajax_form_render_btn({
+       'selector' : '#participation-add-btn-'~ item.id,
+       'formType' : 'gosTenderParticipationForm',
+        'successFunctions' : {
+           'gosTenderList' : 'ITDoorsAjax.updateList'
+       },
+       'serviceSave' : {
+           'alias' : 'lists_handling.service',
+           'method' : 'saveGosTenderParticipationForm'
+       },
+       'defaults' : {
+           'gosTenderId' : item.id
+       },
+       'target' : '#form_modal_gosTenderParticipationForm'~item.id,
+       'html' : 'ListsHandlingBundle:Form:gosTenderParticipationForm.html.twig'
+    }) }}
+{% endif %}
 <div id="form_modal_gosTenderParticipationForm{{item.id}}" class="modal" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -337,9 +337,9 @@
                 <td>{% trans %}Participation{% endtrans %} ({% trans %}Reason{% endtrans %})</td>
                 <td>
                     {% if object.isParticipation is null and access.canEditGosTender %}
-                    {{ include ('ListsHandlingBundle:GosTender/Button:isParticipation.html.twig', {item: object})}}
+                    {{ include ('ListsHandlingBundle:GosTender/Button:isParticipation.html.twig', {item: object, edit : true})}}
                     {% endif %}
-                    {% if object.isParticipation is not null %}{{ object.getParticipations[object.isParticipation] |trans }}{% if object.reason %}({{ object.reason }}){% endif %}{% endif %}
+                    {% if object.isParticipation is not null %}{{ object.getParticipations[object.isParticipation] |trans }}{% if object.reason %} ({{ object.reason }}){% endif %}{% endif %}
 
                 </td>
                 <td>{% trans %}Result{% endtrans %}</td>
