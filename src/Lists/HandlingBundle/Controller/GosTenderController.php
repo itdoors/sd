@@ -51,7 +51,7 @@ class GosTenderController extends ProjectController
             $managerProject = $em->getRepository('ListsLookupBundle:lookup')
                 ->findOneBy(array ('lukey' => 'manager_project'));
             $fileTypes = $em->getRepository('ListsHandlingBundle:ProjectFileType')
-                ->findOneBy(array ('group' => 'gos_tender'));
+                ->findBy(array ('group' => 'gos_tender'));
 
             /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $object */
             $object = $form->getData();
@@ -210,6 +210,35 @@ class GosTenderController extends ProjectController
 
         return $this->render('ListsHandlingBundle:'.$this->nameConroller.':Tab/participants.html.twig', array (
                 'participans' => $participans,
+                'object' => $object,
+                'access' => $access
+        ));
+    }
+    /**
+     * Executes showDocumentsAction
+     *
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showDocumentsAction ($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $repository = $em->getRepository('ListsHandlingBundle:Project'.$this->nameConroller);
+        $methodGet = 'get'.$this->nameConroller;
+        $object = $repository->$methodGet($id);
+
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($user, $object->getProject());
+
+        if (!$access->canSee()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':Tab/documents.html.twig', array (
                 'object' => $object,
                 'access' => $access
         ));

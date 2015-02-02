@@ -94,7 +94,7 @@ class AjaxController extends Controller
     {
         $service = $this->get('lists_handling.service');
         $access= $service->checkAccess($this->getUser());
-        if (!$access->canEdit()) {
+        if (!$access->canEditGosTender()) {
             throw new \Exception('No access', 403);
         }
         $pk = $this->get('request')->request->get('pk');
@@ -102,7 +102,6 @@ class AjaxController extends Controller
         $value = $this->get('request')->request->get('value');
 
         $methodSet = 'set' . ucfirst($name);
-
 
         /** @var ProjectGosTender $object */
         $object = $this->getDoctrine()
@@ -134,7 +133,6 @@ class AjaxController extends Controller
         $return['object'] = $object;
         try {
             $em->flush();
-
             $em->refresh($object);
         } catch (\ErrorException $e) {
             $return['error'] = $e->getMessage();
@@ -161,7 +159,6 @@ class AjaxController extends Controller
 
         $methodSet = 'set' . ucfirst($name);
 
-
         /** @var ProjectGosTender $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:ProjectGosTender')
@@ -174,7 +171,7 @@ class AjaxController extends Controller
                 $value = null;
             }
         }
-        
+
         if ($name == 'kveds') {
             $kvedsOld = $object->getKveds();
             foreach ($kvedsOld as $kved) {
@@ -213,7 +210,6 @@ class AjaxController extends Controller
         $return['object'] = $object;
         try {
             $em->flush();
-
             $em->refresh($object);
         } catch (\ErrorException $e) {
             $return['error'] = $e->getMessage();
@@ -233,11 +229,11 @@ class AjaxController extends Controller
     {
         $result = array();
         $em = $this->getDoctrine()->getManager();
-        $project = $em
-            ->getRepository('ListsHandlingBundle:Handling')
+        $projectFile = $em
+            ->getRepository('ListsHandlingBundle:ProjectFile')
             ->find($id);
 
-        if (!$project) {
+        if (!$projectFile) {
             throw $this->createNotFoundException();
         }
         $file = $request->files->get('file');
@@ -263,8 +259,6 @@ class AjaxController extends Controller
                 }
 
             }
-            $projectFile = new \Lists\HandlingBundle\Entity\ProjectFile();
-            $projectFile->setProject($project);
             $projectFile->setFile($file);
             $projectFile->upload();
             $em->persist($projectFile);

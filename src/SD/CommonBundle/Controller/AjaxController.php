@@ -893,16 +893,13 @@ class AjaxController extends BaseFilterController
     /**
      * Returns json organization list for contacts query
      *
-     * @return string
+     * @param string $slug
+     * 
+     * @return mixed[]
      */
-    public function handlingStatusAction()
+    public function handlingStatusAction($slug)
     {
-        $objects = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingStatus')
-            ->createQueryBuilder('s')
-            ->orderBy('s.sortorder')
-            ->getQuery()
-            ->getResult();
+        $objects = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingStatus')->getListBySlug($slug);
 
         $result = array();
 

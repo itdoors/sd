@@ -69,7 +69,11 @@
                         {{ render(controller('ListsHandlingBundle:GosTender:showParticipants', { id: object.id })) }}
                     </div>
                 </div>
-                <div class="tab-pane" id="tab_5">{{  include('ListsHandlingBundle:GosTender:Tab/documents.html.twig') }}</div>
+                <div class="tab-pane" id="tab_5">
+                    <div id="list_documents" data-url="{{ path('lists_project_gostender_show_documents', { id: object.id }) }}">
+                        {{ render(controller('ListsHandlingBundle:GosTender:showDocuments', { id: object.id })) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

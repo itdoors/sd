@@ -2524,5 +2524,7 @@ ALTER TABLE project_file ADD type_id BIGINT DEFAULT NULL;
 ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08C54C8C93 FOREIGN KEY (type_id) REFERENCES project_file_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_file ALTER name DROP NOT NULL;
 ALTER TABLE project_file ALTER create_datetime DROP NOT NULL;
-
--- prod ++++
+INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Cбор документов', 8, 'gos_tender', DEFAULT, NULL);
+INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Подача - раскрытие ', 9, 'gos_tender', DEFAULT, NULL);
+INSERT INTO "public".handling_status ("name", sortorder, slug, percentagestring, progress) 	VALUES ('Подписание договора', 10, 'gos_tender', DEFAULT, NULL);
+-- prod +++

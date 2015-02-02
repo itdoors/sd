@@ -12,4 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class HandlingStatusRepository extends EntityRepository
 {
+    /**
+     * getListBySlug
+     * 
+     * @param string $slug
+     *
+     * @return array
+     */
+    public function getListBySlug($slug)
+    {
+        $sql = $this->createQueryBuilder('hs');
+        if (in_array($slug, array('gos_tender'))) {
+            $sql->where('hs.slug = :slug')
+                ->setParameter(':slug', $slug);
+        } else {
+            $sql->where('hs.slug is null');
+        }
+        $sql->orderBy('hs.sortorder');
+        
+        return $sql->getQuery()->getResult();
+
+    }
 }

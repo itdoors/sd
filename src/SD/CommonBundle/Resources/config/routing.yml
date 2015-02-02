@@ -238,9 +238,11 @@ sd_common_ajax_organization_lookup_by_ids:
     defaults: { _controller: SDCommonBundle:Ajax:organizationLookupByIds }
 
 sd_common_ajax_handling_status:
-    pattern:  /ajax/handling_status
-    defaults: { _controller: SDCommonBundle:Ajax:handlingStatus }
-
+    pattern:  /ajax/handling_status/{slug}
+    defaults: { _controller: SDCommonBundle:Ajax:handlingStatus, slug: '' }
+    requirements:
+        slug: gos_tender|''
+        
 sd_common_ajax_handling_result:
     pattern:  /ajax/handling_result
     defaults: { _controller: SDCommonBundle:Ajax:handlingResult }

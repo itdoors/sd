@@ -87,7 +87,7 @@
 
             $('#statusId').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}',
-                source: '{{ path('sd_common_ajax_handling_status') }}'
+                source: '{{ path('sd_common_ajax_handling_status', {slug:'gos_tender'}) }}'
             });
 
             $('#resultId').editable({
@@ -204,49 +204,12 @@
             <tr> {# 2 #}
                 <td>{% trans %}Organization Name{% endtrans %}</td>
                 <td>{{ object.project.organization.name }}</td>
+                <td>{% trans %}Create User{% endtrans %} ({% trans %}Create Date{% endtrans %})</td>
+                <td>{{ object.project.user }} ({{ object.project.createdatetime is empty ? '' : object.project.createdatetime|date("d.m.y H:i") }})</td>
+            </tr>
+            {#<tr> 
                 <td></td>
                 <td></td>
-            </tr>
-            <tr> {# 3 #}
-                <td>{% trans %}Create User{% endtrans %}</td>
-                <td>{{ object.project.user }}</td>
-                <td>{% trans %}Result{% endtrans %}</td>
-                <td>
-                    {% if access.canEditGosTender %}
-                    <a  href="#"
-                        id="resultId"
-                        data-type="select"
-                        data-pk="{{ object.project.id }}"
-                        data-value="{{ object.project.resultId }}"
-                        data-original-title="{% trans %}Select type{% endtrans %}"
-                        data-show-more-info-ids="{#{ showMoreInfoIds|json_encode|raw }#}"
-                    >
-                    {% endif %}
-                        {{ object.project.result }}
-                    {% if access.canEditGosTender %}
-                    </a>
-                    {% endif %}
-                    {% if access.canEditGosTender %}
-                    <a  class="more-info btn"
-                            {#% if object.project.resultId not in showMoreInfoIds %}
-                                style="display: none"
-                            {% endif %#}
-                        data-toggle="modal"
-                        href="#form_modal_more_info"
-                        data-target_holder="moreInfoTpl"
-                        data-params='{"handlingId":{{ object.project.id }},"resultId":{{ object.project.resultId }}}'
-                        data-url-more-info="{{ path('sd_common_ajax_handling_more_info') }}"
-                    >
-                    {% endif %}
-                        {% trans from 'ListsHandlingBundle' %}Show more info{% endtrans %}
-                    {% if access.canEditGosTender %}
-                    </a>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr> {# 4 #}
-                <td>{% trans %}Create Date{% endtrans %}</td>
-                <td>{{ object.project.createdatetime is empty ? '' : object.project.createdatetime|date("d.m.y H:i") }}</td>
                 <td>{% trans %}Result Description{% endtrans %}</td>
                 <td>
                     {% if access.canEditGosTender %}
@@ -258,6 +221,7 @@
                     {% endif %}
                 </td>
             </tr>
+            #}
             <tr> {# 6 #}
                 <td>{% trans %}Service offered{% endtrans %}</td>
                 <td>
@@ -362,8 +326,39 @@
             </tr>
             <tr>
                 
-                <td></td>
-                <td></td>
+                <td>{% trans %}Result{% endtrans %}</td>
+                <td>
+                    {% if access.canEditGosTender %}
+                    <a  href="#"
+                        id="resultId"
+                        data-type="select"
+                        data-pk="{{ object.project.id }}"
+                        data-value="{{ object.project.resultId }}"
+                        data-original-title="{% trans %}Select type{% endtrans %}"
+                        data-show-more-info-ids="{#{ showMoreInfoIds|json_encode|raw }#}"
+                    >
+                    {% endif %}
+                        {{ object.project.result }}
+                    {% if access.canEditGosTender %}
+                    </a>
+                    {% endif %}
+                    {#% if access.canEditGosTender %}
+                    <a  class="more-info btn"
+                            {#% if object.project.resultId not in showMoreInfoIds %}
+                                style="display: none"
+                            {% endif %}
+                        data-toggle="modal"
+                        href="#form_modal_more_info"
+                        data-target_holder="moreInfoTpl"
+                        data-params='{"handlingId":{{ object.project.id }},"resultId":{{ object.project.resultId }}}'
+                        data-url-more-info="{{ path('sd_common_ajax_handling_more_info') }}"
+                    >
+                    {% endif %}
+                        {% trans from 'ListsHandlingBundle' %}Show more info{% endtrans %}
+                    {% if access.canEditGosTender %}
+                    </a>
+                    {% endif %#}
+                </td>
                 <td>{% trans %}Closed{% endtrans %}</td>
                 <td>
                     {#% if canEditGosTender %}
