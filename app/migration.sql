@@ -2498,5 +2498,19 @@ INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_numbe
 INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (34, 'МЕТ Метали та продукція металообробки', 'gos_tender', 34, 34);
 INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (35, 'КПН Консалтингові послуги, навчання', 'gos_tender', 35, 35);
 INSERT INTO "public".handling_service (id, "name", slug, sortorder, report_number) VALUES (36, 'ЖИТ Житлово-комунальне, побутове обслуговування та спецтехніка', 'gos_tender', 36, 36);
+CREATE TABLE project_file_type (id BIGSERIAL NOT NULL, name VARCHAR(128) NOT NULL, "group" VARCHAR(64) NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN project_file_type.name IS 'Название типа документа';
+COMMENT ON COLUMN project_file_type."group" IS 'Группа документов';
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Документація конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Зміни до документації конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Акцепт ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender');
+INSERT INTO "public".project_file_type ("name", "group") VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender');
+ALTER TABLE project_file ADD type_id BIGINT DEFAULT NULL;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08C54C8C93 FOREIGN KEY (type_id) REFERENCES project_file_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_file ALTER name DROP NOT NULL;
+ALTER TABLE project_file ALTER create_datetime DROP NOT NULL;
 
 -- prod ----

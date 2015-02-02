@@ -19,6 +19,79 @@ class GosTenderController extends ProjectController
     protected $aliasProjectType = 'gos_tender';
 
     /**
+     * Executes create action
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function createAction (Request $request)
+    {
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+        /** @var HandlingService $service */
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($this->getUser());
+
+        $method = 'canCreate'.$this->nameConroller;
+        if (!$access->$method()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm($this->createForm);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+
+            $type = $em->getRepository('ListsHandlingBundle:HandlingType')
+                ->findOneBy(array('alias' => $this->aliasProjectType));
+            $managerProject = $em->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array ('lukey' => 'manager_project'));
+            $fileTypes = $em->getRepository('ListsHandlingBundle:ProjectFileType')
+                ->findOneBy(array ('group' => 'gos_tender'));
+
+            /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $object */
+            $object = $form->getData();
+
+            $project = $object->getProject();
+            $project->setUser($user);
+            $project->setType($type);
+            $em->persist($project);
+
+            foreach ($fileTypes as $type) {
+                $file = new \Lists\HandlingBundle\Entity\ProjectFile();
+                $file->setProject($project);
+                $file->setType($type);
+                $em->persist($file);
+            }
+
+            $manager = new HandlingUser();
+            $manager->setUser($user);
+            $manager->setLookup($managerProject);
+            $manager->setPart(100);
+            $manager->setHandling($project);
+            $em->persist($manager);
+
+            $em->persist($object);
+            $em->flush();
+            // костыль для поля boolean set null (нужно будет удалить)
+            $db = $em->getConnection();
+            $stmt = $db->prepare('UPDATE "public".project_gos_tender SET "is_participation" = NULL WHERE id = :id');
+            $stmt->execute(array (':id' => $object->getId()));
+
+            return $this->redirect($this->generateUrl('lists_project_'.strtolower($this->nameConroller).'_show', array (
+                'id' => $object->getId()
+            )));
+        }
+
+        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':create.html.twig', array (
+                'form' => $form->createView()
+        ));
+    }
+    /**
      * indexAction
      */
     public function indexAction ()

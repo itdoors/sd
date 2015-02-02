@@ -10,14 +10,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class ProjectFile
 {
-    public function __construct ()
-    {
-        $this->setCreateDatetime(new \DateTime());
-    }
     /**
      * @var string
      */
     private $path = '/uploads/projects/';
+
     /**
      * @var integer
      */
@@ -62,122 +59,116 @@ class ProjectFile
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
      * @param string $name
      * @return ProjectFile
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set shortText
      *
      * @param string $shortText
+     *
      * @return ProjectFile
      */
-    public function setShortText($shortText)
+    public function setShortText ($shortText)
     {
         $this->shortText = $shortText;
 
         return $this;
     }
-
     /**
      * Get shortText
      *
      * @return string 
      */
-    public function getShortText()
+    public function getShortText ()
     {
         return $this->shortText;
     }
-
     /**
      * Set createDatetime
      *
      * @param \DateTime $createDatetime
+     *
      * @return ProjectFile
      */
-    public function setCreateDatetime($createDatetime)
+    public function setCreateDatetime ($createDatetime)
     {
         $this->createDatetime = $createDatetime;
 
         return $this;
     }
-
     /**
      * Get createDatetime
      *
      * @return \DateTime 
      */
-    public function getCreateDatetime()
+    public function getCreateDatetime ()
     {
         return $this->createDatetime;
     }
-
     /**
      * Set deletedDatetime
      *
      * @param \DateTime $deletedDatetime
+     *
      * @return ProjectFile
      */
-    public function setDeletedDatetime($deletedDatetime)
+    public function setDeletedDatetime ($deletedDatetime)
     {
         $this->deletedDatetime = $deletedDatetime;
 
         return $this;
     }
-
     /**
      * Get deletedDatetime
      *
      * @return \DateTime 
      */
-    public function getDeletedDatetime()
+    public function getDeletedDatetime ()
     {
         return $this->deletedDatetime;
     }
-
     /**
      * Set project
      *
      * @param \Lists\HandlingBundle\Entity\Handling $project
+     *
      * @return ProjectFile
      */
-    public function setProject(\Lists\HandlingBundle\Entity\Handling $project = null)
+    public function setProject (\Lists\HandlingBundle\Entity\Handling $project = null)
     {
         $this->project = $project;
 
         return $this;
     }
-
     /**
      * Get project
      *
      * @return \Lists\HandlingBundle\Entity\Handling 
      */
-    public function getProject()
+    public function getProject ()
     {
         return $this->project;
     }
@@ -217,7 +208,7 @@ class ProjectFile
      */
     protected function getUploadDir ()
     {
-        return $this->getPath().$this->getProject()->getId().'/';
+        return $this->getPath() . $this->getProject()->getId() . '/';
     }
 
     private $file;
@@ -260,5 +251,33 @@ class ProjectFile
         $this->setName($filename);
 
         $this->file = null;
+    }
+
+    /**
+     * @var \Lists\HandlingBundle\Entity\ProjectFileType
+     */
+    private $type;
+
+    /**
+     * Set type
+     *
+     * @param \Lists\HandlingBundle\Entity\ProjectFileType $type
+     *
+     * @return ProjectFile
+     */
+    public function setType (\Lists\HandlingBundle\Entity\ProjectFileType $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+    /**
+     * Get type
+     *
+     * @return \Lists\HandlingBundle\Entity\ProjectFileType 
+     */
+    public function getType ()
+    {
+        return $this->type;
     }
 }

@@ -16,7 +16,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
         name:
             type: string
             length: 128
-            nullable: false
+            nullable: true
             options:
                 comment: Название файла
         shortText:
@@ -27,7 +27,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
                 comment: Краткое описание файла
         createDatetime:
             type: datetime
-            nullable: false
+            nullable: true
             column: create_datetime
             options:
                 comment: Дата создания файла
@@ -45,6 +45,16 @@ Lists\HandlingBundle\Entity\ProjectFile:
             inversedBy: files
             joinColumns:
                 project_id:
+                    referencedColumnName: id
+            orphanRemoval: true
+        type:
+            targetEntity: ProjectFileType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    nullable: true
                     referencedColumnName: id
             orphanRemoval: true
     lifecycleCallbacks: {  }
