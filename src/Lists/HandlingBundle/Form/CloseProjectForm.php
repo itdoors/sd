@@ -68,33 +68,17 @@ class CloseProjectForm extends AbstractType
                         )
                     );
                 }
-                if ($project->isGosTender()) {
-                    $typeProtocolOpen = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
-                        ->findOneBy(array(
-                            'alias' => 'protocol_open'
-                        ));
+                $statusAlias = $project->getStatus()->getAlias();
+                if ($project->isGosTender() && $statusAlias == 'signing_document') {
                     $typeAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
                         ->findOneBy(array(
                             'alias' => 'acceptance'
-                        ));
-                    $fileProtocolOpen = $this->em->getRepository('ListsHandlingBundle:ProjectFile')
-                        ->findOneBy(array(
-                            'type' => $typeProtocolOpen,
-                            'project' => $project
                         ));
                     $fileAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFile')
                         ->findOneBy(array(
                             'type' => $typeAcceptance,
                             'project' => $project
                         ));
-                    if (!$fileProtocolOpen || $fileProtocolOpen && (!$fileProtocolOpen->fileExists() || $fileProtocolOpen->getName() == '')) {
-                        $form->addError(
-                            new FormError(
-                                $translator->trans('Download please', array(), 'ListsHandlingBundle')
-                                .': "'.$typeProtocolOpen->getName().'"'
-                            )
-                        );
-                    }
                     if (!$fileAcceptance || $fileAcceptance && (!$fileAcceptance->fileExists() || $fileAcceptance->getName() == '')) {
                         $form->addError(
                             new FormError(

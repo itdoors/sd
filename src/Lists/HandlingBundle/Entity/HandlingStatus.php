@@ -7,6 +7,7 @@ namespace Lists\HandlingBundle\Entity;
  */
 class HandlingStatus
 {
+
     /**
      * @var integer
      */
@@ -22,11 +23,10 @@ class HandlingStatus
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
@@ -34,29 +34,27 @@ class HandlingStatus
      *
      * @return HandlingStatus
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * __toStrong
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getName();
     }
@@ -73,19 +71,18 @@ class HandlingStatus
      *
      * @return HandlingStatus
      */
-    public function setSortorder($sortorder)
+    public function setSortorder ($sortorder)
     {
         $this->sortorder = $sortorder;
 
         return $this;
     }
-
     /**
      * Get sortorder
      *
      * @return integer
      */
-    public function getSortorder()
+    public function getSortorder ()
     {
         return $this->sortorder;
     }
@@ -112,23 +109,21 @@ class HandlingStatus
      *
      * @return HandlingStatus
      */
-    public function setSlug($slug)
+    public function setSlug ($slug)
     {
         $this->slug = $slug;
 
         return $this;
     }
-
     /**
      * Get slug
      *
      * @return string
      */
-    public function getSlug()
+    public function getSlug ()
     {
         return $this->slug;
     }
-
     /**
      * Set percentageString
      *
@@ -136,23 +131,21 @@ class HandlingStatus
      *
      * @return HandlingStatus
      */
-    public function setPercentageString($percentageString)
+    public function setPercentageString ($percentageString)
     {
         $this->percentageString = $percentageString;
 
         return $this;
     }
-
     /**
      * Get percentageString
      *
      * @return string
      */
-    public function getPercentageString()
+    public function getPercentageString ()
     {
         return $this->percentageString;
     }
-
     /**
      * Set progress
      *
@@ -160,30 +153,56 @@ class HandlingStatus
      *
      * @return HandlingStatus
      */
-    public function setProgress($progress)
+    public function setProgress ($progress)
     {
         $this->progress = $progress;
 
         return $this;
     }
-
     /**
      * Get progress
      *
      * @return integer
      */
-    public function getProgress()
+    public function getProgress ()
     {
         return $this->progress;
     }
-
     /**
      * @return array
      */
-    public function __sleep()
+    public function __sleep ()
     {
-        return array(
+        return array (
             'id',
         );
+    }
+
+    /**
+     * @var string
+     */
+    private $alias;
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     *
+     * @return HandlingStatus
+     */
+    public function setAlias ($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias ()
+    {
+        return $this->alias;
     }
 }
