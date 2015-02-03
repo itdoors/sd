@@ -3,7 +3,6 @@
 namespace SD\CalendarBundle\Services;
 
 use Symfony\Component\DependencyInjection\Container;
-use Lists\GrafikBundle\Classes\BankDay;
 use SD\UserBundle\Entity\User;
 
 /**
@@ -48,7 +47,6 @@ class HolidayService
     {
         /** \List\GrafikBundle\Service\GrafikService $grafikService */
         $grafikService = $this->container->get('lists_grafik.service');
-        $grafikService->loadHoliday();
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
@@ -72,7 +70,7 @@ class HolidayService
         foreach ($users as $user) {
             if ($user->getEmail() && $user->getId() == 384) {
                 $textForSend = $text;
-                if ($user->hasRole('ROLE_GOS_TENDER') && BankDay::isWorkDay(time())) {
+                if ($user->hasRole('ROLE_GOS_TENDER') && $grafikService->isWorkDay(time())) {
                     $textForSend .= $this->getTenders($user);
                 }
                 if (empty($textForSend)) {
@@ -160,6 +158,8 @@ class HolidayService
      */
     public function getTenders ($user)
     {
+        /** \List\GrafikBundle\Service\GrafikService $grafikService */
+        $grafikService = $this->container->get('lists_grafik.service');
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
@@ -168,7 +168,7 @@ class HolidayService
         $countDays = array(13, 5, 3);
         $html = '';
         foreach ($countDays as $day) {
-            $date = BankDay::getEndDate(time(), $day);
+            $date = $grafikService->getEndDate(time(), $day);
             $tenders = $em->getRepository('ListsHandlingBundle:ProjectGosTender')
                 ->getListForDate($date, $date, $user);
 

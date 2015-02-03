@@ -9,7 +9,6 @@ use Lists\HandlingBundle\Classes\HandlingAccessFactory;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Lists\GrafikBundle\Classes\BankDay;
 
 /**
  * HandlingService class
