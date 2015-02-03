@@ -490,11 +490,32 @@ class ProdBlogController extends BaseController
             try {
                 $part = $request->request->get($form->getName());
                 $manual = isset($part['manual']) && $part['manual'] == '1' ? true : false;
+                
+                $destination = null;
+                if ($_FILES['articleBlogForm']['name']['file'] != '') {
+                    $name = $this->randomString();
+                    $ext = explode('.', $_FILES['articleBlogForm']['name']['file']);
+                    $directory = $this->container->getParameter('project.web.dir');
+                    $directory .= '/uploads/blogfiles/';
+                    if (! is_dir($directory)) {
+                        mkdir($directory, 0777);
+                    }
+                    $ext = explode('.', $_FILES['articleBlogForm']['name']['file']);
+                    $filename = $name . '.' . $ext[1];
+                    $destination = $directory . $filename;
+                    $location = $_FILES['articleBlogForm']['tmp_name']['file'];
+                    move_uploaded_file($location, $destination);
+                    $directory = $this->container->getParameter('blogfiles.file.path');
+                    $destination = $directory . $filename;
+                }
 
                 $party = $form->getData();
                 $party->setUser($this->getUser());
                 $party->setType($this->articleType);
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
+                if ($destination) {
+                    $party->setFile($destination);
+                }
                 $em->persist($party);
 
 //                 $roles = [];
@@ -758,7 +779,7 @@ class ProdBlogController extends BaseController
         $destination = $directory . $filename;
         $location = $_FILES["file"]["tmp_name"];
         move_uploaded_file($location, $destination);
-        $directory = $this->container->getParameter('blogfiles.file.path');
+        $directory = $this->container->getParameter('blogfiles.image.path');
         $destination = $directory . $filename;
 
         return new Response($destination);

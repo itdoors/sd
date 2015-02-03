@@ -51,6 +51,12 @@
                                 <i class="fa fa-user"></i>
                                 {{item.lastName}} {{item.firstName}} {{item.middleName}}
                             </li>
+                            {% if item.file is not null %}
+                                <li>
+                                    <i class="fa fa-file"></i>
+                                    <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ item.file }}">{% trans %}Download attachment{% endtrans %}</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -110,4 +116,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $('.doclink').click(function(){
+    	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+    	url += '?';
+    	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+    	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+    	window.location = url;
+    });
+</script>
 {% endblock body %}

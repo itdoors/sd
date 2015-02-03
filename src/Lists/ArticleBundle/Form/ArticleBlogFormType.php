@@ -69,7 +69,11 @@ class ArticleBlogFormType extends AbstractType
 //             'multiple' => true,
 //             'required' => false
 //         ))
-            ->add('text', 'textarea', array());
+            ->add('text', 'textarea', array())
+            ->add('file', 'file', array(
+                'required' => false,
+                'mapped' => false
+            ));
     }
 
     /**
