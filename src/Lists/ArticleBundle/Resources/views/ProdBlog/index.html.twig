@@ -39,9 +39,15 @@
                     {% trans %}Add{% endtrans %}
                 </a>
             {% endif %}
-            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_blog_list') }}">
-                {{ render(controller('ListsArticleBundle:ProdBlog:list')) }}
-            </div>
+            {% if manual %}
+                <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_blog_list',{'type': 'manual'}) }}">
+                    {{ render(controller('ListsArticleBundle:ProdBlog:list',{'type': 'manual'})) }}
+                </div>
+            {% else %}
+                <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_blog_list') }}">
+                    {{ render(controller('ListsArticleBundle:ProdBlog:list')) }}
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock body %}

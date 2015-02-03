@@ -10,6 +10,8 @@ Lists\ArticleBundle\Entity\NewsFosUser:
                 strategy: AUTO
         viewed:
             type: datetime
+        manual:
+            type: boolean
         
     manyToOne:
         news:
