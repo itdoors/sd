@@ -70,4 +70,17 @@ class AuthorTaskAccess extends BasicTaskAccess
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function canReply()
+    {
+        if ($this->getStage() == 'matching') {
+
+            return true;
+        }
+
+        return false;
+    }
 }

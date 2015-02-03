@@ -187,6 +187,15 @@ class BasicTaskAccess implements TaskAccessInterface
         return false;
     }
 
+    /**
+     * @return bool
+     */
+    public function canReply()
+    {
+
+        return false;
+    }
+
 
     /**
      * @return null|Stage

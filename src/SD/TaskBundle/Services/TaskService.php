@@ -38,7 +38,7 @@ class TaskService
      * @param string $commentValue
      * @param string $model
      */
-    public function insertCommentToTask($idTaskUserRole, $commentValue, $model = 'Task')
+    public function insertCommentToTask($idTaskUserRole, $commentValue, $model = 'Task', $additional = null)
     {
         $em = $this->container->get('doctrine')->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
@@ -53,6 +53,7 @@ class TaskService
         $comment->setModel($model);
         $comment->setModelId($idTask);
         $comment->setUser($user);
+        $comment->setAdditionField($additional);
 
         $em->persist($comment);
         $em->flush();

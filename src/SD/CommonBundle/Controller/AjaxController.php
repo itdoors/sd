@@ -2869,7 +2869,7 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
-    public function userContactinfoFormSave(Form $form, $user, $request)
+    public function userContactinfoFormSave (Form $form, $user, $request)
     {
         /** @var Usercontactinfo $data */
         $data = $form->getData();

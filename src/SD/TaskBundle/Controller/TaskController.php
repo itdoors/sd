@@ -752,10 +752,10 @@ class TaskController extends Controller
      * @param string $commentValue
      * @param string $model
      */
-    protected function insertComment($idTaskUserRole, $commentValue, $model = 'Task')
+    protected function insertComment($idTaskUserRole, $commentValue, $model = 'Task', $additional = null)
     {
         $taskService = $this->get('task.service');
-        $taskService->insertCommentToTask($idTaskUserRole, $commentValue, $model);
+        $taskService->insertCommentToTask($idTaskUserRole, $commentValue, $model, $additional);
     }
 
     /**
@@ -1054,7 +1054,7 @@ class TaskController extends Controller
         if ($commentValue) {
             $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
         }
-        $this->insertComment($id, $comment);
+        $this->insertComment($id, $comment, 'Task', 'commit');
 
         $em->flush();
 
@@ -1395,4 +1395,35 @@ class TaskController extends Controller
         $em->flush();
     }
 
+    public function replyAction(Request $request) {
+        $idParent = $request->request->get('id');
+
+        $value = $request->request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $comment = $em->getRepository('SDTaskBundle:Comment')->find($idParent);
+        $modelId = $comment->getModelId();
+
+        $commentNew = new Comment();
+        $commentNew->setValue($value);
+        $commentNew->setCreateDatetime(new \DateTime());
+        $commentNew->setModel('Task');
+        $commentNew->setModelId($modelId);
+        $commentNew->setUser($this->getUser());
+
+        $comment->addChild($commentNew);
+
+        $em->persist($comment);
+        $em->persist($commentNew);
+
+        $em->flush();
+
+        $task = $em->getRepository('SDTaskBundle:Task')->find($modelId);
+        $this->setTaskUpdated($this->getUser(), $task);
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
 }
