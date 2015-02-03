@@ -60,13 +60,15 @@ class CloseProjectForm extends AbstractType
                             $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
                         )
                     );
-                } elseif (!$project) {
+                }
+                if (!$project) {
                     $form->addError(
                         new FormError(
                             $translator->trans('Project don`t found', array(), 'ListsHandlingBundle')
                         )
                     );
-                } elseif ($project->isGosTender()) {
+                }
+                if ($project->isGosTender()) {
                     $typeProtocolOpen = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
                         ->findOneBy(array(
                             'alias' => 'protocol_open'
@@ -85,7 +87,7 @@ class CloseProjectForm extends AbstractType
                             'type' => $typeAcceptance,
                             'project' => $project
                         ));
-                    if (!$fileProtocolOpen || $fileProtocolOpen && !$fileProtocolOpen->fileExists()) {
+                    if (!$fileProtocolOpen || $fileProtocolOpen && (!$fileProtocolOpen->fileExists() || $fileProtocolOpen->getName() == '')) {
                         $form->addError(
                             new FormError(
                                 $translator->trans('Download please', array(), 'ListsHandlingBundle')
@@ -93,7 +95,7 @@ class CloseProjectForm extends AbstractType
                             )
                         );
                     }
-                    if (!$fileAcceptance || $fileAcceptance && !$fileAcceptance->fileExists()) {
+                    if (!$fileAcceptance || $fileAcceptance && (!$fileAcceptance->fileExists() || $fileAcceptance->getName() == '')) {
                         $form->addError(
                             new FormError(
                                 $translator->trans('Download please', array(), 'ListsHandlingBundle')
