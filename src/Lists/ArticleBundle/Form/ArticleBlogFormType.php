@@ -50,6 +50,10 @@ class ArticleBlogFormType extends AbstractType
                 'required' => false,
                 'mapped' => false
         ))
+            ->add('manual', 'checkbox', array(
+                'required' => false,
+                'mapped' => false
+        ))
             ->add('textShort', 'textarea', array(
                 'required' => true
         ))
