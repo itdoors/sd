@@ -682,7 +682,7 @@ class ProdBlogController extends BaseController
             );
         }
 
-        $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form', $article);
+        $form = $this->createForm('articleEditForm', $article);
         $request = $this->getRequest();
         $form->handleRequest($request);
 

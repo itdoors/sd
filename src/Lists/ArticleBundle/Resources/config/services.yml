@@ -2,6 +2,7 @@ parameters:
     lists_article.form.history: Lists\ArticleBundle\Form\ArticleHistoryFormType
     lists_article.form.decision: Lists\ArticleBundle\Form\ArticleDecisionFormType
     lists_article.form.blog: Lists\ArticleBundle\Form\ArticleBlogFormType
+    lists_article.form.edit: Lists\ArticleBundle\Form\ArticleEditFormType
     lists_article.service.class: Lists\ArticleBundle\Services\ArticleService
 
 services:
@@ -21,6 +22,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: articleBlogForm }
+            
+    lists_article.form.edit:
+        class: %lists_article.form.edit%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: articleEditForm }
     
     lists_article.service:
         class: %lists_article.service.class%
