@@ -1,7 +1,7 @@
 parameters:
-#    lists_grafik.example.class: Lists\GrafikBundle\Example
+    lists_grafik.service.class: Lists\GrafikBundle\Services\GrafikService
 
 services:
-#    lists_grafik.example:
-#        class: %lists_grafik.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_grafik.service:
+        class: %lists_grafik.service.class%
+        arguments: [ @service_container ]

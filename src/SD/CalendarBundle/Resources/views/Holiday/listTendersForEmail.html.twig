@@ -1,0 +1,24 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+<h4 style="display: block; margin: 5px 0 15px 0;">{% trans %}Tenders{% endtrans %} {%trans%}for{% endtrans%} {{countDays}} {%trans%}days{% endtrans%}:</h4>
+<table style="width:100%;text-align:center;border-collapse: collapse;border: 1px double #eee">
+    <thead>
+        <tr>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}№{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Organization{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}City{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Date{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Action{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key,item in tenders %}
+            <tr class="{{ cycle(['odd', 'even'], item.id) }}">
+                <td style="border: 1px double #eee;padding: 5px;">{{ key+1 }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.project.organization }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.project.organization.city }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.datetimeDeadline|date('d.m.Y H:i') }}</td>
+                <td style="border: 1px double #eee;padding: 5px;"><a class="btn green button_wide" href="{{ path('lists_project_gostender_show', { id: item.id } ) }}">{%trans%}See{% endtrans %}</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
