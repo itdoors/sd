@@ -47,7 +47,7 @@
                     </td>
                     <td>{{ item.vdz|e }}</td>
                     <td>{{ item.advert|e }}</td>
-                    <td>{{ item.branch|e }}</td>
+                    <td>{{ item.project.handlingServices|join('<br>')|raw }}</td>
                     <td>{{ item.project.organization|e }}</td>
                     <td>{{ item.typeOfProcedure|e }}</td>
                     <td>{{ item.kveds|join('<br>')|raw }}</td>

@@ -25,12 +25,6 @@ Lists\HandlingBundle\Entity\ProjectGosTender:
             nullable: true
             options:
                 comment: Объявления
-        branch:
-            type: string
-            length: 128
-            nullable: true
-            options:
-                comment: Отрасль
         typeOfProcedure:
             type: string
             length: 128

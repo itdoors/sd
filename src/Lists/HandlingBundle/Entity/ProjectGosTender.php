@@ -36,11 +36,6 @@ class ProjectGosTender
     /**
      * @var string
      */
-    private $branch;
-
-    /**
-     * @var string
-     */
     private $typeOfProcedure;
 
     /**
@@ -135,28 +130,6 @@ class ProjectGosTender
     public function getAdvert ()
     {
         return $this->advert;
-    }
-    /**
-     * Set branch
-     *
-     * @param string $branch
-     *
-     * @return ProjectGosTender
-     */
-    public function setBranch ($branch)
-    {
-        $this->branch = $branch;
-
-        return $this;
-    }
-    /**
-     * Get branch
-     *
-     * @return string 
-     */
-    public function getBranch ()
-    {
-        return $this->branch;
     }
     /**
      * Set typeOfProcedure

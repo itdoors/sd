@@ -45,9 +45,6 @@ class GosTenderForm extends AbstractType
             ->add('advert', 'integer', array(
                 'required' => true
             ))
-            ->add('branch', 'text', array(
-                'required' => true
-            ))
             ->add('typeOfProcedure', 'text', array(
                 'required' => true
             ))
