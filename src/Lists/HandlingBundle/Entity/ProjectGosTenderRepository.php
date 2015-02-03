@@ -38,8 +38,8 @@ class ProjectGosTenderRepository extends EntityRepository
         
         //where
         if ($status == 'active') {
-            $sql->where('p.isClosed = false');
-            $sqlCount->where('p.isClosed = false');
+            $sql->where('p.isClosed != true ');
+            $sqlCount->where('p.isClosed != true');
         } elseif ($status == 'closed') {
             $sql->where('p.isClosed = true');
             $sqlCount->where('p.isClosed = true');
