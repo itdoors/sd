@@ -33,8 +33,10 @@ list_article_vote_decision_add:
     
 # Product Blog
 list_article_blog:
-    pattern:  /dashboard/blog
-    defaults: { _controller: ListsArticleBundle:ProdBlog:index }
+    pattern:  /dashboard/blog/{type}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:index, type:'' }
+    requirements:
+        type: manual|''
     
 list_article_blog_list:
     pattern:  /dashboard/blog/list

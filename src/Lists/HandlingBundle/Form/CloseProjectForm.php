@@ -60,40 +60,26 @@ class CloseProjectForm extends AbstractType
                             $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
                         )
                     );
-                } elseif (!$project) {
+                }
+                if (!$project) {
                     $form->addError(
                         new FormError(
                             $translator->trans('Project don`t found', array(), 'ListsHandlingBundle')
                         )
                     );
-                } elseif ($project->isGosTender()) {
-                    $typeProtocolOpen = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
-                        ->findOneBy(array(
-                            'alias' => 'protocol_open'
-                        ));
+                }
+                $status = $project->getStatus();
+                if ($project->isGosTender() && $status && $status->getAlias() == 'signing_document') {
                     $typeAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
                         ->findOneBy(array(
                             'alias' => 'acceptance'
-                        ));
-                    $fileProtocolOpen = $this->em->getRepository('ListsHandlingBundle:ProjectFile')
-                        ->findOneBy(array(
-                            'type' => $typeProtocolOpen,
-                            'project' => $project
                         ));
                     $fileAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFile')
                         ->findOneBy(array(
                             'type' => $typeAcceptance,
                             'project' => $project
                         ));
-                    if (!$fileProtocolOpen || $fileProtocolOpen && !$fileProtocolOpen->fileExists()) {
-                        $form->addError(
-                            new FormError(
-                                $translator->trans('Download please', array(), 'ListsHandlingBundle')
-                                .': "'.$typeProtocolOpen->getName().'"'
-                            )
-                        );
-                    }
-                    if (!$fileAcceptance || $fileAcceptance && !$fileAcceptance->fileExists()) {
+                    if (!$fileAcceptance || $fileAcceptance && (!$fileAcceptance->fileExists() || $fileAcceptance->getName() == '')) {
                         $form->addError(
                             new FormError(
                                 $translator->trans('Download please', array(), 'ListsHandlingBundle')

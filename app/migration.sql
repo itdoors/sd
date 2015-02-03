@@ -2543,3 +2543,9 @@ ALTER TABLE project_file ALTER user_id DROP NOT NULL;
 ALTER TABLE comment ADD parent_id INT DEFAULT NULL;
 ALTER TABLE comment ADD CONSTRAINT FK_9474526C727ACA70 FOREIGN KEY (parent_id) REFERENCES comment (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_9474526C727ACA70 ON comment (parent_id);
+ALTER TABLE project_gos_tender DROP branch;
+
+-- prod +++
+
+ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
+alter table article add column file varchar(255);

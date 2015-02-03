@@ -62,12 +62,12 @@ class UserService
                 'text' => $translator->trans('Groups and Roles', array(), 'SDUserBundle')
             );
         }
-        $tabs['plan'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'plan',
-            'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-            'text' => $translator->trans('Plan', array(), 'SDUserBundle')
-        );
+//        $tabs['plan'] = array(
+//            'blockupdate' => 'ajax-tab-holder',
+//            'tab' => 'plan',
+//            'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
+//            'text' => $translator->trans('Plan', array(), 'SDUserBundle')
+//        );
         if ($options['currentUser']) {
             $tabs['loginHistory'] = array(
              'blockupdate' => 'ajax-tab-holder',

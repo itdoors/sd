@@ -34,6 +34,35 @@ class NewsFosUser
     private $user;
 
     /**
+     * @var boolean
+     */
+    private $manual;
+
+    /**
+     * Set manual
+     *
+     * @param boolean $manual
+     *
+     * @return NewsFosUser
+     */
+    public function setManual($manual)
+    {
+        $this->manual = $manual;
+
+        return $this;
+    }
+
+    /**
+     * Get manual
+     *
+     * @return boolean
+     */
+    public function getManual()
+    {
+        return $this->manual;
+    }
+
+    /**
      * Get id
      * 
      * @return integer

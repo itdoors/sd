@@ -38,8 +38,8 @@ class ProjectGosTenderRepository extends EntityRepository
         
         //where
         if ($status == 'active') {
-            $sql->where('p.isClosed = false');
-            $sqlCount->where('p.isClosed = false');
+            $sql->where('p.isClosed = false or p.isClosed is null');
+            $sqlCount->where('p.isClosed = false or p.isClosed is null');
         } elseif ($status == 'closed') {
             $sql->where('p.isClosed = true');
             $sqlCount->where('p.isClosed = true');
@@ -98,10 +98,10 @@ class ProjectGosTenderRepository extends EntityRepository
         $res = $this->createQueryBuilder('t');
 
         /** where */
-        $res->where('t.datetimeOpening >= :startTimestamp');
-        $res->andWhere('t.datetimeOpening <= :endTimestamp');
-        $res->setParameter(':startTimestamp', date('Y-m-d H:i:s', $startTimestamp))
-            ->setParameter(':endTimestamp', date('Y-m-d H:i:s', $endTimestamp));
+        $res->where('t.datetimeDeadline >= :startTimestamp');
+        $res->andWhere('t.datetimeDeadline <= :endTimestamp');
+        $res->setParameter(':startTimestamp', date('Y-m-d ', $startTimestamp).'00:00:00')
+            ->setParameter(':endTimestamp', date('Y-m-d ', $endTimestamp).'23:59:59');
         if ($user) {
             $res
                 ->innerJoin('t.project', 'p')

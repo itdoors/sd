@@ -206,6 +206,5 @@ class HandlingService
         $data->setUser($this->container->get('security.context')->getToken()->getUser());
         $em->persist($data);
         $em->flush();
-        
     }
 }

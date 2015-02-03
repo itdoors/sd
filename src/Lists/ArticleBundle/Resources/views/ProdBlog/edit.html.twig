@@ -69,15 +69,13 @@
                     });
 //                     $('.itdoors-date-picker').datepicker( "setDate", new Date());
                     $('.textear-edit').summernote({
-                        lang: 'ru-RU',
+                    	lang: 'ru-RU',
                         'disableDragAndDrop': true,
                         'disableLinkTarget': true,
                         'onblur': function() {
                             /** Костыль для страховки */
                             $('.textear-edit').text($('.textear-edit').code());
-                        }
-                    });
-                    $('.textear-edit').summernote({
+                        },
                         'onImageUpload': function(files, editor, welEditable) {
                             sendFile(files[0],editor,welEditable);
                         }
@@ -161,15 +159,15 @@
 {#                     </div>#}
 {#                 </div>#}
 {#             </div>#}
-            <div class="form-body">
-                <div class="form-group">
-				    <label class="required control-label col-md-3">{% trans%}Voteable{%endtrans%}</label>
-				    <div class="col-md-9">
-				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'disabled':'disabled', 'placeholder': "Roles"|trans}}) }}
-				        {% if form.textShort.vars.errors|length %}{{form_errors(form.textShort) }}{% endif %}
-				    </div>
-                </div>
-            </div>
+{#             <div class="form-body">#}
+{#                 <div class="form-group">#}
+{# 				    <label class="required control-label col-md-3">{% trans%}Voteable{%endtrans%}</label>#}
+{# 				    <div class="col-md-9">#}
+{# 				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'disabled':'disabled', 'placeholder': "Roles"|trans}}) }}#}
+{# 				        {% if form.textShort.vars.errors|length %}{{form_errors(form.textShort) }}{% endif %}#}
+{# 				    </div>#}
+{#                 </div>#}
+{#             </div>#}
             <div class="form-body">
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Text{% endtrans%}</label>

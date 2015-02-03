@@ -232,7 +232,7 @@
             </tr>
             #}
             <tr> {# 6 #}
-                <td>{% trans %}Service offered{% endtrans %}</td>
+                <td>{% trans %}Branch{% endtrans %}</td>
                 <td>
                     {% if access.canEditGosTender %}
                     <a href="#" id="handlingServices" data-type="select2" data-pk="{{ object.project.id }}" data-placement="right" data-value="{% for key,service in object.project.handlingServices %}{{ key > 0 ? ',' : ''}}{{ service.id }}{% endfor %}" data-placeholder="{% trans %}Select handlingServices Offered{% endtrans %}" data-original-title="{% trans %}Select Service Offered{% endtrans %}">
@@ -399,15 +399,8 @@
                     </td>
                 </tr>
                 <tr>                
-                    <td>{% trans %}Branch{% endtrans %}</td>
+                    <td></td>
                     <td>
-                        {% if access.canEditGosTender %}
-                        <a class="editable-gos-tender" href="#" id="branch" data-type="text" data-placement="right" data-original-title="{% trans %}Branch{% endtrans %}">
-                        {% endif %}
-                            {{ object.branch}}
-                        {% if access.canEditGosTender %}
-                        </a>
-                        {% endif %}
                     </td>
                     <td>{% trans %}Type of procedure{% endtrans %}</td>
                     <td>
@@ -431,10 +424,10 @@
                         </a>
                         {% endif %}
                     </td>
-                    <td>{% trans %}Delivery{% endtrans %}</td>
+                    <td>{% trans %}Contract time{% endtrans %}</td>
                     <td>
                         {% if access.canEditGosTender %}
-                        <a class="editable-gos-tender" href="#" id="delivery" data-type="text" data-placement="right" data-original-title="{% trans %}Delivery{% endtrans %}">
+                        <a class="editable-gos-tender" href="#" id="delivery" data-type="text" data-placement="right" data-original-title="{% trans %}Contract time{% endtrans %}">
                         {% endif %}
                             {{ object.delivery}}
                         {% if access.canEditGosTender %}

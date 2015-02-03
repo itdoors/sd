@@ -26,7 +26,7 @@ class ProdBlogController extends BaseController
     protected $baseTemplate = 'ProdBlog';
 
     protected $articleType = 'blog';
-
+    
     /**
      * @var Article $filterNamespace
      */
@@ -36,6 +36,21 @@ class ProdBlogController extends BaseController
      * @var KnpPaginatorBundle $paginator
      */
     protected $paginator = 'knp_paginator';
+
+    /**
+     * Renders index page
+     *
+     * @return string
+     */
+    public function indexAction()
+    {
+        $request = $this->getRequest();
+        $manual = $request->get('type') == 'manual';
+
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':index.html.twig', array(
+                        'manual' => $manual
+        ));
+    }
 
     /**
      * Renders a blog article
@@ -225,12 +240,16 @@ class ProdBlogController extends BaseController
      */
     public function listAction()
     {
+        $request = $this->getRequest();
+        $manual = $request->get('type') == 'manual';
+
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
         $newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
-            'user' => $user
+            'user' => $user,
+            'manual' => $manual
         ));
         $items = [];
         foreach ($newNFUs as $nfu) {
@@ -250,14 +269,20 @@ class ProdBlogController extends BaseController
             foreach ($myArticles as $article) {
                 $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
                         'user' => $user,
-                        'news' => $article
+                        'news' => $article,
+                        'manual' => $manual
                 ));
-                $item = [
-                    'article' => $article,
-                    'viewed' => $nfu ? $nfu->getViewed() : -1
-                ];
-                if (! in_array($item, $items)) {
-                    $items[] = $item;
+                $isManual = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
+                        'news' => $article
+                ))->getManual();
+                if ($manual == $isManual) {
+                    $item = [
+                        'article' => $article,
+                        'viewed' => $nfu ? $nfu->getViewed() : -1
+                    ];
+                    if (! in_array($item, $items)) {
+                        $items[] = $item;
+                    }
                 }
             }
         }
@@ -463,10 +488,34 @@ class ProdBlogController extends BaseController
 
         if ($form->isValid()) {
             try {
+                $part = $request->request->get($form->getName());
+                $manual = isset($part['manual']) && $part['manual'] == '1' ? true : false;
+                
+                $destination = null;
+                if ($_FILES['articleBlogForm']['name']['file'] != '') {
+                    $name = $this->randomString();
+                    $ext = explode('.', $_FILES['articleBlogForm']['name']['file']);
+                    $directory = $this->container->getParameter('project.web.dir');
+                    $directory .= '/uploads/blogfiles/';
+                    if (! is_dir($directory)) {
+                        mkdir($directory, 0777);
+                    }
+                    $ext = explode('.', $_FILES['articleBlogForm']['name']['file']);
+                    $filename = $name . '.' . $ext[1];
+                    $destination = $directory . $filename;
+                    $location = $_FILES['articleBlogForm']['tmp_name']['file'];
+                    move_uploaded_file($location, $destination);
+                    $directory = $this->container->getParameter('blogfiles.file.path');
+                    $destination = $directory . $filename;
+                }
+
                 $party = $form->getData();
                 $party->setUser($this->getUser());
                 $party->setType($this->articleType);
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
+                if ($destination) {
+                    $party->setFile($destination);
+                }
                 $em->persist($party);
 
 //                 $roles = [];
@@ -557,6 +606,7 @@ class ProdBlogController extends BaseController
                             $nfu = new NewsFosUser();
                             $nfu->setNews($party);
                             $nfu->setUser($stuff->getUser());
+                            $nfu->setManual($manual);
                             $em->persist($nfu);
                         }
                     }
@@ -632,7 +682,7 @@ class ProdBlogController extends BaseController
             );
         }
 
-        $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form', $article);
+        $form = $this->createForm('articleEditForm', $article);
         $request = $this->getRequest();
         $form->handleRequest($request);
 
@@ -729,7 +779,7 @@ class ProdBlogController extends BaseController
         $destination = $directory . $filename;
         $location = $_FILES["file"]["tmp_name"];
         move_uploaded_file($location, $destination);
-        $directory = $this->container->getParameter('blogfiles.file.path');
+        $directory = $this->container->getParameter('blogfiles.image.path');
         $destination = $directory . $filename;
 
         return new Response($destination);
