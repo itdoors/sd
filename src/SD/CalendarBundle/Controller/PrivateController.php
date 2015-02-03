@@ -226,8 +226,8 @@ class PrivateController extends SalesController
                 'url' => $this->generateUrl('lists_project_gostender_show', array(
                         'id' => $tender->getId()
                     )),
-                'start' => $tender->getDatetimeOpening()->format('Y-m-d H:i'),
-                'end' => $tender->getDatetimeOpening()->format('Y-m-d H:i')
+                'start' => $tender->getDatetimeDeadline()->format('Y-m-d H:i'),
+                'end' => $tender->getDatetimeDeadline()->format('Y-m-d H:i')
                 );
         }
 
