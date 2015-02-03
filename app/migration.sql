@@ -2540,3 +2540,6 @@ ALTER TABLE project_file ALTER user_id DROP NOT NULL;
 ALTER TABLE project_gos_tender DROP branch;
 
 -- prod +++
+
+ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
+alter table article add column file varchar(255);

@@ -1030,11 +1030,17 @@
                     </ul>
                 </li>
             {% endif %}
-			<li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_blog') %} class="active"{% endif %}>
-                            <a href="{{ path('list_article_blog') }}">
-                                <i class="icon-pencil"></i>
-                                <span class="title">{% trans %}My news{% endtrans %}</span>
-                            </a>
+			<li{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_blog') %} class="active"{% endif %}>
+                <a href="{{ path('list_article_blog') }}">
+                    <i class="icon-pencil"></i>
+                    <span class="title">{% trans %}My news{% endtrans %}</span>
+                </a>
+            </li>
+            <li{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_blog', {'type': 'manual'}) %} class="active"{% endif %}>
+                <a href="{{ path('list_article_blog', {'type': 'manual'}) }}">
+                    <i class="icon-pencil"></i>
+                    <span class="title">{% trans %}My manuals{% endtrans %}</span>
+                </a>
             </li>
             {% if is_granted('ROLE_SUPERVISOR') %}
 			<li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('it_doors_calculate_homepage') %} class="active"{% endif %}>

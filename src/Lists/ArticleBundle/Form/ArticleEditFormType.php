@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class ArticleHistoryFormType
+ * Class ArticleEditFormType
  */
-class ArticleBlogFormType extends AbstractType
+class ArticleEditFormType extends AbstractType
 {
 
     protected $container;
@@ -46,14 +46,6 @@ class ArticleBlogFormType extends AbstractType
                 'format' => 'dd.MM.yyyy'
             ))
             ->add('title', 'text', array())
-            ->add('vote', 'checkbox', array(
-                'required' => false,
-                'mapped' => false
-        ))
-            ->add('manual', 'checkbox', array(
-                'required' => false,
-                'mapped' => false
-        ))
             ->add('textShort', 'textarea', array(
                 'required' => true
         ))
@@ -69,11 +61,7 @@ class ArticleBlogFormType extends AbstractType
 //             'multiple' => true,
 //             'required' => false
 //         ))
-            ->add('text', 'textarea', array())
-            ->add('file', 'file', array(
-                'required' => false,
-                'mapped' => false
-            ));
+            ->add('text', 'textarea', array());
     }
 
     /**
@@ -95,6 +83,6 @@ class ArticleBlogFormType extends AbstractType
      */
     public function getName()
     {
-        return 'articleBlogForm';
+        return 'articleEditForm';
     }
 }
