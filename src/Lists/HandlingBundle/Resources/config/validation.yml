@@ -26,11 +26,6 @@ Lists\HandlingBundle\Entity\ProjectGosTender:
                 min: 0
                 max: 99999999999
                 groups: [new, edit, createTender]
-        branch:
-            - NotBlank: { groups: [edit, createTender] }
-            - Length: 
-                max: 128
-                groups: [new, edit, createTender]
         typeOfProcedure:
             - NotBlank: { groups: [edit, createTender] }
             - Length: 
@@ -81,6 +76,7 @@ Lists\HandlingBundle\Entity\ProjectFile:
                     - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                     - application/msword
                     - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
                 groups: [add]
                     
 Lists\HandlingBundle\Entity\ProjectGosTenderParticipan:
