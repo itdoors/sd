@@ -68,8 +68,8 @@ class CloseProjectForm extends AbstractType
                         )
                     );
                 }
-                $statusAlias = $project->getStatus()->getAlias();
-                if ($project->isGosTender() && $statusAlias == 'signing_document') {
+                $status = $project->getStatus();
+                if ($project->isGosTender() && $status && $status->getAlias() == 'signing_document') {
                     $typeAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
                         ->findOneBy(array(
                             'alias' => 'acceptance'
