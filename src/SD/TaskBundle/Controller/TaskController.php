@@ -1278,6 +1278,11 @@ class TaskController extends Controller
 
         $return['description'] = $pattern->getDescription();
         $return['title'] = $pattern->getTitle();
+        $responsible = $pattern->getResponsible();
+        $return['responsible'] = null;
+        if ($responsible) {
+            $return['responsible'] = $responsible->getId();
+        }
 
         $patternRoles = $em->getRepository('SDTaskBundle:PatternUserRole')->findBy(array(
             'taskPattern' => $pattern

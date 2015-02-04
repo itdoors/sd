@@ -19,3 +19,14 @@ SD\TaskBundle\Entity\TaskPattern:
         description:
             type: text
             nullable: true
+    manyToOne:
+        responsible:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            nullable: true
+            joinColumns:
+                responsible_id:
+                    referencedColumnName: id
+            orphanRemoval: false

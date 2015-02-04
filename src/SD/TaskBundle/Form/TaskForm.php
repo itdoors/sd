@@ -142,6 +142,9 @@ class TaskForm extends AbstractType
                 }
             ));
 
+            $builder->add('responsible', 'hidden', array(
+                'mapped' => false
+            ));
 
         }
 /*        $builder->add('performer', 'entity', array(

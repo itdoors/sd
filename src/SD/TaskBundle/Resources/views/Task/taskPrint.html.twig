@@ -78,12 +78,27 @@
 <h4>{% trans %}Protocol{% endtrans %}</h4>
 <ul>
     {% for comment in comments %}
+        {% if comment.parent is empty %}
+
         <li style="padding: 5px;">
-            <p>
-                <span>{{ comment.user }}</span> &nbsp; <span>{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
-            </p>
-            <p  style="white-space: pre-line; ">{{ comment.value|raw  }} <br></p>
+                <p>
+                    <span>{{ comment.user }}</span> &nbsp; <span>{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
+                </p>
+                <p  style="white-space: pre-line; ">{{ comment.value|raw  }} <br></p>
+            {% if comment.children is not empty %}
+                <ul>
+                {% for child in comment.children %}
+                    <li style="padding: 5px;">
+                        <p>
+                            <span>{{ child.user }}</span> &nbsp; <span>{{ child.createDatetime|date('d-m-Y H:i ') }}</span>
+                        </p>
+                        <p  style="white-space: pre-line; ">{{ child.value|raw  }} <br></p>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
         </li>
+        {% endif %}
     {% endfor %}
 </ul>
 

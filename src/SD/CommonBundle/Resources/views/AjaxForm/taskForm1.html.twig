@@ -128,6 +128,11 @@
                 } else {
                     $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", '')
                 }
+                if (data.responsible) {
+                    $('#' + '{{ form.vars.name }}' + '_responsible').val(data.responsible)
+                } else {
+                    $('#' + '{{ form.vars.name }}' + '_responsible').val('')
+                }
             }
 
             function showSpinner() {
