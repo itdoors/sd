@@ -10,14 +10,15 @@
             <a class="reload" href="javascript:;"></a>
         </div>
         <div class="portlet-body">
-            {% if accessProject.canCreateGosTender %}
+            
             <a class="btn btn-lg blue" href="{{ path('lists_handling_create_step1') }}">
                 {% trans %}Create project{% endtrans %} <i class="fa fa-comments"></i>
             </a>
-            {% endif %}
+            {% if accessProject.canCreateGosTender %}
             <a class="btn btn-lg blue" href="{{ path('lists_project_gostender_create') }}">
                 {% trans %}Create gos tender{% endtrans %} <i class="fa fa-comments"></i>
             </a>
+            {% endif %}
 
             <a id="managers_list_new" class="btn btn-lg green ajax-form"
                data-toggle="modal"
