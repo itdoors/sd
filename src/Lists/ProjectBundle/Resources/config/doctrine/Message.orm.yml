@@ -78,5 +78,3 @@ Lists\ProjectBundle\Entity\Message:
                 contact_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks:
-        prePersist: [ doOnPrePersist ]

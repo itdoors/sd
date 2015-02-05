@@ -1,4 +1,4 @@
-Lists\ProjectBundle\Entity\FileMassage:
+Lists\ProjectBundle\Entity\FileMessage:
     type: entity
     manyToOne:
         message:

@@ -1,0 +1,2 @@
+Роли для доступа в Гос. тендер:
+    ROLE_STATE_TENDER, ROLE_STATE_TENDER_ADMIN, ROLE_STATE_TENDER_DIRECTOR,

@@ -87,6 +87,17 @@ Lists\ProjectBundle\Entity\StateTender:
                 inverseJoinColumns:
                     kved_id:
                         referencedColumnName: id
+        services:
+            targetEntity: ServiceStateTender
+            inversedBy: null
+            joinTable:
+              name: handling_handling_service
+              joinColumns:
+                handling_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id
     oneToMany:
         participans:
           targetEntity: ProjectGosTenderParticipan

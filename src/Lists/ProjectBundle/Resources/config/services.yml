@@ -1,7 +1,28 @@
 parameters:
-#    lists_project.example.class: Lists\ProjectBundle\Example
+    lists_project.service.class: Lists\ProjectBundle\Service\ProjectService
+
+    lists_project.base.form.class: Lists\ProjectBundle\Form\ProjectBaseForm
+    lists_project.state_tender.form.class: Lists\ProjectBundle\Form\StateTenderForm
 
 services:
-#    lists_project.example:
-#        class: %lists_project.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_project.service:
+        class: %lists_project.service.class%
+        arguments: [@security.context]
+
+    lists_project.projectBaseForm:
+        class: %lists_project.base.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectBaseForm }
+
+    lists_project.stateTenderForm:
+        class: %lists_project.state_tender.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: stateTenderForm }

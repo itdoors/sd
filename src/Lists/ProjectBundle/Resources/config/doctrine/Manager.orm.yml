@@ -7,8 +7,8 @@ Lists\ProjectBundle\Entity\Manager:
         name: discriminator
         type: string
     discriminatorMap:
-        manager: TypeManager
-        manager_project: TypeManagerProject
+        manager: ManagerType
+        manager_project: ManagerProjectType
     id:
         id:
             id: true
