@@ -1,0 +1,40 @@
+<?php
+
+namespace Lists\ProjectBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ComTender
+ */
+class ComTender
+{
+    /**
+     * @var \DateTime
+     */
+    private $createdatetime;
+
+
+    /**
+     * Set createdatetime
+     *
+     * @param \DateTime $createdatetime
+     * @return ComTender
+     */
+    public function setCreatedatetime($createdatetime)
+    {
+        $this->createdatetime = $createdatetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdatetime
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedatetime()
+    {
+        return $this->createdatetime;
+    }
+}

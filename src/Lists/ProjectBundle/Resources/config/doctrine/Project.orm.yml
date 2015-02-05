@@ -1,0 +1,108 @@
+Lists\ProjectBundle\Entity\Project:
+    type: entity
+    table: project
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedDatetime
+          time_aware: false
+    discriminatorColumn:
+        name: discriminator
+        type: string
+    discriminatorMap:
+        state_tender: StateTender
+        commercial_tender: СommercialTender
+        simple: Simple
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDatetime:
+            type: datetime
+            nullable: false
+            options:
+                comment: Дата внесения проекта в систему (создается автоматически)
+        square:
+            type: float
+            nullable: true
+            options:
+                comment: Площадь
+        description:
+            type: text
+            nullable: true
+            options:
+                comment: Заметки
+        isClosed:
+            type: boolean
+            column: is_closed
+            options:
+                comment: Статус проекта (закрыт, открыт)
+                default: 0
+        datetimeClosed:
+            type: datetime
+            nullable: true
+            column: datetime_closed
+            options:
+                comment: Дата закрытия проекта
+        reasonClosed:
+            type: text
+            nullable: true
+            column: reason_closed
+            options:
+                comment: Причина закрытия проекта
+        statusChangeDate:
+            type: datetime
+            nullable: true
+            column: status_change_date
+            options:
+                comment: Дата изменения статуса
+        createDate:
+            type: date
+            nullable: true
+            column: create_date
+            options:
+                comment: Дата создания проекта
+    oneToMany:
+        messages:
+            targetEntity: Message
+            mappedBy: project
+        managers:
+            targetEntity: Manager
+            mappedBy: project
+        files:
+          targetEntity: File
+          mappedBy: project
+    manyToOne:
+        userCreated:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        userClosed:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: closed_user_id
+                nullable: true
+                options:
+                    comment: Кто закрыл проект
+                referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
