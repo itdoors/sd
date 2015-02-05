@@ -1,0 +1,16 @@
+Lists\ProjectBundle\Entity\СommercialTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\СommercialTenderRepository
+    fields:
+        datetimeDeadline:
+            type: datetime
+            nullable: true
+            column: datetime_deadline
+            options:
+                comment: Дата и время конечного срока
+        datetimeOpening:
+            type: datetime
+            nullable: true
+            column: datetime_opening
+            options:
+                comment: Дата и время раскрытия

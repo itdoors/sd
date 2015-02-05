@@ -1,0 +1,58 @@
+Lists\ProjectBundle\Entity\File:
+    type: entity
+    table: project_file
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Lists\ProjectBundle\Entity\FileRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedDatetime
+          time_aware: false
+    discriminatorColumn:
+        name: discriminator
+        type: string
+    discriminatorMap:
+        project: FileProject
+        message: FileMessage
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: Название файла
+        shortText:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: Краткое описание файла
+        createDatetime:
+            type: datetime
+            nullable: true
+            column: create_datetime
+            options:
+                comment: Дата создания файла
+        deletedDatetime:
+            type: datetime
+            nullable: true
+            column: deleted_datetime
+            options:
+                comment: Дата удаления файла
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    nullable: true
+                    options:
+                        comment: Кто загрузил файл
+                    referencedColumnName: id
+            orphanRemoval: false

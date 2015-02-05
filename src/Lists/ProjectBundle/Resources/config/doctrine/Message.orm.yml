@@ -1,0 +1,82 @@
+Lists\ProjectBundle\Entity\Message:
+    type: entity
+    table: project_message
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectMessageRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedDatetime
+          time_aware: false
+    discriminatorColumn:
+        name: discriminator
+        type: string
+    discriminatorMap:
+        current: MessageCurrent
+        planned: MessagePlanned
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDatetime:
+            type: datetime
+            nullable: false
+            column: create_datetime
+            options:
+                comment: Дата создания (создается автоматически)
+        description:
+            type: text
+            nullable: true
+            options:
+                comment: Описание
+        eventDatetime:
+            type: datetime
+            nullable: false
+            column: event_datetime
+            options:
+                comment: Дата события (указывается пользователем)
+        deletedDatetime:
+            type: datetime
+            nullable: true
+            column: deleted_datetime
+            options:
+                comment: Дата удаления файла
+    manyToOne:
+        project:
+            targetEntity: Project
+            cascade: {  }
+            inversedBy: messages
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: MessageType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+        prePersist: [ doOnPrePersist ]

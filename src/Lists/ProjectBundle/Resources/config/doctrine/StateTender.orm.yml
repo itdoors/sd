@@ -1,0 +1,96 @@
+Lists\ProjectBundle\Entity\StateTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\StateTenderRepository
+    fields:
+        vdz:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: № ВДЗ
+        advert:
+            type: integer
+            length: 11
+            nullable: true
+            options:
+                comment: Объявления
+        typeOfProcedure:
+            type: string
+            length: 128
+            nullable: true
+            column: type_of_procedure
+            options:
+                comment: Процедура закупки
+        place:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: Место
+        delivery:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: Cрок поставки
+        datetimeDeadline:
+            type: datetime
+            nullable: true
+            column: datetime_deadline
+            options:
+                comment: Дата и время конечного срока
+        datetimeOpening:
+            type: datetime
+            nullable: true
+            column: datetime_opening
+            options:
+                comment: Дата и время раскрытия
+        software:
+            type: string
+            length: 128
+            nullable: true
+            options:
+                comment: Обеспечение
+        isParticipation:
+            type: boolean
+            nullable: true
+            column: is_participation
+            options:
+                comment: Участвуем или нет в тендере
+        reason:
+            type: text
+            nullable: true
+            options:
+                comment: Причина учистия или нет в тендере
+        budget:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            options:
+                comment: Бюджет
+        pf1:
+            type: float
+            nullable: true
+            column: pf1
+    manyToMany:
+        kveds:
+            targetEntity: Lists\OrganizationBundle\Entity\Kved
+            inversedBy: null
+            options:
+                comment: Кведы
+            joinTable:
+                name: project__kved
+                joinColumns:
+                    project_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    kved_id:
+                        referencedColumnName: id
+    oneToMany:
+        participans:
+          targetEntity: ProjectGosTenderParticipan
+          mappedBy: gosTender
+    uniqueConstraints:
+        unique_project_gos_tender:
+            columns: [advert, datetime_deadline]

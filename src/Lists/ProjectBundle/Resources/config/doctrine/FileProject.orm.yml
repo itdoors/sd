@@ -1,0 +1,23 @@
+Lists\ProjectBundle\Entity\FileProject:
+    type: entity
+    manyToOne:
+        project:
+            targetEntity: Lists\ProjectBundle\Entity\Project
+            cascade: {  }
+            mappedBy: null
+            inversedBy: files
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+            orphanRemoval: true
+        type:
+            targetEntity: ProjectFileType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    nullable: true
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

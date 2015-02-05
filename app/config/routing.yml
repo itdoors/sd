@@ -1,3 +1,7 @@
+lists_project:
+    resource: "@ListsProjectBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_api:
     resource: "@ITDoorsApiBundle/Resources/config/routing.yml"
     prefix:   /

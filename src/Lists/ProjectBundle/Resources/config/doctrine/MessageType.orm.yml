@@ -1,0 +1,41 @@
+Lists\ProjectBundle\Entity\MessageType:
+    type: entity
+    table: message_type
+    repositoryClass: Lists\ProjectBundle\Entity\MessageTypeRepository
+    id:
+        id:
+            id: true
+            type: integer
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 128
+            nullable: false
+        slug:
+            type: string
+            length: 128
+            nullable: true
+        stayActionTime:
+            type: integer
+            nullable: true
+            column: stay_action_time
+        sortorder:
+            type: integer
+            nullable: true
+        reportName:
+            type: string
+            length: 128
+            nullable: true
+            column: report_name
+        isReport:
+            type: boolean
+            nullable: true
+            column: is_report
+        reportSortorder:
+            type: integer
+            nullable: true
+            column: report_sortorder
+    lifecycleCallbacks: {  }
