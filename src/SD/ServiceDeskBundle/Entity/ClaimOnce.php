@@ -12,29 +12,29 @@ class ClaimOnce extends Claim
     /**
      * @var \SD\ServiceDeskBundle\Entity\Individual
      */
-    protected $individual;
+    protected $targetIndividual;
 
     /**
-     * Set individual
+     * Set targetIndividual
      *
      * @param \SD\ServiceDeskBundle\Entity\Individual $individual
      * 
      * @return ClaimOnce
      */
-    public function setIndividual(\SD\ServiceDeskBundle\Entity\Individual $individual = null)
+    public function setTargetIndividual(\SD\ServiceDeskBundle\Entity\Individual $individual = null)
     {
-        $this->individual = $individual;
+        $this->targetIndividual = $individual;
 
         return $this;
     }
 
     /**
-     * Get individual
+     * Get targetIndividual
      *
      * @return \SD\ServiceDeskBundle\Entity\Individual 
      */
-    public function getIndividual()
+    public function getTargetIndividual()
     {
-        return $this->individual;
+        return $this->targetIndividual;
     }
 }

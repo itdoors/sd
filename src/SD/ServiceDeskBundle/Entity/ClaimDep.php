@@ -12,29 +12,29 @@ class ClaimDep extends Claim
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments
      */
-    protected $department;
+    protected $targetDepartment;
 
     /**
-     * Set department
+     * Set targetDepartment
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $department
      * 
      * @return ClaimDep
      */
-    public function setDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
+    public function setTargetDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
     {
-        $this->department = $department;
+        $this->targetDepartment = $department;
 
         return $this;
     }
 
     /**
-     * Get department
+     * Get targetDepartment
      *
      * @return \Lists\DepartmentBundle\Entity\Departments 
      */
-    public function getDepartment()
+    public function getTargetDepartment()
     {
-        return $this->department;
+        return $this->targetDepartment;
     }
 }
