@@ -58,4 +58,39 @@ class BasicProjectAccess implements ProjectAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeStateTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllStateTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateStateTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditStateTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeParticipation ()
+    {
+        return false;
+    }
 }

@@ -15,9 +15,9 @@ Lists\ProjectBundle\Entity\File:
         message: FileMessage
     id:
         id:
+            id: true
             type: integer
-            generator:
-                strategy: IDENTITY
+            generator: { strategy: IDENTITY }
     fields:
         name:
             type: string

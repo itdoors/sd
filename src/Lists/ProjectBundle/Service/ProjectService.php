@@ -1,66 +1,63 @@
 <?php
 
-namespace Lists\ProjectBundle\Services;
+namespace Lists\ProjectBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\Container;
 use Lists\ProjectBundle\Classes\ProjectAccessFactory;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
+use Lists\ProjectBundle\Entity\StateTender;
 
 /**
  * ProjectService class
  */
 class ProjectService
 {
-    /**
-     * @var SecurityContext $context
-     */
+    /** @var SecurityContext $context */
     protected $context;
+    /** @var EntityManager $em */
+    protected $em;
+    /** @var User $user */
+    protected $user;
 
     /**
      * __construct()
      *
      * @param SecurityContext $context
      */
-    public function __construct(SecurityContext $context)
+    public function __construct(SecurityContext $context, EntityManager $em)
     {
+        $this->em = $em;
         $this->context = $context;
+        $this->user = $this->context->getToken()->getUser();
     }
      /**
      * checkAccess
      * 
-     * @param User     $user
-     * @param Handling $handling
+     * @param User          $user
+     * @param StateTender   $object
      * 
      * @return mixed[]
      */
-    public function checkAccess(User $user)
+    public function checkAccess(User $user, $object = null)
     {
         $role = array();
-//        if ($handling) {
-//            $handlingUsers = $handling->getHandlingUsers();
-//            foreach ($handlingUsers as $handlingUser) {
-//                $rol = $handlingUser->getLookup();
-//                if ($rol && $rol->getLukey() == 'manager_project' && $handlingUser->getUser() == $user) {
-//                    $role[] = 'ManagerProject';
-//                }
-//                if ($rol && $rol->getLukey() == 'manager' && $handlingUser->getUser() == $user) {
-//                    $role[] = 'Manager';
-//                }
-//            }
-//        }
-//        if ($user->hasRole('ROLE_GOS_TENDER_ADMIN')) {
-//            $role[] = 'GosTenderAdmin';
-//        }
-//        if ($user->hasRole('ROLE_GOS_TENDER')) {
-//            $role[] = 'GosTender';
-//        }
-//        if ($user->hasRole('ROLE_GOS_TENDER_DIRECTOR')) {
-//            $role[] = 'GosTenderDirector';
-//        }
+        if ($object) {
+            $managers = $object->getManagers();
+            foreach ($managers as $manager) {
+                if ($manager->getUser() == $user) {
+                    $role[] = 'Manager';
+                }
+            }
+        }
+        if ($user->hasRole('ROLE_STATE_TENDER')) {
+            $role[] = 'StateTender';
+        }
+        if ($user->hasRole('ROLE_STATE_TENDER_DIRECTOR')) {
+            $role[] = 'StateTenderDirector';
+        }
 
         return ProjectAccessFactory::createAccess($role);
     }
@@ -71,31 +68,30 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveGosTenderParticipationForm (Form $form, Request $request, $params)
+    public function saveStateTenderParticipationForm (Form $form, Request $request, $params)
     {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
         $data = $form->getData();
         $isParticipation = $data['isParticipation'];
         $reason = $data['reason'];
-        $gosTender = $em->getRepository('ListsHandlingBundle:ProjectGosTender')->find((int)$data['gosTenderId']);
-        if ($gosTender) {
-            $gosTender->setIsParticipation($isParticipation);
+        $stateTender = $this->em->getRepository('ListsProjectBundle:StateTender')->find((int)$data['stateTenderId']);
+        if ($stateTender) {
+            $stateTender->setIsParticipation($isParticipation);
             if (empty($isParticipation)) {
-                $gosTender->setReason($reason);
-                $gosTender->getProject()
-                    ->setCloser($this->container->get('security.context')->getToken()->getUser());
-                $gosTender->getProject()
-                    ->setReasonClosed('Не участвуем');
+                $stateTender->setUserClosed($this->user);
+                $stateTender->setReasonClosed('Не участвуем');
             } else {
-                $status = $em->getRepository('ListsHandlingBundle:HandlingStatus')
-                    ->findOneBy(array('slug' => 'gos_tender', 'sortorder' => 8));
-                $gosTender->getProject()->setStatus($status);
+                $status = $this->em->getRepository('ListsProjectBundle:StatusStateTender')
+                    ->findOneBy(array('alias' => 'collecting_documents'));
+                $stateTender->setStatus($status);
             }
-            $em->persist($gosTender);
-            $em->flush();
+            $stateTender->setReason($reason);
+            $this->em->persist($stateTender);
+            $this->em->flush();
         }
     }
+    
+    
+    
     /**
      * Add form defaults depending on defaults)
      *

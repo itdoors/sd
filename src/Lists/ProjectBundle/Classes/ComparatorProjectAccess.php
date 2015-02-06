@@ -109,4 +109,69 @@ class ComparatorProjectAccess extends BasicProjectAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeStateTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeStateTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllStateTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAllStateTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateStateTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCreateStateTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditStateTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canEditStateTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeParticipation ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canChangeParticipation()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

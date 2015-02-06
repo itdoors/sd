@@ -1,0 +1,250 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsProjectBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+{% block title %}{% trans %}Create tender{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_project_state_tender', {status:'active'}) }}" title="{% trans %}Tenders{% endtrans %}">{% trans %}Tenders{% endtrans %}</a></li>
+        <li><a href="" title="{% trans %}Create tender{% endtrans %}">{% trans %}Create tender{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+	<h3 class="page-title">
+		{% trans %}Project{% endtrans %} <small>{% trans %}create tender{% endtrans %}</small>
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-tags-input/jquery.tagsinput.css')}} "  />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js')}}" ></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.locale ~'.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/localization/messages_'~app.request.getLocale()~'.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/additional-methods.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}"></script>
+    <script type="text/javascript">
+        function createOrganization(){
+            // get param
+            var data = {
+                'organizationCreateForm[name]': $('#{{ form.vars.name }}_organization').data('select2').search[0].value
+            };
+            // close select2
+            $('#{{ form.vars.name }}_organization').select2('close');
+            // load modal
+            $('body').modalmanager('loading');
+            var modalBlock = $('#form_modal_organization');
+            modalBlock.load('{{ path ('lists_organization_create') }}', data, function(){
+                modalBlock.modal();
+            });
+            // save organization
+            var $form = $('#organizationCreateForm');
+            $form.die('submit');
+            $form.live('submit', function(e){
+                e.preventDefault();
+                var self = $(this);
+                $(this).ajaxSubmit({
+                    dataType: 'json',
+                    beforeSend: function () {
+                        ITDoorsAjax.blockUI(self);
+                    },
+                    success: function(response) {
+                        ITDoorsAjax.unblockUI(self);
+                        var $target = $('#form_modal_organization');
+                        if (response.success) {
+                            $('#{{ form.vars.name }}_organization').select2('data', response.organization);
+                            modalBlock.modal('hide');
+                            return;
+                        }
+                        if (response.error) {
+                            $target.empty().html(response.html);
+                            return;
+                        }
+                    }
+                });
+            });
+        }
+      
+        
+        $(document).ready(function (){
+            $('.inputmask-date').inputmask("d.m.y",{ "placeholder": "{% trans %}dd.mm.yyyy{% endtrans %}", "clearIncomplete": true });
+            $('.inputmask-datetime').inputmask("d.m.y h:s",{ "placeholder": "{% trans %}dd.mm.yyyy hh:mm{% endtrans %}", "clearIncomplete": true });
+        });
+
+    </script>
+{% endblock %}
+
+{% block body %}
+<div id="form_modal_organization" class="modal" role="basic" aria-hidden="true"></div>
+    
+    
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create tender{% endtrans %}</div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                
+                {{ form_start(form,
+                    {
+                        'action': path('lists_project_state_tender_create'),
+                        'attr': {
+                            'class' : 'horizontal-form',
+                            'id': 'gosTenderForm'
+                        },
+                    })
+                }}
+
+                <div class="form-body">
+                    {% if  form.vars.valid == false %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group{% if form.organization.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.organization, 'Organization name', {'attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.organization, {'attr': {'placeholder': 'Enter EDRPOU or name organization'} }) }}
+                                {{ form_errors(form.organization) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.vdz.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.vdz, 'VDZ', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.vdz, {'attr' : {'class' : 'form-control', 'placeholder': "Enter vdz"} }) }}
+                                {{ form_errors(form.vdz) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.advert.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.advert, 'Advert', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.advert, {'attr' : {'class' : 'form-control', 'placeholder': "Enter advert"} }) }}
+                                {{ form_errors(form.advert) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.typeOfProcedure.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.typeOfProcedure, 'Type of procedure', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.typeOfProcedure, {'attr' : {'class' : 'form-control', 'placeholder': "Enter type of procedure"} }) }}
+                                {{ form_errors(form.typeOfProcedure) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.place.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.place, 'Place', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.place, {'attr' : {'class' : 'form-control', 'placeholder': "Enter place"} }) }}
+                                {{ form_errors(form.place) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.delivery.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.delivery, 'Contract time', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.delivery, {'attr' : {'class' : 'form-control', 'placeholder': "Enter contract time"} }) }}
+                                {{ form_errors(form.delivery) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.datetimeDeadline.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.datetimeDeadline, 'Datetime deadline', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.datetimeDeadline, {'attr' : {'class' : 'form-control inputmask-datetime', 'placeholder': "Enter datetime deadline"} }) }}
+                                {{ form_errors(form.datetimeDeadline) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.datetimeOpening.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.datetimeOpening, 'Datetime opening', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.datetimeOpening, {'attr' : {'class' : 'form-control inputmask-datetime', 'placeholder': "Enter datetime opening"} }) }}
+                                {{ form_errors(form.datetimeOpening) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group{% if form.software.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.software, 'Software', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.software, {'attr' : {'class' : 'form-control', 'placeholder': "Enter software"} }) }}
+                                {{ form_errors(form.software) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.kveds.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.kveds, 'Kveds', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.kveds, {'attr' : {'placeholder': "Select kveds"} }) }}
+                                {{ form_errors(form.kveds) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.budget.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.budget, 'Expected value', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.budget, {'attr' : {'class' : 'form-control', 'placeholder': "Enter budget"} }) }}
+                                {{ form_errors(form.budget) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.square.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.square, 'Square', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.square, {'attr' : {'class' : 'form-control', 'placeholder': "Enter square"} }) }}
+                                {{ form_errors(form.square) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.services.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.services, 'Branch', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.services, {'attr' : {'placeholder': "Select branch"} }) }}
+                                {{ form_errors(form.services) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group{% if form.description.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description"} }) }}
+                                {{ form_errors(form.description) }}
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'}} ) }}
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

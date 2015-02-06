@@ -1,0 +1,38 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsProjectBundle' %}
+{% block title %}{% trans %}List of tenders{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Projects{% endtrans %} <small>{% trans %}list of tenders{% endtrans %}</small>
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            </li>
+            <li><a href="{{ path('lists_project_state_tender', {status:status}) }}" title="{% trans %}State tenders{% endtrans %}">{% trans %}State tenders{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    {#{ ajax_filter_render(filter, filterNamespace, {
+            'datatable_ajax': 'ITDoorsAjax.updateList'
+        }) }#}
+
+    <div id="gosTenderList" data-url="{{ url('lists_project_state_tender_list', {status:status}) }}">
+        {{ render(controller('ListsProjectBundle:StateTender:listStatus', {status:status})) }}
+   </div>
+{% endblock body %}

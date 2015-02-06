@@ -1,0 +1,76 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% if access.canEditGosTender %}
+    {{ include ('ListsHandlingBundle:GosTender/Button:addDocument.html.twig')}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.editable-project-file').editable({
+                url: '{{ path('lists_handling_ajax_editable_project_file') }}'
+            });
+        });
+    </script>
+{% endif %}
+
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <tr>
+                <th>{% trans %}№{% endtrans %}</th>
+                <th>{% trans %}Name{% endtrans %}</th>
+                <th>{% trans %}Document{% endtrans %}</th>
+                <th>{% trans %}Description{% endtrans %}</th>
+                <th>{% trans %}Author{% endtrans %}</th>
+                <th>{% trans %}Date upload{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,file in object.project.files %}
+                <tr>
+                    <td>{{ key+1 }}</td>
+                    <td>{{ file.type ? file.type.name : 'Document'|trans }}</td>
+                    <td>
+                        {% if file.name %}
+                        <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{% trans %}Document{% endtrans %}</a>
+                        {% elseif access.canEditGosTender %}
+                            <script>
+                                $(document).ready(function(){
+                                    $(function () {
+                                        $('#fileupload').fileupload({
+
+                                            dataType: 'json',
+                                            fail: function (e, data) {
+                                                alert('Upload error');
+                                            },
+                                            done: function (e, data) {
+                                                ITDoorsAjax.updateList('list_documents');
+                                            },
+                                            add: function (e, data) {
+                                                if(confirm('{% trans %}Upload new document{% endtrans %}?')){data.submit();}
+                                            }
+                                            }).prop('disabled', !$.support.fileInput)
+                                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                    });
+                                });
+                            </script>
+                            <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>{% trans %}Upload new document{% endtrans %}</span>
+                                <input id="fileupload" type="file" name="file" data-url="{{ path('lists_handling_ajax_upload_file', {'id': file.id}) }}">
+                            </span>  
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if access.canEditGosTender %}
+                        <a class="editable-project-file" data-pk="{{file.id}}" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}">
+                        {% endif %}
+                            {{ file.shortText}}
+                        {% if access.canEditGosTender %}
+                        </a>
+                        {% endif %}
+                    </td>
+                    <td>{{ file.user}}</td>
+                    <td>{{ file.createDatetime is empty ? '' : file.createDatetime|date('d.m.Y H:i') }}</td>
+                <tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

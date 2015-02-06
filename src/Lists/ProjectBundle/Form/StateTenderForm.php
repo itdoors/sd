@@ -38,7 +38,7 @@ class StateTenderForm extends AbstractType
         $builder
             ->add('organization', 'hidden_entity', array(
                 'entity' => 'ListsOrganizationBundle:Organization',
-                'required' => true,
+                'required' => 'required',
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $this->router->generate('lists_organization_ajax_search'),
@@ -52,13 +52,11 @@ class StateTenderForm extends AbstractType
                 )
             ))
              ->add('services', 'entity', array(
-                'class' => 'ListsProjectBundle:service',
+                'class' => 'ListsProjectBundle:ServiceStateTender',
                 'empty_value' => '',
                 'multiple' => 'multiple',
-                'query_builder' => function (\Lists\ProjectBundle\Entity\ServiceRepository $repository) {
+                'query_builder' => function (\Lists\ProjectBundle\Entity\ServiceStateTenderRepository $repository) {
                     return $repository->createQueryBuilder('s')
-                        ->where('s.slug = :slug')
-                        ->setParameter(':slug', "gos_tender")
                         ->orderBy('s.sortorder', 'ASC');
                 },
                 'attr' => array(
@@ -134,10 +132,9 @@ class StateTenderForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\ProjectGosTender',
-            'validation_groups' => array('createTender'),
-            'translation_domain' => 'ListsHandlingBundle',
-            'cascade_validation' => true,
+            'data_class' => 'Lists\ProjectBundle\Entity\StateTender',
+            'validation_groups' => array('create'),
+            'translation_domain' => 'ListsProjectBundle'
         ));
     }
 
@@ -146,6 +143,6 @@ class StateTenderForm extends AbstractType
      */
     public function getName()
     {
-        return 'gosTenderForm';
+        return 'stateTenderForm';
     }
 }

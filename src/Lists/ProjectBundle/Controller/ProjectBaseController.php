@@ -179,12 +179,12 @@ class ProjectBaseController extends Controller
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
-        $repository = $em->getRepository('ListsPeojectBundle:'.$this->nameEntity);
+        $repository = $em->getRepository('ListsProjectBundle:'.$this->nameEntity);
         $methodGet = 'get'.$this->nameEntity;
         $object = $repository->$methodGet($id);
 
-        $service = $this->get('lists_peoject.service');
-        $access = $service->checkAccess($user);
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user, $object);
 
         $methodSee = 'canSee'.$this->nameEntity;
         if (!$access->$methodSee()) {
@@ -196,7 +196,7 @@ class ProjectBaseController extends Controller
 
         $lookups = $em->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
 
-        return $this->render('ListsHandlingBundle:'.$this->nameEntity.':show.html.twig', array (
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':show.html.twig', array (
                 'accessOrganization' => $accessOrganization,
                 'organization' => $organization,
                 'object' => $object,
@@ -225,9 +225,10 @@ class ProjectBaseController extends Controller
         $object = $repository->$methodGet($id);
 
         $service = $this->get('lists_project.service');
-        $access = $service->checkAccess($user, $object->getProject());
+        $access = $service->checkAccess($user, $object);
 
-        if (!$access->canSee()) {
+        $methodSee = 'canSee'.$this->nameEntity;
+        if (!$access->$methodSee()) {
             throw $this->createAccessDeniedException();
         }
 

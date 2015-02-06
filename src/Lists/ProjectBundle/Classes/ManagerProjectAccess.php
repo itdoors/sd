@@ -1,0 +1,24 @@
+<?php
+
+namespace Lists\ProjectBundle\Classes;
+
+/**
+ * ManagerProjectAccess class
+ */
+class ManagerProjectAccess extends BasicProjectAccess
+{
+    /**
+     * @return bool
+     */
+    public function canSeeStateTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditStateTender ()
+    {
+        return true;
+    }
+}

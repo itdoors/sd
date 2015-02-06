@@ -1,6 +1,6 @@
 Lists\HandlingBundle\Entity\ProjectFileType:
     type: entity
-    table: project_file_type
+    table: project_file_type_old
     id:
         id:
             id: true

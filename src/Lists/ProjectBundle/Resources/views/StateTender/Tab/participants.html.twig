@@ -1,0 +1,65 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% if access.canEditGosTender  %}
+    {{ include ('ListsHandlingBundle:GosTender/Button:addParticipant.html.twig')}}
+    {% if object.participans|length > 0 %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.editable-gos-tender-participant').editable({
+                url: '{{ path('lists_handling_ajax_editable_gos_tender_participant') }}'
+            });
+            $('#isWinner').editable({
+                url: '{{ path('lists_handling_ajax_editable_gos_tender_participant') }}',
+                source: {{  object.participans.0.getChoiceList|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }}
+            });
+        });
+    </script>
+    {% endif %}
+{% endif %}
+    <div class="table-scrollable">
+        <table class="table table-striped table-bordered table-advance table-hover">
+            <thead>
+                <tr>
+                    <th>{% trans %}№{% endtrans %}</th>
+                    <th>{% trans %}Name{% endtrans %}</th>
+                    <th>{% trans %}Summa{% endtrans %}</th>
+                    <th>{% trans %}Winner{% endtrans %}</th>
+                    <th>{% trans %}Description{% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key,participant in object.participans %}
+                    <tr>
+                        <td>{{key+1}}</td>
+                        <td>{{participant.participan}}</td>
+                        <td>
+                            {% if access.canEditGosTender %}
+                            <a class="editable-gos-tender-participant" data-pk="{{participant.id}}" href="#" id="summa" data-type="text" data-placement="right" data-original-title="{% trans %}Summa{% endtrans %}">
+                            {% endif %}
+                            {{participant.summa|number_format(2, '.', ' ')}}
+                            {% if access.canEditGosTender %}
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if access.canEditGosTender %}
+                            <a data-pk="{{participant.id}}" href="#" id="isWinner" data-type="select" data-placement="right" data-original-title="{% trans %}Winner{% endtrans %}">
+                            {% endif %}
+                            {{ participant.isWinner is not null ? participant.getChoiceList[participant.isWinner]|trans : '' }}
+                            {% if access.canEditGosTender %}
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if access.canEditGosTender %}
+                            <a class="editable-gos-tender-participant" data-pk="{{participant.id}}" href="#" id="reason" data-type="text" data-placement="right" data-original-title="{% trans %}Description{% endtrans %}">
+                            {% endif %}
+                            {{participant.reason}}
+                            {% if access.canEditGosTender %}
+                            </a>
+                            {% endif %}
+                        </td>
+                    <tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>

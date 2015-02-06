@@ -1,14 +1,20 @@
 parameters:
+    # SERVICE
     lists_project.service.class: Lists\ProjectBundle\Service\ProjectService
-
+    # FORM
     lists_project.base.form.class: Lists\ProjectBundle\Form\ProjectBaseForm
     lists_project.state_tender.form.class: Lists\ProjectBundle\Form\StateTenderForm
+    lists_project.state_tender_participation.form.class: Lists\ProjectBundle\Form\StateTenderParticipationForm
+     # VALIDATOR
+    lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueStateTenderValidator
 
 services:
+    # SERVICE
     lists_project.service:
         class: %lists_project.service.class%
-        arguments: [@security.context]
+        arguments: [@security.context, @doctrine.orm.entity_manager]
 
+    # FORM
     lists_project.projectBaseForm:
         class: %lists_project.base.form.class%
         arguments:
@@ -26,3 +32,19 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: stateTenderForm }
+    lists_project.stateTenderParticipationForm:
+        class: %lists_project.state_tender_participation.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: stateTenderParticipationForm }
+        
+    # VALIDATOR
+    unique_state_tender_validator:
+        class: %lists_project.unique_state_tender.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: unique_state_tender }

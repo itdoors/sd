@@ -1,3 +1,52 @@
-lists_project_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: ListsProjectBundle:Default:index }
+# StateTenderController
+lists_project_state_tender_create:
+    path:     /lists/project/state/tender/create
+    defaults: { _controller: ListsProjectBundle:StateTender:create }
+
+lists_project_state_tender_show:
+    pattern:  /lists/project/state/tender/show/{id}
+    defaults: { _controller: ListsProjectBundle:StateTender:show }
+    requirements:
+        id: \d+
+
+lists_project_state_tender_edit:
+    pattern:  /lists/project/state/tender/edit/{id}
+    defaults: { _controller: ListsProjectBundle:StateTender:edit }
+    requirements:
+        id: \d+
+
+lists_project_state_tender:
+    pattern:  /lists/project/state/tender/{status}
+    defaults: { _controller: ListsProjectBundle:StateTender:indexStatus }
+    requirements:
+        status: active|closed
+
+lists_project_state_tender_list:
+    pattern:  /lists/project/state/tender/list/{status}
+    defaults: { _controller: ListsProjectBundle:StateTender:listStatus }
+    requirements:
+        status: active|closed
+
+lists_project_state_tender_show_participants:
+    pattern:  /lists/project/state/tender/show/participants/{id}
+    defaults: { _controller: ListsProjectBundle:StateTender:showParticipants }
+    requirements:
+        id: \d+
+        
+lists_project_state_tender_show_documents:
+    pattern:  /lists/project/state/tender/show/documents/{id}
+    defaults: { _controller: ListsProjectBundle:StateTender:showDocuments }
+    requirements:
+        id: \d+
+# AjaxController
+lists_project_ajax_editable_state_tender:
+    pattern:  /lists/project/ajax/editable/state/tender
+    defaults: { _controller: ListsProjectBundle:Ajax:editableStateTender }
+    
+lists_project_ajax_services_state_tender_search:
+    pattern:  /lists/project/ajax/services/tender/search/search
+    defaults: { _controller: ListsProjectBundle:Ajax:servicesStateTenderSearch}
+        
+lists_project_ajax_services_by_ids:
+    pattern:  /lists/project/ajax/services/by_ids
+    defaults: { _controller: ListsProjectBundle:Ajax:projectServicesByIds}

@@ -1,0 +1,3 @@
+Lists\ProjectBundle\Entity\StatusStateTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\StatusStateTenderRepository

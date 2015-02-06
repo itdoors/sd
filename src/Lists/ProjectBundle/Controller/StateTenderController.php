@@ -8,14 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Lists\ProjectBundle\Entity\StateTender;
 use Lists\ProjectBundle\Services\ProjectService;
+use Lists\ProjectBundle\Entity\ManagerProjectType;
 
 /**
  * Class StateTenderController
  */
 class StateTenderController extends ProjectBaseController
 {
-    protected $filterNamespace = 'project_state_tender';
-    protected $createForm = 'gosTenderForm';
+    protected $filterNamespace = 'state_tender';
+    protected $createForm = 'stateTenderForm';
     protected $nameEntity = 'StateTender';
 
     /**
@@ -30,8 +31,8 @@ class StateTenderController extends ProjectBaseController
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
         /** @var ProjectService $service */
-        $service = $this->get('lists_handling.service');
-        $access = $service->checkAccess($this->getUser());
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user);
 
         $method = 'canCreate'.$this->nameEntity;
         if (!$access->$method()) {
@@ -46,48 +47,36 @@ class StateTenderController extends ProjectBaseController
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
 
-            $type = $em->getRepository('ListsHandlingBundle:HandlingType')
-                ->findOneBy(array('alias' => $this->aliasProjectType));
-            $managerProject = $em->getRepository('ListsLookupBundle:lookup')
-                ->findOneBy(array ('lukey' => 'manager_project'));
-            $fileTypes = $em->getRepository('ListsHandlingBundle:ProjectFileType')
+            $fileTypes = $em->getRepository('ListsProjectBundle:ProjectFileType')
                 ->findBy(array ('group' => 'gos_tender'));
 
-            /** @var \Lists\HandlingBundle\Entity\ProjectGosTender $object */
+            /** @var StateTender $object */
             $object = $form->getData();
-
-            $project = $object->getProject();
-            $project->setUser($user);
-            $project->setType($type);
-            $em->persist($project);
+            $object->setUserCreated($user);
 
             foreach ($fileTypes as $type) {
-                $file = new \Lists\HandlingBundle\Entity\ProjectFile();
-                $file->setProject($project);
+                $file = new \Lists\ProjectBundle\Entity\FileProject();
+                $file->setProject($object);
                 $file->setType($type);
+                $file->setUser($user);
                 $em->persist($file);
             }
 
-            $manager = new HandlingUser();
-            $manager->setUser($user);
-            $manager->setLookup($managerProject);
-            $manager->setPart(100);
-            $manager->setHandling($project);
-            $em->persist($manager);
+            $managerProject = new ManagerProjectType();
+            $managerProject->setPart(100);
+            $managerProject->setUser($user);
+            $managerProject->setProject($object);
+            $em->persist($managerProject);
 
             $em->persist($object);
             $em->flush();
-            // костыль для поля boolean set null (нужно будет удалить)
-            $db = $em->getConnection();
-            $stmt = $db->prepare('UPDATE "public".project_gos_tender SET "is_participation" = NULL WHERE id = :id');
-            $stmt->execute(array (':id' => $object->getId()));
 
-            return $this->redirect($this->generateUrl('lists_project_'.strtolower($this->nameConroller).'_show', array (
+            return $this->redirect($this->generateUrl('lists_project_'.$this->filterNamespace.'_show', array (
                 'id' => $object->getId()
             )));
         }
 
-        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':create.html.twig', array (
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':create.html.twig', array (
                 'form' => $form->createView()
         ));
     }
@@ -114,15 +103,15 @@ class StateTenderController extends ProjectBaseController
      */
     public function indexStatusAction ($status)
     {
-        /** @var HandlingService $service */
-        $service = $this->get('lists_handling.service');
+        /** @var ProjectService $service */
+        $service = $this->get('lists_project.service');
         $access = $service->checkAccess($this->getUser());
-        $method = 'canSeeList'.$this->nameConroller;
+        $method = 'canSee'.$this->nameEntity;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
 
-        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':indexStatus.html.twig', array (
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':indexStatus.html.twig', array (
                 'access' => $access,
                 'status' => $status
         ));
@@ -136,18 +125,19 @@ class StateTenderController extends ProjectBaseController
      */
     public function listStatusAction ($status)
     {
-        $filterNamespace = $this->filterNamespace.'_'.strtolower($this->nameConroller);
+        $filterNamespace = $this->filterNamespace.'_'.strtolower($this->nameEntity);
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
-        /** @var HandlingService $service */
-        $service = $this->get('lists_handling.service');
+        /** @var ProjectService $service */
+        $service = $this->get('lists_project.service');
         $access = $service->checkAccess($user);
 
-        $method = 'canSeeList'.$this->nameConroller;
+        $method = 'canSee'.$this->nameEntity;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
-        if ($access->canSeeAllGosTender()) {
+        $methodCanSeeAll = 'canSeeAll'.$this->nameEntity;
+        if ($access->$methodCanSeeAll()) {
             $user = null;
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
@@ -165,9 +155,9 @@ class StateTenderController extends ProjectBaseController
 
         /** @var \Lists\HandlingBundle\Entity\ProjectGosTenderRepository $repository */
         $repository = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Project'.$this->nameConroller);
+            ->getRepository('ListsProjectBundle:'.$this->nameEntity);
 
-        $methodRepository = 'getList'.$this->nameConroller;
+        $methodRepository = 'getList'.$this->nameEntity;
         /** @var \Doctrine\ORM\Query $query */
         $query = $repository->$methodRepository($user, $status);
 
@@ -180,7 +170,7 @@ class StateTenderController extends ProjectBaseController
             10
         );
 
-        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':listStatus.html.twig', array(
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':listStatus.html.twig', array(
                 'filterNamespace' => $filterNamespace,
                 'pagination' => $pagination,
                 'access' => $access
@@ -199,19 +189,20 @@ class StateTenderController extends ProjectBaseController
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
-        $repository = $em->getRepository('ListsHandlingBundle:Project'.$this->nameConroller);
-        $methodGet = 'get'.$this->nameConroller;
+        $repository = $em->getRepository('ListsProjectBundle:'.$this->nameEntity);
+        $methodGet = 'get'.$this->nameEntity;
         $object = $repository->$methodGet($id);
 
-        $service = $this->get('lists_handling.service');
-        $access = $service->checkAccess($user, $object->getProject());
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user, $object);
 
-        if (!$access->canSee()) {
+        $methodSee = 'canSee'.$this->nameEntity;
+        if (!$access->$methodSee()) {
             throw $this->createAccessDeniedException();
         }
         $participans = $object->getParticipans();
 
-        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':Tab/participants.html.twig', array (
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':Tab/participants.html.twig', array (
                 'participans' => $participans,
                 'object' => $object,
                 'access' => $access
@@ -230,18 +221,19 @@ class StateTenderController extends ProjectBaseController
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
-        $repository = $em->getRepository('ListsHandlingBundle:Project'.$this->nameConroller);
-        $methodGet = 'get'.$this->nameConroller;
+        $repository = $em->getRepository('ListsProjectBundle:'.$this->nameEntity);
+        $methodGet = 'get'.$this->nameEntity;
         $object = $repository->$methodGet($id);
 
-        $service = $this->get('lists_handling.service');
-        $access = $service->checkAccess($user, $object->getProject());
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user, $object);
 
-        if (!$access->canSee()) {
+       $methodSee = 'canSee'.$this->nameEntity;
+        if (!$access->$methodSee()) {
             throw $this->createAccessDeniedException();
         }
 
-        return $this->render('ListsHandlingBundle:'.$this->nameConroller.':Tab/documents.html.twig', array (
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':Tab/documents.html.twig', array (
                 'object' => $object,
                 'access' => $access
         ));

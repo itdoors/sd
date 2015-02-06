@@ -35,4 +35,24 @@ interface ProjectAccessInterface
      * @return bool
      */
     public function canExportToExelAll();
+     /**
+     * @return bool
+     */
+    public function canSeeStateTender();
+    /**
+     * @return bool
+     */
+    public function canSeeAllStateTender();
+    /**
+     * @return bool
+     */
+    public function canCreateStateTender();
+    /**
+     * @return bool
+     */
+    public function canEditStateTender();
+    /**
+     * @return bool
+     */
+    public function canChangeParticipation();
 }

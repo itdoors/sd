@@ -69,10 +69,10 @@ Lists\ProjectBundle\Entity\StateTender:
             nullable: true
             options:
                 comment: Бюджет
-        pf1:
+        pf:
             type: float
             nullable: true
-            column: pf1
+            column: pf
     manyToMany:
         kveds:
             targetEntity: Lists\OrganizationBundle\Entity\Kved
@@ -91,17 +91,27 @@ Lists\ProjectBundle\Entity\StateTender:
             targetEntity: ServiceStateTender
             inversedBy: null
             joinTable:
-              name: handling_handling_service
+              name: project_state_tender_service
               joinColumns:
-                handling_id:
+                project_id:
                   referencedColumnName: id
               inverseJoinColumns:
                 service_id:
                   referencedColumnName: id
-    oneToMany:
-        participans:
-          targetEntity: ProjectGosTenderParticipan
-          mappedBy: gosTender
+#    oneToMany:
+#        participans:
+#          targetEntity: ProjectGosTenderParticipan
+#          mappedBy: gosTender
+    manyToOne:
+        statusStateTender:
+            targetEntity: StatusStateTender
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     uniqueConstraints:
         unique_project_gos_tender:
             columns: [advert, datetime_deadline]
