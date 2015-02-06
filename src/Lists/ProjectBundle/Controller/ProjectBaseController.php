@@ -11,6 +11,7 @@ use Lists\ProjectBundle\Services\ProjectService;
 use SD\UserBundle\Entity\User;
 use Lists\ProjectBundle\Entity\ManagerProjectType;
 use ITDoors\CommonBundle\Services\BaseService;
+use Lists\ProjectBundle\Entity\ManagerType;
 
 /**
  * Class ProjectBaseController
@@ -234,6 +235,36 @@ class ProjectBaseController extends Controller
 
         return $this->render('ListsProjectBundle:'.$this->nameEntity.':Tab/edit.html.twig', array (
                 'object' => $object,
+                'access' => $access
+        ));
+    }
+    /**
+     * Renders managers list
+     *
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function managersAction ($id)
+    {
+        /** @var \Lists\ProjectBundle\Entity\ProjectRepository $project */
+        $project = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Project')->find($id);
+
+        $managers = $project->getManagers();
+//        foreach ($managers as $manager) {
+//            if ($manager instanceof ManagerProjectType) {
+//                echo 'менеджерsdfsf';die;
+//            }
+//        }
+
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($this->getUser(), $project);
+
+        return $this->render('ListsProjectBundle:Project:listManagers.html.twig', array (
+                'managerProject' => $managers[0],
+                'managers' => $managers,
+                'project' => $project,
                 'access' => $access
         ));
     }

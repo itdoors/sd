@@ -889,52 +889,6 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
-
-    /**
-     * Returns json organization list for contacts query
-     *
-     * @param string $slug
-     * 
-     * @return mixed[]
-     */
-    public function handlingStatusAction($slug)
-    {
-        $objects = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingStatus')->getListBySlug($slug);
-
-        $result = array();
-
-        foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
-        }
-
-        return new Response(json_encode($result));
-    }
-
-    /**
-     * Returns json handling result list
-     *
-     * @return string
-     */
-    public function handlingResultAction()
-    {
-        $objects = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingResult')
-            ->createQueryBuilder('s')
-            ->orderBy('s.sortorder')
-            ->getQuery()
-            ->getResult();
-
-        $result = array();
-
-        $result[] = $this->getEmptyResult();
-
-        foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
-        }
-
-        return new Response(json_encode($result));
-    }
-
     /**
      * Returns empty result array
      *
@@ -3824,84 +3778,6 @@ class AjaxController extends BaseFilterController
         $em->flush();
     }
 
-    /**
-     * Saves object to db
-     *
-     * @return mixed[]
-     */
-    public function handlingSaveAction()
-    {
-        $translator = $this->get('translator');
-
-        $pk = $this->get('request')->request->get('pk');
-        $name = $this->get('request')->request->get('name');
-        $value = $this->get('request')->request->get('value');
-
-        $methodSet = 'set' . ucfirst($name);
-
-        /** @var Handling $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($pk);
-
-        if (!$value) {
-            $methodGet = 'get' . ucfirst($name);
-            $type = gettype($object->$methodGet());
-
-            if (in_array($type, array('integer', 'object'))) {
-                $value = null;
-            }
-        }
-
-        $object->$methodSet($value);
-
-        $validator = $this->get('validator');
-
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
-        $errors = $validator->validate($object, array('edit'));
-
-        if (sizeof($errors)) {
-            $return = $this->getFirstError($errors);
-
-            return new Response($return, 406);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($object);
-
-        try {
-            $em->flush();
-
-            $em->refresh($object);
-        } catch (\ErrorException $e) {
-            $return = array('msg' => $translator->trans('Wrong input data'));
-
-            return new Response(json_encode($return));
-        }
-
-        $return = array(
-            'success' => 1,
-            'handling' => array(
-                'id' => $object->getId()
-            )
-        );
-
-        $result = $object->getResult();
-        $status = $object->getStatus();
-
-        if ($result && $result->getProgress()) {
-            $return['handling']['progress'] = $result->getProgress();
-            $return['handling']['progressString'] = $result->getPercentageString();
-        } elseif ($status && $status->getProgress()) {
-            $return['handling']['progress'] = $status->getProgress();
-            $return['handling']['progressString'] = $status->getPercentageString();
-        } else {
-            $return['handling']['progress'] = null;
-            $return['handling']['progressString'] = null;
-        }
-
-        return new Response(json_encode($return));
-    }
     /**
      * Saves object to db
      *

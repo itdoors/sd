@@ -116,4 +116,37 @@ class Manager
     {
         return $this->user;
     }
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        if ($this instanceof ManagerType) {
+            return 'Manager';
+        } elseif ($this instanceof ManagerProjectType) {
+            return 'Manager project';
+        } else {
+            return 'Type undefined';
+        }
+    }
+    /**
+     * isManager
+     *
+     * @return boolean
+     */
+    public function isManager()
+    {
+        return $this instanceof ManagerType;
+    }
+    /**
+     * isManagerProject
+     *
+     * @return boolean
+     */
+    public function isManagerProject()
+    {
+        return $this instanceof ManagerProjectType;
+    }
 }

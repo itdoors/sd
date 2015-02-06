@@ -9,6 +9,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 use Lists\ProjectBundle\Entity\StateTender;
+use Lists\ProjectBundle\Entity\Project;
 
 /**
  * ProjectService class
@@ -36,8 +37,8 @@ class ProjectService
      /**
      * checkAccess
      * 
-     * @param User          $user
-     * @param StateTender   $object
+     * @param User                  $user
+     * @param StateTender|Project   $object
      * 
      * @return mixed[]
      */
@@ -47,9 +48,12 @@ class ProjectService
         if ($object) {
             $managers = $object->getManagers();
             foreach ($managers as $manager) {
-                if ($manager->getUser() == $user) {
+                if ($manager instanceof \Lists\ProjectBundle\Entity\ManagerProjectType && $manager->getUser() == $user) {
+                    $role[] = 'ManagerProject';
+                } elseif ($manager->getUser() == $user) {
                     $role[] = 'Manager';
                 }
+                
             }
         }
         if ($user->hasRole('ROLE_STATE_TENDER')) {
@@ -82,12 +86,51 @@ class ProjectService
             } else {
                 $status = $this->em->getRepository('ListsProjectBundle:StatusStateTender')
                     ->findOneBy(array('alias' => 'collecting_documents'));
-                $stateTender->setStatus($status);
+                $stateTender->setStatusStateTender($status);
             }
             $stateTender->setReason($reason);
             $this->em->persist($stateTender);
             $this->em->flush();
         }
+    }
+     /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+     */
+    public function addManagerFormDefaults(Form $form, $defaults)
+    {
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->find((int) $defaults['project']);
+        $form->add('project', 'hidden_entity', array(
+                'data_class' => null,
+                'entity'=>'Lists\ProjectBundle\Entity\Project',
+                'data' => $project
+            ));
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveAddManagerForm (Form $form, Request $request, $params)
+    {
+        $data = $form->getData();
+        $access = $this->checkAccess($this->user, $data->getProject());
+        if ($access->canChangeManager()) {
+            $managers = $data->getProject()->getManagers();
+            foreach ($managers as $manager) {
+                if ($manager->isManagerProject()) {
+                    $manager->setPart($manager->getPart()-$data->getPart());
+                    $this->em->persist($manager);
+                }
+            }
+            $this->em->persist($data);
+            $this->em->flush();
+        }
+        
     }
     
     

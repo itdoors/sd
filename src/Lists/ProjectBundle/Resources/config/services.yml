@@ -5,6 +5,7 @@ parameters:
     lists_project.base.form.class: Lists\ProjectBundle\Form\ProjectBaseForm
     lists_project.state_tender.form.class: Lists\ProjectBundle\Form\StateTenderForm
     lists_project.state_tender_participation.form.class: Lists\ProjectBundle\Form\StateTenderParticipationForm
+    lists_project.project_add_manager.form.class: Lists\ProjectBundle\Form\AddManagerForm
      # VALIDATOR
     lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueStateTenderValidator
 
@@ -40,6 +41,14 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: stateTenderParticipationForm }
+    lists_project.addManagerForm:
+        class: %lists_project.project_add_manager.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addManagerForm }
         
     # VALIDATOR
     unique_state_tender_validator:

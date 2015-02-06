@@ -125,7 +125,7 @@ class StateTenderController extends ProjectBaseController
      */
     public function listStatusAction ($status)
     {
-        $filterNamespace = $this->filterNamespace.'_'.strtolower($this->nameEntity);
+        $filterNamespace = $this->filterNamespace.'_'.strtolower($this->nameEntity).'_'.$status;
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
         /** @var ProjectService $service */

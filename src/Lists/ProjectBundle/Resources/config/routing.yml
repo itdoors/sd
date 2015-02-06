@@ -50,3 +50,14 @@ lists_project_ajax_services_state_tender_search:
 lists_project_ajax_services_by_ids:
     pattern:  /lists/project/ajax/services/by_ids
     defaults: { _controller: ListsProjectBundle:Ajax:projectServicesByIds}
+
+lists_project_ajax_search_status_state_tender:
+    pattern:  /lists/project/ajax/search/status/state_tender
+    defaults: { _controller: ListsProjectBundle:Ajax:searchStatusStateTender}
+    
+# ProjectBaseController
+lists_project_managers:
+    pattern:  /lists/project/lists/managers/{id}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:managers}
+    requirements:
+        id: \d+

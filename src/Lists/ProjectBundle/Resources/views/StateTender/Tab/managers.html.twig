@@ -1,27 +1,10 @@
-{% trans_default_domain 'ListsHandlingBundle' %}
-
-    <div class="col-md-12">
-        <h3>{% trans %}Managers{% endtrans %}</h3>
-        <p>{% trans %}Managers on handling{% endtrans %}</p>
-        {% if access.canChangeManager %}
-        <div class="table-toolbar">
-            <div class="btn-group" style="margin-bottom:10px;">
-                <button id="managers_list_new" class="btn green ajax-form"
-                        data-target_holder="managerFormTpl"
-                        data-form_name="handlingUserForm"
-                        data-default='{"handlingId":{{ object.project.id }}}'
-                        data-post_function="updateList"
-                        data-post_target_id="managers_list"
-                >
-                    {% trans %}Add Manager{% endtrans %} <i class="fa fa-plus"></i>
-                </button>
-                
-            </div>
-            <div style="display: none" id="managerFormTpl">
-            </div>
-        </div>
-        {% endif %}
-        <div id="managers_list" data-url="{{ path('lists_handling_ajax_users', { handlingId: object.id }) }}" data-params='{"handlingId":{{ object.id }}'>
-            {{ render(controller('ListsHandlingBundle:Handling:HandlingUsers', { handlingId: object.id })) }}
-        </div>
+{% trans_default_domain 'ListsProjectBundle' %}
+<div class="col-md-12">
+    <h3>{% trans %}Managers{% endtrans %}</h3>
+    {% if access.canChangeManager %}
+        {{ include ('ListsProjectBundle:StateTender/Button:addManager.html.twig')}}
+    {% endif %}
+    <div id="managers_list" data-url="{{ path('lists_project_managers', { id: object.id }) }}">
+        {{ render(controller('ListsProjectBundle:ProjectBase:managers', { id: object.id })) }}
     </div>
+</div>

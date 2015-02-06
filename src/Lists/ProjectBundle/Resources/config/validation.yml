@@ -103,4 +103,9 @@ Lists\ProjectBundle\Entity\StateTender:
 #            - Length:
 #                max: 11
 #                groups: [new, edit, addParticipan]
-#            
+# 
+Lists\ProjectBundle\Entity\Manager:
+    properties:
+        part:
+            - NotBlank: { groups: [create] }
+            - Lists\ProjectBundle\Validator\ManagerMaxPart: { groups: [create] }

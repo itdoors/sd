@@ -145,6 +145,33 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
     /**
+     * searchStatusStateTenderAction
+     * 
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function searchStatusStateTenderAction(Request $request)
+    {
+        $searchText = $request->query->get('query');
+        /** @var \Lists\ProjectBundle\Entity\StatusStateTenderRepository[] $status */
+        $status = $this->getDoctrine()->getRepository('ListsProjectBundle:StatusStateTender')
+            ->getSearchQuery($searchText);
+        $result = array();
+        foreach ($status as $val) {
+            $id = $val->getId();
+            $string = $val->getName();
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
      * projectServicesByIdsAction
      *
      * @return string

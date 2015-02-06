@@ -42,28 +42,27 @@ class StateTenderRepository extends EntityRepository
      */
     public function getListStateTender($user, $status)
     {
-
         /** @var \Doctrine\ORM\QueryBuilder $sql */
-        $sql = $this->createQueryBuilder('t');
+        $sql = $this->createQueryBuilder('p');
         /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
-        $sqlCount = $this->createQueryBuilder('t');
+        $sqlCount = $this->createQueryBuilder('p');
         
         // select
-        $sqlCount->select('COUNT(DISTINCT t.id)');
+        $sqlCount->select('COUNT(DISTINCT p.id)');
         
         //where
         if ($status == 'active') {
-            $sql->where('t.isClosed = false or t.isClosed is null');
-            $sqlCount->where('t.isClosed = false or t.isClosed is null');
+            $sql->where('p.isClosed = false or p.isClosed is null');
+            $sqlCount->where('p.isClosed = false or p.isClosed is null');
         } elseif ($status == 'closed') {
-            $sql->where('t.isClosed = true');
-            $sqlCount->where('t.isClosed = true');
+            $sql->where('p.isClosed = true');
+            $sqlCount->where('p.isClosed = true');
         }
         if ($user) {
-            $sql->leftJoin('t.managers', 'm')
+            $sql->leftJoin('p.managers', 'm')
                 ->andWhere('m.user = :user')
                 ->setParameter(':user', $user);
-            $sqlCount->leftJoin('t.managers', 'm')
+            $sqlCount->leftJoin('p.managers', 'm')
                 ->andWhere('m.user = :user')
                 ->setParameter(':user', $user);
         }

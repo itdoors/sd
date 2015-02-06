@@ -405,6 +405,7 @@ class Project
     {
         if ($userClosed) {
             $this->setDatetimeClosed(new \DateTime());
+            $this->setIsClosed(true);
         }
         $this->userClosed = $userClosed;
 

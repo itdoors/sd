@@ -65,7 +65,7 @@
                         {{ render(controller('ListsProjectBundle:StateTender:edit', { id: object.id })) }}
                     </div>
                 </div>
-                <div class="tab-pane" id="tab_1">{#{  include('ListsProjectBundle:StateTender:Tab/managers.html.twig') }#}</div>
+                <div class="tab-pane" id="tab_1">{{  include('ListsProjectBundle:StateTender:Tab/managers.html.twig') }}</div>
                 <div class="tab-pane" id="tab_2">{#{  include('ListsProjectBundle:StateTender:Tab/contacts.html.twig') }#}</div>
                 <div class="tab-pane" id="tab_3">{#{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }#}</div>
                 <div class="tab-pane" id="tab_4">

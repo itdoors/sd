@@ -6,12 +6,25 @@
 
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
-
+         setProgress = function(response)
+            {
+                if (response.handling.progress)
+                {
+                    var targetProcess = $('.progress-bar.progress-bar-success');
+                    targetProcess.attr('aria-valuenow', response.handling.progress);
+                    targetProcess.css('width', response.handling.progress + '%');
+                    targetProcess.find('span').html(response.handling.progressString);
+                }
+            };
         {% if access.canEditStateTender %}
                 $('.editable-gos-tender').editable({
                     url: '{{ path('lists_project_ajax_editable_state_tender') }}',
                     pk: {{object.id}}
                 });
+                $('#statusStateTender').editable({
+                url: '{{ path('lists_project_ajax_editable_state_tender') }}',
+                source: '{{ path('lists_project_ajax_search_status_state_tender') }}'
+            });
                 /*$('#isParticipation').editable({
                     url: '{#{ path('lists_project_ajax_editable_state_tender') }}',
                     pk: {{object.id}},
@@ -62,60 +75,6 @@
                         }
                     }
                 });
-
-            setProgress = function(response)
-            {
-                if (response.handling.progress)
-                {
-                    var targetProcess = $('.progress-bar.progress-bar-success');
-                    targetProcess.attr('aria-valuenow', response.handling.progress);
-                    targetProcess.css('width', response.handling.progress + '%');
-                    targetProcess.find('span').html(response.handling.progressString);
-                }
-            };
-
-            $('#statusId').editable({
-                url: '{{ path('sd_common_ajax_handling_save') }}',
-                source: '{{ path('sd_common_ajax_handling_status', {slug:'gos_tender'}) }}'
-            });
-
-            $('#resultId').editable({
-                url: '{{ path('sd_common_ajax_handling_save') }}',
-                source: '{{ path('sd_common_ajax_handling_result') }}'
-            });
-
-            $('#statusId').on('save', function(e, params) {
-
-                // Progress
-                var response = JSON.parse(params.response);
-
-                setProgress(response);
-            });
-
-            $('#resultId').on('save', function(e, params) {
-
-                var showMoreInfoIds = $(this).data('show-more-info-ids');
-
-                var moreInfoHref = $(this).parent().find('a.more-info');
-
-                if ($.inArray(params.newValue, showMoreInfoIds)) {
-                    moreInfoHref.show();
-                } else {
-                    moreInfoHref.hide();
-                }
-
-                var moreInfoHrefParams = {
-                    handlingId: $(this).data('pk'),
-                    resultId: params.newValue
-                };
-
-                moreInfoHref.data('params', moreInfoHrefParams);
-
-                // Progress
-                var response = JSON.parse(params.response);
-
-                setProgress(response);
-            });
 
             $('.sd-dogovor-date').live('mouseover', function(e){
 
@@ -169,14 +128,14 @@
                 <td style="width:15%">{% trans %}Project status{% endtrans %}</td>
                 <td style="width:35%">
                     {%  if object.isClosed  == true or object.isParticipation is not null %}
-                        {% if object.closedatetime %}
+                        {% if object.datetimeClosed %}
                             {% trans %}Closed{% endtrans %}  ({{object.reasonClosed}})<br>
-                            {{ object.closer }}  ({{ object.closedatetime|date("d.m.y, H:i") }})
+                            {{ object.userClosed }}  ({{ object.datetimeClosed|date("d.m.y, H:i") }})
                         {% else %}
                             {% if access.canEditStateTender %}
-                            <a href="#" id="statusId" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">
+                            <a href="#" id="statusStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
                             {% endif %}
-                                {{ object.status }}
+                                {{ object.statusStateTender }}
                                 {% if object.statusChangeDate %}
                                     {{ object.statusChangeDate|date("d.m.y, H:i") }}
                                 {% endif %}
@@ -324,39 +283,8 @@
                     {% if object.isParticipation is not null %}{{ object.getParticipations[object.isParticipation] |trans }}{% if object.reason %} ({{ object.reason }}){% endif %}{% endif %}
 
                 </td>
-                <td>{#% trans %}Result{% endtrans %#}</td>
-                <td>
-                    {#% if access.canEditStateTender %}
-                    <a  href="#"
-                        id="resultId"
-                        data-type="select"
-                        data-pk="{{ object.id }}"
-                        data-value="{{ object.resultId }}"
-                        data-original-title="{% trans %}Select type{% endtrans %}"
-                        data-show-more-info-ids="{#{ showMoreInfoIds|json_encode|raw }}"
-                    >
-                    {% endif %}
-                        {{ object.result }}
-                    {% if access.canEditStateTender %}
-                    </a>
-                    {% endif %#}
-                    {#% if access.canEditStateTender %}
-                    <a  class="more-info btn"
-                            {#% if object.resultId not in showMoreInfoIds %}
-                                style="display: none"
-                            {% endif %}
-                        data-toggle="modal"
-                        href="#form_modal_more_info"
-                        data-target_holder="moreInfoTpl"
-                        data-params='{"handlingId":{{ object.id }},"resultId":{{ object.resultId }}}'
-                        data-url-more-info="{{ path('sd_common_ajax_handling_more_info') }}"
-                    >
-                    {% endif %}
-                        {% trans from 'ListsProjectBundle' %}Show more info{% endtrans %}
-                    {% if access.canEditStateTender %}
-                    </a>
-                    {% endif %#}
-                </td>
+                <td></td>
+                <td></td>
             </tr>
                 <tr>                
                     <td>№ {% trans %}VDZ{% endtrans %}</td>
