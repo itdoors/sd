@@ -289,11 +289,11 @@ class Claim
     /**
      * Add curators
      *
-     * @param \SD\UserBundle\Entity\Stuff $curators
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
      * 
      * @return Claim
      */
-    public function addCurator(\SD\UserBundle\Entity\Stuff $curators)
+    public function addCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
     {
         $this->curators[] = $curators;
 
@@ -303,9 +303,9 @@ class Claim
     /**
      * Remove curators
      *
-     * @param \SD\UserBundle\Entity\Stuff $curators
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
      */
-    public function removeCurator(\SD\UserBundle\Entity\Stuff $curators)
+    public function removeCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
     {
         $this->curators->removeElement($curators);
     }
@@ -323,11 +323,11 @@ class Claim
     /**
      * Add performers
      *
-     * @param \SD\UserBundle\Entity\Stuff $performers
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
      * 
      * @return Claim
      */
-    public function addPerformer(\SD\UserBundle\Entity\Stuff $performers)
+    public function addPerformer(\SD\BusinessRoleBundle\Entity\Stuff $performers)
     {
         $this->performers[] = $performers;
 
@@ -337,9 +337,9 @@ class Claim
     /**
      * Remove performers
      *
-     * @param \SD\UserBundle\Entity\Stuff $performers
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
      */
-    public function removePerformer(\SD\UserBundle\Entity\Stuff $performers)
+    public function removePerformer(\SD\BusinessRoleBundle\Entity\Stuff $performers)
     {
         $this->performers->removeElement($performers);
     }

@@ -6,6 +6,7 @@ SD\BusinessRoleBundle\Entity\BusinessRole:
         name: discr
         type: string
     discriminatorMap:
+        stuff: Stuff
         client: Client
         companyClient: CompanyClient
         personClient: PersonClient

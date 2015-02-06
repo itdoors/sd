@@ -31,7 +31,7 @@ SD\ServiceDeskBundle\Entity\Claim:
             type: boolean
     manyToMany:
         curators:
-            targetEntity: SD\UserBundle\Entity\Stuff
+            targetEntity: SD\BusinessRoleBundle\Entity\Stuff
             joinTable:
                 name: claims_curators
                 joinColumns:
@@ -41,7 +41,7 @@ SD\ServiceDeskBundle\Entity\Claim:
                   stuff_id:
                     referencedColumnName: id
         performers:
-            targetEntity: SD\UserBundle\Entity\Stuff
+            targetEntity: SD\BusinessRoleBundle\Entity\Stuff
             joinTable:
                 name: claims_performers
                 joinColumns:
