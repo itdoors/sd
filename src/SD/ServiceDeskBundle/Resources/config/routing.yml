@@ -1,0 +1,3 @@
+sd_service_desk_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: SDServiceDeskBundle:Default:index }

@@ -1,0 +1,6 @@
+SD\ServiceDeskBundle\Entity\ClaimOnce:
+    type: entity
+    manyToOne:
+        individual:
+            targetEntity: Individual
+#            inversedBy: claims

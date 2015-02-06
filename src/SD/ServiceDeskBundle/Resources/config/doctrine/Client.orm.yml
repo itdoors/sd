@@ -1,0 +1,2 @@
+SD\ServiceDeskBundle\Entity\Client:
+    type: entity

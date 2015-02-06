@@ -1,0 +1,45 @@
+SD\ServiceDeskBundle\Entity\Claim:
+    type: entity
+    table: sd_claim
+    inheritanceType: SINGLE_TABLE
+    discriminatorColumn:
+        name: discr
+        type: string
+    discriminatorMap:
+        claimOnce: ClaimOnce
+        claimDep: ClaimDep
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        types:
+            type: string
+            columnDefinition: ENUM('visible', 'invisible')
+        status:
+            type: string
+            columnDefinition: ENUM('active', 'inactive')
+        importance:
+            type: string
+            columnDefinition: ENUM('hot', 'weak')
+        createdAt:
+            type: datetime
+        closedAt:
+            type: datetime
+            nullable: true
+        disabled:
+            type: boolean
+    manyToMany:
+        curators:
+            targetEntity: ClaimCurator
+        performers:
+            targetEntity: ClaimPerformer
+    manyToOne:
+        customer:
+            targetEntity: Client
+            inversedBy: claims
+    oneToMany:
+        messages:
+            targetEntity: ClaimMessage
+            mappedBy: claim
+            orphanremoval: true
