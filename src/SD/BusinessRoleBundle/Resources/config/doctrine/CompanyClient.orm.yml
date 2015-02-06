@@ -1,4 +1,4 @@
-SD\ServiceDeskBundle\Entity\CompanyClient:
+SD\BusinessRoleBundle\Entity\CompanyClient:
     type: entity
     manyToOne:
         organization:

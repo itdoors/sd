@@ -1,4 +1,4 @@
-SD\ServiceDeskBundle\Entity\BusinessRole:
+SD\BusinessRoleBundle\Entity\BusinessRole:
     type: entity
     table: sd_business_role
     inheritanceType: SINGLE_TABLE
@@ -15,4 +15,4 @@ SD\ServiceDeskBundle\Entity\BusinessRole:
             generator: { strategy: IDENTITY }
     manyToOne:
         individual:
-            targetEntity: Individual
+            targetEntity: Lists\IndividualBundle\Entity\Individual

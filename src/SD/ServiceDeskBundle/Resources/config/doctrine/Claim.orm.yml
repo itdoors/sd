@@ -31,12 +31,28 @@ SD\ServiceDeskBundle\Entity\Claim:
             type: boolean
     manyToMany:
         curators:
-            targetEntity: ClaimCurator
+            targetEntity: SD\UserBundle\Entity\Stuff
+            joinTable:
+                name: claims_curators
+                joinColumns:
+                  claim_id:
+                    referencedColumnName: id
+                inverseJoinColumns:
+                  stuff_id:
+                    referencedColumnName: id
         performers:
-            targetEntity: ClaimPerformer
+            targetEntity: SD\UserBundle\Entity\Stuff
+            joinTable:
+                name: claims_performers
+                joinColumns:
+                  claim_id:
+                    referencedColumnName: id
+                inverseJoinColumns:
+                  stuff_id:
+                    referencedColumnName: id
     manyToOne:
         customer:
-            targetEntity: Client
+            targetEntity: SD\BusinessRoleBundle\Entity\Client
             inversedBy: claims
     oneToMany:
         messages:

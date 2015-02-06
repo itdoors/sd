@@ -1,6 +1,6 @@
 <?php
 
-namespace SD\ServiceDeskBundle\Entity;
+namespace SD\BusinessRoleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +15,7 @@ class BusinessRole
     protected $id;
 
     /**
-     * @var \SD\ServiceDeskBundle\Entity\Individual
+     * @var \Lists\IndividualBundle\Entity\Individual
      */
     protected $individual;
 
@@ -33,11 +33,11 @@ class BusinessRole
     /**
      * Set individual
      *
-     * @param \SD\ServiceDeskBundle\Entity\Individual $individual
+     * @param \Lists\IndividualBundle\Entity\Individual $individual
      * 
      * @return BusinessRole
      */
-    public function setIndividual(\SD\ServiceDeskBundle\Entity\Individual $individual = null)
+    public function setIndividual(\Lists\IndividualBundle\Entity\Individual $individual = null)
     {
         $this->individual = $individual;
 
@@ -47,7 +47,7 @@ class BusinessRole
     /**
      * Get individual
      *
-     * @return \SD\ServiceDeskBundle\Entity\Individual 
+     * @return \Lists\IndividualBundle\Entity\Individual 
      */
     public function getIndividual()
     {

@@ -1,0 +1,3 @@
+sd_business_role_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: SDBusinessRoleBundle:Default:index }

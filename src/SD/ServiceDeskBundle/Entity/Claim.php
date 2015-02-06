@@ -50,7 +50,7 @@ class Claim
     protected $messages;
 
     /**
-     * @var \SD\ServiceDeskBundle\Entity\Client
+     * @var \SD\BusinessRoleBundle\Entity\Client
      */
     protected $customer;
 
@@ -269,7 +269,7 @@ class Claim
      * 
      * @return Claim
      */
-    public function setCustomer(\SD\ServiceDeskBundle\Entity\Client $customer = null)
+    public function setCustomer(\SD\BusinessRoleBundle\Entity\Client $customer = null)
     {
         $this->customer = $customer;
 
@@ -279,7 +279,7 @@ class Claim
     /**
      * Get customer
      *
-     * @return \SD\ServiceDeskBundle\Entity\Client 
+     * @return \SD\BusinessRoleBundle\Entity\Client 
      */
     public function getCustomer()
     {
@@ -289,11 +289,11 @@ class Claim
     /**
      * Add curators
      *
-     * @param \SD\ServiceDeskBundle\Entity\ClaimCurator $curators
+     * @param \SD\UserBundle\Entity\Stuff $curators
      * 
      * @return Claim
      */
-    public function addCurator(\SD\ServiceDeskBundle\Entity\ClaimCurator $curators)
+    public function addCurator(\SD\UserBundle\Entity\Stuff $curators)
     {
         $this->curators[] = $curators;
 
@@ -303,9 +303,9 @@ class Claim
     /**
      * Remove curators
      *
-     * @param \SD\ServiceDeskBundle\Entity\ClaimCurator $curators
+     * @param \SD\UserBundle\Entity\Stuff $curators
      */
-    public function removeCurator(\SD\ServiceDeskBundle\Entity\ClaimCurator $curators)
+    public function removeCurator(\SD\UserBundle\Entity\Stuff $curators)
     {
         $this->curators->removeElement($curators);
     }
@@ -323,11 +323,11 @@ class Claim
     /**
      * Add performers
      *
-     * @param \SD\ServiceDeskBundle\Entity\ClaimPerformer $performers
+     * @param \SD\UserBundle\Entity\Stuff $performers
      * 
      * @return Claim
      */
-    public function addPerformer(\SD\ServiceDeskBundle\Entity\ClaimPerformer $performers)
+    public function addPerformer(\SD\UserBundle\Entity\Stuff $performers)
     {
         $this->performers[] = $performers;
 
@@ -337,9 +337,9 @@ class Claim
     /**
      * Remove performers
      *
-     * @param \SD\ServiceDeskBundle\Entity\ClaimPerformer $performers
+     * @param \SD\UserBundle\Entity\Stuff $performers
      */
-    public function removePerformer(\SD\ServiceDeskBundle\Entity\ClaimPerformer $performers)
+    public function removePerformer(\SD\UserBundle\Entity\Stuff $performers)
     {
         $this->performers->removeElement($performers);
     }

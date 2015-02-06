@@ -1,6 +1,6 @@
 <?php
 
-namespace SD\ServiceDeskBundle\Entity;
+namespace SD\BusinessRoleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

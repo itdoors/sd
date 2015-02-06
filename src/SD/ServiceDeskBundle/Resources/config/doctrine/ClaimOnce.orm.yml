@@ -2,5 +2,5 @@ SD\ServiceDeskBundle\Entity\ClaimOnce:
     type: entity
     manyToOne:
         targetIndividual:
-            targetEntity: Individual
+            targetEntity: Lists\IndividualBundle\Entity\Individual
 #            inversedBy: claims
