@@ -40,9 +40,12 @@
                 }
             });
         });
-    });
-</script>
+        
+    
+ });
+ </script>
 {% endif %}
+
 <table class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
@@ -82,13 +85,12 @@
             {% if access.canChangeManager%}
             <td>
                 {% if item.isManager and item.user != app.user  %}
-                <a
-                    class="ajax-delete-and-update"
-                    href="javascript:;"
-                    data-params='{"model":"HandlingUser","handlingUserId":{{ item.id }}}'
-                >
-                    {% trans %}Delete{% endtrans %}
-                </a>
+                    <a class="ajax-delete fa"
+                        title="{% trans %}Delete{% endtrans %}"
+                        href="javascript:;"
+                        data-question="{% trans %}Delete manager{% endtrans %}?"
+                        data-url="{{ path('lists_project_ajax_remove_manager', { id : item.id }) }}"
+                    >{% trans %}Delete{% endtrans %}</a>
                 {% endif %}
             </td>
              {% endif %}

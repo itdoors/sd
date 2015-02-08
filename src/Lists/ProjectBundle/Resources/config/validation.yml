@@ -69,43 +69,48 @@ Lists\ProjectBundle\Entity\StateTender:
                 min: 0
                 max: 99999999999
                 groups: [edit]
-#Lists\HandlingBundle\Entity\ProjectFile:
-#    properties:
-#        shortText:
-#            - NotBlank: { groups: [edit] }
-#            - Length: 
-#                max: 128
-#                groups: [edit]
-#        name:
-#            - NotBlank: { groups: [add] }
-#            - File:
-#                maxSize: 5M
-#                mimeTypes:
-#                    - application/pdf
-#                    - application/vnd.ms-excel
-#                    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-#                    - application/msword
-#                    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-#                mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
-#                groups: [add]
-#                    
-#Lists\HandlingBundle\Entity\ProjectGosTenderParticipan:
-#    properties:
-#        participan:
-#            - NotBlank: { groups: [new, addParticipan] }
-#            - Lists\HandlingBundle\Validator\UniqueProjectGosTenderParticipan: { groups: [new, addParticipan] }
-#        gosTender:
-#            - NotBlank: { groups: [new] }
-#        summa:
-#            - Range: 
-#                min: 0
-#                groups: [new, edit, addParticipan]
-#            - Length:
-#                max: 11
-#                groups: [new, edit, addParticipan]
-# 
+Lists\ProjectBundle\Entity\File:
+    properties:
+        shortText:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [createFileProject]
+        name:
+            - NotBlank: { groups: [createFileProject] }
+            - File:
+                maxSize: 5M
+                mimeTypes:
+                    - application/pdf
+                    - application/vnd.ms-excel
+                    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                    - application/msword
+                    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
+                groups: [createFileProject]          
+Lists\ProjectBundle\Entity\StateTenderParticipant:
+    properties:
+        participant:
+            - NotBlank: { groups: [create] }
+            - Lists\ProjectBundle\Validator\UniqueStateTenderParticipant: { groups: [create] }
+        stateTender:
+            - NotBlank: { groups: [create] }
+        summa:
+            - Range: 
+                min: 0
+                groups: [create, edit]
+            - Length:
+                max: 11
+                groups: [create, edit]
+#        isWinner:
+#            - Choice:
+#                 callback: getChoiceList
+#                 groups: [edit]
+ 
 Lists\ProjectBundle\Entity\Manager:
     properties:
         part:
             - NotBlank: { groups: [create] }
             - Lists\ProjectBundle\Validator\ManagerMaxPart: { groups: [create] }
+        user:
+            - Lists\ProjectBundle\Validator\ManagerUniqueUser: { groups: [create] }

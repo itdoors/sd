@@ -55,6 +55,25 @@ lists_project_ajax_search_status_state_tender:
     pattern:  /lists/project/ajax/search/status/state_tender
     defaults: { _controller: ListsProjectBundle:Ajax:searchStatusStateTender}
     
+lists_project_ajax_remove_manager:
+    pattern:  /lists/project/ajax/remove/manager/{id}
+    defaults: { _controller: ListsProjectBundle:Ajax:removeManager}
+    requirements:
+        id: \d+
+        
+lists_project_ajax_editable_state_tender_participant:
+    pattern:  /lists/project/ajax/editable/state_tender_participant
+    defaults: { _controller: ListsProjectBundle:Ajax:editableStateTenderParticipant }
+
+lists_project_ajax_editable_project_file:
+    pattern:  /lists/project/ajax/editable/project/file
+    defaults: { _controller: ListsProjectBundle:Ajax:editableProjectFile }
+    
+lists_project_ajax_upload_file:
+    pattern:  /lists/project/ajax/upload/file/{id}
+    defaults: { _controller: ListsProjectBundle:Ajax:uploadFile }
+    requirements:
+        id: \d+
 # ProjectBaseController
 lists_project_managers:
     pattern:  /lists/project/lists/managers/{id}

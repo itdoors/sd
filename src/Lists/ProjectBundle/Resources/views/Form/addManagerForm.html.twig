@@ -2,26 +2,6 @@
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
 <script type="text/javascript">
     ITDoorsAjax.select2($('#{{ form.vars.name }}_user'));
-    /*$(document).ready(function(){
-        $('#{{ form.vars.name }}_user').select2({
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ path('sd_common_ajax_user') }}',
-                dataType: 'json',
-                data: function (term, page) {
-                    return {
-                        query: term
-                    };
-                },
-                results: function (data, page) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-    }); */
-
 </script>
 
 <div class="modal-dialog">
@@ -29,37 +9,50 @@
         <div class="modal-header">
             <h4 class="modal-title">{% trans %}Add manager in project{% endtrans %}</h4>
         </div>
-        <div class="modal-body">                
-            {{ form_start(form, {
-                'action' : path('it_doors_ajax_form'),
-                'attr' : {
-                    'method' : 'POST',
-                    'class' : 'itdoors-ajax-form'
-                }
-            }) }}
-                <div class="panel-body">
-                    {% if form.vars.valid is sameas(false) %}
+        <div class="modal-body">
+            <div class="row ">
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="form-group col-md-12">
                     <div class="alert alert-danger">
                         <button class="close" data-close="alert"></button>
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
                         {{ form_errors(form) }}
                     </div>
+                    </div>
                     {% endif %}
-                    <div class="form-group">
-                        {{ form_label(form.user, 'Manager', {'attr': {'class': 'control-label'} }) }}
-                        {{ form_widget(form.user, {'attr' : { 'placeholder': "Manager" } }) }}
-                        <span class="help-block">После добавления пользователя, он получет доступ к проекту, контактам.</span>
+                {{ form_start(form, {
+                    'action' : path('it_doors_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'itdoors-ajax-form'
+                    }
+                }) }}
+                <div class="form-body">
+                    
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.user.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.user, 'Manager', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.user, {'attr' : { 'placeholder': "Manager" } }) }}
+                            {{ form_errors(form.user) }}
+                            <span class="help-block">После добавления пользователя, он получет доступ к проекту, контактам.</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        {{ form_label(form.part, 'Percentage of participation', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.part, {'attr' : {'class' : 'form-control', 'placeholder': "Percentage of participation" } }) }}
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.part.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.part, 'Percentage of participation', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.part, {'attr' : {'class' : 'form-control', 'placeholder': "Percentage of participation" } }) }}
+                            {{ form_errors(form.part) }}
+                        </div>
                     </div>
-                </div>
-                <div class="form-actions">
-                    {{ form_widget(form.submit, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
-                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
+                
+                <div class="col-md-12">
+                    <div class="form-actions">
+                        {{ form_widget(form.submit, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                        {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default itdoors-form-cancel-btn'} } ) }}
+                    </div>
                 </div>
                 <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                </div>
             {{ form_end(form) }}
         </div>
     </div>

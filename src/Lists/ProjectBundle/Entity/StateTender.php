@@ -82,6 +82,8 @@ class StateTender extends Project
     {
         parent::__construct();
         $this->kveds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->participants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
     }
     /**
      * Set vdz
@@ -451,5 +453,44 @@ class StateTender extends Project
     public function getStatusStateTender ()
     {
         return $this->statusStateTender;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $participants;
+
+
+    /**
+     * Add participants
+     *
+     * @param \Lists\ProjectBundle\Entity\StateTenderParticipant $participants
+     *
+     * @return StateTender
+     */
+    public function addParticipan(\Lists\ProjectBundle\Entity\StateTenderParticipant $participants)
+    {
+        $this->participants[] = $participants;
+
+        return $this;
+    }
+
+    /**
+     * Remove participants
+     *
+     * @param \Lists\ProjectBundle\Entity\StateTenderParticipant $participants
+     */
+    public function removeParticipan(\Lists\ProjectBundle\Entity\StateTenderParticipant $participants)
+    {
+        $this->participants->removeElement($participants);
+    }
+
+    /**
+     * Get participants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParticipants()
+    {
+        return $this->participants;
     }
 }

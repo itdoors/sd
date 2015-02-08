@@ -7,7 +7,7 @@
     'successFunctions' : {
         'managers_list' : 'ITDoorsAjax.updateList'
     },
-'   serviceDefault' : {
+    'serviceDefault' : {
         'alias' : 'lists_project.service',
         'method' : 'addManagerFormDefaults'
     },
@@ -18,20 +18,7 @@
     'defaults' : {
         'project' : object.id
     },
-    'target' : '#form_modal_addManagerForm',
+    'target' : '#form_modal_block',
     'html' : 'ListsProjectBundle:Form:addManagerForm.html.twig'
 }) }}
 
-<div id="form_modal_addManagerForm" class="modal" role="basic" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">{% trans from 'ListsProjectBundle' %}Add manager in project{% endtrans %}</h4>
-            </div>
-            <div class="modal-body">
-                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
-            </div>
-        </div>
-    </div>
-</div>

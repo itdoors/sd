@@ -3,12 +3,116 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * File
  */
 class File
 {
+    /**
+     * @var string
+     */
+    private $path = '/uploads/projects/';
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    private function getPath ()
+    {
+        return $this->path;
+    }
+    /**
+     * getAbsolutePath
+     *
+     * @return null|string
+     */
+    public function getAbsolutePath ()
+    {
+        return null === $this->getName() ? null : $this->getUploadRootDir() . '/' . $this->getName();
+    }
+    /**
+     * fileExists
+     *
+     * @return null|string
+     */
+    public function fileExists ()
+    {
+        return null === $this->getName() ? null : file_exists($this->getAbsolutePath());
+    }
+    /**
+     * getWebPath
+     *
+     * @return null|string
+     */
+    public function getWebPath ()
+    {
+        return null === $this->getName() ? null : $this->getUploadDir() . '/' . $this->getName();
+    }
+    /**
+     * getUploadRootDir
+     *
+     * @return string
+     */
+    protected function getUploadRootDir ()
+    {
+        $dir = __DIR__ . '/../../../../web/' . $this->getUploadDir();
+
+        return $dir;
+    }
+    /**
+     * getUploadDir
+     *
+     * @return string
+     */
+    protected function getUploadDir ()
+    {
+        return $this->getPath() . $this->getProject()->getId() . '/';
+    }
+
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile (UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile ()
+    {
+        return $this->file;
+    }
+    /**
+     * upload
+     */
+    public function upload ()
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $filename = uniqid() . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir();
+
+        $this->getFile()->move($uploadDir, $filename);
+
+        $this->setName($filename);
+        $this->setCreateDatetime(new \DateTime());
+
+        $this->file = null;
+    }
     /**
      * @var integer
      */

@@ -272,6 +272,7 @@ var SD = (function() {
 
     SD.prototype.initAjaxDelete = function()
     {
+        console.log('SD.initAjaxDelete()');
         var selfSD = this;
 
         $('.' + this.params.ajaxDeleteClass).die('click');

@@ -21,4 +21,11 @@ class ManagerProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canEdit ()
+    {
+        return true;
+    }
 }

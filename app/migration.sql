@@ -2655,4 +2655,17 @@ ALTER TABLE project ADD status_id INT DEFAULT NULL;
 ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE6BF700BD FOREIGN KEY (status_id) REFERENCES project_status (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_2FB3D0EE6BF700BD ON project (status_id);
 
+CREATE TABLE project_state_tender_participant (id BIGSERIAL NOT NULL, organization_id BIGINT DEFAULT NULL, project_id INT DEFAULT NULL, summa NUMERIC(10, 2) DEFAULT NULL, is_winner BOOLEAN DEFAULT NULL, reason TEXT DEFAULT NULL, datetime_create TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_C7903FA32C8A3DE ON project_state_tender_participant (organization_id);
+CREATE INDEX IDX_C7903FA166D1F9C ON project_state_tender_participant (project_id);
+CREATE UNIQUE INDEX unique_state_tender_participan ON project_state_tender_participant (organization_id, project_id);
+COMMENT ON COLUMN project_state_tender_participant.summa IS 'Сумма';
+COMMENT ON COLUMN project_state_tender_participant.is_winner IS 'Победитель';
+COMMENT ON COLUMN project_state_tender_participant.reason IS 'Комментарий';
+COMMENT ON COLUMN project_state_tender_participant.datetime_create IS 'Дата и время добавления участника (автоматически)';
+COMMENT ON COLUMN project_state_tender_participant.datetime_deleted IS 'Дата и время удаления участника';
+
+ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
 -- prod ----

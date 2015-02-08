@@ -4,7 +4,7 @@ namespace Lists\ProjectBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Lists\HandlingBundle\Entity\ProjectGosTender;
+use Lists\ProjectBundle\Entity\FileProject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\File;
 use Lists\ProjectBundle\Entity\StateTender;
@@ -15,6 +15,45 @@ use Lists\ProjectBundle\Entity\ServiceStateTender;
  */
 class AjaxController extends Controller
 {
+    
+    /**
+     * removeManagerAction
+     * 
+     * @param integer $id
+     * 
+     * @return Response
+     */
+    public function removeManagerAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $return = array('error'=>false);
+
+        $manager = $this->getDoctrine()->getRepository('ListsProjectBundle:Manager')->find($id);
+         if (!$manager) {
+            $return['error'] = 'Manager doesn`t found';
+
+            return new Response(json_encode($return));
+        }
+        $project = $manager->getProject();
+        $service = $this->get('lists_project.service');
+        $access= $service->checkAccess($this->getUser(), $project);
+        if (!$access->canChangeManager()) {
+            throw $this->createAccessDeniedException();
+        }
+        $managers = $project->getManagers();
+        foreach ($managers as $managerTemp) {
+            if ($managerTemp->isManagerProject()) {
+                $managerTemp->plusPart($manager->getPart());
+                $em->persist($managerTemp);
+                $em->remove($manager);
+            }
+        }
+       
+        
+        $em->flush();
+
+        return new Response(json_encode($return));
+    }
     /**
      * editableGosTenderAction
      * 
@@ -200,18 +239,13 @@ class AjaxController extends Controller
 
         return new Response(json_encode($result));
     }
-    
-    
-    
-    
-    
      /**
-     * editableGosTenderParticipantAction
+     * editableStateTenderParticipantAction
      * 
      * @return Response
      * @throws \Exception
      */
-    public function editableGosTenderParticipantAction()
+    public function editableStateTenderParticipantAction()
     {
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
@@ -221,15 +255,15 @@ class AjaxController extends Controller
 
         /** @var ProjectGosTenderParticipan $object */
         $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:ProjectGosTenderParticipan')
+            ->getRepository('ListsProjectBundle:StateTenderParticipant')
             ->find($pk);
-        $service = $this->get('lists_handling.service');
-        $access= $service->checkAccess($this->getUser(), $object->getGosTender()->getProject());
-        if (!$access->canEditGosTender()) {
+        $service = $this->get('lists_project.service');
+        $access= $service->checkAccess($this->getUser(), $object->getStateTender());
+        if (!$access->canEditStateTender()) {
             throw $this->createAccessDeniedException();
         }
         if ($name == 'summa') {
-            $value = str_replace(',', '.', $value);
+            $value = str_replace(',', '.', str_replace(' ', '', $value));
         }
 
         $object->$methodSet($value);
@@ -264,10 +298,6 @@ class AjaxController extends Controller
 
         return new Response(json_encode($return));
     }
-    
-    
-    
-    
     /**
      * editableProjectFileAction
      * 
@@ -282,13 +312,13 @@ class AjaxController extends Controller
 
         $methodSet = 'set' . ucfirst($name);
 
-        /** @var ProjectGosTender $object */
+        /** @var FileProject $object */
         $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:ProjectFile')
+            ->getRepository('ListsProjectBundle:FileProject')
             ->find($pk);
-        $service = $this->get('lists_handling.service');
+        $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object->getProject());
-        if (!$access->canEditGosTender()) {
+        if (!$access->canEditStateTender()) {
             throw new \Exception('No access', 403);
         }
         $object->$methodSet($value);
@@ -323,8 +353,6 @@ class AjaxController extends Controller
 
         return new Response(json_encode($return));
     }
-   
-    
     /**
      * Saves project file ajax
      *
@@ -338,7 +366,7 @@ class AjaxController extends Controller
         $result = array();
         $em = $this->getDoctrine()->getManager();
         $projectFile = $em
-            ->getRepository('ListsHandlingBundle:ProjectFile')
+            ->getRepository('ListsProjectBundle:File')
             ->find($id);
 
         if (!$projectFile) {

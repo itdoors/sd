@@ -98,10 +98,10 @@ Lists\ProjectBundle\Entity\StateTender:
               inverseJoinColumns:
                 service_id:
                   referencedColumnName: id
-#    oneToMany:
-#        participans:
-#          targetEntity: ProjectGosTenderParticipan
-#          mappedBy: gosTender
+    oneToMany:
+        participants:
+          targetEntity: StateTenderParticipant
+          mappedBy: stateTender
     manyToOne:
         statusStateTender:
             targetEntity: StatusStateTender

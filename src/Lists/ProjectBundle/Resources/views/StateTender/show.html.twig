@@ -46,6 +46,9 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
 {% endblock %}
 
+{% block modal %}
+    <div id="form_modal_block" class="modal" role="basic"></div>
+{% endblock %}
 {% block body %}
 
 <div class="row">
@@ -66,16 +69,16 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="tab_1">{{  include('ListsProjectBundle:StateTender:Tab/managers.html.twig') }}</div>
-                <div class="tab-pane" id="tab_2">{#{  include('ListsProjectBundle:StateTender:Tab/contacts.html.twig') }#}</div>
-                <div class="tab-pane" id="tab_3">{#{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }#}</div>
+                <div class="tab-pane" id="tab_2">{{  include('ListsProjectBundle:StateTender:Tab/contacts.html.twig') }}</div>
+                <div class="tab-pane" id="tab_3">{{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }}</div>
                 <div class="tab-pane" id="tab_4">
                     <div id="list_participants" data-url="{{ path('lists_project_state_tender_show_participants', { id: object.id }) }}">
-                        {#{ render(controller('ListsProjectBundle:StateTender:showParticipants', { id: object.id })) }#}
+                        {{ render(controller('ListsProjectBundle:StateTender:showParticipants', { id: object.id })) }}
                     </div>
                 </div>
                 <div class="tab-pane" id="tab_5">
                     <div id="list_documents" data-url="{{ path('lists_project_state_tender_show_documents', { id: object.id }) }}">
-                        {#{ render(controller('ListsProjectBundle:StateTender:showDocuments', { id: object.id })) }#}
+                        {{ render(controller('ListsProjectBundle:StateTender:showDocuments', { id: object.id })) }}
                     </div>
                 </div>
             </div>

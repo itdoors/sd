@@ -206,7 +206,7 @@ class ProjectBaseController extends Controller
         ));
     }
     /**
-     * Executes showParticipants
+     * Executes editAction
      *
      * @param integer $id
      *

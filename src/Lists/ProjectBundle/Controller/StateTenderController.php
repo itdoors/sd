@@ -185,25 +185,27 @@ class StateTenderController extends ProjectBaseController
      */
     public function showParticipantsAction ($id)
     {
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
+        /** @var ProjectService $service */
+        $service = $this->get('lists_project.service');
 
         $repository = $em->getRepository('ListsProjectBundle:'.$this->nameEntity);
         $methodGet = 'get'.$this->nameEntity;
         $object = $repository->$methodGet($id);
 
-        $service = $this->get('lists_project.service');
         $access = $service->checkAccess($user, $object);
 
         $methodSee = 'canSee'.$this->nameEntity;
         if (!$access->$methodSee()) {
             throw $this->createAccessDeniedException();
         }
-        $participans = $object->getParticipans();
+        $participants = $object->getParticipants();
 
         return $this->render('ListsProjectBundle:'.$this->nameEntity.':Tab/participants.html.twig', array (
-                'participans' => $participans,
+                'participants' => $participants,
                 'object' => $object,
                 'access' => $access
         ));

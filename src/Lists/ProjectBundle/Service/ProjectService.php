@@ -24,7 +24,7 @@ class ProjectService
     protected $user;
 
     /**
-     * __construct()
+     * __construct
      *
      * @param SecurityContext $context
      */
@@ -130,29 +130,6 @@ class ProjectService
             $this->em->persist($data);
             $this->em->flush();
         }
-        
-    }
-    
-    
-    
-    /**
-     * Add form defaults depending on defaults)
-     *
-     * @param Form    $form
-     * @param mixed[] $defaults
-     */
-    public function projectGosTenderParticipanFormDefaults(Form $form, $defaults)
-    {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $gosTenderId = (int) $defaults['gosTender'];
-        $gosTender = $em->getRepository('ListsHandlingBundle:ProjectGosTender')->find($gosTenderId);
-        $form
-            ->add('gosTender', 'hidden_entity', array(
-                'data_class' => null,
-                'entity'=>'Lists\HandlingBundle\Entity\ProjectGosTender',
-                'data' => $gosTender
-            ));
     }
     /**
      * Add form defaults depending on defaults)
@@ -160,16 +137,13 @@ class ProjectService
      * @param Form    $form
      * @param mixed[] $defaults
      */
-    public function addDocumentFormDefaults(Form $form, $defaults)
+    public function stateTenderParticipantFormDefaults(Form $form, $defaults)
     {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $projectId = (int) $defaults['project'];
-        $project = $em->getRepository('ListsHandlingBundle:Handling')->find($projectId);
+        $project = $this->em->getRepository('ListsProjectBundle:StateTender')->find((int) $defaults['stateTender']);
         $form
-            ->add('project', 'hidden_entity', array(
+            ->add('stateTender', 'hidden_entity', array(
                 'data_class' => null,
-                'entity'=>'Lists\HandlingBundle\Entity\Handling',
+                'entity'=>'Lists\ProjectBundle\Entity\StateTender',
                 'data' => $project
             ));
     }
@@ -180,22 +154,51 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveProjectGosTenderParticipanForm (Form $form, Request $request, $params)
+    public function saveStateTenderParticipantForm (Form $form, Request $request, $params)
     {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
         $data = $form->getData();
-        $isWinner = $data->getIsWinner();
-        $em->persist($data);
-        $em->flush();
-        
-        if ($isWinner === null) {
-            // костыль для поля boolean set null (нужно будет удалить)
-            $db = $em->getConnection();
-            $stmt = $db->prepare('UPDATE "public".project_gos_tender_participan SET "is_winner" = NULL WHERE id = :id');
-            $stmt->execute(array (':id' => $data->getId()));
-        }
+        $this->em->persist($data);
+        $this->em->flush();
     }
+     /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+     */
+    public function addDocumentFormDefaults(Form $form, $defaults)
+    {
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->find((int) $defaults['project']);
+        $form
+            ->add('project', 'hidden_entity', array(
+                'data_class' => null,
+                'entity'=>'Lists\ProjectBundle\Entity\Project',
+                'data' => $project
+            ));
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveAddDocumentForm (Form $form, Request $request, $params)
+    {
+        $data = $form->getData();
+        $data->setFile($data->getName());
+        $data->upload();
+        $data->setUser($this->user);
+        $this->em->persist($data);
+        $this->em->flush();
+    }
+    
+    
+    
+    
+    
+    
+   
     /**
      * Save form
      *
@@ -219,22 +222,5 @@ class ProjectService
             $em->flush();
         }
     }
-    /**
-     * Save form
-     *
-     * @param Form    $form
-     * @param Request $request
-     * @param mixed[] $params
-     */
-    public function saveAddDocumentForm (Form $form, Request $request, $params)
-    {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $data = $form->getData();
-        $data->setFile($data->getName());
-        $data->upload();
-        $data->setUser($this->container->get('security.context')->getToken()->getUser());
-        $em->persist($data);
-        $em->flush();
-    }
+    
 }

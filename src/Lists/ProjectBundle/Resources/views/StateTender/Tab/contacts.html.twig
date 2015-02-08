@@ -1,34 +1,33 @@
-{% trans_default_domain 'ListsHandlingBundle' %}
-{{ call_to_model_contact({
+{% trans_default_domain 'ListsProjectBundle' %}
+{#{ call_to_model_contact({
     'selector' : '.call-btn',
     'params' : {
         'modelName' : 'handling',
         'modelId' : object.id,
         'formName' : 'handlingMessageCallForm'
     },
-}) }}
+}) }#}
 
     <div class="col-md-12">
         <h3>{% trans %}Contacts{% endtrans %}</h3>
-        <p>{% trans %}Contacts on handling{% endtrans %}</p>
         {% if access.canEdit %}
         <div class="table-toolbar">
             <div class="btn-group" style="margin-bottom: 10px;">
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target_holder="contactsFormTpl"
                         data-form_name="modelContactOrganizationForm"
-                        data-default='{"modelName":"organization","modelId":{{ object.project.organization.id }} }'
+                        data-default='{"modelName":"organization","modelId":{{ object.organization.id }} }'
                         data-post_function="updateList"
                         data-post_target_id="contact_list"
                         >
-                    {% trans %}Add Contact{% endtrans %} <i class="fa fa-plus"></i>
+                    {% trans %}Add contact{% endtrans %} <i class="fa fa-plus"></i>
                 </button>
             </div>
             <div style="display: none" id="contactsFormTpl">
             </div>
         </div>
         {% endif %}
-        <div id="contact_list" data-url="{{ path('lists_contact_ajax_handling', { handlingId: object.id }) }}" data-params='{"handlingId":{{ object.id }}'>
-            {{ render(controller('ListsContactBundle:Contact:Handling', { handlingId: object.id })) }}
+        <div id="contact_list" data-url="{{ path('lists_contact_ajax_project', { id: object.id }) }}">
+            {{ render(controller('ListsContactBundle:Contact:Project', { id: object.id })) }}
         </div>
     </div>

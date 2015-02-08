@@ -1,10 +1,10 @@
-{% trans_default_domain 'ListsHandlingBundle' %}
-{% if access.canEditGosTender %}
-    {{ include ('ListsHandlingBundle:GosTender/Button:addDocument.html.twig')}}
+{% trans_default_domain 'ListsProjectBundle' %}
+{% if access.canEditStateTender %}
+    {{ include ('ListsProjectBundle:StateTender/Button:addDocument.html.twig')}}
     <script type="text/javascript">
         $(document).ready(function(){
             $('.editable-project-file').editable({
-                url: '{{ path('lists_handling_ajax_editable_project_file') }}'
+                url: '{{ path('lists_project_ajax_editable_project_file') }}'
             });
         });
     </script>
@@ -23,18 +23,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for key,file in object.project.files %}
+            {% for key,file in object.files %}
                 <tr>
                     <td>{{ key+1 }}</td>
                     <td>{{ file.type ? file.type.name : 'Document'|trans }}</td>
                     <td>
                         {% if file.name %}
                         <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{% trans %}Document{% endtrans %}</a>
-                        {% elseif access.canEditGosTender %}
+                        {% elseif access.canEditStateTender %}
                             <script>
                                 $(document).ready(function(){
                                     $(function () {
-                                        $('#fileupload').fileupload({
+                                        $('#fileupload{{ key+1 }}').fileupload({
 
                                             dataType: 'json',
                                             fail: function (e, data) {
@@ -54,16 +54,16 @@
                             <span class="btn btn-success fileinput-button">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span>{% trans %}Upload new document{% endtrans %}</span>
-                                <input id="fileupload" type="file" name="file" data-url="{{ path('lists_handling_ajax_upload_file', {'id': file.id}) }}">
+                                <input id="fileupload{{ key+1 }}" type="file" name="file" data-url="{{ path('lists_project_ajax_upload_file', {'id': file.id}) }}">
                             </span>  
                         {% endif %}
                     </td>
                     <td>
-                        {% if access.canEditGosTender %}
+                        {% if access.canEditStateTender %}
                         <a class="editable-project-file" data-pk="{{file.id}}" href="#" id="shortText" data-type="text" data-placement="top" data-original-title="{% trans %}Short text{% endtrans %}">
                         {% endif %}
                             {{ file.shortText}}
-                        {% if access.canEditGosTender %}
+                        {% if access.canEditStateTender %}
                         </a>
                         {% endif %}
                     </td>
