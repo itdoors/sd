@@ -18,6 +18,7 @@ class ClaimController extends Controller
     /**
      * Lists all Claim entities.
      *
+     * @return string
      */
     public function indexAction()
     {
@@ -31,7 +32,10 @@ class ClaimController extends Controller
     }
     /**
      * Creates a new Claim entity.
+     * 
+     * @param Request $request
      *
+     * @return string
      */
     public function createAction(Request $request)
     {
@@ -75,6 +79,7 @@ class ClaimController extends Controller
     /**
      * Displays a form to create a new Claim entity.
      *
+     * @return string
      */
     public function newAction()
     {
@@ -90,6 +95,9 @@ class ClaimController extends Controller
     /**
      * Finds and displays a Claim entity.
      *
+     * @param integer $id
+     * 
+     * @return string
      */
     public function showAction($id)
     {
@@ -111,7 +119,10 @@ class ClaimController extends Controller
 
     /**
      * Displays a form to edit an existing Claim entity.
-     *
+     * 
+     * @param integer $id
+     * 
+     * @return string
      */
     public function editAction($id)
     {
@@ -153,7 +164,11 @@ class ClaimController extends Controller
     }
     /**
      * Edits an existing Claim entity.
-     *
+     * 
+     * @param Request $request
+     * @param integer $id
+     * 
+     * @return string
      */
     public function updateAction(Request $request, $id)
     {
@@ -184,6 +199,10 @@ class ClaimController extends Controller
     /**
      * Deletes a Claim entity.
      *
+     * @param Request $request
+     * @param integer $id
+     * 
+     * @return string
      */
     public function deleteAction(Request $request, $id)
     {
@@ -218,7 +237,6 @@ class ClaimController extends Controller
             ->setAction($this->generateUrl('claim_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

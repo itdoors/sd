@@ -1,5 +1,0 @@
-SD\BusinessRoleBundle\Entity\CompanyClient:
-    type: entity
-    manyToOne:
-        organization:
-            targetEntity: Lists\OrganizationBundle\Entity\Organization

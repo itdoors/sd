@@ -6,11 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * ClaimType
+ */
 class ClaimType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,10 +26,9 @@ class ClaimType extends AbstractType
             ->add('disabled')
             ->add('customer')
             ->add('curators')
-            ->add('performers')
-        ;
+            ->add('performers');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

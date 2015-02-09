@@ -1,6 +1,0 @@
-SD\ServiceDeskBundle\Entity\ClaimDep:
-    type: entity
-    manyToOne:
-        targetDepartment:
-            targetEntity: Lists\DepartmentBundle\Entity\Departments
-#            inversedBy: claims
