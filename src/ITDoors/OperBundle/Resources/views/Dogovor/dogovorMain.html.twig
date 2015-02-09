@@ -136,11 +136,11 @@
 #}
                                         <td>
 {#                                             <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>#}
-                                            {% trans %}Временно недоступно{% endtrans %}
-
-{#
-                                            <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ dopDogovor.filepath }}">{% trans %}File{% endtrans %}</a>
-#}
+                                            {% if is_granted('ROLE_LAWYER') %}
+                                                 <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ dopDogovor.filepath }}">{% trans %}File{% endtrans %}</a>
+                                            {% else %}
+                                                {% trans %}Недоступно{% endtrans %}
+                                            {% endif %}
                                         </td>
                                     </tr>
                     {% endif %}

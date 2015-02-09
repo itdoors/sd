@@ -94,12 +94,13 @@
                    <td>{{ item.user.firstName }} {{ item.user.lastName }} {{ item.user.middleName }}</td>
                    <td>
                         {% if item.filepath %}
-                            {% trans %}Временно недоступно{% endtrans %}
-{#
-                            <a href="/uploads/document/{{ item.filepath }}" target="_blank">
-                                {% trans %}See document{% endtrans %}
-                            </a>
-#}
+                            {% if is_granted('ROLE_LAWYER') %}
+                                <a href="/uploads/document/{{ item.filepath }}" target="_blank">
+                                    {% trans %}See document{% endtrans %}
+                                </a>
+                            {% else %}
+                                {% trans %}Недоступно{% endtrans %}
+                            {% endif %}
                         {% endif %}
                 <span class="btn btn-success fileinput-button">
                     <i class="glyphicon glyphicon-plus"></i>

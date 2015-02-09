@@ -69,12 +69,13 @@
 <td>{{ item.dogovorType|e }}</td>
 <td>
     {% if item.filepath %}
-        {% trans %}Временно недоступно{% endtrans %}
-        {#
-                <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
-                    {% trans %}See document{% endtrans %}
-                </a>
-        #}
+        {% if is_granted('ROLE_LAWYER') %}
+            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+                {% trans %}See document{% endtrans %}
+            </a>
+        {% else %}
+            {% trans %}Недоступно{% endtrans %}
+        {% endif %}
     {% endif %}
 </td>
 {% if access.canProlongate %}
