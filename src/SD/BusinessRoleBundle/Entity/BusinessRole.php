@@ -70,4 +70,8 @@ class BusinessRole
     {
         return $this->individual;
     }
+
+    public function __toString() {
+        return (string) $this->getIndividual();
+    }
 }
