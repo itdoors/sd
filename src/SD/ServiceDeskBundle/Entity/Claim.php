@@ -28,23 +28,23 @@ class Claim
     protected $id;
 
     /**
-     * @var string
+     * @var ClaimType
      *
-     * @ORM\Column(name="types", type="string", columnDefinition="ENUM('visible', 'invisible')")
+     * @ORM\Column(name="types", type="claimType")
      */
     protected $types;
 
     /**
-     * @var string
+     * @var StatusType
      *
-     * @ORM\Column(name="status", type="string", columnDefinition="ENUM('active', 'inactive')")
+     * @ORM\Column(name="status", type="statusType")
      */
     protected $status;
 
     /**
-     * @var string
+     * @var ImportanceType
      *
-     * @ORM\Column(name="importance", type="string", columnDefinition="ENUM('hot', 'weak')")
+     * @ORM\Column(name="importance", type="importanceType")
      */
     protected $importance;
 
@@ -403,4 +403,23 @@ class Claim
     {
         return $this->performers;
     }
+}
+
+// @codingStandardsIgnoreStart
+class ClaimType extends \ITDoors\DBAL\EnumType
+{
+    protected $name = 'claimType';
+    protected $values = array('visible', 'invisible');
+}
+
+class StatusType extends \ITDoors\DBAL\EnumType
+{
+    protected $name = 'statusType';
+    protected $values = array('active', 'inactive');
+}
+
+class ImportanceType extends \ITDoors\DBAL\EnumType
+{
+    protected $name = 'importanceType';
+    protected $values = array('hot', 'weak');
 }
