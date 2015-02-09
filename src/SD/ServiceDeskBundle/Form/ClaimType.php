@@ -18,15 +18,18 @@ class ClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('types')
-            ->add('status')
-            ->add('importance')
-            ->add('createdAt')
-            ->add('closedAt')
-            ->add('disabled')
-            ->add('customer')
-            ->add('curators')
-            ->add('performers');
+            ->add('types', 'text', array())
+            ->add('status', 'text', array())
+            ->add('importance', 'text', array())
+            ->add('createdAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
+            ->add('closedAt', 'text', array())
+            ->add('disabled', 'text', array())
+            ->add('customer', 'text', array())
+            ->add('curators', 'text', array())
+            ->add('performers', 'text', array());
     }
 
     /**
