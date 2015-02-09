@@ -287,10 +287,11 @@
             <td>{% trans from 'messages' %}File{% endtrans %}</td>
             <td>
                 {% if dogovor.filepath %}
-                    {% trans %}Временно недоступно{% endtrans %}
-{#
-                    <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~dogovor.filepath ,timestamp:'now'|date('U') }) }}"  target="_blank" >{% trans %}See document{% endtrans %}</a>
-#}
+                    {% if is_granted('ROLE_LAWYER') %}
+                        <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~dogovor.filepath ,timestamp:'now'|date('U') }) }}"  target="_blank" >{% trans %}See document{% endtrans %}</a>
+                    {% else %}
+                        {% trans %}Недоступно{% endtrans %}
+                    {% endif %}
                 {% endif %}
                 {% if access.canEdit %}
                 <script>
