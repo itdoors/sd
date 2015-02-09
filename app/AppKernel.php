@@ -66,6 +66,8 @@ class AppKernel extends Kernel
             new ITDoors\CalculateBundle\ITDoorsCalculateBundle(),
             new ITDoors\ApiBundle\ITDoorsApiBundle(),
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+            new SD\ServiceDeskBundle\SDServiceDeskBundle(),
+            new SD\BusinessRoleBundle\SDBusinessRoleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

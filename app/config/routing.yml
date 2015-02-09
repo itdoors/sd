@@ -1,3 +1,11 @@
+sd_business_role:
+    resource: "@SDBusinessRoleBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_service_desk:
+    resource: "@SDServiceDeskBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_api:
     resource: "@ITDoorsApiBundle/Resources/config/routing.yml"
     prefix:   /
