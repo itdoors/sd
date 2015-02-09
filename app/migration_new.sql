@@ -1,4 +1,7 @@
-CREATE TABLE sd_claim (id SERIAL NOT NULL, customer_id INT DEFAULT NULL, types ENUM('visible', 'invisible'), status ENUM('active', 'inactive'), importance ENUM('hot', 'weak'), createdAt TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, closedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, disabled BOOLEAN NOT NULL, discr VARCHAR(255) NOT NULL, targetIndividual_id BIGINT DEFAULT NULL, targetDepartment_id BIGINT DEFAULT NULL, PRIMARY KEY(id));
+CREATE TYPE claim_type AS ENUM ('visible', 'invisible');
+CREATE TYPE claim_status AS ENUM ('active', 'inactive');
+CREATE TYPE claim_importance AS ENUM ('hot', 'weak');
+CREATE TABLE sd_claim (id SERIAL NOT NULL, customer_id INT DEFAULT NULL, types claim_type, status claim_status, importance claim_importance, createdAt TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, closedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, disabled BOOLEAN NOT NULL, discr VARCHAR(255) NOT NULL, targetIndividual_id BIGINT DEFAULT NULL, targetDepartment_id BIGINT DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_A497B2F49395C3F3 ON sd_claim (customer_id);
 CREATE INDEX IDX_A497B2F4A750E600 ON sd_claim (targetIndividual_id);
 CREATE INDEX IDX_A497B2F4A7F70FD2 ON sd_claim (targetDepartment_id);

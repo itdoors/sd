@@ -1,0 +1,30 @@
+claim:
+    path:     /
+    defaults: { _controller: "SDServiceDeskBundle:Claim:index" }
+
+claim_show:
+    path:     /{id}/show
+    defaults: { _controller: "SDServiceDeskBundle:Claim:show" }
+
+claim_new:
+    path:     /new
+    defaults: { _controller: "SDServiceDeskBundle:Claim:new" }
+
+claim_create:
+    path:     /create
+    defaults: { _controller: "SDServiceDeskBundle:Claim:create" }
+    requirements: { _method: post }
+
+claim_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SDServiceDeskBundle:Claim:edit" }
+
+claim_update:
+    path:     /{id}/update
+    defaults: { _controller: "SDServiceDeskBundle:Claim:update" }
+    requirements: { _method: post|put }
+
+claim_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SDServiceDeskBundle:Claim:delete" }
+    requirements: { _method: post|delete }
