@@ -6,14 +6,14 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 abstract class EnumType extends Type
 {
-    protected $name;
-    protected $values = array();
+    protected static $name;
+    protected static $values = [];
 
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        $values = array_map(function($val) { return "'".$val."'"; }, $this->values);
+        static::$values = array_map(function($val) { return "'".$val."'"; }, static::$values);
 
-        return "ENUM(".implode(", ", $values).") COMMENT '(DC2Type:".$this->name.")'";
+        return "ENUM(".implode(", ", $values).") COMMENT '(DC2Type:".static::$name.")'";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -23,8 +23,8 @@ abstract class EnumType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!in_array($value, $this->values)) {
-            throw new \InvalidArgumentException("Invalid '".$this->name."' value.");
+        if (!in_array($value, static::$values)) {
+            throw new \InvalidArgumentException("Invalid '".static::$name."' value.");
         }
         return $value;
     }
@@ -32,5 +32,15 @@ abstract class EnumType extends Type
     public function getName()
     {
         return $this->name;
+    }
+    
+    public static function values()
+    {
+        $values = [];
+        foreach (static::$values as $value) {
+            $values[''] = '';
+            $values[$value] = $value;
+        }
+        return $values;
     }
 }

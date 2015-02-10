@@ -18,18 +18,22 @@ class ClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('types', 'text', array())
-            ->add('status', 'text', array())
-            ->add('importance', 'text', array())
+            ->add('types', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
+            ->add('status', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\StatusType::values()))
+            ->add('importance', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImportanceType::values()))
             ->add('createdAt', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy'
             ))
-            ->add('closedAt', 'text', array())
-            ->add('disabled', 'text', array())
-            ->add('customer', 'text', array())
-            ->add('curators', 'text', array())
-            ->add('performers', 'text', array());
+            ->add('closedAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+                'required' => false
+            ))
+            ->add('disabled', 'checkbox', array('required' => false))
+            ->add('customer', 'text', array('required' => false))
+            ->add('curators', 'text', array('required' => false))
+            ->add('performers', 'text', array('required' => false));
     }
 
     /**

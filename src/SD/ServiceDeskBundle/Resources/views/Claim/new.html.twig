@@ -14,7 +14,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
         </li>
         <li>
-            <a href="{{ path('list_article_blog') }}" title="{% trans %}My news{% endtrans %}">{% trans %}My news{% endtrans %}</a>
+            <a href="{{ path('list_article_blog') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
         </li>
         <li>
             <a href="" title="{% trans %}Add{% endtrans %}">{% trans %}Add{% endtrans %}</a>
@@ -54,6 +54,50 @@
             </div>
         </div>
         <div class="portlet-body form">
+            <script>
+                $(document).ready(function() {
+//                    SD.select2('#' + '{{ form.vars.name }}' + '_types', {
+//                         multiple: false
+//                     });
+                    $('.itdoors-date-picker').datepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        weekStart: 1
+                    });
+                    $('#' + '{{ form.vars.name }}' + '_createdAt').datepicker( "setDate", new Date());
+                    $('.textear-edit').summernote({
+                    	lang: 'ru-RU',
+                        'disableDragAndDrop': true,
+                        'disableLinkTarget': true,
+                        'onblur': function() {
+                            /** Костыль для страховки */
+                            $('.textear-edit').text($('.textear-edit').code());
+                        },
+                        'onImageUpload': function(files, editor, welEditable) {
+                            sendFile(files[0],editor,welEditable);
+                        }
+                    });
+                    function sendFile(file,editor,welEditable) {
+                        data = new FormData();
+                        data.append("file", file);
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "{{ path('list_article_blog_upload') }}",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(url) {
+                                    editor.insertImage(welEditable, url);
+                            }
+                        });
+                    }
+                });
+            </script>
                         
             {% if form.vars.valid is sameas(false) %}
                 <div class="form-group col-md-12">
@@ -72,46 +116,50 @@
             }) }}
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Type{% endtrans%}</label>
+                    <label class="required control-label col-md-3">{% trans %}Claim Type{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.types, {'attr' : {'class' : 'form-control', 'placeholder': 'customer' | trans}}) }}
+                        {{ form_widget(form.types, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
                         {% if form.types.vars.errors|length %}{{ form_errors(form.types) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Status{% endtrans%}</label>
+                    <label class="required control-label col-md-3">{% trans %}Claim Status{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.status, {'attr' : {'class' : 'form-control'}}) }}
+                        {{ form_widget(form.status, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
                         {% if form.status.vars.errors|length %}{{ form_errors(form.status) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Importance{% endtrans%}</label>
+                    <label class="required control-label col-md-3">{% trans %}Claim Importance{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.importance, {'attr' : {'class' : 'form-control'}}) }}
+                        {{ form_widget(form.importance, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
                         {% if form.importance.vars.errors|length %}{{ form_errors(form.importance) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Created{% endtrans%}</label>
-                    <div class="col-md-9">
-                        {{ form_widget(form.createdAt, {'attr' : {'class' : 'form-control'}}) }}
+                    <div class="col-md-3">
+                        {{ form_widget(form.createdAt, {'attr' : {'id' : 'datepic','class' : 'form-control form-control-inline input-medium date-picker itdoors-date-picker'}}) }}
                         {% if form.createdAt.vars.errors|length %}{{ form_errors(form.createdAt) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Closed{% endtrans%}</label>
-                    <div class="col-md-9">
-                        {{ form_widget(form.closedAt, {'attr' : {'class' : 'form-control'}}) }}
+                    <div class="col-md-3">
+                        {{ form_widget(form.closedAt, {'attr' : {'id' : 'datepic','class' : 'form-control form-control-inline input-medium date-picker itdoors-date-picker'}}) }}
                         {% if form.closedAt.vars.errors|length %}{{ form_errors(form.closedAt) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Disabled{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.disabled, {'attr' : {'class' : 'form-control'}}) }}
-                        {% if form.disabled.vars.errors|length %}{{ form_errors(form.disabled) }}{% endif %}
-                    </div>
+				        <div class="checkbox-list">
+							<label class="checkbox-inline">
+    							{{ form_widget(form.disabled, {'attr' : {'class' : 'form-control'}}) }}
+				                {% if form.disabled.vars.errors|length %}{{form_errors(form.disabled) }}{% endif %}
+                            </label>
+						</div>
+				    </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Customer{% endtrans%}</label>

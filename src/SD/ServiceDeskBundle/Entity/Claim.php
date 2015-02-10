@@ -371,6 +371,24 @@ class Claim
     }
 
     /**
+     * Set curators
+     * 
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+     *
+     * @return Claim
+     */
+    public function setCurators(\Doctrine\Common\Collections\Collection $curators = null)
+    {
+        if ($curators) {
+            $this->curators = $curators;
+        } else {
+            $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        return $this;
+    }
+
+    /**
      * Add performers
      *
      * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
@@ -403,23 +421,41 @@ class Claim
     {
         return $this->performers;
     }
+
+    /**
+     * Set performers
+     *
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
+     *
+     * @return Claim
+     */
+    public function setPerformers(\Doctrine\Common\Collections\Collection $performers = null)
+    {
+        if ($performers) {
+            $this->performers = $performers;
+        } else {
+            $this->performers = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        return $this;
+    }
 }
 
 // @codingStandardsIgnoreStart
 class ClaimType extends \ITDoors\DBAL\EnumType
 {
-    protected $name = 'claimType';
-    protected $values = array('visible', 'invisible');
+    protected static $name = 'claimType';
+    protected static $values = array('visible', 'invisible');
 }
 
 class StatusType extends \ITDoors\DBAL\EnumType
 {
-    protected $name = 'statusType';
-    protected $values = array('active', 'inactive');
+    protected static $name = 'statusType';
+    protected static $values = array('active', 'inactive');
 }
 
 class ImportanceType extends \ITDoors\DBAL\EnumType
 {
-    protected $name = 'importanceType';
-    protected $values = array('hot', 'weak');
+    protected static $name = 'importanceType';
+    protected static $values = array('hot', 'weak');
 }
