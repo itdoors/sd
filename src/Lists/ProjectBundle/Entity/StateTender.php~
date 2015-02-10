@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class StateTender extends Project
 {
+
     /**
      * @var string
      */
@@ -77,35 +78,32 @@ class StateTender extends Project
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct();
         $this->kveds = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
     /**
      * Set vdz
      *
      * @param string $vdz
      * @return StateTender
      */
-    public function setVdz($vdz)
+    public function setVdz ($vdz)
     {
         $this->vdz = $vdz;
-    
+
         return $this;
     }
-
     /**
      * Get vdz
      *
      * @return string 
      */
-    public function getVdz()
+    public function getVdz ()
     {
         return $this->vdz;
     }
-
     /**
      * Set advert
      *
@@ -113,23 +111,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setAdvert($advert)
+    public function setAdvert ($advert)
     {
         $this->advert = $advert;
-    
+
         return $this;
     }
-
     /**
      * Get advert
      *
      * @return integer 
      */
-    public function getAdvert()
+    public function getAdvert ()
     {
         return $this->advert;
     }
-
     /**
      * Set typeOfProcedure
      *
@@ -137,23 +133,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setTypeOfProcedure($typeOfProcedure)
+    public function setTypeOfProcedure ($typeOfProcedure)
     {
         $this->typeOfProcedure = $typeOfProcedure;
-    
+
         return $this;
     }
-
     /**
      * Get typeOfProcedure
      *
      * @return string 
      */
-    public function getTypeOfProcedure()
+    public function getTypeOfProcedure ()
     {
         return $this->typeOfProcedure;
     }
-
     /**
      * Set place
      *
@@ -161,23 +155,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setPlace($place)
+    public function setPlace ($place)
     {
         $this->place = $place;
-    
+
         return $this;
     }
-
     /**
      * Get place
      *
      * @return string 
      */
-    public function getPlace()
+    public function getPlace ()
     {
         return $this->place;
     }
-
     /**
      * Set delivery
      *
@@ -185,23 +177,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setDelivery($delivery)
+    public function setDelivery ($delivery)
     {
         $this->delivery = $delivery;
-    
+
         return $this;
     }
-
     /**
      * Get delivery
      *
      * @return string 
      */
-    public function getDelivery()
+    public function getDelivery ()
     {
         return $this->delivery;
     }
-
     /**
      * Set datetimeDeadline
      *
@@ -209,23 +199,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setDatetimeDeadline($datetimeDeadline)
+    public function setDatetimeDeadline ($datetimeDeadline)
     {
         $this->datetimeDeadline = $datetimeDeadline;
-    
+
         return $this;
     }
-
     /**
      * Get datetimeDeadline
      *
      * @return \DateTime 
      */
-    public function getDatetimeDeadline()
+    public function getDatetimeDeadline ()
     {
         return $this->datetimeDeadline;
     }
-
     /**
      * Set datetimeOpening
      *
@@ -233,23 +221,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setDatetimeOpening($datetimeOpening)
+    public function setDatetimeOpening ($datetimeOpening)
     {
         $this->datetimeOpening = $datetimeOpening;
-    
+
         return $this;
     }
-
     /**
      * Get datetimeOpening
      *
      * @return \DateTime 
      */
-    public function getDatetimeOpening()
+    public function getDatetimeOpening ()
     {
         return $this->datetimeOpening;
     }
-
     /**
      * Set software
      *
@@ -257,23 +243,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setSoftware($software)
+    public function setSoftware ($software)
     {
         $this->software = $software;
-    
+
         return $this;
     }
-
     /**
      * Get software
      *
      * @return string 
      */
-    public function getSoftware()
+    public function getSoftware ()
     {
         return $this->software;
     }
-
     /**
      * Set isParticipation
      *
@@ -281,23 +265,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setIsParticipation($isParticipation)
+    public function setIsParticipation ($isParticipation)
     {
         $this->isParticipation = $isParticipation;
-    
+
         return $this;
     }
-
     /**
      * Get isParticipation
      *
      * @return boolean 
      */
-    public function getIsParticipation()
+    public function getIsParticipation ()
     {
         return $this->isParticipation;
     }
-
     /**
      * Set reason
      *
@@ -305,23 +287,21 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setReason($reason)
+    public function setReason ($reason)
     {
         $this->reason = $reason;
-    
+
         return $this;
     }
-
     /**
      * Get reason
      *
      * @return string 
      */
-    public function getReason()
+    public function getReason ()
     {
         return $this->reason;
     }
-
     /**
      * Set budget
      *
@@ -329,46 +309,42 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function setBudget($budget)
+    public function setBudget ($budget)
     {
         $this->budget = $budget;
-    
+
         return $this;
     }
-
     /**
      * Get budget
      *
      * @return string 
      */
-    public function getBudget()
+    public function getBudget ()
     {
         return $this->budget;
     }
-
     /**
      * Set pf
      *
      * @param float $pf
      * @return StateTender
      */
-    public function setPf($pf)
+    public function setPf ($pf)
     {
         $this->pf = $pf;
-    
+
         return $this;
     }
-
     /**
      * Get pf
      *
      * @return float 
      */
-    public function getPf()
+    public function getPf ()
     {
         return $this->pf;
     }
-
     /**
      * Add kveds
      *
@@ -376,37 +352,35 @@ class StateTender extends Project
      *
      * @return StateTender
      */
-    public function addKved(\Lists\OrganizationBundle\Entity\Kved $kveds)
+    public function addKved (\Lists\OrganizationBundle\Entity\Kved $kveds)
     {
         $this->kveds[] = $kveds;
-    
+
         return $this;
     }
-
     /**
      * Remove kveds
      *
      * @param \Lists\OrganizationBundle\Entity\Kved $kveds
      */
-    public function removeKved(\Lists\OrganizationBundle\Entity\Kved $kveds)
+    public function removeKved (\Lists\OrganizationBundle\Entity\Kved $kveds)
     {
         $this->kveds->removeElement($kveds);
     }
-
     /**
      * Get kveds
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getKveds()
+    public function getKveds ()
     {
         return $this->kveds;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $services;
-
 
     /**
      * Add services
@@ -414,33 +388,31 @@ class StateTender extends Project
      * @param \Lists\ProjectBundle\Entity\ServiceStateTender $services
      * @return StateTender
      */
-    public function addService(\Lists\ProjectBundle\Entity\ServiceStateTender $services)
+    public function addService (\Lists\ProjectBundle\Entity\ServiceStateTender $services)
     {
         $this->services[] = $services;
-    
+
         return $this;
     }
-
     /**
      * Remove services
      *
      * @param \Lists\ProjectBundle\Entity\ServiceStateTender $services
      */
-    public function removeService(\Lists\ProjectBundle\Entity\ServiceStateTender $services)
+    public function removeService (\Lists\ProjectBundle\Entity\ServiceStateTender $services)
     {
         $this->services->removeElement($services);
     }
-
     /**
      * Get services
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getServices()
+    public function getServices ()
     {
         return $this->services;
     }
-     /**
+    /**
      * getParticipations
      * 
      * @return mixed[]
@@ -451,5 +423,72 @@ class StateTender extends Project
             true => 'Yes',
             false => 'No'
         );
+    }
+
+    /**
+     * @var \Lists\ProjectBundle\Entity\StatusStateTender
+     */
+    private $statusStateTender;
+
+    /**
+     * Set statusStateTender
+     *
+     * @param \Lists\ProjectBundle\Entity\StatusStateTender $statusStateTender
+     *
+     * @return StateTender
+     */
+    public function setStatusStateTender (\Lists\ProjectBundle\Entity\StatusStateTender $statusStateTender = null)
+    {
+        $this->statusStateTender = $statusStateTender;
+
+        return $this;
+    }
+    /**
+     * Get statusStateTender
+     *
+     * @return \Lists\ProjectBundle\Entity\StatusStateTender 
+     */
+    public function getStatusStateTender ()
+    {
+        return $this->statusStateTender;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $participans;
+
+
+    /**
+     * Add participans
+     *
+     * @param \Lists\ProjectBundle\Entity\StateTenderParticipant $participans
+     *
+     * @return StateTender
+     */
+    public function addParticipan(\Lists\ProjectBundle\Entity\StateTenderParticipant $participans)
+    {
+        $this->participans[] = $participans;
+
+        return $this;
+    }
+
+    /**
+     * Remove participans
+     *
+     * @param \Lists\ProjectBundle\Entity\StateTenderParticipant $participans
+     */
+    public function removeParticipan(\Lists\ProjectBundle\Entity\StateTenderParticipant $participans)
+    {
+        $this->participans->removeElement($participans);
+    }
+
+    /**
+     * Get participans
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParticipans()
+    {
+        return $this->participans;
     }
 }
