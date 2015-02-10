@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CompanyClient
  *
- * @ORM\Table(name="CompanyClient")
  * @ORM\Entity
  */
-class CompanyClient
+class CompanyClient extends Client
 {
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
