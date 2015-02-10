@@ -70,9 +70,7 @@
 <td>
     {% if item.filepath %}
         {% if is_granted('ROLE_LAWYER') %}
-            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
-                {% trans %}See document{% endtrans %}
-            </a>
+            <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~item.filepath ,timestamp:'now'|date('U') }) }}" >{% trans %}See document{% endtrans %}</a>
         {% else %}
             {% trans %}Недоступно{% endtrans %}
         {% endif %}
