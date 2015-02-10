@@ -2543,7 +2543,7 @@ ALTER TABLE project_gos_tender DROP branch;
 
 ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
 alter table article add column file varchar(255);
--- prod ???
+-- prod +++
 ALTER TABLE  project_file_type RENAME TO project_file_type_old;
 ALTER TABLE  project_file RENAME TO project_file_old;
 
@@ -2668,4 +2668,25 @@ COMMENT ON COLUMN project_state_tender_participant.datetime_deleted IS 'Дата
 ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
+INSERT INTO "public".project_file_type ("name", "group", "alias") 
+	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
+
+# Нужно изменить последовательность в project_file_id
+
+# app/console  lists:project:migration   
+# app/console sd:group:role-add  STATE_TENDER STATE_TENDER
+# app/console sd:group:role-add  STATE_TENDER_ADMIN STATE_TENDER_ADMIN 
+# app/console sd:user:group-add i.grom STATE_TENDER
 -- prod ----

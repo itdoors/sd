@@ -8,6 +8,7 @@ parameters:
     lists_project.state_tender_participant.form.class: Lists\ProjectBundle\Form\StateTenderParticipantForm
     lists_project.project_add_manager.form.class: Lists\ProjectBundle\Form\AddManagerForm
     lists_project.project_add_document.form.class: Lists\ProjectBundle\Form\AddDocumentForm
+    lists_project.close_state_tender.form.class: Lists\ProjectBundle\Form\CloseStateTenderForm
      # VALIDATOR
     lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueStateTenderValidator
     lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueStateTenderParticipantValidator
@@ -70,6 +71,14 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: addDocumentForm }
+    lists_project.closeStateTenderForm:
+        class: %lists_project.close_state_tender.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: closeStateTenderForm }
         
     # VALIDATOR
     lists.project.uniqueStateTenderValidator:

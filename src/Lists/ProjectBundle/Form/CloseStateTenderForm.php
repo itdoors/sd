@@ -13,9 +13,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Translation\Translator;
 
 /**
- * CloseProjectForm
+ * CloseStateTenderForm
  */
-class CloseProjectForm extends AbstractType
+class CloseStateTenderForm extends AbstractType
 {
     protected $em;
     protected $router;
@@ -52,7 +52,7 @@ class CloseProjectForm extends AbstractType
                 $reasonClosed = $form->get('reasonClosed')->getData();
                 $projectId = $form->get('projectId')->getData();
                 
-                $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
+                $project = $this->em->getRepository('ListsProjectBundle:StateTender')->find($projectId);
 
                 if ($reasonClosed === null) {
                     $form->get('reasonClosed')->addError(
@@ -64,17 +64,17 @@ class CloseProjectForm extends AbstractType
                 if (!$project) {
                     $form->addError(
                         new FormError(
-                            $translator->trans('Project don`t found', array(), 'ListsHandlingBundle')
+                            $translator->trans('Project don`t found', array(), 'ListsProjectBundle')
                         )
                     );
                 }
-                $status = $project->getStatus();
-                if ($project->isGosTender() && $status && $status->getAlias() == 'signing_document') {
-                    $typeAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFileType')
+                $status = $project->getStatusStateTender();
+                if ($status && $status->getAlias() == 'signing_document') {
+                    $typeAcceptance = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
                         ->findOneBy(array(
                             'alias' => 'acceptance'
                         ));
-                    $fileAcceptance = $this->em->getRepository('ListsHandlingBundle:ProjectFile')
+                    $fileAcceptance = $this->em->getRepository('ListsProjectBundle:ProjectFile')
                         ->findOneBy(array(
                             'type' => $typeAcceptance,
                             'project' => $project
@@ -82,7 +82,7 @@ class CloseProjectForm extends AbstractType
                     if (!$fileAcceptance || $fileAcceptance && (!$fileAcceptance->fileExists() || $fileAcceptance->getName() == '')) {
                         $form->addError(
                             new FormError(
-                                $translator->trans('Download please', array(), 'ListsHandlingBundle')
+                                $translator->trans('Download please', array(), 'ListsProjectBundle')
                                 .': "'.$typeAcceptance->getName().'"'
                             )
                         );
@@ -99,7 +99,7 @@ class CloseProjectForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => null,
-            'translation_domain' => 'ListsHandlingBundle'
+            'translation_domain' => 'ListsProjectBundle'
         ));
     }
 
@@ -108,6 +108,6 @@ class CloseProjectForm extends AbstractType
      */
     public function getName()
     {
-        return 'closeProjectForm';
+        return 'closeStateTenderForm';
     }
 }

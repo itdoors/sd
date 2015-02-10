@@ -2,6 +2,8 @@
 
 namespace Lists\ProjectBundle\Classes;
 
+use Lists\ProjectBundle\Entity\StateTender;
+
 /**
  * ProjectAccessFactory class
  */
@@ -10,11 +12,12 @@ class ProjectAccessFactory
     /**
      * createAccess
      * 
-     * @param mixed    $roles
+     * @param mixed         $roles
+     * @param StateTender   $object
      *
      * @return ComparatorProjectAccess
      */
-    public static function createAccess($roles)
+    public static function createAccess($roles, $object = null)
     {
         $access = array();
         $access[] = new BasicProjectAccess();
@@ -23,6 +26,6 @@ class ProjectAccessFactory
                 $access[] = new $className();            
         }
 
-        return new ComparatorProjectAccess($access);
+        return new ComparatorProjectAccess($access, $object);
     }
 }

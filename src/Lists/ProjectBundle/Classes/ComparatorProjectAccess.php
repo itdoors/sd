@@ -1,7 +1,9 @@
 <?php
 
 namespace Lists\ProjectBundle\Classes;
+
 use Lists\ProjectBundle\Interfaces\ProjectAccessInterface;
+use Lists\ProjectBundle\Entity\StateTender;
 
 /**
  * ComparatorProjectAccess class
@@ -10,13 +12,16 @@ class ComparatorProjectAccess extends BasicProjectAccess
 {
 
     protected $accesses;
+    protected $object;
 
     /**
      * @param ProjectAccessInterface[] $accesses
+     * @param StateTender              $object
      */
-    public function __construct($accesses)
+    public function __construct($accesses, $object = null)
     {
         $this->accesses = $accesses;
+        $this->object = $object;
     }
     /**
      * @return bool
@@ -153,6 +158,11 @@ class ComparatorProjectAccess extends BasicProjectAccess
      */
     public function canEditStateTender ()
     {
+        if ($this->object) {
+            if ($this->object->getIsClosed()) {
+                return false;
+            }
+        }
         foreach ($this->accesses as $access) {
             if ($access->canEditStateTender()) {
                 return true;

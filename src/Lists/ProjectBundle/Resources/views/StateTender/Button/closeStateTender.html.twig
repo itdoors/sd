@@ -1,0 +1,21 @@
+<a class="btn green" id="close-add-btn-{{object.id}}" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Close project{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+   'selector' : '#close-add-btn-'~ object.id,
+   'formType' : 'closeStateTenderForm',
+   'successFunctions' : {
+        'project_edit' : 'ITDoorsAjax.updateList',
+        'list_participants' : 'ITDoorsAjax.updateList',
+        'list_documents' : 'ITDoorsAjax.updateList'
+   },
+   'serviceSave' : {
+       'alias' : 'lists_project.service',
+       'method' : 'saveCloseStateTenderForm'
+   },
+   'defaults' : {
+       'projectId' : object.id
+   },
+   'target' : '#form_modal_block',
+   'html' : 'ListsProjectBundle:Form:closeStateTenderForm.html.twig'
+}) }}

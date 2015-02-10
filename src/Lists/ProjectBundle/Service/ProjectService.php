@@ -63,7 +63,7 @@ class ProjectService
             $role[] = 'StateTenderDirector';
         }
 
-        return ProjectAccessFactory::createAccess($role);
+        return ProjectAccessFactory::createAccess($role, $object);
     }
     /**
      * Save form
@@ -192,13 +192,6 @@ class ProjectService
         $this->em->persist($data);
         $this->em->flush();
     }
-    
-    
-    
-    
-    
-    
-   
     /**
      * Save form
      *
@@ -206,20 +199,17 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveCloseProjectForm (Form $form, Request $request, $params)
+    public function saveCloseStateTenderForm (Form $form, Request $request, $params)
     {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine.orm.entity_manager');
-
         $reasonClosed = $form->get('reasonClosed')->getData();
         $projectId = $form->get('projectId')->getData();
 
-        $project = $em->getRepository('ListsHandlingBundle:Handling')->find($projectId);
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
         if ($project) {
-            $project->setCloser($this->container->get('security.context')->getToken()->getUser());
+            $project->setUserClosed($this->user);
             $project->setReasonClosed($reasonClosed);
-            $em->persist($project);
-            $em->flush();
+            $this->em->persist($project);
+            $this->em->flush();
         }
     }
     
