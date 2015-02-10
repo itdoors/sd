@@ -24,7 +24,12 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SDServiceDeskBundle:Claim')->findAll();
+        $entities = $em
+            ->getRepository('SDServiceDeskBundle:Claim')
+            ->findBy(array(), array(
+                'createdAt' => 'DESC',
+                'id' => 'DESC'
+            ));
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => $entities,

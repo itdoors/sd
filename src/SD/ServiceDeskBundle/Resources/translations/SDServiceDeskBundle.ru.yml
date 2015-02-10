@@ -9,9 +9,12 @@ Claim Status: Статус заявки
 Claim Importance: Важность заявки
 Created: Дата создания
 Closed: Дата закрытия
-Disabled: Неактивна
 Customer: Клиент
 Performers: Исполнители
 Curators: Кураторы
 Cancel: Отмена
 Select...:  Выберите...
+
+Status: Статус
+Active: Активна
+Disabled: Неактивна
