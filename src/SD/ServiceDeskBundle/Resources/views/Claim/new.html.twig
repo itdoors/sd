@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
-{% trans_default_domain 'ListsArticleBundle' %}
+{% trans_default_domain 'SDServiceDeskBundle' %}
 {% block title %}{% trans %}Add{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}My news{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
+        {% trans %}Claims{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
     </h3>
 {% endblock %}
 
@@ -27,7 +27,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}} " />
 
@@ -40,8 +39,8 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js') }}"></script>
 
 {% endblock %}
@@ -59,6 +58,9 @@
 //                    SD.select2('#' + '{{ form.vars.name }}' + '_types', {
 //                         multiple: false
 //                     });
+                    $('.select2').select2({
+                        allowClear: true
+                    });
                     $('.itdoors-date-picker').datepicker({
                         rtl: Metronic.isRTL(),
                         autoclose: true,
@@ -109,11 +111,7 @@
                 </div>
             {% endif %}
     
-            {{ form_start(form, {
-                    'attr' : {
-                        'class' : 'form-horizontal form-row-seperated'
-                    }
-            }) }}
+            {{ form_start(form, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
             <div class="form-body">
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Claim Type{% endtrans%}</label>
@@ -164,21 +162,21 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Customer{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.customer, {'attr' : {'class' : 'form-control'}}) }}
+                        {{ form_widget(form.customer, {'attr' : {'class' : 'form-control input-large select2me', 'placeholder': 'Select...' | trans}}) }}
                         {% if form.customer.vars.errors|length %}{{ form_errors(form.customer) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Curators{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.curators, {'attr' : {'class' : 'form-control'}}) }}
+                        {{ form_widget(form.curators, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
                         {% if form.curators.vars.errors|length %}{{ form_errors(form.curators) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Performers{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.performers, {'attr' : {'class' : 'form-control'}}) }}
+                        {{ form_widget(form.performers, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
                         {% if form.performers.vars.errors|length %}{{ form_errors(form.performers) }}{% endif %}
                     </div>
                 </div>
@@ -188,7 +186,7 @@
                         <div class="col-md-12">
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
-                                <a class="btn btn-cl green" href="{{ path('list_article_blog') }}" title="{% trans %}Cancel{% endtrans %}">
+                                <a class="btn btn-cl green" href="{{ path('claim') }}" title="{% trans %}Cancel{% endtrans %}">
                                     {% trans %}Cancel{% endtrans %}
                                 </a>
                             </div>

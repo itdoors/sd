@@ -5,6 +5,7 @@ namespace SD\ServiceDeskBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use SD\UserBundle\SDUserBundle;
 
 /**
  * ClaimType
@@ -31,9 +32,17 @@ class ClaimType extends AbstractType
                 'required' => false
             ))
             ->add('disabled', 'checkbox', array('required' => false))
-            ->add('customer', 'text', array('required' => false))
-            ->add('curators', 'text', array('required' => false))
-            ->add('performers', 'text', array('required' => false));
+            ->add('customer')
+            ->add('curators', 'entity', array(
+                'class' => 'SDBusinessRoleBundle:Stuff',
+                'required' => false,
+                'multiple' => true
+            ))
+            ->add('performers', 'entity', array(
+                'class' => 'SDBusinessRoleBundle:Stuff',
+                'required' => false,
+                'multiple' => true
+            ));
     }
 
     /**
