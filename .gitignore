@@ -18,7 +18,7 @@
 /composer.phar
 /logs
 /build.properties
-/*~
+/**/*~
 /app/share/1c/debt/
 /composer.lock
 /components/

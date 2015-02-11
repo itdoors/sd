@@ -13,6 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({
  *  "businessRole" = "BusinessRole",
  *  "stuff" = "Stuff",
+ *  "claimStuff" = "ClaimStuff",
+ *  "claimCurator" = "ClaimCurator",
+ *  "claimPerformer" = "ClaimPerformer",
  *  "client" = "Client",
  *  "companyClient" = "CompanyClient",
  *  "personClient" = "PersonClient"})
@@ -32,7 +35,7 @@ class BusinessRole
     /**
      * @var \Lists\IndividualBundle\Entity\Individual
      *
-     * @ORM\ManyToOne(targetEntity="Lists\IndividualBundle\Entity\Individual")
+     * @ORM\ManyToOne(targetEntity="Lists\IndividualBundle\Entity\Individual", fetch="EAGER")
      * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
      */
     protected $individual;

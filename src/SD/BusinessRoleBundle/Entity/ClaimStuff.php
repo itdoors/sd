@@ -5,11 +5,11 @@ namespace SD\BusinessRoleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PersonClient
+ * ClaimStuff
  *
  * @ORM\Entity
  */
-class PersonClient extends Client
+class ClaimStuff extends Stuff
 {
     /**
      * @var integer
@@ -19,7 +19,7 @@ class PersonClient extends Client
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $claims;
+    private $responsibilities;
 
     /**
      * @var \Lists\IndividualBundle\Entity\Individual
@@ -31,7 +31,7 @@ class PersonClient extends Client
      */
     public function __construct()
     {
-        $this->claims = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->responsibilities = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -45,43 +45,43 @@ class PersonClient extends Client
     }
 
     /**
-     * Add claims
+     * Add responsibilities
      *
-     * @param \SD\ServiceDeskBundle\Entity\Claim $claims
-     * @return PersonClient
+     * @param \SD\BusinessRoleBundle\Entity\Responsibility $responsibilities
+     * @return ClaimStuff
      */
-    public function addClaim(\SD\ServiceDeskBundle\Entity\Claim $claims)
+    public function addResponsibilitie(\SD\BusinessRoleBundle\Entity\Responsibility $responsibilities)
     {
-        $this->claims[] = $claims;
+        $this->responsibilities[] = $responsibilities;
     
         return $this;
     }
 
     /**
-     * Remove claims
+     * Remove responsibilities
      *
-     * @param \SD\ServiceDeskBundle\Entity\Claim $claims
+     * @param \SD\BusinessRoleBundle\Entity\Responsibility $responsibilities
      */
-    public function removeClaim(\SD\ServiceDeskBundle\Entity\Claim $claims)
+    public function removeResponsibilitie(\SD\BusinessRoleBundle\Entity\Responsibility $responsibilities)
     {
-        $this->claims->removeElement($claims);
+        $this->responsibilities->removeElement($responsibilities);
     }
 
     /**
-     * Get claims
+     * Get responsibilities
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getClaims()
+    public function getResponsibilities()
     {
-        return $this->claims;
+        return $this->responsibilities;
     }
 
     /**
      * Set individual
      *
      * @param \Lists\IndividualBundle\Entity\Individual $individual
-     * @return PersonClient
+     * @return ClaimStuff
      */
     public function setIndividual(\Lists\IndividualBundle\Entity\Individual $individual = null)
     {

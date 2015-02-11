@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  "claim" = "Claim",
  *  "claimOnce" = "ClaimOnce",
  *  "claimDep" = "ClaimDep"})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClaimRepository")
  */
 class Claim
 {
@@ -79,7 +79,7 @@ class Claim
     /**
      * @var \SD\BusinessRoleBundle\Entity\Client
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Client", inversedBy="claims")
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Client", inversedBy="claims", fetch="EAGER")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      */
     protected $customer;
