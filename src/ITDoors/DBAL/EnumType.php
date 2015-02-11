@@ -13,7 +13,7 @@ abstract class EnumType extends Type
     {
         static::$values = array_map(function($val) { return "'".$val."'"; }, static::$values);
 
-        return "ENUM(".implode(", ", static::$values).") COMMENT '(DC2Type:".static::$name.")'";
+        return 'VARCHAR(50)';//"ENUM(".implode(", ", static::$values).")";// COMMENT '(DC2Type:".static::$name.")'";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -31,7 +31,7 @@ abstract class EnumType extends Type
 
     public function getName()
     {
-        return $this->name;
+        return static::$name;
     }
     
     public static function values()

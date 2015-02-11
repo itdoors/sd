@@ -38,10 +38,10 @@ class ClaimMessage
     /**
      * @var \SD\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")!!!b.role
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\BusinessRole")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    private $businessRole;
 
     /**
      * @var \SD\ServiceDeskBundle\Entity\Claim

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({
  *  "claim" = "Claim",
  *  "claimOnce" = "ClaimOnce",
- *  "claimDep" = "ClaimDep"})
+ *  "claimDep" = "ClaimDepartment"})
  * @ORM\Entity(repositoryClass="ClaimRepository")
  */
 class Claim
@@ -87,13 +87,13 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")!!!
+     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimCurator")
      * @ORM\JoinTable(name="claims_curators",
      *   joinColumns={
      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="stuff_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="curator_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -102,13 +102,13 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")!!!
+     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimPerformer")
      * @ORM\JoinTable(name="claims_performers",
      *   joinColumns={
      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="stuff_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="performer_id", referencedColumnName="id")
      *   }
      * )
      */
@@ -444,20 +444,40 @@ class Claim
 // @codingStandardsIgnoreStart
 class ClaimType extends \ITDoors\DBAL\EnumType
 {
-    protected static $name = 'claimType';
-    protected static $values = array('visible', 'invisible');
+    const VISIBLE = 'visible';
+    const INVISIBLE = 'invisible';
+    protected static $name = __CLASS__;
+
+//     protected static $name = 'claimType';
+    protected static $values = array(
+        ClaimType::VISIBLE,
+        ClaimType::INVISIBLE
+    );
 }
 
 class StatusType extends \ITDoors\DBAL\EnumType
 {
-    protected static $name = 'statusType';
-    protected static $values = array('active', 'inactive');
+    const ACTIVE = 'active';
+    const INACTIVE = 'inactive';
+    protected static $name = __CLASS__;
+
+//     protected static $name = 'statusType';
+    protected static $values = array(
+        StatusType::ACTIVE,
+        StatusType::INACTIVE
+                    
+    );
 }
 
 class ImportanceType extends \ITDoors\DBAL\EnumType
 {
     const HOT = 'hot';
-    protected static $name = 'importanceType';
-    protected static $values = array(ImportanceType::HOT, 'weak');
+    const WEAK = 'weak';
+    protected static $name = __CLASS__;
 
+//     protected static $name = 'importanceType';
+    protected static $values = array(
+        self::HOT,
+        self::WEAK
+    );
 }

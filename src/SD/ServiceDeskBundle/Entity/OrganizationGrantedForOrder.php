@@ -32,7 +32,7 @@ class OrganizationGrantedForOrder
     /**
      * @var \SD\BusinessRoleBundle\Entity\Client
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\CompanyClient")
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\CompanyClient", inversedBy="grantedOrganizations")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     protected $companyClient;
@@ -41,9 +41,9 @@ class OrganizationGrantedForOrder
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Lists\DepartmentBundle\Entity\Departments")
-     * @ORM\JoinTable(name="org_granted_for_order_departments",
+     * @ORM\JoinTable(name="organization_granted_for_order_departments",
      *      joinColumns={@ORM\JoinColumn(name="org_granted_for_order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id", unique=true)}!!!
+     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id")}
      *      )
      */
     protected $departments;

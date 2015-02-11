@@ -5,11 +5,11 @@ namespace SD\ServiceDeskBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClaimDep
+ * ClaimDepartment
  *
  * @ORM\Entity
  */
-class ClaimDep!!! extends Claim
+class ClaimDepartment extends Claim
 {
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments
