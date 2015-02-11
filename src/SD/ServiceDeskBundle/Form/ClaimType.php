@@ -5,6 +5,7 @@ namespace SD\ServiceDeskBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use SD\UserBundle\SDUserBundle;
 
 /**
  * ClaimType
@@ -18,15 +19,30 @@ class ClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('types')
-            ->add('status')
-            ->add('importance')
-            ->add('createdAt')
-            ->add('closedAt')
-            ->add('disabled')
+            ->add('types', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
+            ->add('status', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\StatusType::values()))
+            ->add('importance', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImportanceType::values()))
+            ->add('createdAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
+            ->add('closedAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+                'required' => false
+            ))
+            ->add('disabled', 'checkbox', array('required' => false))
             ->add('customer')
-            ->add('curators')
-            ->add('performers');
+            ->add('curators', 'entity', array(
+                'class' => 'SDBusinessRoleBundle:Stuff',
+                'required' => false,
+                'multiple' => true
+            ))
+            ->add('performers', 'entity', array(
+                'class' => 'SDBusinessRoleBundle:Stuff',
+                'required' => false,
+                'multiple' => true
+            ));
     }
 
     /**

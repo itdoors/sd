@@ -24,7 +24,9 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SDServiceDeskBundle:Claim')->findAll();
+        $entities = $em
+            ->getRepository('SDServiceDeskBundle:Claim')
+            ->findAll();
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => $entities,
@@ -70,8 +72,6 @@ class ClaimController extends Controller
             'action' => $this->generateUrl('claim_create'),
             'method' => 'POST',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
@@ -135,12 +135,10 @@ class ClaimController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('SDServiceDeskBundle:Claim:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView()
         ));
     }
 
@@ -157,8 +155,6 @@ class ClaimController extends Controller
             'action' => $this->generateUrl('claim_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
@@ -180,20 +176,18 @@ class ClaimController extends Controller
             throw $this->createNotFoundException('Unable to find Claim entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('claim_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('claim', array('id' => $id)));
         }
 
         return $this->render('SDServiceDeskBundle:Claim:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView()
         ));
     }
     /**

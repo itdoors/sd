@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimOnce
  *
- * @ORM\Table(name="ClaimOnce")
  * @ORM\Entity
  */
-class ClaimOnce
+class ClaimOnce extends Claim
 {
     /**
      * @var \Lists\IndividualBundle\Entity\Individual

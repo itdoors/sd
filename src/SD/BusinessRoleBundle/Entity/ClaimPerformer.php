@@ -5,10 +5,10 @@ namespace SD\BusinessRoleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PersonClient
+ * ClaimPerformer
  *
  * @ORM\Entity
  */
-class PersonClient extends Client
+class ClaimPerformer extends ClaimStuff
 {
 }

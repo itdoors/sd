@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimDep
  *
- * @ORM\Table(name="ClaimDep")
  * @ORM\Entity
  */
-class ClaimDep
+class ClaimDep extends Claim
 {
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments

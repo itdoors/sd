@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  "claim" = "Claim",
  *  "claimOnce" = "ClaimOnce",
  *  "claimDep" = "ClaimDep"})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClaimRepository")
  */
 class Claim
 {
@@ -28,23 +28,23 @@ class Claim
     protected $id;
 
     /**
-     * @var string
+     * @var ClaimType
      *
-     * @ORM\Column(name="types", type="string", columnDefinition="ENUM('visible', 'invisible')")
+     * @ORM\Column(name="types", type="claimType")
      */
     protected $types;
 
     /**
-     * @var string
+     * @var StatusType
      *
-     * @ORM\Column(name="status", type="string", columnDefinition="ENUM('active', 'inactive')")
+     * @ORM\Column(name="status", type="statusType")
      */
     protected $status;
 
     /**
-     * @var string
+     * @var ImportanceType
      *
-     * @ORM\Column(name="importance", type="string", columnDefinition="ENUM('hot', 'weak')")
+     * @ORM\Column(name="importance", type="importanceType")
      */
     protected $importance;
 
@@ -79,7 +79,7 @@ class Claim
     /**
      * @var \SD\BusinessRoleBundle\Entity\Client
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Client", inversedBy="claims")
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Client", inversedBy="claims", fetch="EAGER")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      */
     protected $customer;
@@ -371,6 +371,24 @@ class Claim
     }
 
     /**
+     * Set curators
+     * 
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+     *
+     * @return Claim
+     */
+    public function setCurators(\Doctrine\Common\Collections\Collection $curators = null)
+    {
+        if ($curators) {
+            $this->curators = $curators;
+        } else {
+            $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        return $this;
+    }
+
+    /**
      * Add performers
      *
      * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
@@ -403,4 +421,41 @@ class Claim
     {
         return $this->performers;
     }
+
+    /**
+     * Set performers
+     *
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
+     *
+     * @return Claim
+     */
+    public function setPerformers(\Doctrine\Common\Collections\Collection $performers = null)
+    {
+        if ($performers) {
+            $this->performers = $performers;
+        } else {
+            $this->performers = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        return $this;
+    }
+}
+
+// @codingStandardsIgnoreStart
+class ClaimType extends \ITDoors\DBAL\EnumType
+{
+    protected static $name = 'claimType';
+    protected static $values = array('visible', 'invisible');
+}
+
+class StatusType extends \ITDoors\DBAL\EnumType
+{
+    protected static $name = 'statusType';
+    protected static $values = array('active', 'inactive');
+}
+
+class ImportanceType extends \ITDoors\DBAL\EnumType
+{
+    protected static $name = 'importanceType';
+    protected static $values = array('hot', 'weak');
 }

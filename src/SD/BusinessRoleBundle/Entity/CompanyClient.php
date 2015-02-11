@@ -7,40 +7,102 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CompanyClient
  *
- * @ORM\Table(name="CompanyClient")
  * @ORM\Entity
  */
-class CompanyClient
+class CompanyClient extends Client
 {
     /**
-     * @var \Lists\OrganizationBundle\Entity\Organization
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToOne(targetEntity="Lists\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder", mappedBy="companyClient")
      */
-    private $organization;
+    protected $grantedOrganizations;
 
     /**
-     * Set organization
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     * @ORM\ManyToMany(targetEntity="Lists\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinTable(name="origin_org_for_client",
+     *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    protected $originOrganizations;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->grantedOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->originOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add grantedOrganization
+     *
+     * @param \SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization
      * 
      * @return CompanyClient
      */
-    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    public function addGrantedOrganization(\SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization)
     {
-        $this->organization = $organization;
+        $this->grantedOrganizations[] = $grantedOrganization;
 
         return $this;
     }
 
     /**
-     * Get organization
+     * Remove grantedOrganization
      *
-     * @return \Lists\OrganizationBundle\Entity\Organization 
+     * @param \SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization
      */
-    public function getOrganization()
+    public function removeGrantedOrganization(\SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization)
     {
-        return $this->organization;
+        $this->grantedOrganizations->removeElement($grantedOrganization);
+    }
+
+    /**
+     * Get grantedOrganizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGrantedOrganizations()
+    {
+        return $this->grantedOrganizations;
+    }
+
+    /**
+     * Add originOrganization
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
+     * 
+     * @return CompanyClient
+     */
+    public function addOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
+    {
+        $this->originOrganizations[] = $originOrganization;
+
+        return $this;
+    }
+
+    /**
+     * Remove originOrganization
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
+     */
+    public function removeOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
+    {
+        $this->originOrganizations->removeElement($originOrganization);
+    }
+
+    /**
+     * Get originOrganizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOriginOrganizations()
+    {
+        return $this->originOrganizations;
     }
 }
