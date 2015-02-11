@@ -12,6 +12,11 @@ Lists\ProjectBundle\Entity\Project:
                 min: 0
                 max: 99999999999
                 groups: [edit]
+        statusAccess:
+            - NotBlank: { groups: [confirm] }
+#            - Choice:
+#                 callback: getCoiceConfirm
+#                 groups: [confirm]
 #        createdate:
 #            - NotBlank: { groups: [new] }
 #            - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }

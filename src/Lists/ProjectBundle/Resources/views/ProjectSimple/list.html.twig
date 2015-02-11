@@ -26,18 +26,26 @@
                     <th>{% trans %}Type{% endtrans %}</th>
                     <th>{% trans %}Customer{% endtrans %}</th>
                     <th>{% trans %}Responsibility{% endtrans %}</th>
+                    <th>{% trans %}Action{% endtrans %}</th>
                 </tr>
             </thead>
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
                     <td>
-                        <a class="btn green button_wide" href="{{ path('lists_project_'~item.getDiscr~'_show', { id: item.id } ) }}">
+                        <a class="btn{% if item.statusAccess  != true %} yellow{% elseif  item.isClosed  != true %} blue{% else%} red{% endif %} button_wide" href="{{ path('lists_project_'~item.getDiscr~'_show', { id: item.id } ) }}">
                             {{ item.id|e }}
                         </a>
                     </td>
                     <td>{{ item.getProjectType|trans}}</td>
                     <td>{{ item.organization|e }}</td>
                     <td>{{ item.managers|join('<br>')|raw}}</td>
+                    <td>
+                        {% if item.statusAccess  == true and item.isClosed  != true and item.isManager(app.user) %}
+                            {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig', {isList: true, object: item})}}
+                        {% elseif item.statusAccess  != true and item.organization.isManager(app.user) %}
+                            {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig', {isList: true, object: item})}}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </table>

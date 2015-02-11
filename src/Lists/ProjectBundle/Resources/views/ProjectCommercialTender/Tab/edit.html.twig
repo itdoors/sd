@@ -63,7 +63,7 @@
                     </a>
                     {% endif %#}
                 {% endif %}
-                {% if object.isClosed  != true and access.canEditProjectSimple %}
+                {% if object.isClosed  != true and access.canCloseProject %}
                     {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
                 {% endif %}
             </td>

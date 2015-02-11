@@ -26,13 +26,17 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
 {% endblock %}
 
+{% block modal %}
+    <div id="form_modal_block" class="modal" role="basic"></div>
+{% endblock %}
+
 {% block body %}
 
     {#{ ajax_filter_render(filter, filterNamespace, {
             'datatable_ajax': 'ITDoorsAjax.updateList'
         }) }#}
 
-    <div id="gosTenderList" data-url="{{ url('lists_project_simple_list') }}">
+    <div id="projectList" data-url="{{ url('lists_project_simple_list') }}">
         {{ render(controller('ListsProjectBundle:ProjectSimple:list')) }}
    </div>
 {% endblock body %}

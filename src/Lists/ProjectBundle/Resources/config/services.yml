@@ -10,6 +10,7 @@ parameters:
     lists_project.project_add_document.form.class: Lists\ProjectBundle\Form\AddDocumentForm
     lists_project.close_project.form.class: Lists\ProjectBundle\Form\CloseProjectForm
     lists_project.project_simple.form.class: Lists\ProjectBundle\Form\ProjectSimpleForm
+    lists_project.confirm_project.form.class: Lists\ProjectBundle\Form\ConfirmProjectForm
      # VALIDATOR
     lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderValidator
     lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipantValidator
@@ -88,6 +89,10 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: projectSimpleForm }
+    lists_project.confirmProjectForm:
+        class: %lists_project.confirm_project.form.class%
+        tags:
+            - { name: form.type, alias: confirmProjectForm }
         
     # VALIDATOR
     lists.project.uniqueProjectStateTenderValidator:

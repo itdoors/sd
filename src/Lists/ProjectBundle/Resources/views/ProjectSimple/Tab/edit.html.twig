@@ -51,6 +51,9 @@
                 {% else %}
                     {% if object.statusAccess is null %}
                         {% trans %}Not approved by the manager{% endtrans %}
+                        {% if access.canConfirmProject %}
+                            {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig')}}
+                        {% endif %}
                     {% endif %}
                     {#% if access.canEditProjectSimple %}
                     <a href="#" id="statusProjectStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusProjectStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
@@ -63,7 +66,7 @@
                     </a>
                     {% endif %#}
                 {% endif %}
-                {% if object.isClosed  != true and access.canEditProjectSimple %}
+                {% if object.isClosed  != true and access.canCloseProject %}
                     {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
                 {% endif %}
             </td>

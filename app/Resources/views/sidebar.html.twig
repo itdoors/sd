@@ -85,7 +85,13 @@
                     (
                         app.request.attributes.get('_route_params').id is defined
                         and
-                        path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('lists_project_simple_show', app.request.attributes.get('_route_params'))
+                        (
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('lists_project_simple_show', app.request.attributes.get('_route_params'))
+                            or
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('lists_project_commercial_tender_show', app.request.attributes.get('_route_params'))
+                            or
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('lists_project_electronic_trading_show', app.request.attributes.get('_route_params'))
+                        )
                     )
                 %}{% set classOpen = 'open' %} class="active"{% endif %}>
                 <a href="javascript:;">

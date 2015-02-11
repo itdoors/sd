@@ -39,11 +39,17 @@ class ProjectRepository extends EntityRepository
 //            $sqlCount->where('p.isClosed = true');
 //        }
         if ($user) {
-            $sql->leftJoin('p.managers', 'm')
-                ->andWhere('m.user = :user')
+            $sql
+                ->leftJoin('p.managers', 'm')
+                ->leftJoin('p.organization', 'o')
+                ->leftJoin('o.organizationUsers', 'mo')
+                ->andWhere($sql->expr()->orX('m.user = :user', 'mo.user = :user'))
                 ->setParameter(':user', $user);
-            $sqlCount->leftJoin('p.managers', 'm')
-                ->andWhere('m.user = :user')
+            $sqlCount
+                ->leftJoin('p.managers', 'm')
+                ->leftJoin('p.organization', 'o')
+                ->leftJoin('o.organizationUsers', 'mo')
+                ->andWhere($sql->expr()->orX('m.user = :user', 'mo.user = :user'))
                 ->setParameter(':user', $user);
         }
         $sql->andWhere('p INSTANCE OF :discr')

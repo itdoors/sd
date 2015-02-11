@@ -342,6 +342,22 @@ class Project
         return $this->managers;
     }
     /**
+     * isManager
+     *
+     * @return boolean
+     */
+    public function isManager (\SD\UserBundle\Entity\User $user)
+    {
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            if ($manager->getUser() == $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
      * Add files
      *
      * @param \Lists\ProjectBundle\Entity\File $files
@@ -497,5 +513,17 @@ class Project
     public function getStatusAccess()
     {
         return $this->statusAccess;
+    }
+    /**
+     * getCoiceConfirm
+     * 
+     * @return mixed[]
+     */
+    public static function getCoiceConfirm ()
+    {
+        return array (
+            true => 'Yes',
+            false => 'No'
+        );
     }
 }

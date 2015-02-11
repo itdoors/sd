@@ -979,7 +979,7 @@ class Organization
     {
         $managers = $this->getOrganizationUsers();
         foreach ($managers as $manager) {
-            if ($manager == $user) {
+            if ($manager->getUser() == $user) {
                 return true;
             }
         }

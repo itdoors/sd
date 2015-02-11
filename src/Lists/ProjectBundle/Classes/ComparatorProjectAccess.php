@@ -355,4 +355,30 @@ class ComparatorProjectAccess extends BasicProjectAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canConfirmProject ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canConfirmProject()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCloseProject ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCloseProject()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -103,4 +103,12 @@ interface ProjectAccessInterface
      * @return bool
      */
     public function canChangeParticipation();
+    /**
+     * @return bool
+     */
+    public function canConfirmProject();
+    /**
+     * @return bool
+     */
+    public function canCloseProject();
 }

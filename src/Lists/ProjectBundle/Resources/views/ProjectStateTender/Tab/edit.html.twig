@@ -97,7 +97,7 @@
                 {% else %}
                     {% trans %}New{% endtrans %}
                 {% endif %}
-                {% if object.isClosed  != true and access.canEditProjectStateTender %}
+                {% if object.isClosed  != true and access.canCloseProject %}
                     {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
                 {% endif %}
             </td>

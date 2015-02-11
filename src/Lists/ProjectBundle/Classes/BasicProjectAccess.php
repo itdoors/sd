@@ -177,4 +177,18 @@ class BasicProjectAccess implements ProjectAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canConfirmProject ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCloseProject ()
+    {
+        return false;
+    }
 }

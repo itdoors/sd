@@ -55,6 +55,13 @@ class ProjectService
                 }
                 
             }
+            $organizationManagers = $object->getOrganization()->getOrganizationUsers();
+  
+            foreach ($organizationManagers as $manager) {
+                if ($manager->getUser() == $user) {
+                    $role[] = 'ManagerOrganization';
+                }
+            }
         }
         if ($user->hasRole('ROLE_PROJECT_STATE_TENDER')) {
             $role[] = 'ProjectStateTender';
@@ -105,7 +112,7 @@ class ProjectService
             $this->em->flush();
         }
     }
-     /**
+    /**
      * Add form defaults depending on defaults)
      *
      * @param Form    $form
@@ -118,6 +125,19 @@ class ProjectService
                 'data_class' => null,
                 'entity'=>'Lists\ProjectBundle\Entity\Project',
                 'data' => $project
+            ));
+    }
+    /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+     */
+    public function confirmProjectFormDefaults(Form $form, $defaults)
+    {
+        $form->add('projectId', 'hidden', array(
+                'mapped' => false,
+                'data' => (int) $defaults['projectId']
             ));
     }
     /**
@@ -211,15 +231,39 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveCloseProjectStateTenderForm (Form $form, Request $request, $params)
+    public function saveCloseProjectForm (Form $form, Request $request, $params)
     {
         $reasonClosed = $form->get('reasonClosed')->getData();
         $projectId = $form->get('projectId')->getData();
 
         $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
+        $access = $this->checkAccess($this->user, $project);
+
+        if (!$access->canCloseProject()) {
+            throw new \Exception('No access', 403);
+        }
         if ($project) {
             $project->setUserClosed($this->user);
             $project->setReasonClosed($reasonClosed);
+            $this->em->persist($project);
+            $this->em->flush();
+        }
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveConfirmProjectForm (Form $form, Request $request, $params)
+    {
+        $statusAccess = $form->get('statusAccess')->getData();
+        $projectId = $form->get('projectId')->getData();
+
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
+        if ($project) {
+            $project->setStatusAccess($statusAccess);
             $this->em->persist($project);
             $this->em->flush();
         }

@@ -70,4 +70,11 @@ class ManagerProjectProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canCloseProject ()
+    {
+        return true;
+    }
 }

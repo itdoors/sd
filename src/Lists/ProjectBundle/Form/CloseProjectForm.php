@@ -111,6 +111,6 @@ class CloseProjectForm extends AbstractType
      */
     public function getName()
     {
-        return 'closeProjectSimpleForm';
+        return 'closeProjectForm';
     }
 }

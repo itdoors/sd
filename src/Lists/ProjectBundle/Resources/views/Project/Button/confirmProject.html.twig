@@ -1,5 +1,5 @@
-<a class="btn green" id="close-add-btn-{{object.id}}" href="#" data-toggle="modal">
-    {% trans from 'ListsProjectBundle'%}Close project{% endtrans %}
+<a class="btn green" id="confirm-project-btn-{{object.id}}" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Confirm{% endtrans %}
 </a>
 {% if isList is defined %}
     {% set arrayUpdate = { 'projectList' : 'ITDoorsAjax.updateList'} %}
@@ -7,16 +7,20 @@
      {% set arrayUpdate = { 'project_edit' : 'ITDoorsAjax.updateList', 'list_participants' : 'ITDoorsAjax.updateList','list_documents' : 'ITDoorsAjax.updateList'} %}
 {% endif %}
 {{ ajax_form_render_btn({
-   'selector' : '#close-add-btn-'~ object.id,
-   'formType' : 'closeProjectForm',
+   'selector' : '#confirm-project-btn-'~ object.id,
+   'formType' : 'confirmProjectForm',
    'successFunctions' : arrayUpdate,
+    'serviceDefault' : {
+        'alias' : 'lists_project.service',
+        'method' : 'confirmProjectFormDefaults'
+    },
    'serviceSave' : {
        'alias' : 'lists_project.service',
-       'method' : 'saveCloseProjectForm'
+       'method' : 'saveConfirmProjectForm'
    },
    'defaults' : {
        'projectId' : object.id
    },
    'target' : '#form_modal_block',
-   'html' : 'ListsProjectBundle:Form:closeProjectForm.html.twig'
+   'html' : 'ListsProjectBundle:Form:confirmProjectForm.html.twig'
 }) }}
