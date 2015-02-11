@@ -1,0 +1,3 @@
+Lists\ProjectBundle\Entity\StatusProjectSimple:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\StatusProjectSimpleRepository

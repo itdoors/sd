@@ -32,7 +32,7 @@
             'datatable_ajax': 'ITDoorsAjax.updateList'
         }) }#}
 
-    <div id="gosTenderList" data-url="{{ url('lists_project_state_tender_list', {status:status}) }}">
+    <div id="stateTenderList" data-url="{{ url('lists_project_state_tender_list', {status:status}) }}">
         {{ render(controller('ListsProjectBundle:ProjectStateTender:listStatus', {status:status})) }}
    </div>
 {% endblock body %}

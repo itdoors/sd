@@ -2600,7 +2600,7 @@ CREATE INDEX IDX_6C3A29DCA76ED395 ON project_manager (user_id);
 CREATE UNIQUE INDEX unique_project_manager ON project_manager (project_id, user_id);
 COMMENT ON COLUMN project_manager.part IS 'Процент участия';
 CREATE TABLE project_service (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, sortorder INT DEFAULT NULL, report_number INT DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
-CREATE TABLE message_type (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, stay_action_time INT DEFAULT NULL, sortorder INT DEFAULT NULL, report_name VARCHAR(128) DEFAULT NULL, is_report BOOLEAN DEFAULT NULL, report_sortorder INT DEFAULT NULL, PRIMARY KEY(id));
+CREATE TABLE project_message_type (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, stay_action_time INT DEFAULT NULL, sortorder INT DEFAULT NULL, report_name VARCHAR(128) DEFAULT NULL, is_report BOOLEAN DEFAULT NULL, report_sortorder INT DEFAULT NULL, PRIMARY KEY(id));
 CREATE TABLE project_file (id SERIAL NOT NULL, user_id INT DEFAULT NULL, project_id INT DEFAULT NULL, type_id BIGINT DEFAULT NULL, message_id INT DEFAULT NULL, name VARCHAR(128) DEFAULT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_B50EFE08A76ED395 ON project_file (user_id);
 CREATE INDEX IDX_B50EFE08166D1F9C ON project_file (project_id);
@@ -2612,7 +2612,7 @@ COMMENT ON COLUMN project_file.create_datetime IS 'Дата создания ф�
 COMMENT ON COLUMN project_file.deleted_datetime IS 'Дата удаления файла';
 
 ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1A166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AC54C8C93 FOREIGN KEY (type_id) REFERENCES message_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AC54C8C93 FOREIGN KEY (type_id) REFERENCES project_message_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AE7A1254A FOREIGN KEY (contact_id) REFERENCES model_contact (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEE104C1D3 FOREIGN KEY (created_user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -2711,5 +2711,9 @@ COMMENT ON COLUMN project.statusAccess IS 'Статус доступа созд�
 CREATE TABLE project_electronic_trading__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
 CREATE INDEX IDX_E67BFE67166D1F9C ON project_electronic_trading__project_simple_service (project_id);
 CREATE INDEX IDX_E67BFE67ED5CA9E6 ON project_electronic_trading__project_simple_service (service_id);
+ALTER TABLE project_message DROP CONSTRAINT FK_20A33C1AC54C8C93;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AC54C8C93 FOREIGN KEY (type_id) REFERENCES project_message_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE
 
 -- prod ----

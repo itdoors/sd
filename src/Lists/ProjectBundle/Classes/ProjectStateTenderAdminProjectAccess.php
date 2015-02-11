@@ -21,4 +21,11 @@ class ProjectStateTenderAdminProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectStateTender ()
+    {
+        return true;
+    }
 }

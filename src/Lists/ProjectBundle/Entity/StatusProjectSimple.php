@@ -5,8 +5,8 @@ namespace Lists\ProjectBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * StatusStateTender
+ * StatusProjectSimple
  */
-class StatusStateTender extends Status
+class StatusProjectSimple extends Status
 {
 }

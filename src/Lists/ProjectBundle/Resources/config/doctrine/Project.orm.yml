@@ -118,3 +118,12 @@ Lists\ProjectBundle\Entity\Project:
                 organization_id:
                     referencedColumnName: id
             orphanRemoval: false
+        status:
+            targetEntity: Status
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false

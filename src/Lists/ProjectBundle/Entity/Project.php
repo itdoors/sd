@@ -96,6 +96,15 @@ class Project
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
     /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return $this->getOrganization();
+    }
+    /**
      * Get id
      *
      * @return integer 
@@ -525,5 +534,33 @@ class Project
             true => 'Yes',
             false => 'No'
         );
+    }
+    /**
+     * @var \Lists\ProjectBundle\Entity\Status
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param \Lists\ProjectBundle\Entity\Status $status
+     * @return Project
+     */
+    public function setStatus(\Lists\ProjectBundle\Entity\Status $status = null)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \Lists\ProjectBundle\Entity\Status 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

@@ -9,6 +9,7 @@ Lists\ProjectBundle\Entity\Status:
     discriminatorMap:
         state_tender: StatusProjectStateTender
         commercial_tender: StatusСommercialTender
+        simple: StatusProjectSimple
     id:
         id:
             id: true

@@ -1,6 +1,6 @@
 Lists\ProjectBundle\Entity\MessageType:
     type: entity
-    table: message_type
+    table: project_message_type
     repositoryClass: Lists\ProjectBundle\Entity\MessageTypeRepository
     id:
         id:

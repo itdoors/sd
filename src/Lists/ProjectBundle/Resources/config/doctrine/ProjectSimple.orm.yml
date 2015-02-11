@@ -13,4 +13,13 @@ Lists\ProjectBundle\Entity\ProjectSimple:
               inverseJoinColumns:
                 service_id:
                   referencedColumnName: id
-
+    manyToOne:
+        statusProjectSimple:
+            targetEntity: StatusProjectSimple
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
