@@ -7,7 +7,7 @@ Lists\ProjectBundle\Entity\Status:
         name: discriminator
         type: string
     discriminatorMap:
-        state_tender: StatusStateTender
+        state_tender: StatusProjectStateTender
         commercial_tender: StatusСommercialTender
     id:
         id:

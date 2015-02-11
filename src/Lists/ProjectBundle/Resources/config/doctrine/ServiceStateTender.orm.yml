@@ -1,3 +1,0 @@
-Lists\ProjectBundle\Entity\ServiceStateTender:
-    type: entity
-    repositoryClass: Lists\ProjectBundle\Entity\ServiceStateTenderRepository

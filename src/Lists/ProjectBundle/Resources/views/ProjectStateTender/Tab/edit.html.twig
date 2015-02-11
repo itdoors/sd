@@ -1,0 +1,292 @@
+{% trans_default_domain 'ListsProjectBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+      /*  setProgress = function(response)
+        {
+            if (response.handling.progress)
+            {
+                var targetProcess = $('.progress-bar.progress-bar-success');
+                targetProcess.attr('aria-valuenow', response.handling.progress);
+                targetProcess.css('width', response.handling.progress + '%');
+                targetProcess.find('span').html(response.handling.progressString);
+            }
+        };*/
+        {% if access.canEditProjectStateTender %}
+            $('.editable-project').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                pk: {{object.id}}
+            });
+            $('#statusProjectStateTender').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_project_ajax_search_status_state_tender') }}'
+            });
+            $('#kveds').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_organization_ajax_search_kved') }}',
+                pk: {{object.id}},
+                select2: {
+                    multiple: true,
+                    width: '250px',
+                    minimumInputLength: 0,
+                    initSelection: function(element, callback) {
+                        return $.ajax({
+                            type: "GET",
+                            url: '{{ path('lists_organization_ajax_kved_by_ids') }}',
+                            dataType: 'json',
+                            data: { ids: element.val()},
+                            success: function(data){
+                                    callback(data);
+                            }
+                        });
+                    }
+                }
+            });
+            $('#services').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_project_ajax_services_state_tender_search') }}',
+                select2: {
+                    multiple: true,
+                    width: '250px',
+                    initSelection: function(element, callback) {
+                        return $.ajax({
+                            type: "GET",
+                            url: '{{ path('lists_project_ajax_services_by_ids') }}',
+                            dataType: 'json',
+                            data: { ids: element.val()},
+                            success: function(data){
+                                    callback(data);
+                            }
+                        });
+                    }
+                }
+            });
+        {% endif %}
+    });
+
+</script>
+
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+        <tr> {# 1 #}
+            <td style="width:15%">{% trans %}ID{% endtrans %}</td>
+            <td style="width:35%">{{ object.id }}</td>
+            <td style="width:15%">{% trans %}Project status{% endtrans %}</td>
+            <td style="width:35%">
+                {%  if object.isClosed  == true or object.isParticipation is not null %}
+                    {% if object.datetimeClosed %}
+                        {% trans %}Closed{% endtrans %}  ({{object.reasonClosed}})<br>
+                        {{ object.userClosed }}  ({{ object.datetimeClosed|date("d.m.y, H:i") }})
+                    {% else %}
+                        {% if access.canEditProjectStateTender %}
+                        <a href="#" id="statusProjectStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusProjectStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                        {% endif %}
+                            {{ object.statusProjectStateTender }}
+                            {% if object.statusChangeDate %}
+                                {{ object.statusChangeDate|date("d.m.y, H:i") }}
+                            {% endif %}
+                        {% if access.canEditProjectStateTender %}
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% trans %}New{% endtrans %}
+                {% endif %}
+                {% if object.isClosed  != true and access.canEditProjectStateTender %}
+                    {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
+                {% endif %}
+            </td>
+        </tr>
+        <tr> {# 2 #}
+            <td>{% trans %}Organization name{% endtrans %}</td>
+            <td>{{ object.organization.name }}</td>
+            <td>{% trans %}User created{% endtrans %} ({% trans %}Date created{% endtrans %})</td>
+            <td>{{ object.userCreated }} ({{ object.createdatetime is empty ? '' : object.createdatetime|date("d.m.y H:i") }})</td>
+        </tr>
+        {#<tr> 
+            <td></td>
+            <td></td>
+            <td>{% trans %}Result Description{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}
+                <a href="#" id="resultString" data-type="textarea" data-pk="{{ object.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">
+                {% endif %}
+                    {{ object.resultString }}
+                {% if access.canEditProjectStateTender %}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        #}
+        <tr> {# 6 #}
+            <td>{% trans %}Branch{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}
+                <a href="#" id="services" data-type="select2" data-pk="{{ object.id }}" data-placement="right" data-value="{% for key,service in object.services %}{{ key > 0 ? ',' : ''}}{{ service.id }}{% endfor %}" data-placeholder="{% trans %}Select service offered{% endtrans %}" data-original-title="{% trans %}Select service offered{% endtrans %}">
+                {% endif %}
+                    {{ object.services|join('<br>')|raw }}
+                {% if access.canEditProjectStateTender %}
+                </a>
+                {% endif %}
+                <span class="help-block">Если предлагаемых услуг нет в списке - обратитесь к администратору.</span>
+
+            </td>
+            <td>{% trans %}Budget{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}
+                <a class="editable-project" href="#" id="budget" data-type="text" data-pk="{{ object.id }}" data-value="{{ object.budget }}" data-original-title="{% trans %}Enter budget{% endtrans %}">
+                {% endif %}
+                    {{ object.budget }}
+                {% if access.canEditProjectStateTender %}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr> {# 7 #}
+            <td>{% trans %}Square{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}
+                <a class="editable-project" href="#" id="square" data-type="text" data-pk="{{ object.id }}" data-value="{{ object.square }}" data-original-title="{% trans %}Enter square{% endtrans %}">
+                {% endif %}
+                    {{ object.square }}
+                {% if access.canEditProjectStateTender %}
+                </a>
+                {% endif %}
+            </td>
+            <td>{% trans %}PF{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}
+                <a class="editable-project" href="#" id="pf" data-type="text" data-pk="{{ object.id }}" data-placement="right" data-value="{{ object.pf }}" data-placeholder="{% trans %}Enter PF{% endtrans %}">
+                {% endif %}
+                    {{ object.pf }}
+                {% if access.canEditProjectStateTender %}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans %}Participation{% endtrans %} ({% trans %}Reason{% endtrans %})</td>
+            <td>
+                {% if object.isParticipation is null and access.canChangeParticipation %}
+                {{ include ('ListsProjectBundle:ProjectStateTender/Button:isParticipation.html.twig', {item: object, edit : true})}}
+                {% endif %}
+                {% if object.isParticipation is not null %}{{ object.getParticipations[object.isParticipation] |trans }}{% if object.reason %} ({{ object.reason }}){% endif %}{% endif %}
+
+            </td>
+             <td>{% trans %}Description{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectStateTender %}<a class="editable-project" href="#" id="description" data-type="textarea" data-pk="{{ object.id }}" data-value="{{ object.description }}" data-original-title="{% trans %}Enter description{% endtrans %}">{% endif %}{{ object.description }}{% if access.canEditProjectStateTender %}</a>{% endif %}
+            </td>
+        </tr>
+            <tr>                
+                <td>№ {% trans %}VDZ{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="vdz" data-type="text" data-placement="right" data-original-title="№ {% trans %}VDZ{% endtrans %}">
+                    {% endif %}
+                        {{ object.vdz}}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td>№ {% trans %}Advert{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="advert" data-type="text" data-placement="right" data-original-title="{% trans %}Advert{% endtrans %}">
+                    {% endif %}
+                        {{ object.advert}}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>                
+                <td></td>
+                <td>
+                </td>
+                <td>{% trans %}Type of procedure{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="typeOfProcedure" data-type="text" data-placement="right" data-original-title="{% trans %}Type of procedure{% endtrans %}">
+                    {% endif %}
+                        {{ object.typeOfProcedure}}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>                
+                <td>{% trans %}Place{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="place" data-type="text" data-placement="right" data-original-title="{% trans %}Place{% endtrans %}">
+                    {% endif %}
+                        {{ object.place}}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td>{% trans %}Contract time{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="delivery" data-type="text" data-placement="right" data-original-title="{% trans %}Contract time{% endtrans %}">
+                    {% endif %}
+                        {{ object.delivery}}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>                
+                <td>{% trans %}Datetime deadline{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="datetimeDeadline" data-type="datetime" data-placement="right" data-original-title="{% trans %}Datetime deadline{% endtrans %}">
+                    {% endif %}
+                    {{ object.datetimeDeadline is empty ? '' : object.datetimeDeadline|date('d.m.Y H:i') }}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td>{% trans %}Datetime opening{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="datetimeOpening" data-type="datetime" data-placement="right" data-original-title="{% trans %}Datetime opening{% endtrans %}">
+                    {% endif %}
+                        {{ object.datetimeOpening is empty ? '' : object.datetimeOpening|date('d.m.Y H:i') }}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Software{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a class="editable-project" href="#" id="software" data-type="text" data-placement="right" data-original-title="{% trans %}Software{% endtrans %}">
+                    {% endif %}
+                    {{ object.software }}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+
+                <td>{% trans %}Kveds{% endtrans %}</td>
+                <td>
+                    {% if access.canEditProjectStateTender %}
+                    <a href="#" id="kveds" data-type="select2" data-value="{% for key,kved in object.kveds %}{% if key > 0 %},{% endif %}{{  kved.id  }}{% endfor %}" data-placement="top" data-original-title="{% trans %}Kveds{% endtrans %}">
+                    {% endif %}
+                    {{ object.kveds|join('<br>')|raw }}
+                    {% if access.canEditProjectStateTender %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

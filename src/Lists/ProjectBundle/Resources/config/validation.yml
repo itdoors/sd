@@ -17,7 +17,7 @@ Lists\ProjectBundle\Entity\Project:
 #            - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }
 #        budget:
 #            - NotBlank: { groups: [new, createTender] }
-Lists\ProjectBundle\Entity\StateTender:
+Lists\ProjectBundle\Entity\ProjectStateTender:
     properties:
         vdz:
             - NotBlank: { groups: [create] }
@@ -26,7 +26,7 @@ Lists\ProjectBundle\Entity\StateTender:
                 groups: [create]
         advert:
             - NotBlank: { groups: [create] }
-            - Lists\ProjectBundle\Validator\UniqueStateTender: { groups: [create] }
+            - Lists\ProjectBundle\Validator\UniqueProjectStateTender: { groups: [create] }
             - Range:
                 min: 0
                 max: 99999999999
@@ -88,12 +88,12 @@ Lists\ProjectBundle\Entity\File:
                     - application/vnd.openxmlformats-officedocument.wordprocessingml.document
                 mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
                 groups: [createFileProject]          
-Lists\ProjectBundle\Entity\StateTenderParticipant:
+Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
     properties:
         participant:
             - NotBlank: { groups: [create] }
-            - Lists\ProjectBundle\Validator\UniqueStateTenderParticipant: { groups: [create] }
-        stateTender:
+            - Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipant: { groups: [create] }
+        projectStateTender:
             - NotBlank: { groups: [create] }
         summa:
             - Range: 

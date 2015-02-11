@@ -1,0 +1,15 @@
+Lists\ProjectBundle\Entity\ProjectElectronicTrading:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectElectronicTradingRepository
+    manyToMany:
+        services:
+            targetEntity: ServiceProjectSimple
+            inversedBy: null
+            joinTable:
+              name: project_electronic_trading__project_simple_service
+              joinColumns:
+                project_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id

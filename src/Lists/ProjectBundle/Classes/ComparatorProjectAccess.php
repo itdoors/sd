@@ -3,7 +3,7 @@
 namespace Lists\ProjectBundle\Classes;
 
 use Lists\ProjectBundle\Interfaces\ProjectAccessInterface;
-use Lists\ProjectBundle\Entity\StateTender;
+use Lists\ProjectBundle\Entity\ProjectStateTender;
 
 /**
  * ComparatorProjectAccess class
@@ -16,7 +16,7 @@ class ComparatorProjectAccess extends BasicProjectAccess
 
     /**
      * @param ProjectAccessInterface[] $accesses
-     * @param StateTender              $object
+     * @param ProjectStateTender       $object
      */
     public function __construct($accesses, $object = null)
     {
@@ -117,10 +117,10 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
-    public function canSeeStateTender ()
+    public function canSeeProjectStateTender ()
     {
         foreach ($this->accesses as $access) {
-            if ($access->canSeeStateTender()) {
+            if ($access->canSeeProjectStateTender()) {
                 return true;
             }
         }
@@ -130,10 +130,10 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
-    public function canSeeAllStateTender ()
+    public function canSeeAllProjectStateTender ()
     {
         foreach ($this->accesses as $access) {
-            if ($access->canSeeAllStateTender()) {
+            if ($access->canSeeAllProjectStateTender()) {
                 return true;
             }
         }
@@ -143,10 +143,10 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
-    public function canCreateStateTender ()
+    public function canCreateProjectStateTender ()
     {
         foreach ($this->accesses as $access) {
-            if ($access->canCreateStateTender()) {
+            if ($access->canCreateProjectStateTender()) {
                 return true;
             }
         }
@@ -156,7 +156,7 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
-    public function canEditStateTender ()
+    public function canEditProjectStateTender ()
     {
         if ($this->object) {
             if ($this->object->getIsClosed()) {
@@ -164,7 +164,178 @@ class ComparatorProjectAccess extends BasicProjectAccess
             }
         }
         foreach ($this->accesses as $access) {
-            if ($access->canEditStateTender()) {
+            if ($access->canEditProjectStateTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectSimple ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeProjectSimple()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectSimple ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAllProjectSimple()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectSimple ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCreateProjectSimple()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectSimple ()
+    {
+        if ($this->object) {
+            if ($this->object->getIsClosed() || !$this->object->getStatusAccess()) {
+                return false;
+            }
+        }
+        foreach ($this->accesses as $access) {
+            if ($access->canEditProjectSimple()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectCommercialTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeProjectCommercialTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectCommercialTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAllProjectCommercialTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectCommercialTender ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCreateProjectCommercialTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectCommercialTender ()
+    {
+        if ($this->object) {
+            if ($this->object->getIsClosed() || !$this->object->getStatusAccess()) {
+                return false;
+            }
+        }
+        foreach ($this->accesses as $access) {
+            if ($access->canEditProjectCommercialTender()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectElectronicTrading ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeProjectElectronicTrading()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectElectronicTrading ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAllProjectElectronicTrading()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectElectronicTrading ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canCreateProjectElectronicTrading()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectElectronicTrading ()
+    {
+        if ($this->object) {
+            if ($this->object->getIsClosed() || !$this->object->getStatusAccess()) {
+                return false;
+            }
+        }
+        foreach ($this->accesses as $access) {
+            if ($access->canEditProjectElectronicTrading()) {
                 return true;
             }
         }

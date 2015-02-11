@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Lists\ProjectBundle\Entity\FileProject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\File;
-use Lists\ProjectBundle\Entity\StateTender;
-use Lists\ProjectBundle\Entity\ServiceStateTender;
+use Lists\ProjectBundle\Entity\ProjectStateTender;
+use Lists\ProjectBundle\Entity\ServiceProjectStateTender;
 
 /**
  * Class AjaxController
@@ -55,12 +55,12 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
     /**
-     * editableGosTenderAction
+     * editableProjectAction
      * 
      * @return Response
      * @throws \Exception
      */
-    public function editableStateTenderAction()
+    public function editableProjectAction()
     {
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
@@ -68,13 +68,15 @@ class AjaxController extends Controller
 
         $methodSet = 'set' . ucfirst($name);
 
-        /** @var StateTender $object */
         $object = $this->getDoctrine()
-            ->getRepository('ListsProjectBundle:StateTender')
+            ->getRepository('ListsProjectBundle:Project')
             ->find($pk);
+        $temp = explode('\\', get_class($object));
+        $className = end($temp);
         $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object);
-        if (!$access->canEditStateTender()) {
+        $method = 'canEdit'.$className;
+        if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
         if (in_array($name, array('datetimeDeadline', 'datetimeOpening'))) {
@@ -108,9 +110,9 @@ class AjaxController extends Controller
             foreach ($servicesOld as $service) {
                 $object->removeService($service);
             }
-            /** @var ServiceStateTender[] $services */
+            /** @var ServiceProjectStateTender[] $services */
             $services = $this->getDoctrine()
-                    ->getRepository('ListsProjectBundle:ServiceStateTender')
+                    ->getRepository('ListsProjectBundle:Service')
                     ->findBy(array('id' => $value));
             foreach ($services as $service) {
                 $object->addService($service);
@@ -150,21 +152,21 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
     /**
-     * servicesStateTenderSearchAction
+     * servicesProjectStateTenderSearchAction
      * 
      * @param Request $request
      *
      * @return string
      */
-    public function servicesStateTenderSearchAction(Request $request)
+    public function servicesProjectStateTenderSearchAction(Request $request)
     {
         $searchText = $request->query->get('query');
 
-        /** @var \Lists\ProjectBundle\Entity\ServiceStateTenderRepository $serviceRepository */
+        /** @var \Lists\ProjectBundle\Entity\ServiceProjectStateTenderRepository $serviceRepository */
         $serviceRepository = $this->getDoctrine()
-            ->getRepository('ListsProjectBundle:ServiceStateTender');
+            ->getRepository('ListsProjectBundle:ServiceProjectStateTender');
 
-        /** @var ServiceStateTender[] $services */
+        /** @var ServiceProjectStateTender[] $services */
         $services = $serviceRepository->getSearchQuery($searchText);
 
         $result = array();
@@ -184,17 +186,47 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
     /**
-     * searchStatusStateTenderAction
+     * servicesProjectSimpleSearchAction
      * 
      * @param Request $request
      *
      * @return string
      */
-    public function searchStatusStateTenderAction(Request $request)
+    public function servicesProjectSimpleSearchAction(Request $request)
     {
         $searchText = $request->query->get('query');
-        /** @var \Lists\ProjectBundle\Entity\StatusStateTenderRepository[] $status */
-        $status = $this->getDoctrine()->getRepository('ListsProjectBundle:StatusStateTender')
+
+        $services = $this->getDoctrine()->getRepository('ListsProjectBundle:ServiceProjectSimple')
+            ->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($services as $service) {
+            $id = $service->getId();
+            $string = $service->getName();
+
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * searchStatusProjectStateTenderAction
+     * 
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function searchStatusProjectStateTenderAction(Request $request)
+    {
+        $searchText = $request->query->get('query');
+        /** @var \Lists\ProjectBundle\Entity\StatusProjectStateTenderRepository[] $status */
+        $status = $this->getDoctrine()->getRepository('ListsProjectBundle:StatusProjectStateTender')
             ->getSearchQuery($searchText);
         $result = array();
         foreach ($status as $val) {
@@ -240,12 +272,12 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
      /**
-     * editableStateTenderParticipantAction
+     * editableProjectStateTenderParticipantAction
      * 
      * @return Response
      * @throws \Exception
      */
-    public function editableStateTenderParticipantAction()
+    public function editableProjectStateTenderParticipantAction()
     {
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
@@ -255,11 +287,11 @@ class AjaxController extends Controller
 
         /** @var ProjectGosTenderParticipan $object */
         $object = $this->getDoctrine()
-            ->getRepository('ListsProjectBundle:StateTenderParticipant')
+            ->getRepository('ListsProjectBundle:ProjectStateTenderParticipant')
             ->find($pk);
         $service = $this->get('lists_project.service');
-        $access= $service->checkAccess($this->getUser(), $object->getStateTender());
-        if (!$access->canEditStateTender()) {
+        $access= $service->checkAccess($this->getUser(), $object->getProjectStateTender());
+        if (!$access->canEditProjectStateTender()) {
             throw $this->createAccessDeniedException();
         }
         if ($name == 'summa') {
@@ -318,7 +350,7 @@ class AjaxController extends Controller
             ->find($pk);
         $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object->getProject());
-        if (!$access->canEditStateTender()) {
+        if (!$access->canEditProjectStateTender()) {
             throw new \Exception('No access', 403);
         }
         $object->$methodSet($value);

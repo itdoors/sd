@@ -61,28 +61,112 @@ class BasicProjectAccess implements ProjectAccessInterface
     /**
      * @return bool
      */
-    public function canSeeStateTender ()
+    public function canSeeProjectStateTender ()
     {
         return false;
     }
     /**
      * @return bool
      */
-    public function canSeeAllStateTender ()
+    public function canSeeAllProjectStateTender ()
     {
         return false;
     }
     /**
      * @return bool
      */
-    public function canCreateStateTender ()
+    public function canCreateProjectStateTender ()
     {
         return false;
     }
     /**
      * @return bool
      */
-    public function canEditStateTender ()
+    public function canEditProjectStateTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectSimple ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectSimple ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectSimple ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectSimple ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectCommercialTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectCommercialTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectCommercialTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectCommercialTender ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectElectronicTrading ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeAllProjectElectronicTrading ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectElectronicTrading ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectElectronicTrading ()
     {
         return false;
     }

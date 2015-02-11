@@ -3,7 +3,7 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\ORM\Mapping\ClassMetadata;
 /**
  * Project
  */
@@ -469,5 +469,33 @@ class Project
     public function getDeletedDatetime()
     {
         return $this->deletedDatetime;
+    }
+    /**
+     * @var boolean
+     */
+    private $statusAccess;
+
+
+    /**
+     * Set statusAccess
+     *
+     * @param boolean $statusAccess
+     * @return Project
+     */
+    public function setStatusAccess($statusAccess)
+    {
+        $this->statusAccess = $statusAccess;
+    
+        return $this;
+    }
+
+    /**
+     * Get statusAccess
+     *
+     * @return boolean 
+     */
+    public function getStatusAccess()
+    {
+        return $this->statusAccess;
     }
 }

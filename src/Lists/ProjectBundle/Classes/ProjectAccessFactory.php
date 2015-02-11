@@ -2,7 +2,7 @@
 
 namespace Lists\ProjectBundle\Classes;
 
-use Lists\ProjectBundle\Entity\StateTender;
+use Lists\ProjectBundle\Entity\ProjectStateTender;
 
 /**
  * ProjectAccessFactory class
@@ -12,8 +12,8 @@ class ProjectAccessFactory
     /**
      * createAccess
      * 
-     * @param mixed         $roles
-     * @param StateTender   $object
+     * @param mixed                $roles
+     * @param ProjectStateTender   $object
      *
      * @return ComparatorProjectAccess
      */

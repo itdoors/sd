@@ -8,8 +8,8 @@ use SD\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
-use Lists\ProjectBundle\Entity\StateTender;
-use Lists\ProjectBundle\Entity\Project;
+use Lists\ProjectBundle\Entity\ProjectStateTender;
+use Lists\ProjectBundle\Entity\ProjectSimple;
 
 /**
  * ProjectService class
@@ -37,8 +37,8 @@ class ProjectService
      /**
      * checkAccess
      * 
-     * @param User                  $user
-     * @param StateTender|Project   $object
+     * @param User                              $user
+     * @param ProjectStateTender|ProjectSimple  $object
      * 
      * @return mixed[]
      */
@@ -56,11 +56,23 @@ class ProjectService
                 
             }
         }
-        if ($user->hasRole('ROLE_STATE_TENDER')) {
-            $role[] = 'StateTender';
+        if ($user->hasRole('ROLE_PROJECT_STATE_TENDER')) {
+            $role[] = 'ProjectStateTender';
         }
-        if ($user->hasRole('ROLE_STATE_TENDER_DIRECTOR')) {
-            $role[] = 'StateTenderDirector';
+        if ($user->hasRole('ROLE_PROJECT_STATE_TENDER_ADMIN')) {
+            $role[] = 'ProjectStateTenderAdmin';
+        }
+        if ($user->hasRole('ROLE_PROJECT_STATE_TENDER_DIRECTOR')) {
+            $role[] = 'ProjectStateTenderDirector';
+        }
+        if ($user->hasRole('ROLE_PROJECT_SIMPLE')) {
+            $role[] = 'ProjectSimple';
+        }
+        if ($user->hasRole('ROLE_PROJECT_SIMPLE_ADMIN')) {
+            $role[] = 'ProjectSimpleAdmin';
+        }
+        if ($user->hasRole('ROLE_PROJECT_SIMPLE_DIRECTOR')) {
+            $role[] = 'ProjectSimpleDirector';
         }
 
         return ProjectAccessFactory::createAccess($role, $object);
@@ -72,24 +84,24 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveStateTenderParticipationForm (Form $form, Request $request, $params)
+    public function saveProjectStateTenderParticipationForm (Form $form, Request $request, $params)
     {
         $data = $form->getData();
         $isParticipation = $data['isParticipation'];
         $reason = $data['reason'];
-        $stateTender = $this->em->getRepository('ListsProjectBundle:StateTender')->find((int)$data['stateTenderId']);
-        if ($stateTender) {
-            $stateTender->setIsParticipation($isParticipation);
+        $projectStateTender = $this->em->getRepository('ListsProjectBundle:ProjectStateTender')->find((int)$data['projectStateTenderId']);
+        if ($projectStateTender) {
+            $projectStateTender->setIsParticipation($isParticipation);
             if (empty($isParticipation)) {
-                $stateTender->setUserClosed($this->user);
-                $stateTender->setReasonClosed('Не участвуем');
+                $projectStateTender->setUserClosed($this->user);
+                $projectStateTender->setReasonClosed('Не участвуем');
             } else {
-                $status = $this->em->getRepository('ListsProjectBundle:StatusStateTender')
+                $status = $this->em->getRepository('ListsProjectBundle:StatusProjectStateTender')
                     ->findOneBy(array('alias' => 'collecting_documents'));
-                $stateTender->setStatusStateTender($status);
+                $projectStateTender->setStatusProjectStateTender($status);
             }
-            $stateTender->setReason($reason);
-            $this->em->persist($stateTender);
+            $projectStateTender->setReason($reason);
+            $this->em->persist($projectStateTender);
             $this->em->flush();
         }
     }
@@ -137,13 +149,13 @@ class ProjectService
      * @param Form    $form
      * @param mixed[] $defaults
      */
-    public function stateTenderParticipantFormDefaults(Form $form, $defaults)
+    public function projectStateTenderParticipantFormDefaults(Form $form, $defaults)
     {
-        $project = $this->em->getRepository('ListsProjectBundle:StateTender')->find((int) $defaults['stateTender']);
+        $project = $this->em->getRepository('ListsProjectBundle:ProjectStateTender')->find((int) $defaults['projectStateTender']);
         $form
-            ->add('stateTender', 'hidden_entity', array(
+            ->add('projectStateTender', 'hidden_entity', array(
                 'data_class' => null,
-                'entity'=>'Lists\ProjectBundle\Entity\StateTender',
+                'entity'=>'Lists\ProjectBundle\Entity\ProjectStateTender',
                 'data' => $project
             ));
     }
@@ -154,7 +166,7 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveStateTenderParticipantForm (Form $form, Request $request, $params)
+    public function saveProjectStateTenderParticipantForm (Form $form, Request $request, $params)
     {
         $data = $form->getData();
         $this->em->persist($data);
@@ -199,7 +211,7 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function saveCloseStateTenderForm (Form $form, Request $request, $params)
+    public function saveCloseProjectStateTenderForm (Form $form, Request $request, $params)
     {
         $reasonClosed = $form->get('reasonClosed')->getData();
         $projectId = $form->get('projectId')->getData();

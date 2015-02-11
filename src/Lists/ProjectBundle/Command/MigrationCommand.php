@@ -10,8 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 use Lists\ProjectBundle\Entity\ServiceСommercialTender;
-use Lists\ProjectBundle\Entity\ServiceStateTender;
-use Lists\ProjectBundle\Entity\StatusStateTender;
+use Lists\ProjectBundle\Entity\ServiceProjectStateTender;
+use Lists\ProjectBundle\Entity\StatusProjectStateTender;
 use Lists\ProjectBundle\Entity\StatusСommercialTender;
 
 /**
@@ -56,7 +56,7 @@ class MigrationCommand extends ContainerAwareCommand
                     'name' => $service->getName()
                 ));
             if (!$servicesNew && $service->getSlug() == 'project') {
-                $servicesNew = new ServiceСommercialTender();
+                $servicesNew = new ServiceProjectSimple();
                 $servicesNew->setName($service->getName());
                 $servicesNew->setReportNumber($service->getReportNumber());
                 $servicesNew->setSlug($service->getSlug());
@@ -64,7 +64,7 @@ class MigrationCommand extends ContainerAwareCommand
                 $this->em->persist($servicesNew);
             }
             if (!$servicesNew && $service->getSlug() == 'gos_tender') {
-                $servicesNew = new ServiceStateTender();
+                $servicesNew = new ServiceProjectStateTender();
                 $servicesNew->setName($service->getName());
                 $servicesNew->setReportNumber($service->getReportNumber());
                 $servicesNew->setSlug($service->getSlug());
@@ -84,7 +84,7 @@ class MigrationCommand extends ContainerAwareCommand
                 ));
             if (!$statusNew) {
                 if ($val->getSlug() == 'gos_tender') {
-                    $statusNew = new StatusStateTender();
+                    $statusNew = new StatusProjectStateTender();
                 } else {
                     $statusNew = new StatusСommercialTender();
                 }

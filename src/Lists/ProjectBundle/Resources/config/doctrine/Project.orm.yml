@@ -11,9 +11,10 @@ Lists\ProjectBundle\Entity\Project:
         name: discriminator
         type: string
     discriminatorMap:
-        state_tender: StateTender
-        commercial_tender: СommercialTender
-        simple: Simple
+        project_state_tender: ProjectStateTender
+        project_simple: ProjectSimple
+        project_commercial_tender: ProjectCommercialTender
+        project_electronic_trading: ProjectElectronicTrading
     id:
         id:
             id: true
@@ -25,6 +26,11 @@ Lists\ProjectBundle\Entity\Project:
             nullable: false
             options:
                 comment: Дата внесения проекта в систему (создается автоматически)
+        statusAccess:
+            type: boolean
+            nullable: true
+            options:
+                comment: Статус доступа создания проекта (контролирует менеджер организации)
         square:
             type: float
             nullable: true

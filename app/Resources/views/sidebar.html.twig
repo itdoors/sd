@@ -19,7 +19,7 @@
                 <span class="selected"></span>
             </a>
         </li>
-        {% if is_granted('ROLE_STATE_TENDER_ADMIN') or is_granted('ROLE_STATE_TENDER') or is_granted('ROLE_STATE_TENDER_DIRECTOR') %}
+        {% if is_granted('ROLE_PROJECT_STATE_TENDER_ADMIN') or is_granted('ROLE_PROJECT_STATE_TENDER') or is_granted('ROLE_PROJECT_STATE_TENDER_DIRECTOR') %}
             {% set classOpen = '' %}
             <li{% if 
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_state_tender_create')
@@ -42,7 +42,7 @@
                     <span class="arrow {{classOpen}}"></span>
                 </a>
                 <ul class="sub-menu">
-                    {% if is_granted('ROLE_STATE_TENDER') %}
+                    {% if is_granted('ROLE_PROJECT_STATE_TENDER') %}
                     <li{% if
                             app.request.attributes.get('_route_params').status is defined
                             and
@@ -70,6 +70,46 @@
                         <a href="{{ path('lists_project_state_tender', {status: 'closed'}) }}" title="{% trans %}Closed{% endtrans %}">
                             <i class="icon-pencil"></i>
                             {% trans %}Closed{% endtrans %}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+        {% if is_granted('ROLE_PROJECT_SIMPLE_ADMIN') or is_granted('ROLE_PROJECT_SIMPLE') or is_granted('ROLE_PROJECT_SIMPLE_DIRECTOR') %}
+            {% set classOpen = '' %}
+            <li{% if 
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_create')
+                    or
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_index')
+                    or
+                    (
+                        app.request.attributes.get('_route_params').id is defined
+                        and
+                        path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('lists_project_simple_show', app.request.attributes.get('_route_params'))
+                    )
+                %}{% set classOpen = 'open' %} class="active"{% endif %}>
+                <a href="javascript:;">
+                    <i class="icon-handbag"></i>
+                    <span class="title">{% trans %}Projects{% endtrans %}</span>
+                    <span class="arrow {{classOpen}}"></span>
+                </a>
+                <ul class="sub-menu">
+                    {% if is_granted('ROLE_PROJECT_SIMPLE') %}
+                    <li{% if
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_create')
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('lists_project_simple_create') }}" title="{% trans %}Create{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}Create{% endtrans %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li{% if
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_index')
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('lists_project_simple_index') }}" title="{% trans %}List project{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}List project{% endtrans %}
                         </a>
                     </li>
                 </ul>

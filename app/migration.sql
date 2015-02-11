@@ -2685,8 +2685,31 @@ INSERT INTO "public".project_file_type ("name", "group", "alias")
 
 # Нужно изменить последовательность в project_file_id
 
-# app/console  lists:project:migration   
-# app/console sd:group:role-add  STATE_TENDER STATE_TENDER
-# app/console sd:group:role-add  STATE_TENDER_ADMIN STATE_TENDER_ADMIN 
-# app/console sd:user:group-add i.grom STATE_TENDER
+# app/console  lists:project:migration  
+ 
+# app/console sd:group:role-add  PROJECT_STATE_TENDER PROJECT_STATE_TENDER
+# app/console sd:group:role-add  PROJECT_STATE_TENDER_ADMIN PROJECT_STATE_TENDER_ADMIN
+# app/console sd:group:role-add  PROJECT_STATE_TENDER_DIRECTOR PROJECT_STATE_TENDER_DIRECTOR
+
+# app/console sd:user:group-add i.grom PROJECT_STATE_TENDER_ADMIN
+
+# app/console sd:group:role-add  PROJECT_SIMPLE PROJECT_SIMPLE
+# app/console sd:group:role-add  PROJECT_SIMPLE_ADMIN PROJECT_SIMPLE_ADMIN
+# app/console sd:group:role-add  PROJECT_SIMPLE_DIRECTOR PROJECT_SIMPLE_DIRECTOR
+
+CREATE TABLE project__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_F51EAD52166D1F9C ON project__project_simple_service (project_id);
+CREATE INDEX IDX_F51EAD52ED5CA9E6 ON project__project_simple_service (service_id);
+ALTER TABLE project ALTER is_closed SET  DEFAULT NULL;
+CREATE TABLE project_commercial_tender__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+ALTER TABLE project_commercial_tender__project_simple_service ADD CONSTRAINT FK_698F8E3B166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_commercial_tender__project_simple_service ADD CONSTRAINT FK_698F8E3BED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__project_simple_service ADD CONSTRAINT FK_F51EAD52166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__project_simple_service ADD CONSTRAINT FK_F51EAD52ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD statusAccess BOOLEAN DEFAULT NULL;
+COMMENT ON COLUMN project.statusAccess IS 'Статус доступа создания проекта (контролирует менеджер организации)'
+CREATE TABLE project_electronic_trading__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_E67BFE67166D1F9C ON project_electronic_trading__project_simple_service (project_id);
+CREATE INDEX IDX_E67BFE67ED5CA9E6 ON project_electronic_trading__project_simple_service (service_id);
+
 -- prod ----

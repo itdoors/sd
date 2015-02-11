@@ -1,0 +1,16 @@
+Lists\ProjectBundle\Entity\ProjectSimple:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectSimpleRepository
+    manyToMany:
+        services:
+            targetEntity: ServiceProjectSimple
+            inversedBy: null
+            joinTable:
+              name: project__project_simple_service
+              joinColumns:
+                project_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id
+

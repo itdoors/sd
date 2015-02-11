@@ -7,7 +7,8 @@ Lists\ProjectBundle\Entity\Service:
         name: discriminator
         type: string
     discriminatorMap:
-        service_state_tender: ServiceStateTender
+        service_state_tender: ServiceProjectStateTender
+        service_project_simple: ServiceProjectSimple
         service_commercial_tender: ServiceСommercialTender
     id:
         id:

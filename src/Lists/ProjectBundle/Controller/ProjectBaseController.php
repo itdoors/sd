@@ -53,6 +53,8 @@ class ProjectBaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $object = $form->getData();
+            $object->setUserCreated($user);
+            $em->persist($object);
 
             $managerProject = new ManagerProjectType();
             $managerProject->setPart(100);
@@ -60,9 +62,6 @@ class ProjectBaseController extends Controller
             $managerProject->setProject($object);
             $em->persist($managerProject);
 
-            $object->setUserCreated($user);
-
-            $em->persist($object);
             $em->flush();
             // костыль для поля boolean set null (нужно будет удалить)
 //            $db = $em->getConnection();
@@ -94,7 +93,7 @@ class ProjectBaseController extends Controller
         /** @var ProjectService $service */
         $service = $this->get('lists_project.service');
         $access = $service->checkAccess($user);
-        $method = 'canSeeList'.$this->nameEntity;
+        $method = 'canSee'.$this->nameEntity;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
@@ -120,11 +119,12 @@ class ProjectBaseController extends Controller
         $service = $this->get('lists_project.service');
         $access = $service->checkAccess($user);
 
-        $method = 'canSeeList'.$this->nameEntity;
+        $method = 'canSee'.$this->nameEntity;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
-        if ($access->canSeeAllGosTender()) {
+        $methodAll = 'canSeeAll'.$this->nameEntity;
+        if ($access->$methodAll()) {
             $user = null;
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
@@ -140,12 +140,11 @@ class ProjectBaseController extends Controller
             $page = 1;
         }
 
-        $repository = $this->getDoctrine()
-            ->getRepository('ListsProjectBundle:'.$this->nameEntity);
-
         $methodRepository = 'getList'.$this->nameEntity;
         /** @var \Doctrine\ORM\Query $query */
-        $query = $repository->$methodRepository($user);
+        $query = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:'.$this->nameEntity)
+            ->$methodRepository($user);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
@@ -265,6 +264,36 @@ class ProjectBaseController extends Controller
                 'managerProject' => $managers[0],
                 'managers' => $managers,
                 'project' => $project,
+                'access' => $access
+        ));
+    }
+    /**
+     * Executes showDocumentsAction
+     *
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showDocumentsAction ($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $repository = $em->getRepository('ListsProjectBundle:'.$this->nameEntity);
+        $methodGet = 'get'.$this->nameEntity;
+        $object = $repository->$methodGet($id);
+
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user, $object);
+
+       $methodSee = 'canSee'.$this->nameEntity;
+        if (!$access->$methodSee()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('ListsProjectBundle:'.$this->nameEntity.':Tab/documents.html.twig', array (
+                'object' => $object,
                 'access' => $access
         ));
     }
