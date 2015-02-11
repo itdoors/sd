@@ -1,8 +1,8 @@
-#Lists\ProjectBundle\Entity\HandlingMessage:
-#    properties:
-#        createdate:
-#            - NotBlank: { groups: [new] }
-#
+Lists\ProjectBundle\Entity\Message:
+    properties:
+        eventDatetime:
+            - NotBlank: { groups: [create] }
+
 Lists\ProjectBundle\Entity\Project:
     properties:
         organization:

@@ -10,6 +10,25 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class Project
 {
 
+     /**
+     * Constructor
+     */
+    public function __construct ()
+    {
+        $this->createDatetime = new \DateTime();
+        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getId();
+    }
     /**
      * @var integer
      */
@@ -85,25 +104,6 @@ class Project
      */
     private $organization;
 
-    /**
-     * Constructor
-     */
-    public function __construct ()
-    {
-        $this->createDatetime = new \DateTime();
-        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->managers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    /**
-     * __toString
-     * 
-     * @return string
-     */
-    public function __toString ()
-    {
-        return $this->getOrganization();
-    }
     /**
      * Get id
      *

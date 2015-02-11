@@ -44,6 +44,7 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}"></script>
 {% endblock %}
 
 {% block modal %}
@@ -81,7 +82,7 @@
 </div>
 
 <div class="row">
-    {#{  include('ListsHandlingBundle:Handling:messages.html.twig') }#}
+    {{  include('ListsProjectBundle:Project:messages.html.twig') }}
 </div>
 {#    {{ form(handlingMessageForm) }}#}
 

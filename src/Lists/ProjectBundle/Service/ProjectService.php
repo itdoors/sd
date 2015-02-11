@@ -133,6 +133,147 @@ class ProjectService
      * @param Form    $form
      * @param mixed[] $defaults
      */
+    public function addMessageFormDefaults(Form $form, $defaults)
+    {
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->find((int) $defaults['project']);
+         if (!$project) {
+            throw new \Exception('Not found', 404);
+        }
+//        $creator = $project->getUser();
+
+//        $userIds = array();
+//
+//        $userIds[$creator->getId()] = $creator->getId();
+
+        /** @var HandlingUser[] $users */
+//        $users = $handling->getHandlingUsers();
+
+//        if ($users) {
+//            foreach ($users as $user) {
+//                $userIds[$user->getUserId()] = $user->getUserId();
+//            }
+//        }
+
+        $organizationId = $project->getOrganization()->getId();
+
+        $form
+            ->get('current')
+                ->add('contact', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'required' => true,
+                    'query_builder' => function (\Lists\ContactBundle\Entity\ModelContactRepository $repository) use ($organizationId) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->setParameter(':modelName', \Lists\ContactBundle\Entity\ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId);
+                    }
+                ))
+                ->add('project', 'hidden_entity', array(
+                    'data_class' => null,
+                    'entity'=>'Lists\ProjectBundle\Entity\Project',
+                    'data' => $project
+                ));
+        $form
+            ->get('planned')
+                ->add('contact', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'required' => true,
+                    'query_builder' => function (\Lists\ContactBundle\Entity\ModelContactRepository $repository) use ($organizationId) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->setParameter(':modelName', \Lists\ContactBundle\Entity\ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId);
+                    }
+                ))
+                ->add('project', 'hidden_entity', array(
+                    'data_class' => null,
+                    'entity'=>'Lists\ProjectBundle\Entity\Project',
+                    'data' => $project
+                ));
+
+//        $form
+//            ->add('usersFromOurSide', 'entity', array(
+//                'class' => 'ListsHandlingBundle:HandlingUser',
+//                'empty_value' => '',
+//                'required' => false,
+//                'multiple' => true,
+//                'mapped' => false,
+//                'query_builder' => function (HandlingUserRepository $repository) use ($handlingId) {
+//                        return $repository->createQueryBuilder('hu')
+//                            ->innerJoin('hu.handling', 'h')
+//                            ->leftJoin('hu.lookup', 'l')
+//                            ->innerJoin('hu.user', 'u')
+//                            ->innerJoin('u.stuff', 's')
+//                            ->where('h.id = :handlingId')
+//                            ->setParameter(':handlingId', $handlingId);
+//                }
+//            ));
+//
+//        $form
+//            ->add('contactMany', 'entity', array(
+//                'class' => 'ListsContactBundle:ModelContact',
+//                'empty_value' => '',
+//                'required' => false,
+//                'mapped' => false,
+//                'multiple' => true,
+//                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+//                        return $repository->createQueryBuilder('mc')
+//                            ->leftJoin('mc.owner', 'owner')
+//                            ->where('mc.modelName = :modelName')
+//                            ->andWhere('mc.modelId = :modelId')
+//                            ->andWhere('owner.id in (:ownerIds)')
+//                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+//                            ->setParameter(':modelId', $organizationId)
+//                            ->setParameter(':ownerIds', $userIds);
+//                }
+//            ));
+//
+//         $form
+//            ->add('contactnext', 'entity', array(
+//                'class' => 'ListsContactBundle:ModelContact',
+//                'empty_value' => '',
+//                'required' => false,
+//                'mapped' => false,
+//                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+//                        return $repository->createQueryBuilder('mc')
+//                            ->leftJoin('mc.owner', 'owner')
+//                            ->where('mc.modelName = :modelName')
+//                            ->andWhere('mc.modelId = :modelId')
+//                            ->andWhere('owner.id in (:ownerIds)')
+//                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+//                            ->setParameter(':modelId', $organizationId)
+//                            ->setParameter(':ownerIds', $userIds);
+//                }
+//            ));
+//
+//        $form
+//            ->add('status', 'entity', array(
+//                'class' => 'ListsHandlingBundle:HandlingStatus',
+//                'data' => $handling->getStatus(),
+//                'empty_value' => '',
+//                'mapped' => false,
+//                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+//                        return $repository->createQueryBuilder('s')
+//                            ->orderBy('s.sortorder', 'ASC');
+//                }
+//            ));
+//
+//        $form
+//            ->add('mindate', 'hidden', array(
+//                'data' => $defaultData['mindate'],
+//                'mapped' => false
+//        ));
+    }
+    /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+     */
     public function confirmProjectFormDefaults(Form $form, $defaults)
     {
         $form->add('projectId', 'hidden', array(
@@ -162,6 +303,27 @@ class ProjectService
             $this->em->persist($data);
             $this->em->flush();
         }
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveAddMessageForm (Form $form, Request $request, $params)
+    {
+        $current = $form->get('current')->getData();
+        $planned = $form->get('planned')->getData();
+        $access = $this->checkAccess($this->user, $current->getProject());
+        if ($access->canAddMessage()) {
+            throw new \Exception('No access', 403);
+        }
+        $current->setUser($this->user);
+        $planned->setUser($this->user);
+        $this->em->persist($current);
+        $this->em->persist($planned);
+        $this->em->flush();
     }
     /**
      * Add form defaults depending on defaults)

@@ -1,0 +1,71 @@
+{% trans_default_domain 'ListsProjectBundle' %}
+<div class="row">
+    <div class="col-md-12">
+        <ul class="timeline">
+            {% for item in messages %}
+                <li id="handling_message_{{ item.id }}" class="timeline-{% if (item.eventDatetime | date('U')) <= ("now"|date("U"))  and item.isPlannedMessage %}blue{% elseif (item.eventDatetime | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
+                    <div class="timeline-time">
+                            <span class="date">{{ item.eventDatetime|date('d.m.Y') }}</span>
+                            <span class="time">{{ item.eventDatetime|date('H:i') }}</span>
+                    </div>
+                    <div class="timeline-icon">
+                            <i class="fa 
+                               {% if item.type.id == 3 %}
+                                    fa-user
+                               {% elseif item.type.id == 5 %}
+                                    fa-suitcase
+                               {% elseif item.type.id == 1 %}
+                                    fa-envelope-o
+                               {% elseif item.type.id == 6 %}
+                                    fa-comments
+                               {% elseif item.type.id == 7 %}
+                                    fa-comments
+                               {% else %}
+                                    fa-tachometer
+                               {% endif %}
+                               "></i>
+                    </div>
+                    <div class="timeline-body">
+                            <h2>{{ item.type }} | {{ item.contact }} | {{ item.user }}{#% if item.isBusinessTrip %} | {% trans %}Business trip{% endtrans %}{% endif %#}</h2>
+                            <div class="timeline-content">
+                                    {{ item.description }} <br /><br>
+                                    {#% if usersFromOurSide['message'~item.id] is not empty%}
+                                        {% trans %}usersFromOurSidePersons from our side{% endtrans %}: <br>
+                                        {% for person in usersFromOurSide['message'~item.id] %}
+                                            &#9679; {{ person.handlingUser.user.fullName }}<br>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <br>
+                                    {% if usersFromTheirSide['message'~item.id] is not empty%}
+                                        {% trans %}Persons from their side{% endtrans %}: <br>
+                                        {% for person in usersFromTheirSide['message'~item.id] %}
+                                            &#9679; {{ person.modelContact.fullName }}<br>
+                                        {% endfor %}
+                                    {% endif %#}
+                                    {#% if item.files | length > 0 %}
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
+                                                <div class="panel-body">
+                                                     {% for key,file in item.files %}
+                                                    <a href="{{  asset(file.getWebPath()) }}" target="_blank">
+                                                        {% if item.filename and key == 0 %}
+                                                            {{ item.filename }}
+                                                        {% else %}
+                                                            {% trans %}Noname File{% endtrans %}
+                                                        {% endif %}
+                                                    </a><br>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                    {% endif %}
+                                    {#% if calls[item.id] is defined %}
+                                        {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
+                                    {% endif %#}
+                            </div>
+                    </div>
+                </li>
+                                                
+            {% endfor %}
+        </ul>
+    </div>
+</div>

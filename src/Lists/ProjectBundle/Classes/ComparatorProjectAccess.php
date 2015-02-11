@@ -91,6 +91,19 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
+    public function canAddMessage ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddMessage()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canChangeManagerProject ()
     {
         foreach ($this->accesses as $access) {

@@ -11,6 +11,7 @@ parameters:
     lists_project.close_project.form.class: Lists\ProjectBundle\Form\CloseProjectForm
     lists_project.project_simple.form.class: Lists\ProjectBundle\Form\ProjectSimpleForm
     lists_project.confirm_project.form.class: Lists\ProjectBundle\Form\ConfirmProjectForm
+    lists_project.project_add_message.form.class: Lists\ProjectBundle\Form\AddMessageForm
      # VALIDATOR
     lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderValidator
     lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipantValidator
@@ -89,6 +90,14 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: projectSimpleForm }
+    lists_project.addMessageForm:
+        class: %lists_project.project_add_message.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addMessageForm }
     lists_project.confirmProjectForm:
         class: %lists_project.confirm_project.form.class%
         tags:

@@ -30,6 +30,10 @@ interface ProjectAccessInterface
     /**
      * @return bool
      */
+    public function canAddMessage();
+    /**
+     * @return bool
+     */
     public function canChangeManagerProject();
     /**
      * @return bool

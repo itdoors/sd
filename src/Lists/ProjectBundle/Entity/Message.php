@@ -9,6 +9,24 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Message
 {
+    /**
+     * isPlannedMessage
+     * 
+     * @return boolean
+     */
+    public function isPlannedMessage()
+    {
+        return $this instanceof MessagePlanned;
+    }
+    /**
+     * isCurrentMessage
+     * 
+     * @return boolean
+     */
+    public function isCurrentMessage()
+    {
+        return $this instanceof MessageCurrent;
+    }
 
     /**
      * @var integer
@@ -55,6 +73,10 @@ class Message
      */
     private $contact;
 
+    public function __construct ()
+    {
+        $this->setCreateDatetime(new \DateTime());
+    }
     /**
      * Get id
      *
@@ -239,5 +261,43 @@ class Message
     public function getContact ()
     {
         return $this->contact;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $files;
+
+
+    /**
+     * Add files
+     *
+     * @param \Lists\ProjectBundle\Entity\FileMessage $files
+     * @return Message
+     */
+    public function addFile(\Lists\ProjectBundle\Entity\FileMessage $files)
+    {
+        $this->files[] = $files;
+    
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param \Lists\ProjectBundle\Entity\FileMessage $files
+     */
+    public function removeFile(\Lists\ProjectBundle\Entity\FileMessage $files)
+    {
+        $this->files->removeElement($files);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 }

@@ -47,6 +47,13 @@ class BasicProjectAccess implements ProjectAccessInterface
     /**
      * @return bool
      */
+    public function canAddMessage ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canChangeManagerProject ()
     {
         return false;

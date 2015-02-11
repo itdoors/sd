@@ -77,4 +77,11 @@ class ManagerProjectProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canAddMessage ()
+    {
+        return true;
+    }
 }

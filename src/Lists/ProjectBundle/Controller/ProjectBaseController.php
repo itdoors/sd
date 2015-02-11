@@ -297,4 +297,51 @@ class ProjectBaseController extends Controller
                 'access' => $access
         ));
     }
+     /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function messagesListAction ($id)
+    {
+        $messages = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Message')->getMessagesByProjectId($id);
+
+//        $usersFromTheirSide = array ();
+//        $usersFromOurSide = array ();
+//        $calls = array ();
+//        foreach ($messages as $message) {
+//            $usersFromTheirSideTemp = $this->getDoctrine()
+//                ->getRepository('ListsHandlingBundle:HandlingMessageModelContact')
+//                ->findBy(array (
+//                'handlingMessage' => $message
+//            ));
+//
+//            $usersFromTheirSide['message' . $message->getId()] = $usersFromTheirSideTemp;
+//
+//            $usersFromOurSideTemp = $this->getDoctrine()
+//                ->getRepository('ListsHandlingBundle:HandlingMessageHandlingUser')
+//                ->findBy(array (
+//                'handlingMessage' => $message
+//            ));
+//
+//            $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
+//
+//            if ($message->getType() && $message->getType()->getId() === 1) {
+//                $call = $this->getDoctrine()
+//                    ->getRepository('ITDoorsSipBundle:Call')
+//                    ->findOneBy(array('modelName' => 'handling_message' ,'modelId' => $message->getId()));
+//                if ($call) {
+//                    $calls[$message->getId()] = $call;
+//                }
+//            }
+//        }
+
+        return $this->render('ListsProjectBundle:Project:messagesList.html.twig', array (
+                'messages' => $messages,
+//                'usersFromTheirSide' => $usersFromTheirSide,
+//                'usersFromOurSide' => $usersFromOurSide,
+//                'calls' => $calls
+        ));
+    }
 }

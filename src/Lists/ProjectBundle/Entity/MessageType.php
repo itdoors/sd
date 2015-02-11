@@ -9,7 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MessageType
 {
-
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return $this->getName();
+    }
     /**
      * @var integer
      */
