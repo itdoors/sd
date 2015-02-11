@@ -42,7 +42,8 @@ class ClaimType extends AbstractType
                 'class' => 'SDBusinessRoleBundle:Stuff',
                 'required' => false,
                 'multiple' => true
-            ));
+            ))
+            ->add('text');
     }
 
     /**

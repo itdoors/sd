@@ -3,6 +3,7 @@
 namespace SD\ServiceDeskBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\ServiceDeskBundle\Entity\Claim;
@@ -232,5 +233,41 @@ class ClaimController extends Controller
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm();
+    }
+
+    /**
+     * Saves uploaded image
+     *
+     * @param Request $request
+     *
+     * @return string path to image
+     */
+    public function uploadAction(Request $request)
+    {
+        $name = $this->randomString();
+        $ext = explode('.', $_FILES['file']['name']);
+        $directory = $this->container->getParameter('project.web.dir');
+        $directory .= '/uploads/claim/images';
+        if (! is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+        $ext = explode('.', $_FILES['file']['name']);
+        $filename = $name . '.' . $ext[1];
+        $destination = $directory . $filename;
+        $location = $_FILES["file"]["tmp_name"];
+        move_uploaded_file($location, $destination);
+        $destination = '/uploads/claim/images' . $filename;
+
+        return new Response($destination);
+    }
+
+    /**
+     * Random string
+     *
+     * @return string
+     */
+    private function randomString()
+    {
+        return md5(rand(100, 200));
     }
 }

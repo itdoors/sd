@@ -89,7 +89,7 @@
                         $.ajax({
                             data: data,
                             type: "POST",
-                            url: "{{ path('list_article_blog_upload') }}",
+                            url: "{{ path('claim_upload') }}",
                             cache: false,
                             contentType: false,
                             processData: false,
@@ -178,6 +178,13 @@
                     <div class="col-md-9">
                         {{ form_widget(form.performers, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
                         {% if form.performers.vars.errors|length %}{{ form_errors(form.performers) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Text{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Changes"| trans}}) }}
+                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
                     </div>
                 </div>
                 

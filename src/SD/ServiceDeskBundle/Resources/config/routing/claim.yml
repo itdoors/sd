@@ -14,6 +14,11 @@ claim_create:
     path:     /create
     defaults: { _controller: "SDServiceDeskBundle:Claim:create" }
     requirements: { _method: post }
+    
+claim_upload:
+    path:     /upload
+    defaults: { _controller: "SDServiceDeskBundle:Claim:upload" }
+    requirements: { _method: post }
 
 claim_edit:
     path:     /{id}/edit

@@ -177,7 +177,7 @@ class ClaimMessage
 
         return $this;
     }
-    
+
     /**
      * Get visibility
      *

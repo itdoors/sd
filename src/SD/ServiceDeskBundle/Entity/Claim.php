@@ -63,6 +63,13 @@ class Claim
     protected $closedAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="text", type="text")
+     */
+    protected $text;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="disabled", type="boolean")
@@ -438,6 +445,30 @@ class Claim
         }
 
         return $this;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     *
+     * @return Claim
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 }
 
