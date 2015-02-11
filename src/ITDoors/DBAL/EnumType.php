@@ -13,7 +13,7 @@ abstract class EnumType extends Type
     {
         static::$values = array_map(function($val) { return "'".$val."'"; }, static::$values);
 
-        return "ENUM(".implode(", ", $values).") COMMENT '(DC2Type:".static::$name.")'";
+        return "ENUM(".implode(", ", static::$values).") COMMENT '(DC2Type:".static::$name.")'";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
