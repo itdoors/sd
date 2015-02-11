@@ -19,29 +19,36 @@ class ClaimMessage
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="text", type="text")
      */
-    private $text;
+    protected $text;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_visible", type="boolean")
+     */
+    protected $visible;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \SD\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\BusinessRole")
+     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $businessRole;
+    protected $user;
 
     /**
      * @var \SD\ServiceDeskBundle\Entity\Claim
@@ -49,7 +56,7 @@ class ClaimMessage
      * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", inversedBy="messages")
      * @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      */
-    private $claim;
+    protected $claim;
 
     /**
      * Get id
@@ -155,5 +162,29 @@ class ClaimMessage
     public function getClaim()
     {
         return $this->claim;
+    }
+
+    /**
+     * Set visibility
+     *
+     * @param boolean $visible
+     *
+     * @return ClaimMessage
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+    
+    /**
+     * Get visibility
+     *
+     * @return boolean
+     */
+    public function getVisible()
+    {
+        return $this->visible;
     }
 }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrganizationGrantedForOrder
  *
- * @ORM\Table(name="org_granted_for_order")!!!
+ * @ORM\Table(name="organization_granted_for_order")
  * @ORM\Entity
  */
 class OrganizationGrantedForOrder
