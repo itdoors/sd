@@ -74,7 +74,13 @@ class BusinessRole
         return $this->individual;
     }
 
-    public function __toString() {
+    /**
+     * __toString()
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
         return (string) $this->getIndividual();
     }
 }

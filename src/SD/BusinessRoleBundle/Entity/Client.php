@@ -59,47 +59,4 @@ class Client extends BusinessRole
     {
         return $this->claims;
     }
-    /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var \Lists\IndividualBundle\Entity\Individual
-     */
-    private $individual;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set individual
-     *
-     * @param \Lists\IndividualBundle\Entity\Individual $individual
-     * @return Client
-     */
-    public function setIndividual(\Lists\IndividualBundle\Entity\Individual $individual = null)
-    {
-        $this->individual = $individual;
-    
-        return $this;
-    }
-
-    /**
-     * Get individual
-     *
-     * @return \Lists\IndividualBundle\Entity\Individual 
-     */
-    public function getIndividual()
-    {
-        return $this->individual;
-    }
 }
