@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  */
-class ClaimDep extends Claim
+class ClaimDep!!! extends Claim
 {
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments

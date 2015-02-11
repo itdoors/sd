@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrganizationGrantedForOrder
  *
- * @ORM\Table(name="org_granted_for_order")
+ * @ORM\Table(name="org_granted_for_order")!!!
  * @ORM\Entity
  */
 class OrganizationGrantedForOrder
@@ -43,7 +43,7 @@ class OrganizationGrantedForOrder
      * @ORM\ManyToMany(targetEntity="Lists\DepartmentBundle\Entity\Departments")
      * @ORM\JoinTable(name="org_granted_for_order_departments",
      *      joinColumns={@ORM\JoinColumn(name="org_granted_for_order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id", unique=true)}!!!
      *      )
      */
     protected $departments;

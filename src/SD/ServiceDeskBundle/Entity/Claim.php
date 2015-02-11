@@ -87,7 +87,7 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")
+     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")!!!
      * @ORM\JoinTable(name="claims_curators",
      *   joinColumns={
      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
@@ -102,7 +102,7 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")
+     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\Stuff")!!!
      * @ORM\JoinTable(name="claims_performers",
      *   joinColumns={
      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
@@ -456,6 +456,8 @@ class StatusType extends \ITDoors\DBAL\EnumType
 
 class ImportanceType extends \ITDoors\DBAL\EnumType
 {
+    const HOT = 'hot';
     protected static $name = 'importanceType';
-    protected static $values = array('hot', 'weak');
+    protected static $values = array(ImportanceType::HOT, 'weak');
+
 }
