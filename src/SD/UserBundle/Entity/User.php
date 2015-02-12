@@ -715,4 +715,33 @@ class User extends BaseUser
     {
         return $this->userPosition;
     }
+
+    /**
+     * @var \Lists\IndividualBundle\Entity\Individual
+     */
+    private $individual;
+
+    /**
+     * Set individual
+     *
+     * @param \Lists\IndividualBundle\Entity\Individual $individual
+     * 
+     * @return User
+     */
+    public function setIndividual(\Lists\IndividualBundle\Entity\Individual $individual = null)
+    {
+        $this->individual = $individual;
+
+        return $this;
+    }
+
+    /**
+     * Get individual
+     *
+     * @return \Lists\IndividualBundle\Entity\Individual 
+     */
+    public function getIndividual()
+    {
+        return $this->individual;
+    }
 }

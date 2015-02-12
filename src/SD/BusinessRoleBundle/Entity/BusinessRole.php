@@ -35,7 +35,7 @@ class BusinessRole
     /**
      * @var \Lists\IndividualBundle\Entity\Individual
      *
-     * @ORM\ManyToOne(targetEntity="Lists\IndividualBundle\Entity\Individual", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Lists\IndividualBundle\Entity\Individual", inversedBy="businessRoles", fetch="EAGER")
      * @ORM\JoinColumn(name="individual_id", referencedColumnName="id")
      */
     protected $individual;
