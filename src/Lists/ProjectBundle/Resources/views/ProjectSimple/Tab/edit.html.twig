@@ -9,10 +9,10 @@
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 pk: {{object.id}}
             });
-           /* $('#statusProjectSimple').editable({
+            $('#status').editable({
                 url: '{{ path('lists_project_ajax_editable_project') }}',
-                source: '{{ path('lists_project_ajax_search_status_state_tender') }}'
-            });*/
+                source: '{{ path('lists_project_ajax_search_status_simple') }}'
+            });
             $('#services').editable({
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 source: '{{ path('lists_project_ajax_services_simple_search') }}',
@@ -55,16 +55,16 @@
                             {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig')}}
                         {% endif %}
                     {% endif %}
-                    {#% if access.canEditProjectSimple %}
-                    <a href="#" id="statusProjectStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusProjectStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                    {% if access.canEditProjectSimple %}
+                    <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
                     {% endif %}
-                        {{ object.statusProjectStateTender }}
+                        {{ object.status }}
                         {% if object.statusChangeDate %}
                             {{ object.statusChangeDate|date("d.m.y, H:i") }}
                         {% endif %}
                     {% if access.canEditProjectSimple %}
                     </a>
-                    {% endif %#}
+                    {% endif %}
                 {% endif %}
                 {% if object.isClosed  != true and access.canCloseProject %}
                     {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}

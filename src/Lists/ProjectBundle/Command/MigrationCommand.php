@@ -9,10 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
-use Lists\ProjectBundle\Entity\ServiceСommercialTender;
 use Lists\ProjectBundle\Entity\ServiceProjectStateTender;
 use Lists\ProjectBundle\Entity\StatusProjectStateTender;
-use Lists\ProjectBundle\Entity\StatusСommercialTender;
 
 /**
  * Class MigrationCommand
@@ -74,14 +72,12 @@ class MigrationCommand extends ContainerAwareCommand
                 'alias' => $val->getAlias()
             ));
         if (!$statusNew) {
-            if ($val->getSlug() == 'gos_tender') {
-                $statusNew = new StatusProjectStateTender();
-            } else {
-                $statusNew = new StatusСommercialTender();
-            }
-            $statusNew->setName($val->getName());
-            $statusNew->setAlias($val->getAlias());
-            $this->em->persist($statusNew);
+            $statusNew = $this->em->getRepository('ListsProjectBundle:Status')->findOneBy(
+                array(
+                    'name' => 'Проработка',
+                    'alias' => 'study'
+            ));
+            
         }
         return $statusNew;
     }
@@ -141,22 +137,18 @@ class MigrationCommand extends ContainerAwareCommand
            }
        }
     }
-//    private function saveFileType($type)
-//    {
-//        $typeFile = $this->em->getRepository('ListsProjectBundle:ProjectFileType')->findOneBy(
-//         array(
-//             'name' => $type->getName()
-//         ));
-//        if (!$typeFile) {
-//             
-//            $typeFile = new \Lists\ProjectBundle\Entity\ProjectFileType();
-//            $typeFile->setAlias($type->getAlias());
-//            $typeFile->setGroup($type->getGroup());
-//            $typeFile->setName($type->getName());
-//            $this->em->persist($typeFile);
-//        }
-//        return $typeFile;
-//    }
+    private function addFile($project)
+    {
+       $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+            ->findBy(array ('group' => 'commercial_offer'));
+        foreach ($fileTypes as $type) {
+            $file = new \Lists\ProjectBundle\Entity\FileProject();
+            $file->setProject($project);
+            $file->setType($type);
+            $file->setUser($project->getUser());
+            $this->em->persist($file);
+        }
+    }
     /**
      * {@inheritdoc}
      */
@@ -232,6 +224,8 @@ class MigrationCommand extends ContainerAwareCommand
                 $project->setUserClosed($val->getClosedUser()? $val->getClosedUser(): $val->getCloser());
                 $project->setUserCreated($val->getUser());
                 
+                $this->addFile($project);
+                
                 $this->em->persist($project);
                 
                 $this->saveManager($val, $project);
@@ -279,6 +273,19 @@ class MigrationCommand extends ContainerAwareCommand
                 $project->setVdz($val->getVdz());
                 $project->setAdvert($val->getAdvert());
                 
+                $files = $val->getFiles();
+                foreach ($files as $file) {
+                    $addFile = new \Lists\HandlingBundle\Entity\ProjectFile();
+                    $addFile->setCreateDatetime($file->getCreateDatetime());
+                    $addFile->setDeletedDatetime($file->getDeletedDatetime());
+                    $addFile->setFile($file->getFile());
+                    $addFile->setName($file->getName());
+                    $addFile->setProject($project);
+                    $addFile->setShortText($file->getShortText());
+                    $addFile->setType($file->getType());
+                    $addFile->setUser($file->getUser());
+                    $this->em->persist($addFile);
+                }
                 $this->em->persist($project);
                 
                 $this->saveManager($val->getProject(), $project);

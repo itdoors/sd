@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>{% trans %}№{% endtrans %}</th>
-                <th>{% trans %}Name{% endtrans %}</th>
+                <th>{% trans %}Type document{% endtrans %}</th>
                 <th>{% trans %}Document{% endtrans %}</th>
                 <th>{% trans %}Description{% endtrans %}</th>
                 <th>{% trans %}Author{% endtrans %}</th>
@@ -26,10 +26,10 @@
             {% for key,file in object.files %}
                 <tr>
                     <td>{{ key+1 }}</td>
-                    <td>{{ file.type ? file.type.name : 'Document'|trans }}</td>
+                    <td>{{ file.type ? file.type.name : '' }}</td>
                     <td>
                         {% if file.name %}
-                        <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{% trans %}Document{% endtrans %}</a>
+                        <a href="{{ path('it_doors_file_access_get_if_authenticated', {path:file.getWebPath ,timestamp:'now'|date('U') }) }}" target="_blank">{{file.nameOriginal is empty ? 'Document'|trans :file.nameOriginal }}</a>
                         {% elseif access.canEditProjectStateTender %}
                             <script>
                                 $(document).ready(function(){

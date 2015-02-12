@@ -69,32 +69,4 @@ class ProjectSimple extends Project
     {
         return 'Negotiation procedure';
     }
-    /**
-     * @var \Lists\ProjectBundle\Entity\StatusProjectSimple
-     */
-    private $statusProjectSimple;
-
-
-    /**
-     * Set statusProjectSimple
-     *
-     * @param \Lists\ProjectBundle\Entity\StatusProjectSimple $statusProjectSimple
-     * @return ProjectSimple
-     */
-    public function setStatusProjectSimple(\Lists\ProjectBundle\Entity\StatusProjectSimple $statusProjectSimple = null)
-    {
-        $this->statusProjectSimple = $statusProjectSimple;
-    
-        return $this;
-    }
-
-    /**
-     * Get statusProjectSimple
-     *
-     * @return \Lists\ProjectBundle\Entity\StatusProjectSimple 
-     */
-    public function getStatusProjectSimple()
-    {
-        return $this->statusProjectSimple;
-    }
 }

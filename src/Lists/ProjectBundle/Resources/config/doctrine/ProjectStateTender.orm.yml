@@ -102,16 +102,6 @@ Lists\ProjectBundle\Entity\ProjectStateTender:
         participants:
           targetEntity: ProjectStateTenderParticipant
           mappedBy: projectStateTender
-    manyToOne:
-        statusProjectStateTender:
-            targetEntity: StatusProjectStateTender
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                status_id:
-                    referencedColumnName: id
-            orphanRemoval: false
     uniqueConstraints:
         unique_project_gos_tender:
             columns: [advert, datetime_deadline]

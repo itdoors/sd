@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class StatusProjectSimpleRepository extends EntityRepository
 {
+    /**
+     * Searches service by $q
+     *
+     * @param string  $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('s');
+
+        $sql->where($sql->expr()->like('lower(s.name)', ':q'))
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
 }

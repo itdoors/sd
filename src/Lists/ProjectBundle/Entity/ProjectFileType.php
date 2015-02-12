@@ -11,6 +11,15 @@ class ProjectFileType
 {
 
     /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return $this->getName();
+    }
+    /**
      * @var integer
      */
     private $id;

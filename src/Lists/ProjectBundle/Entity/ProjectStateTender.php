@@ -427,34 +427,6 @@ class ProjectStateTender extends Project
             false => 'No'
         );
     }
-
-    /**
-     * @var \Lists\ProjectBundle\Entity\StatusProjectStateTender
-     */
-    private $statusProjectStateTender;
-
-    /**
-     * Set statusProjectStateTender
-     *
-     * @param \Lists\ProjectBundle\Entity\StatusProjectStateTender $statusProjectStateTender
-     *
-     * @return ProjectStateTender
-     */
-    public function setStatusProjectStateTender (\Lists\ProjectBundle\Entity\StatusProjectStateTender $statusProjectStateTender = null)
-    {
-        $this->statusProjectStateTender = $statusProjectStateTender;
-
-        return $this;
-    }
-    /**
-     * Get statusProjectStateTender
-     *
-     * @return \Lists\ProjectBundle\Entity\StatusProjectStateTender 
-     */
-    public function getStatusProjectStateTender ()
-    {
-        return $this->statusProjectStateTender;
-    }
     /**
      * @var \Doctrine\Common\Collections\Collection
      */

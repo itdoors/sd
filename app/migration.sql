@@ -2715,5 +2715,15 @@ ALTER TABLE project_message DROP CONSTRAINT FK_20A33C1AC54C8C93;
 ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AC54C8C93 FOREIGN KEY (type_id) REFERENCES project_message_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+ALTER TABLE project ADD status_text VARCHAR(128) DEFAULT NULL;
+COMMENT ON COLUMN project.status_text IS 'Причина изменения статуса'
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Cбор документов', 'collecting_documents', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подача - раскрытие ', 'submission_disclosure', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подписание договора', 'signing_document', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Проработка', 'study', 'simple');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Комм. Предложение', 'comm_proposal', 'simple');
+INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
+ALTER TABLE project_file ADD name_original VARCHAR(128) DEFAULT NULL;
+COMMENT ON COLUMN project_file.name_original IS 'Оригинальное название файла'
 
 -- prod ----

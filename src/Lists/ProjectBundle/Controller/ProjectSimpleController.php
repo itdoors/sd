@@ -49,6 +49,9 @@ class ProjectSimpleController extends ProjectBaseController
         if ($form->isValid()) {
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsProjectBundle:Status')->findOneBy(array(
+                'alias' => 'study'
+            ));
             
             $type = $form->get('type')->getData();
             if ($type == 'simple') {
@@ -63,7 +66,6 @@ class ProjectSimpleController extends ProjectBaseController
                 foreach ($services as $service) {
                     $object->addService($service);
                 }
-                
             } elseif ($type == 'electronic_trading') {
                 $services = $form->get('services')->getData();
                 $object = new \Lists\ProjectBundle\Entity\ProjectElectronicTrading();
@@ -74,14 +76,25 @@ class ProjectSimpleController extends ProjectBaseController
                     $object->addService($service);
                 }
             }
+            $fileTypes = $em->getRepository('ListsProjectBundle:ProjectFileType')
+                ->findBy(array ('group' => 'simple'));
+            foreach ($fileTypes as $typeFile) {
+                $file = new \Lists\ProjectBundle\Entity\FileProject();
+                $file->setProject($object);
+                $file->setType($typeFile);
+                $em->persist($file);
+            }
+           
+            $object->setStatus($status);
             $isManager = $object->getOrganization()->isManager($user);
             if ($isManager) {
                 $object->setStatusAccess(true);
             } else {
-                throw $this->createAccessDeniedException('Уведомление на почту сделать');
+                throw $this->createAccessDeniedException('В разработке... (Уведомление на почту и оповещение в системе)');
             }
 
             $object->setUserCreated($user);
+             
             $em->persist($object);
 
             $managerProject = new ManagerProjectType();

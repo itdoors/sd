@@ -81,5 +81,5 @@ Lists\ProjectBundle\Entity\Message:
     oneToMany:
         files:
             targetEntity: FileMessage
-            mappedBy: project
+            mappedBy: message
             orphanRemoval: true

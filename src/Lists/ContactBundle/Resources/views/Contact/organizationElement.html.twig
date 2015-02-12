@@ -42,17 +42,17 @@
 </td>
 <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.phone1 }}
-    {% if item.0.phone1 %}
+    {#% if item.0.phone1 %}
         <a href="#" data-phone="{{ item.0.phone1 }}" class="call-btn"></a>
         <a href="#" class="hangup-btn" style="display: none"></a>
-    {% endif %}
+    {% endif %#}
 </td>
 <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.phone2 }}
-    {% if item.0.phone2 %}
+    {#% if item.0.phone2 %}
         <a href="#" data-phone="{{ item.0.phone2 }}" class="call-btn"></a>
         <a href="#" class="hangup-btn" style="display: none"></a>
-    {% endif %}
+    {% endif %#}
 </td>
 <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.email }}

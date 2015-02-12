@@ -21,7 +21,7 @@
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 pk: {{object.id}}
             });
-            $('#statusProjectStateTender').editable({
+            $('#status').editable({
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 source: '{{ path('lists_project_ajax_search_status_state_tender') }}'
             });
@@ -84,9 +84,9 @@
                         {{ object.userClosed }}  ({{ object.datetimeClosed|date("d.m.y, H:i") }})
                     {% else %}
                         {% if access.canEditProjectStateTender %}
-                        <a href="#" id="statusProjectStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusProjectStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                        <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
                         {% endif %}
-                            {{ object.statusProjectStateTender }}
+                            {{ object.status }}
                             {% if object.statusChangeDate %}
                                 {{ object.statusChangeDate|date("d.m.y, H:i") }}
                             {% endif %}

@@ -131,6 +131,10 @@ lists_project_ajax_search_status_state_tender:
     pattern:  /lists/project/ajax/search/status/state_tender
     defaults: { _controller: ListsProjectBundle:Ajax:searchStatusProjectStateTender}
     
+lists_project_ajax_search_status_simple:
+    pattern:  /lists/project/ajax/search/status/simple
+    defaults: { _controller: ListsProjectBundle:Ajax:searchStatusSimple}
+    
 lists_project_ajax_remove_manager:
     pattern:  /lists/project/ajax/remove/manager/{id}
     defaults: { _controller: ListsProjectBundle:Ajax:removeManager}

@@ -93,7 +93,11 @@ class AjaxController extends Controller
                 $value = null;
             }
         }
-
+        if ($name == 'status') {
+            $value = $this->getDoctrine()
+                    ->getRepository('ListsProjectBundle:Status')
+                    ->find(array('id' => (int) $value));
+        }
         if ($name == 'kveds') {
             $kvedsOld = $object->getKveds();
             foreach ($kvedsOld as $kved) {
@@ -227,6 +231,33 @@ class AjaxController extends Controller
         $searchText = $request->query->get('query');
         /** @var \Lists\ProjectBundle\Entity\StatusProjectStateTenderRepository[] $status */
         $status = $this->getDoctrine()->getRepository('ListsProjectBundle:StatusProjectStateTender')
+            ->getSearchQuery($searchText);
+        $result = array();
+        foreach ($status as $val) {
+            $id = $val->getId();
+            $string = $val->getName();
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * searchStatusProjectStateTenderAction
+     * 
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function searchStatusSimpleAction(Request $request)
+    {
+        $searchText = $request->query->get('query');
+        /** @var \Lists\ProjectBundle\Entity\StatusProjectSimpleRepository[] $status */
+        $status = $this->getDoctrine()->getRepository('ListsProjectBundle:StatusProjectSimple')
             ->getSearchQuery($searchText);
         $result = array();
         foreach ($status as $val) {

@@ -55,14 +55,15 @@ class CloseProjectForm extends AbstractType
                 
                 $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
 
+                if ($reasonClosed === null) {
+                    $form->get('reasonClosed')->addError(
+                        new FormError(
+                            $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
+                        )
+                    );
+                }
+                    
                 if ($project instanceof ProjectStateTender) {
-                    if ($reasonClosed === null) {
-                        $form->get('reasonClosed')->addError(
-                            new FormError(
-                                $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
-                            )
-                        );
-                    }
                     if (!$project) {
                         $form->addError(
                             new FormError(
@@ -90,6 +91,17 @@ class CloseProjectForm extends AbstractType
                             );
                         }
                     }
+                } elseif ($project->getStatus() && ($project->getStatus()->getAlias() == 'comm_proposal') && !$project->hasCommercialFile()) {
+                    $typeComm = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+                            ->findOneBy(array(
+                                'alias' => 'commercial_offer'
+                            ));
+                    $form->addError(
+                        new FormError(
+                            $translator->trans('Download please', array(), 'ListsProjectBundle')
+                            .': "'.$typeComm->getName().'"'
+                        )
+                    );
                 }
             }
         );

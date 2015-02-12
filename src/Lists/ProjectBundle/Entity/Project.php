@@ -3,7 +3,6 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ClassMetadata;
 /**
  * Project
  */
@@ -549,6 +548,7 @@ class Project
      */
     public function setStatus(\Lists\ProjectBundle\Entity\Status $status = null)
     {
+        $this->setStatusChangeDate(new \DateTime());
         $this->status = $status;
     
         return $this;
@@ -562,5 +562,49 @@ class Project
     public function getStatus()
     {
         return $this->status;
+    }
+    /**
+     * @var string
+     */
+    private $statusText;
+
+
+    /**
+     * Set statusText
+     *
+     * @param string $statusText
+     * @return Project
+     */
+    public function setStatusText($statusText)
+    {
+        $this->statusText = $statusText;
+    
+        return $this;
+    }
+
+    /**
+     * Get statusText
+     *
+     * @return string 
+     */
+    public function getStatusText()
+    {
+        return $this->statusText;
+    }
+
+    /**
+     * hasCommercialFile
+     *
+     * @return string 
+     */
+    public function hasCommercialFile()
+    {
+        $files = $this->getFiles();
+        foreach ($files as $file) {
+            if ($file->getType() && $file->getType()->getAlias() == 'commercial_offer' && $file->getName() != '') {
+                return true;
+            }
+        }
+        return false;
     }
 }

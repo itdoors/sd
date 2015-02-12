@@ -172,7 +172,7 @@ class ComparatorProjectAccess extends BasicProjectAccess
     public function canEditProjectStateTender ()
     {
         if ($this->object) {
-            if ($this->object->getIsClosed()) {
+            if ($this->object->getIsClosed() || !$this->object->getStatusAccess()) {
                 return false;
             }
         }

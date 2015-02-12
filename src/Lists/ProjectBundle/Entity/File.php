@@ -101,6 +101,7 @@ class File
         }
 
         $fileExtension = $this->getFile()->getClientOriginalExtension();
+        $this->setNameOriginal($this->getFile()->getClientOriginalName());
 
         $filename = uniqid() . '.' . $fileExtension;
 
@@ -267,5 +268,33 @@ class File
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * @var string
+     */
+    private $nameOriginal;
+
+
+    /**
+     * Set nameOriginal
+     *
+     * @param string $nameOriginal
+     * @return File
+     */
+    public function setNameOriginal($nameOriginal)
+    {
+        $this->nameOriginal = $nameOriginal;
+    
+        return $this;
+    }
+
+    /**
+     * Get nameOriginal
+     *
+     * @return string 
+     */
+    public function getNameOriginal()
+    {
+        return $this->nameOriginal;
     }
 }
