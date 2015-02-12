@@ -29,7 +29,7 @@ class Responsibility
     /**
      * @var \SD\BusinessRoleBundle\Entity\Staff
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Stuff", inversedBy="responsibilities")
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Staff", inversedBy="responsibilities")
      * @ORM\JoinColumn(name="stuff_id", referencedColumnName="id")
      */
     protected $staff;
