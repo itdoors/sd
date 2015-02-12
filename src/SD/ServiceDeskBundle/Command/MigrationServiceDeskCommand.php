@@ -94,7 +94,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $sd_claim->setClosedAt($claimCloseDatetime);
             $sd_claim->setDisabled(false);
             // problem?? $sd_claim->setImportance();
-            $sd_claim->setStatus();
+            //$sd_claim->setStatus();
 
             /*
             * claim user
@@ -138,7 +138,9 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     /*
                      * user_info
                      */
-
+                    $stmtClient = $conn->prepare('
+                      SELECT * FROM sf_guard_user WHERE id = '.$client['user.id'].'
+                    ');
                     $clFirstName = $client['first_name'];
                     $userLastName = $client['last_name'];
                     $userMiddleName = $client['middle_name'];
