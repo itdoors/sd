@@ -5,16 +5,16 @@ namespace SD\BusinessRoleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Stuff
+ * Staff
  *
  * @ORM\Entity
  */
-class Stuff extends BusinessRole
+class Staff extends BusinessRole
 {
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="SD\BusinessRoleBundle\Entity\Responsibility", mappedBy="stuff")
+     * @ORM\OneToMany(targetEntity="SD\BusinessRoleBundle\Entity\Responsibility", mappedBy="staff")
      */
     protected $responsibilities;
 
@@ -31,7 +31,7 @@ class Stuff extends BusinessRole
      *
      * @param \SD\BusinessRoleBundle\Entity\Responsibility $responsibility
      * 
-     * @return Stuff
+     * @return Staff
      */
     public function addResponsibility(\SD\BusinessRoleBundle\Entity\Responsibility $responsibility)
     {

@@ -12,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
  *  "businessRole" = "BusinessRole",
- *  "stuff" = "Stuff",
- *  "claimStuff" = "ClaimStuff",
+ *  "staff" = "Staff",
  *  "claimCurator" = "ClaimCurator",
  *  "claimPerformer" = "ClaimPerformer",
  *  "client" = "Client",

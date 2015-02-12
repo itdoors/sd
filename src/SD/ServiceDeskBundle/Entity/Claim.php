@@ -91,20 +91,20 @@ class Claim
      */
     protected $customer;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection!!!
-     *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimCurator")
-     * @ORM\JoinTable(name="claims_curators",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="curator_id", referencedColumnName="id")
-     *   }
-     * )
-     */
-    protected $curators;
+//     /**
+//      * @var \Doctrine\Common\Collections\Collection!!!
+//      *
+//      * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimCurator")
+//      * @ORM\JoinTable(name="claims_curators",
+//      *   joinColumns={
+//      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
+//      *   },
+//      *   inverseJoinColumns={
+//      *     @ORM\JoinColumn(name="curator_id", referencedColumnName="id")
+//      *   }
+//      * )
+//      */
+//     protected $curators;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -127,7 +127,7 @@ class Claim
     public function __construct()
     {
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
+//         $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->performers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -343,80 +343,80 @@ class Claim
         return $this->customer;
     }
 
+//     /**
+//      * Add curators
+//      *
+//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+//      * 
+//      * @return Claim
+//      */
+//     public function addCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
+//     {
+//         $this->curators[] = $curators;
+
+//         return $this;
+//     }
+
+//     /**
+//      * Remove curators
+//      *
+//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+//      */
+//     public function removeCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
+//     {
+//         $this->curators->removeElement($curators);
+//     }
+
+//     /**
+//      * Get curators
+//      *
+//      * @return \Doctrine\Common\Collections\Collection 
+//      */
+//     public function getCurators()
+//     {
+//         return $this->curators;
+//     }
+
+//     /**
+//      * Set curators
+//      * 
+//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+//      *
+//      * @return Claim
+//      */
+//     public function setCurators(\Doctrine\Common\Collections\Collection $curators = null)
+//     {
+//         if ($curators) {
+//             $this->curators = $curators;
+//         } else {
+//             $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
+//         }
+
+//         return $this;
+//     }
+
     /**
-     * Add curators
+     * Add performer
      *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+     * @param \SD\BusinessRoleBundle\Entity\Stuff $performer
      * 
      * @return Claim
      */
-    public function addCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
+    public function addPerformer(\SD\BusinessRoleBundle\Entity\Staff $performer)
     {
-        $this->curators[] = $curators;
+        $this->performers[] = $performer;
 
         return $this;
     }
 
     /**
-     * Remove curators
+     * Remove performer
      *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
+     * @param \SD\BusinessRoleBundle\Entity\Staff $performer
      */
-    public function removeCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
+    public function removePerformer(\SD\BusinessRoleBundle\Entity\Staff $performer)
     {
-        $this->curators->removeElement($curators);
-    }
-
-    /**
-     * Get curators
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCurators()
-    {
-        return $this->curators;
-    }
-
-    /**
-     * Set curators
-     * 
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
-     *
-     * @return Claim
-     */
-    public function setCurators(\Doctrine\Common\Collections\Collection $curators = null)
-    {
-        if ($curators) {
-            $this->curators = $curators;
-        } else {
-            $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add performers
-     *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
-     * 
-     * @return Claim
-     */
-    public function addPerformer(\SD\BusinessRoleBundle\Entity\Stuff $performers)
-    {
-        $this->performers[] = $performers;
-
-        return $this;
-    }
-
-    /**
-     * Remove performers
-     *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
-     */
-    public function removePerformer(\SD\BusinessRoleBundle\Entity\Stuff $performers)
-    {
-        $this->performers->removeElement($performers);
+        $this->performers->removeElement($performer);
     }
 
     /**
@@ -432,7 +432,7 @@ class Claim
     /**
      * Set performers
      *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $performers
+     * @param \SD\BusinessRoleBundle\Entity\Staff $performers
      *
      * @return Claim
      */

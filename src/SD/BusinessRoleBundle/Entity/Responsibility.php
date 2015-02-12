@@ -27,12 +27,12 @@ class Responsibility
     private $id;
 
     /**
-     * @var \SD\BusinessRoleBundle\Entity\Stuff
+     * @var \SD\BusinessRoleBundle\Entity\Staff
      *
      * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\Stuff", inversedBy="responsibilities")
      * @ORM\JoinColumn(name="stuff_id", referencedColumnName="id")
      */
-    protected $stuff;
+    protected $staff;
 
     /**
      * Get id
@@ -45,26 +45,26 @@ class Responsibility
     }
 
     /**
-     * Set stuff
+     * Set staff
      *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $stuff
+     * @param \SD\BusinessRoleBundle\Entity\Staff $staff
      * 
      * @return Responsibility
      */
-    public function setStuff(\SD\BusinessRoleBundle\Entity\Stuff $stuff = null)
+    public function setStaff(\SD\BusinessRoleBundle\Entity\Staff $staff = null)
     {
-        $this->stuff = $stuff;
+        $this->staff = $staff;
 
         return $this;
     }
 
     /**
-     * Get stuff
+     * Get staff
      *
-     * @return \SD\BusinessRoleBundle\Entity\Stuff 
+     * @return \SD\BusinessRoleBundle\Entity\Staff 
      */
-    public function getStuff()
+    public function getStaff()
     {
-        return $this->stuff;
+        return $this->staff;
     }
 }
