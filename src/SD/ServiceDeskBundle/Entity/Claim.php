@@ -92,7 +92,7 @@ class Claim
     protected $customer;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\Collection!!!
      *
      * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimCurator")
      * @ORM\JoinTable(name="claims_curators",

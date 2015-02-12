@@ -14,7 +14,7 @@ class CompanyClient extends Client
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder", mappedBy="companyClient")
+     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder", mappedBy="companyClient")!!!
      */
     protected $grantedOrganizations;
 
