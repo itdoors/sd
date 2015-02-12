@@ -91,35 +91,20 @@ class Claim
      */
     protected $customer;
 
-//     /**
-//      * @var \Doctrine\Common\Collections\Collection!!!
-//      *
-//      * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimCurator")
-//      * @ORM\JoinTable(name="claims_curators",
-//      *   joinColumns={
-//      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
-//      *   },
-//      *   inverseJoinColumns={
-//      *     @ORM\JoinColumn(name="curator_id", referencedColumnName="id")
-//      *   }
-//      * )
-//      */
-//     protected $curators;
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\BusinessRoleBundle\Entity\ClaimPerformer")
-     * @ORM\JoinTable(name="claims_performers",
+     * @ORM\ManyToMany(targetEntity="SD\ServiceDeskBundle\Entity\ClaimPerformerRule")
+     * @ORM\JoinTable(name="claim_claim_performer_rule",
      *   joinColumns={
      *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="performer_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="claim_performer_rule_id", referencedColumnName="id")
      *   }
      * )
      */
-    protected $performers;
+    protected $claimPerformerRules;
 
     /**
      * Constructor
@@ -127,8 +112,7 @@ class Claim
     public function __construct()
     {
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
-//         $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->performers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->claimPerformerRules = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -343,110 +327,6 @@ class Claim
         return $this->customer;
     }
 
-//     /**
-//      * Add curators
-//      *
-//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
-//      * 
-//      * @return Claim
-//      */
-//     public function addCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
-//     {
-//         $this->curators[] = $curators;
-
-//         return $this;
-//     }
-
-//     /**
-//      * Remove curators
-//      *
-//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
-//      */
-//     public function removeCurator(\SD\BusinessRoleBundle\Entity\Stuff $curators)
-//     {
-//         $this->curators->removeElement($curators);
-//     }
-
-//     /**
-//      * Get curators
-//      *
-//      * @return \Doctrine\Common\Collections\Collection 
-//      */
-//     public function getCurators()
-//     {
-//         return $this->curators;
-//     }
-
-//     /**
-//      * Set curators
-//      * 
-//      * @param \SD\BusinessRoleBundle\Entity\Stuff $curators
-//      *
-//      * @return Claim
-//      */
-//     public function setCurators(\Doctrine\Common\Collections\Collection $curators = null)
-//     {
-//         if ($curators) {
-//             $this->curators = $curators;
-//         } else {
-//             $this->curators = new \Doctrine\Common\Collections\ArrayCollection();
-//         }
-
-//         return $this;
-//     }
-
-    /**
-     * Add performer
-     *
-     * @param \SD\BusinessRoleBundle\Entity\Stuff $performer
-     * 
-     * @return Claim
-     */
-    public function addPerformer(\SD\BusinessRoleBundle\Entity\Staff $performer)
-    {
-        $this->performers[] = $performer;
-
-        return $this;
-    }
-
-    /**
-     * Remove performer
-     *
-     * @param \SD\BusinessRoleBundle\Entity\Staff $performer
-     */
-    public function removePerformer(\SD\BusinessRoleBundle\Entity\Staff $performer)
-    {
-        $this->performers->removeElement($performer);
-    }
-
-    /**
-     * Get performers
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPerformers()
-    {
-        return $this->performers;
-    }
-
-    /**
-     * Set performers
-     *
-     * @param \SD\BusinessRoleBundle\Entity\Staff $performers
-     *
-     * @return Claim
-     */
-    public function setPerformers(\Doctrine\Common\Collections\Collection $performers = null)
-    {
-        if ($performers) {
-            $this->performers = $performers;
-        } else {
-            $this->performers = new \Doctrine\Common\Collections\ArrayCollection();
-        }
-
-        return $this;
-    }
-
     /**
      * Set text
      *
@@ -469,6 +349,40 @@ class Claim
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Add claimPerformerRule
+     *
+     * @param \SD\ServiceDeskBundle\Entity\ClaimPerformerRule $claimPerformerRule
+     * 
+     * @return Claim
+     */
+    public function addClaimPerformerRule(\SD\ServiceDeskBundle\Entity\ClaimPerformerRule $claimPerformerRule)
+    {
+        $this->claimPerformerRules[] = $claimPerformerRule;
+
+        return $this;
+    }
+
+    /**
+     * Remove claimPerformerRule
+     *
+     * @param \SD\ServiceDeskBundle\Entity\ClaimPerformerRule $claimPerformerRule
+     */
+    public function removeClaimPerformerRule(\SD\ServiceDeskBundle\Entity\ClaimPerformerRule $claimPerformerRule)
+    {
+        $this->claimPerformerRules->removeElement($claimPerformerRule);
+    }
+
+    /**
+     * Get claimPerformerRules
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClaimPerformerRules()
+    {
+        return $this->claimPerformerRules;
     }
 }
 
