@@ -52,16 +52,16 @@
                     {% if object.statusAccess is null %}
                         {% trans %}Not approved by the manager{% endtrans %}
                     {% endif %}
-                    {#% if access.canEditProjectSimple %}
-                    <a href="#" id="statusProjectStateTender" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.statusProjectStateTender.id }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                    {% if access.canEditProjectSimple %}
+                    <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status ? object.status.id : '' }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
                     {% endif %}
-                        {{ object.statusProjectStateTender }}
+                        {{ object.status }}
                         {% if object.statusChangeDate %}
                             {{ object.statusChangeDate|date("d.m.y, H:i") }}
                         {% endif %}
                     {% if access.canEditProjectSimple %}
                     </a>
-                    {% endif %#}
+                    {% endif %}
                 {% endif %}
                 {% if object.isClosed  != true and access.canCloseProject %}
                     {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
