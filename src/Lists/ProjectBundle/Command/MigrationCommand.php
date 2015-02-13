@@ -44,7 +44,7 @@ class MigrationCommand extends ContainerAwareCommand
                 'name' => $service->getName()
             ));
         if (!$servicesNew && $service->getSlug() == 'project') {
-            $servicesNew = new ServiceProjectSimple();
+            $servicesNew = new \Lists\ProjectBundle\Entity\ServiceProjectSimple();
             $servicesNew->setName($service->getName());
             $servicesNew->setReportNumber($service->getReportNumber());
             $servicesNew->setSlug($service->getSlug());
