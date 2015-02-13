@@ -181,7 +181,6 @@ class MigrationCommand extends ContainerAwareCommand
          // перенос проектов
         $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
         foreach ($handlings as $val) {
-            $output->writeln($val->getId());
             $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
                 array(
                     'createDatetime' => $val->getCreatedatetime(),
@@ -224,11 +223,15 @@ class MigrationCommand extends ContainerAwareCommand
                 $project->setUserClosed($val->getClosedUser()? $val->getClosedUser(): $val->getCloser());
                 $project->setUserCreated($val->getUser());
                 
+                $output->writeln('ADD PROJECT');
+                
                 $this->addFile($project);
                 
+                $output->writeln('END FILE');
                 $this->em->persist($project);
                 
                 $this->saveManager($val, $project);
+                $output->writeln('ADD MANAGER');
             }
         }
         $output->writeln('END PROJECT');
