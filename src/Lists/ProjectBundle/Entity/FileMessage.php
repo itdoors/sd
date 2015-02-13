@@ -11,6 +11,15 @@ class FileMessage extends File
 {
 
     /**
+     * getUploadDir
+     *
+     * @return string
+     */
+    protected function getUploadDir ()
+    {
+        return $this->getPath() . $this->getMessage()->getProject()->getId();
+    }
+    /**
      * @var \Lists\ProjectBundle\Entity\Message
      */
     private $message;

@@ -42,18 +42,14 @@
                                             &#9679; {{ person.modelContact.fullName }}<br>
                                         {% endfor %}
                                     {% endif %#}
-                                    {#% if item.files | length > 0 %}
+                                    {% if item.files | length > 0 %}
                                             <div class="panel panel-default">
-                                                <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
+                                                <div class="panel-heading">{% trans %}Attached files{% endtrans %}</div>
                                                 <div class="panel-body">
-                                                     {% for key,file in item.files %}
-                                                    <a href="{{  asset(file.getWebPath()) }}" target="_blank">
-                                                        {% if item.filename and key == 0 %}
-                                                            {{ item.filename }}
-                                                        {% else %}
-                                                            {% trans %}Noname File{% endtrans %}
-                                                        {% endif %}
-                                                    </a><br>
+                                                    {% for file in item.files %}
+                                                        <div>
+                                                            <a href="{{ url('it_doors_file_access_get_if_authenticated', {path: file.getWebPath() ,timestamp:'now'|date('U') }) }}">{{ file.nameOriginal }}</a> 
+                                                        </div>
                                                     {% endfor %}
                                                 </div>
                                             </div>

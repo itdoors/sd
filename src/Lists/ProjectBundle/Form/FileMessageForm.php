@@ -13,9 +13,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
 /**
- * Class MessageCurrentForm
+ * Class FileMessageForm
  */
-class MessageCurrentForm extends AbstractType
+class FileMessageForm extends AbstractType
 {
     protected $em;
     protected $router;
@@ -41,27 +41,12 @@ class MessageCurrentForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('eventDatetime', 'datetime', array(
-                'data' => new \DateTime(),
-                'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm'
-            ))
-            ->add('type', 'entity', array(
-                'class' => 'Lists\ProjectBundle\Entity\MessageType',
-                'empty_value' => '',
-                'required' => true,
-            ))
-            ->add('project', 'entity', array(
-                'class' => 'Lists\ProjectBundle\Entity\Project',
-                'required' => true,
-            ))
-            ->add('description')
-            ->add('files', 'collection', array(
+            ->add('file', 'file', array(
                 'required' => false,
-                'type'=> new FileMessageForm($this->em, $this->router, $this->translator),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'delete_empty'=> true
+                'multiple' => false,
+                'attr' => array(
+                    'style' => 'display: inline;'
+                    )
             ));
     }
 
@@ -71,16 +56,17 @@ class MessageCurrentForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\ProjectBundle\Entity\MessageCurrent',
+            'data_class' => 'Lists\ProjectBundle\Entity\FileMessage',
             'validation_groups' => array('create'),
             'translation_domain' => 'ListsProjectBundle'
         ));
     }
+
     /**
      * @return string
      */
     public function getName()
     {
-        return 'messageCurrentForm';
+        return 'fileMessageForm';
     }
 }

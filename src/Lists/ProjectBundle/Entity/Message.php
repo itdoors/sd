@@ -10,6 +10,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Message
 {
     /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getType();
+    }
+    /**
      * isPlannedMessage
      * 
      * @return boolean

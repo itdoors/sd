@@ -83,3 +83,4 @@ Lists\ProjectBundle\Entity\Message:
             targetEntity: FileMessage
             mappedBy: message
             orphanRemoval: true
+            cascade: ["persist"]

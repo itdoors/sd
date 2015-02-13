@@ -11,6 +11,15 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class File
 {
     /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getNameOriginal();
+    }
+    /**
      * @var string
      */
     private $path = '/uploads/projects/';
@@ -19,7 +28,7 @@ class File
      *
      * @return string 
      */
-    private function getPath ()
+    public function getPath ()
     {
         return $this->path;
     }
@@ -68,7 +77,7 @@ class File
      */
     protected function getUploadDir ()
     {
-        return $this->getPath() . $this->getProject()->getId() . '/';
+        return $this->getPath() . $this->getId() . '/';
     }
 
     private $file;

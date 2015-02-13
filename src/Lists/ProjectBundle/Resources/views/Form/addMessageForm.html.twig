@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsProjectBundle' %}
-{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
 <script type="text/javascript">
 
     $(document).ready(function (){
@@ -14,9 +14,9 @@
             //startDate: new Date(1000{#{ form.mindate.vars.value }#})
         });*/
 
-        $('#handlingMessageForm_next_is_business_trip').uniform();
+       // $('#handlingMessageForm_next_is_business_trip').uniform();
 
-        $('#' + '{{ form.vars.name }}' + '_type').die('click');
+       /* $('#' + '{{ form.vars.name }}' + '_type').die('click');
         $('#' + '{{ form.vars.name }}' + '_type').live('click', function(e){
             var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val(); //options of type
             var labelDescription = $('#label_description').find('label')[0];
@@ -46,39 +46,41 @@
                 insidePersonsSelect.hide();
                 contacts.show();
             }
-        })
+        })*/
 
-        $('#' + '{{ form.vars.name }}' + '_contactMany').attr("multiple", true);
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').attr("multiple", true);
 
-        $('#' + '{{ form.vars.name }}' + '_contactMany').select2({
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').select2({
             //multiple: true
-        });
+       // });
 
-        $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
-        $('#contact_many_holder').hide();
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
+        //$('#contact_many_holder').hide();
 
-        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').attr("multiple", true);
+        //$('#' + '{{ form.vars.name }}' + '_usersFromOurSide').attr("multiple", true);
 
-        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2({
+       // $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2({
             //multiple: true
-        });
+       // });
 
-        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
-        $('#usersFromOurSide_holder').hide();
+       // $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
+        //$('#usersFromOurSide_holder').hide();
     })
 
-    SD.select2('#' + '{{ form.vars.name }}' + '_user', {
+   /* SD.select2('#' + '{{ form.vars.name }}' + '_user', {
         allowClear: false
     });
 
     SD.select2('#' + '{{ form.vars.name }}' + '_userNext', {
         allowClear: false
-    });
+    });*/
 
     $(document).ready(function (){
         $('.inputmask-date').inputmask("d.m.y",{ "placeholder": "{% trans %}dd.mm.yyyy{% endtrans %}", "clearIncomplete": true });
         $('.inputmask-datetime').inputmask("d.m.y h:s",{ "placeholder": "{% trans %}dd.mm.yyyy hh:mm{% endtrans %}", "clearIncomplete": true });
     });
+    
+
 </script>
 
 <div class="row">
@@ -126,56 +128,7 @@
                                     {{ form_widget(form.current.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description" } }) }}
                                     {{ form_errors(form.current.description) }}
                                 </div>
-                                {#% if form.user is defined %}
-                                <div class="form-group">
-                                    {{ form_label(form.user, 'Creator'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.user, {'attr' : {
-                                        'class' : 'form-control',
-                                        'placeholder': 'Creator'|trans({}, 'messages'),
-                                        'data-url': path('sd_common_ajax_user'),
-                                        'data-url-by-id': path('sd_common_ajax_user_by_id'),
-                                    } } ) }}
-                                </div>
-                                {% endif %}
-                                <div class="form-group">
-                                    {{ form_label(form.type, 'Message Type', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }}
-                                </div>
-                                <div class="form-group">
-                                    <span id="contact_holder">
-                                        {{ form_label(form.contact, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
-                                        {{ form_widget(form.contact, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
-                                    </span>
-                                </div>
-                                <div class="form-group">
-                                    <span id="usersFromOurSide_holder">
-                                        {{ form_label(form.usersFromOurSide, 'Persons from our side', {'attr': {'class': 'control-label'}}) }}
-                                        {{ form_widget(form.usersFromOurSide, {'attr' : {'class' : 'form-control', 'placeholder': 'Select persons from our side'} } ) }}
-                                    </span>
-                                </div>
-                                <div class="form-group">
-                                    <span id="contact_many_holder">
-                                        {{ form_label(form.contactMany, 'Persons from their side', {'attr': {'class': 'control-label'}}) }}
-                                        {{ form_widget(form.contactMany, {'attr' : {'class' : 'form-control', 'placeholder': 'Select persons from their side'} } ) }}
-                                    </span>
-                                </div>
-                                <div class="form-group">
-                                    <span id="label_description">
-                                        {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
-                                    </span>
-                                    <span id="input_description">
-                                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
-                                    </span>
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.filename, 'Filename', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.files, 'Select File', {'attr': {'class': 'control-label'} }) }}
-                                    {{ form_widget(form.files ) }}
-                                    {{ form_errors(form.files) }}
-                                </div>#}
+                                {{ form_widget(form.current.files)|raw }}
                             </div>
                         </div>
                     </div>
@@ -203,42 +156,7 @@
                                     {{ form_widget(form.planned.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description" } }) }}
                                     {{ form_errors(form.planned.description) }}
                                 </div>
-                                {#<div class="form-group">
-                                    {{ form_label(form.createdate, 'Next Message Create Date', {'attr': {'class': 'control-label'}}) }}
-                                    <div class="input-group date form_datetime">
-                                        {{ form_widget(form.nextcreatedate, {'attr' : {
-                                        'class' : 'form-control',
-                                        'placeholder': 'Create Date',
-                                        'readonly': 'readonly'
-                                        }}) }}
-                                        <span class="input-group-btn">
-                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
-                                {% if form.userNext is defined %}
-                                    <div class="form-group">
-                                        {{ form_label(form.userNext, 'Creator'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
-                                        {{ form_widget(form.userNext, {'attr' : {
-                                            'class' : 'form-control',
-                                            'placeholder': 'Creator'|trans({}, 'messages'),
-                                            'data-url': path('sd_common_ajax_user'),
-                                            'data-url-by-id': path('sd_common_ajax_user_by_id'),
-                                        } } ) }}
-                                    </div>
-                                {% endif %}
-                                <div class="form-group">
-                                    {{ form_label(form.nexttype, 'Message Type', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.contactnext, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.contactnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_label(form.descriptionnext, 'Description', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.descriptionnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
-                                </div>#}
+                                {{ form_widget(form.planned.files)|raw }}
                             </div>
                         </div>
                     </div>

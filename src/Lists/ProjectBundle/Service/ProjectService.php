@@ -194,7 +194,20 @@ class ProjectService
                     'entity'=>'Lists\ProjectBundle\Entity\Project',
                     'data' => $project
                 ));
-
+//            $form
+//            ->get('planned')
+//                ->add('contact', 'entity', array(
+//                    'class' => 'ListsContactBundle:ModelContact',
+//                    'required' => true,
+//                    'query_builder' => function (\Lists\ContactBundle\Entity\ModelContactRepository $repository) use ($organizationId) {
+//                        return $repository->createQueryBuilder('mc')
+//                            ->leftJoin('mc.owner', 'owner')
+//                            ->where('mc.modelName = :modelName')
+//                            ->andWhere('mc.modelId = :modelId')
+//                            ->setParameter(':modelName', \Lists\ContactBundle\Entity\ModelContactRepository::MODEL_ORGANIZATION)
+//                            ->setParameter(':modelId', $organizationId);
+//                    }
+//                ));
 //        $form
 //            ->add('usersFromOurSide', 'entity', array(
 //                'class' => 'ListsHandlingBundle:HandlingUser',
@@ -316,8 +329,21 @@ class ProjectService
         $current = $form->get('current')->getData();
         $planned = $form->get('planned')->getData();
         $access = $this->checkAccess($this->user, $current->getProject());
-        if ($access->canAddMessage()) {
+        if (!$access->canAddMessage()) {
             throw new \Exception('No access', 403);
+        }
+        $currentFiles = $form->get('current')->get('files')->getData();
+        foreach ($currentFiles as $currentFile) {
+            $currentFile->setMessage($current);
+            $currentFile->setUser($this->user);
+            $currentFile->upload();
+        }
+
+        $plannedFiles = $form->get('planned')->get('files')->getData();
+        foreach ($plannedFiles as $plannedFile) {
+            $plannedFile->setMessage($planned);
+            $plannedFile->setUser($this->user);
+            $plannedFile->upload();
         }
         $current->setUser($this->user);
         $planned->setUser($this->user);
