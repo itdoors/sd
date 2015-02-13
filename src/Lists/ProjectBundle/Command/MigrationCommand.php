@@ -117,10 +117,14 @@ class MigrationCommand extends ContainerAwareCommand
            }
            if (!$projectManager) {
                 if ($manager->getLookupId() == 62) {
-                    $projectManager = $this->em->getRepository('ListsProjectBundle:ManagerProjectType')->findOneBy(
-                        array(
-                            'project' => $project
-                        ));
+                     if ($project->getId()) {
+                        $projectManager = $this->em->getRepository('ListsProjectBundle:ManagerProjectType')->findOneBy(
+                            array(
+                                'project' => $project
+                            ));
+                     } else {
+                         $projectManager = null;
+                     }
                     if ($projectManager) {
                         $projectManager = new \Lists\ProjectBundle\Entity\ManagerType();
                     } else {
