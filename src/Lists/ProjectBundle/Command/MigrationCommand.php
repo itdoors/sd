@@ -181,6 +181,7 @@ class MigrationCommand extends ContainerAwareCommand
          // перенос проектов
         $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
         foreach ($handlings as $val) {
+            $output->writeln($val->getId());
             $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
                 array(
                     'createDatetime' => $val->getCreatedatetime(),
