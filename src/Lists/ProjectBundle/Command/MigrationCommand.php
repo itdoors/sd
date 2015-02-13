@@ -273,7 +273,7 @@ class MigrationCommand extends ContainerAwareCommand
                 if (!$status) {
                     $output->writeln('status not found' .' for '.$val->getId());
                 }
-                $project->setStatusProjectStateTender($status);
+                $project->setStatus($status);
                 $project->setTypeOfProcedure($val->getTypeOfProcedure());
                 $project->setUserClosed($val->getProject()->getClosedUser()? $val->getProject()->getClosedUser(): $val->getProject()->getCloser());
                 $project->setUserCreated($val->getProject()->getUser());
