@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Claim
  *
- * @ORM\Table(name="sd_claim")
+ * @ORM\Table(name="sd_claim", options={
+ *  "comment" = "ServiceDeskBundle:Claim"
+ *  })
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({

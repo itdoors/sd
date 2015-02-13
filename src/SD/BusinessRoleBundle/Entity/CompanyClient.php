@@ -23,9 +23,9 @@ class CompanyClient extends Client
      *
      * @ORM\ManyToMany(targetEntity="Lists\OrganizationBundle\Entity\Organization")
      * @ORM\JoinTable(name="origin_organization_for_client",
-     *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
-     *      )
+     *   joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
+     *   )
      */
     protected $originOrganizations;
 

@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrganizationGrantedForOrder
  *
- * @ORM\Table(name="organization_granted_for_order")
+ * @ORM\Table(name="organization_granted_for_order", options={
+ *  "comment" = "Client can add claims only for these organizations/departments"
+ *  })
  * @ORM\Entity
  */
 class OrganizationGrantedForOrder
@@ -42,9 +44,9 @@ class OrganizationGrantedForOrder
      *
      * @ORM\ManyToMany(targetEntity="Lists\DepartmentBundle\Entity\Departments")
      * @ORM\JoinTable(name="organization_granted_for_order_departments",
-     *      joinColumns={@ORM\JoinColumn(name="org_granted_for_order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id")}
-     *      )
+     *   joinColumns={@ORM\JoinColumn(name="org_granted_for_order_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id")}
+     *   )
      */
     protected $departments;
 
