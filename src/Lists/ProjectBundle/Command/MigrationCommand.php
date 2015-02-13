@@ -36,7 +36,6 @@ class MigrationCommand extends ContainerAwareCommand
           ->setName('lists:project:migration')
           ->setDescription('Mifration handling to project');
     }
-
     private function saveService($service)
     {
         $servicesNew = $this->em->getRepository('ListsProjectBundle:Service')->findOneBy(
