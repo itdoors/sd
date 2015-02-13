@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimPerformerRule
  *
- * @ORM\Table(name="sd_claim_performer_rule")
+ * @ORM\Table(name="sd_claim_performer_rule", options={"comment" = "Rule for performer to access claim features"})
  * @ORM\Entity()
  */
 class ClaimPerformerRule

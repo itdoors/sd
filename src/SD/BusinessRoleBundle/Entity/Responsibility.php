@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Responsibility
  *
- * @ORM\Table(name="responsibility")
+ * @ORM\Table(name="responsibility", options={
+ *  "comment" = "Responsibilities assigned to staff"
+ *  })
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({

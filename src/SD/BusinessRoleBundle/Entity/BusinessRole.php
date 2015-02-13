@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * BusinessRole
  *
- * @ORM\Table(name="sd_business_role")
+ * @ORM\Table(name="sd_business_role", options={
+ *  "comment" = "Various types of individual's possibilities"
+ *  })
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({

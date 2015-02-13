@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimMessage
  *
- * @ORM\Table(name="sd_claim_message")
+ * @ORM\Table(name="sd_claim_message", options={"comment" = "ServiceDeskBundle:ClaimMessage"})
  * @ORM\Entity
  */
 class ClaimMessage
