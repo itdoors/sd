@@ -280,7 +280,7 @@ class MigrationCommand extends ContainerAwareCommand
                 $project->setVdz($val->getVdz());
                 $project->setAdvert($val->getAdvert());
                 
-                $files = $val->getFiles();
+                $files = $val->getProject()->getFiles();
                 foreach ($files as $file) {
                     $addFile = new \Lists\HandlingBundle\Entity\ProjectFile();
                     $addFile->setCreateDatetime($file->getCreateDatetime());
