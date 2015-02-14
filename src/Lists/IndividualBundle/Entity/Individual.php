@@ -378,4 +378,43 @@ class Individual
     {
         $this->actions->removeElement($actions);
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $contacts;
+
+    /**
+     * Add contact
+     *
+     * @param \Lists\IndividualBundle\Entity\Contact $contact
+     * 
+     * @return Individual
+     */
+    public function addContact(\Lists\IndividualBundle\Entity\Contact $contact)
+    {
+        $this->contacts[] = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Remove contact
+     *
+     * @param \Lists\IndividualBundle\Entity\Contact $contact
+     */
+    public function removeContact(\Lists\IndividualBundle\Entity\Contact $contact)
+    {
+        $this->contacts->removeElement($contact);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
 }

@@ -62,6 +62,9 @@ Lists\IndividualBundle\Entity\Individual:
         businessRoles:
             targetEntity: SD\BusinessRoleBundle\Entity\BusinessRole
             mappedBy: individual
+        contacts:
+            targetEntity: Lists\IndividualBundle\Entity\Contact
+            mappedBy: individual
     oneToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User

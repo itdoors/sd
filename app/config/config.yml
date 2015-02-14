@@ -130,6 +130,7 @@ doctrine:
             claimType: SD\ServiceDeskBundle\Entity\ClaimType
             statusType: SD\ServiceDeskBundle\Entity\StatusType
             importanceType: SD\ServiceDeskBundle\Entity\ImportanceType
+            contactType: Lists\IndividualBundle\Entity\ContactType
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
