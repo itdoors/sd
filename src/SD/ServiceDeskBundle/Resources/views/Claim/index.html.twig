@@ -70,7 +70,7 @@
                         <tr>
                             <td><a href="{{ path('claim_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                             <td>{% if entity.customer %}<a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.customer }}{% endif %}</td>
-                            <td>{{ entity.types }}</td>
+                            <td>{{ entity.type }}</td>
                             <td>{{ entity.status }}</td>
                             <td>{{ entity.importance }}</td>
                             <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d') }}{% endif %}</td>

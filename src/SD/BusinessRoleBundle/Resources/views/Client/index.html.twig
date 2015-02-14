@@ -39,13 +39,14 @@
                 <div class="table-toolbar">
     				<div class="row">
     					<div class="col-md-6">
-    						<div class="btn-group">
 {#                                 {% if is_granted('ROLE_ARTICLEADMIN') %}#}
-        							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
-                                        {% trans %}Add{% endtrans %}
-                                    </a>
+    							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
+                                    {% trans %}Add{% endtrans %}
+                                </a>
+                                <a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
+                                    {% trans %}Add{% endtrans %}
+                                </a>
 {#                                 {% endif %}#}
-    						</div>
     					</div>
     				</div>
     			</div>

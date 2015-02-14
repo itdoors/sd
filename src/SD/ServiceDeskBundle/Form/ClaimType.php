@@ -19,7 +19,7 @@ class ClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('types', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
+            ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
             ->add('status', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\StatusType::values()))
             ->add('importance', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImportanceType::values()))
             ->add('createdAt', 'date', array(
@@ -33,16 +33,11 @@ class ClaimType extends AbstractType
             ))
             ->add('disabled', 'checkbox', array('required' => false))
             ->add('customer')
-            ->add('curators', 'entity', array(
-                'class' => 'SDBusinessRoleBundle:Stuff',
-                'required' => false,
-                'multiple' => true
-            ))
-            ->add('performers', 'entity', array(
-                'class' => 'SDBusinessRoleBundle:Stuff',
-                'required' => false,
-                'multiple' => true
-            ))
+//             ->add('performers', 'entity', array(
+//                 'class' => 'SDBusinessRoleBundle:Staff',
+//                 'required' => false,
+//                 'multiple' => true
+//             ))
             ->add('text');
     }
 

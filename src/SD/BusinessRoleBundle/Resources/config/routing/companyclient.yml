@@ -1,0 +1,30 @@
+companyclient:
+    path:     /
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:index" }
+
+companyclient_show:
+    path:     /{id}/show
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:show" }
+
+companyclient_new:
+    path:     /new
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:new" }
+
+companyclient_create:
+    path:     /create
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:create" }
+    requirements: { _method: post }
+
+companyclient_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:edit" }
+
+companyclient_update:
+    path:     /{id}/update
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:update" }
+    requirements: { _method: post|put }
+
+companyclient_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SDBusinessRoleBundle:CompanyClient:delete" }
+    requirements: { _method: post|delete }

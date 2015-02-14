@@ -50,17 +50,18 @@ class CompanyClient extends Client
     public function __construct()
     {
         $this->grantedOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->departments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->originOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Add grantedOrganization
      *
-     * @param \SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization
+     * @param \Lists\OrganizationBundle\Entity\Organization $grantedOrganization
      * 
      * @return CompanyClient
      */
-    public function addGrantedOrganization(\SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization)
+    public function addGrantedOrganization(\Lists\OrganizationBundle\Entity\Organization $grantedOrganization)
     {
         $this->grantedOrganizations[] = $grantedOrganization;
 
@@ -70,9 +71,9 @@ class CompanyClient extends Client
     /**
      * Remove grantedOrganization
      *
-     * @param \SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization
+     * @param \Lists\OrganizationBundle\Entity\Organization $grantedOrganization
      */
-    public function removeGrantedOrganization(\SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder $grantedOrganization)
+    public function removeGrantedOrganization(\Lists\OrganizationBundle\Entity\Organization $grantedOrganization)
     {
         $this->grantedOrganizations->removeElement($grantedOrganization);
     }
@@ -85,40 +86,6 @@ class CompanyClient extends Client
     public function getGrantedOrganizations()
     {
         return $this->grantedOrganizations;
-    }
-
-    /**
-     * Add originOrganization
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
-     * 
-     * @return CompanyClient
-     */
-    public function addOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
-    {
-        $this->originOrganizations[] = $originOrganization;
-
-        return $this;
-    }
-
-    /**
-     * Remove originOrganization
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
-     */
-    public function removeOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
-    {
-        $this->originOrganizations->removeElement($originOrganization);
-    }
-
-    /**
-     * Get originOrganizations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOriginOrganizations()
-    {
-        return $this->originOrganizations;
     }
 
     /**
@@ -156,36 +123,36 @@ class CompanyClient extends Client
     }
 
     /**
-     * Add claim
+     * Add originOrganization
      *
-     * @param \SD\ServiceDeskBundle\Entity\Claim $claim
+     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
      * 
      * @return CompanyClient
      */
-    public function addClaim(\SD\ServiceDeskBundle\Entity\Claim $claim)
+    public function addOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
     {
-        $this->claims[] = $claim;
+        $this->originOrganizations[] = $originOrganization;
 
         return $this;
     }
 
     /**
-     * Remove claim
+     * Remove originOrganization
      *
-     * @param \SD\ServiceDeskBundle\Entity\Claim $claim
+     * @param \Lists\OrganizationBundle\Entity\Organization $originOrganization
      */
-    public function removeClaim(\SD\ServiceDeskBundle\Entity\Claim $claim)
+    public function removeOriginOrganization(\Lists\OrganizationBundle\Entity\Organization $originOrganization)
     {
-        $this->claims->removeElement($claim);
+        $this->originOrganizations->removeElement($originOrganization);
     }
 
     /**
-     * Get claims
+     * Get originOrganizations
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getClaims()
+    public function getOriginOrganizations()
     {
-        return $this->claims;
+        return $this->originOrganizations;
     }
 }

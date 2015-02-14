@@ -1,0 +1,113 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'SDBusinessRoleBundle' %}
+{% block title %}{% trans %}Add{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Company clients{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('client') }}" title="{% trans %}Clients{% endtrans %}">{% trans %}Clients{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="" title="{% trans %}Add{% endtrans %}">{% trans %}Add{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
+
+{% endblock %}
+
+{% block body -%}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>{% trans %}Add{% endtrans %}
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <script>
+                $(document).ready(function() {
+                    $('.select2').select2({
+                        allowClear: true
+                    });
+                });
+            </script>
+                        
+            {% if form.vars.valid is sameas(false) %}
+                <div class="form-group col-md-12">
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            {% endif %}
+    
+            {{ form_start(form, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Individual{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.individual, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
+                        {% if form.individual.vars.errors|length %}{{ form_errors(form.individual) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Origin organizations{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.originOrganizations, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.originOrganizations.vars.errors|length %}{{ form_errors(form.originOrganizations) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Granted organizations{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.grantedOrganizations, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.grantedOrganizations.vars.errors|length %}{{ form_errors(form.grantedOrganizations) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Departments{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.departments, {'attr' : {'class' : 'form-control select2', 'multiple' : 'multiple', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.departments.vars.errors|length %}{{ form_errors(form.departments) }}{% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-actions fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
+                                <a class="btn btn-cl green" href="{{ path('client') }}" title="{% trans %}Cancel{% endtrans %}">
+                                    {% trans %}Cancel{% endtrans %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+

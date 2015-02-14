@@ -1,3 +1,7 @@
 SDBusinessRoleBundle_client:
         resource: "@SDBusinessRoleBundle/Resources/config/routing/client.yml"
         prefix:   /client
+
+SDBusinessRoleBundle_companyclient:
+        resource: "@SDBusinessRoleBundle/Resources/config/routing/companyclient.yml"
+        prefix:   /companyclient
