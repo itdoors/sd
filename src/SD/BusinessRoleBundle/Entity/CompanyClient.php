@@ -14,15 +14,30 @@ class CompanyClient extends Client
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder", mappedBy="companyClient")
+     * @ORM\ManyToMany(targetEntity="Lists\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinTable(name="granted_organizations_for_client",
+     *   joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
+     *   )
      */
     protected $grantedOrganizations;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\ManyToMany(targetEntity="Lists\DepartmentBundle\Entity\Departments")
+     * @ORM\JoinTable(name="client_departments_for_order",
+     *   joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="department_id", referencedColumnName="id")}
+     *   )
+     */
+    protected $departments;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\ManyToMany(targetEntity="Lists\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinTable(name="origin_organization_for_client",
+     * @ORM\JoinTable(name="origin_organizations_for_client",
      *   joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
      *   inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id")}
      *   )
@@ -104,5 +119,73 @@ class CompanyClient extends Client
     public function getOriginOrganizations()
     {
         return $this->originOrganizations;
+    }
+
+    /**
+     * Add department
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $department
+     * 
+     * @return CompanyClient
+     */
+    public function addDepartment(\Lists\DepartmentBundle\Entity\Departments $department)
+    {
+        $this->departments[] = $department;
+
+        return $this;
+    }
+
+    /**
+     * Remove department
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $department
+     */
+    public function removeDepartment(\Lists\DepartmentBundle\Entity\Departments $department)
+    {
+        $this->departments->removeElement($department);
+    }
+
+    /**
+     * Get departments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDepartments()
+    {
+        return $this->departments;
+    }
+
+    /**
+     * Add claim
+     *
+     * @param \SD\ServiceDeskBundle\Entity\Claim $claim
+     * 
+     * @return CompanyClient
+     */
+    public function addClaim(\SD\ServiceDeskBundle\Entity\Claim $claim)
+    {
+        $this->claims[] = $claim;
+
+        return $this;
+    }
+
+    /**
+     * Remove claim
+     *
+     * @param \SD\ServiceDeskBundle\Entity\Claim $claim
+     */
+    public function removeClaim(\SD\ServiceDeskBundle\Entity\Claim $claim)
+    {
+        $this->claims->removeElement($claim);
+    }
+
+    /**
+     * Get claims
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClaims()
+    {
+        return $this->claims;
     }
 }
