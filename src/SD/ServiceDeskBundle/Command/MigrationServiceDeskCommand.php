@@ -10,6 +10,7 @@ use Lists\IndividualBundle\Entity\Individual;
 use SD\BusinessRoleBundle\Entity\CompanyClient;
 use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Entity\ClaimDepartment;
+use SD\ServiceDeskBundle\Entity\ClaimType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -97,12 +98,49 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $claimOrganizationTypeId = $claim['organization_type_id'];
             $claimOrganizationImportanceId = $claim['organization_importance_id'];
 
+
+
             //new claim here
 
             $sd_claim = new ClaimDepartment();
-            //$sd_claim->setTypes();
-            $sd_claim->setStatus($claimStatus);//!!!
-            //$sd_claim->setImportance();
+            switch ($claimTypeId) {
+                case 1:
+                    $claimType = ClaimType::CLEANING;
+                    break;
+                case 2:
+                    $claimType = ClaimType::TECH;
+                    break;
+                case 3:
+                    $claimType = ClaimType::GREEN_COMFORT_IT;
+                    break;
+                case 4:
+                    $claimType = ClaimType::CATERING;
+                    break;
+                case 5:
+                    $claimType = ClaimType::COMPLAINT;
+                    break;
+                case 6:
+                    $claimType = ClaimType::OPINION;
+                    break;
+                case 7:
+                    $claimType = ClaimType::OTHER;
+                    break;
+                case 8:
+                    $claimType = ClaimType::TRANSPORTATION;
+                    break;
+                case 9:
+                    $claimType = ClaimType::PROPERTY;
+                    break;
+                case 10:
+                    $claimType = ClaimType::PEST;
+                    break;
+                case 11:
+                    $claimType = ClaimType::ACT_COLLECTING;
+                    break;
+            }
+            $sd_claim->setType($claimType);
+            $sd_claim->setStatus($claimStatus);
+            //$sd_claim->setImportance();!!!
             $sd_claim->setCreatedAt($claimCreateDatetime);
             $sd_claim->setClosedAt($claimCloseDatetime);
             $sd_claim->setText($claimDescription);
@@ -110,7 +148,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $department = $doctrine
                 ->getRepository('ListsDepartmentBundle:Departments')
                 ->find($claimDepartmentId);
-            $sd_claim->setDepartment($department);
+            $sd_claim->setTargetDepartment($department);
             //$sd_claim->setMessages();
             //$sd_claim->setCustomer();
             //$sd_claim->addClaimPerformerRules();
@@ -188,14 +226,18 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     // new client here
                     $organization = $doctrine
-                        ->getRepository('ListsDepartmentBundle:Departments')
-                        ->find($claimDepartmentId);
+                        ->getRepository('ListsOrganizationBundle:Organization')
+                        ->find($clientOrganizationId);
 
                     $sd_client = new CompanyClient();
                     $sd_client->setIndividual($sd_individual);
                     //$sd_client->addGrantedOrganization();
-                    //$sd_client->addOriginOrganization();
 
+                    $checkClientOrganizations = $sd_client->getOriginOrganizations();
+
+                    if (!in_array($organization, $checkClientOrganizations->toArray())) {
+                        $sd_client->addOriginOrganization($organization);
+                    }
 
                     /*
                      * client departments
@@ -213,9 +255,17 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         $clientId = $clientDepartment['client_id'];
                         $departmentId = $clientDepartment['departments_id'];
 
-                        $orgGranted = new OrganizationGrantedForOrder();
-                        $orgGranted->setCompanyClient($sd_client);
-                        //$orgGranted->add
+                        $departmentAddClient = $doctrine
+                            ->getRepository('ListsDepartmentBundle:Departments')
+                            ->find($departmentId);
+
+                        $sd_client->addDepartment($departmentAddClient);
+
+                        $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
+                        if (!in_array($departmentAddClient->getOrganization(), $checkClientGrantedOrganizations->toArray())) {
+                            $sd_client->addGrantedOrganization($departmentAddClient->getOrganization());
+                        }
+
                     }
 
                     /*
@@ -232,6 +282,15 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     foreach ($clientOrganizations as $clientOrganization) {
                         $clientId = $clientOrganization['client_id'];
                         $organizationId = $clientOrganization['organization_id'];
+
+                        $organization = $doctrine
+                            ->getRepository('ListsOrganizationBundle:Organization')
+                            ->find($clientOrganizationId);
+
+                        $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
+                        if (!in_array($organization, $checkClientGrantedOrganizations->toArray())) {
+                            $sd_client->addGrantedOrganization($organization);
+                        }
                     }
 
                     //$output->writeln($echo);

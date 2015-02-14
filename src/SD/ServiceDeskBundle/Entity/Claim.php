@@ -391,37 +391,75 @@ class Claim
 // @codingStandardsIgnoreStart
 final class ClaimType extends \ITDoors\DBAL\EnumType
 {
-    const VISIBLE = 'visible';
-    const INVISIBLE = 'invisible';
+    const CLEANING = 'cleaning';
+    const TECH = 'tech';
+    const GREEN_COMFORT_IT = 'green_comfort_it';
+    const CATERING = 'catering';
+    const COMPLAINT = 'complaint';
+    const OPINION = 'opinion';
+    const OTHER = 'other';
+    const TRANSPORTATION = 'transportation';
+    const PROPERTY = 'property';
+    const PEST = 'pest';
+    const ACT_COLLECTING = 'act_collection';
+
     protected static $name = 'claimType';
 
     protected static $values = array(
-        self::VISIBLE,
-        self::INVISIBLE
+        self::CLEANING,
+        self::TECH,
+        self::GREEN_COMFORT_IT,
+        self::CATERING,
+        self::COMPLAINT,
+        self::OPINION,
+        self::OTHER,
+        self::TRANSPORTATION,
+        self::PROPERTY,
+        self::PEST,
+        self::ACT_COLLECTING
     );
 }
 
 final class StatusType extends \ITDoors\DBAL\EnumType
 {
-    const ACTIVE = 'active';
-    const INACTIVE = 'inactive';
+    const DONE = 'sta_sclose_smclose_cclose';
+    const OPEN = 'sta_open';
+    const SEND = 'sta_sappointed_smwait';
+    const IN_PROGRESS = 'sta_sclose_smwait';
+    const SUBMITTING = 'sta_sclose_smwait_cwait';
+    const CREATING = 'sta_smeta_composу';
+    const MATCHED = 'sta_smeta_conform';
+    const CANCELED = 'sta_smeta_cancel';
+    const ESTIMATING = 'sta_smet';
     protected static $name = 'statusType';
 
     protected static $values = array(
-        self::ACTIVE,
-        self::INACTIVE
-                    
+        self::DONE,
+        self::OPEN,
+        self::SEND,
+        self::IN_PROGRESS,
+        self::SUBMITTING,
+        self::CREATING,
+        self::MATCHED,
+        self::CANCELED,
+        self::ESTIMATING
     );
 }
 
 final class ImportanceType extends \ITDoors\DBAL\EnumType
 {
+    const PLANNED = 'planned';
+    const UNPLANNED = 'unplanned';
     const HOT = 'hot';
-    const WEAK = 'weak';
+    const BROKEN = 'broken';
+    const MONTH = 'MONTH';
     protected static $name = 'importanceType';
 
     protected static $values = array(
+        self::PLANNED,
+        self::UNPLANNED,
         self::HOT,
-        self::WEAK
+        self::BROKEN,
+        self::MONTH
     );
 }
