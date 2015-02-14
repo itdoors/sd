@@ -1,0 +1,19 @@
+Lists\IndividualBundle\Entity\Contact:
+    type: entity
+    table: individual_contacts
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        type:
+            type: contactType
+        value:
+            type: string
+            length: 255
+    manyToOne:
+        individual:
+            targetEntity: Individual
+            inversedBy: contacts

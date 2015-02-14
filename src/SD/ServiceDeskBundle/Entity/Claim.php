@@ -32,9 +32,9 @@ class Claim
     /**
      * @var ClaimType
      *
-     * @ORM\Column(name="types", type="claimType")
+     * @ORM\Column(name="type", type="claimType")
      */
-    protected $types;
+    protected $type;
 
     /**
      * @var StatusType
@@ -128,27 +128,27 @@ class Claim
     }
 
     /**
-     * Set types
+     * Set type
      *
-     * @param string $types
+     * @param string $type
      * 
      * @return Claim
      */
-    public function setTypes($types)
+    public function setType($type)
     {
-        $this->types = $types;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get types
+     * Get type
      *
      * @return string 
      */
-    public function getTypes()
+    public function getType()
     {
-        return $this->types;
+        return $this->type;
     }
 
     /**
@@ -389,40 +389,37 @@ class Claim
 }
 
 // @codingStandardsIgnoreStart
-class ClaimType extends \ITDoors\DBAL\EnumType
+final class ClaimType extends \ITDoors\DBAL\EnumType
 {
     const VISIBLE = 'visible';
     const INVISIBLE = 'invisible';
-    protected static $name = __CLASS__;
+    protected static $name = 'claimType';
 
-//     protected static $name = 'claimType';
     protected static $values = array(
-        ClaimType::VISIBLE,
-        ClaimType::INVISIBLE
+        self::VISIBLE,
+        self::INVISIBLE
     );
 }
 
-class StatusType extends \ITDoors\DBAL\EnumType
+final class StatusType extends \ITDoors\DBAL\EnumType
 {
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
-    protected static $name = __CLASS__;
+    protected static $name = 'statusType';
 
-//     protected static $name = 'statusType';
     protected static $values = array(
-        StatusType::ACTIVE,
-        StatusType::INACTIVE
+        self::ACTIVE,
+        self::INACTIVE
                     
     );
 }
 
-class ImportanceType extends \ITDoors\DBAL\EnumType
+final class ImportanceType extends \ITDoors\DBAL\EnumType
 {
     const HOT = 'hot';
     const WEAK = 'weak';
-    protected static $name = __CLASS__;
+    protected static $name = 'importanceType';
 
-//     protected static $name = 'importanceType';
     protected static $values = array(
         self::HOT,
         self::WEAK
