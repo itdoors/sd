@@ -7,7 +7,10 @@
 namespace SD\ServiceDeskBundle\Command;
 
 use Lists\IndividualBundle\Entity\Individual;
+use SD\BusinessRoleBundle\Entity\CompanyClient;
 use SD\ServiceDeskBundle\Entity\Claim;
+use SD\ServiceDeskBundle\Entity\ClaimDepartment;
+use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,7 +36,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure ()
+    protected function configure()
     {
         $this
             ->setName('sd:migration:service-desk')
@@ -43,7 +46,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute (InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $doctrine = $this->getContainer()->get('doctrine');
 
@@ -82,6 +85,13 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $claimSmetaCosts = $claim['smeta_costs'];
             $claimMpk = $claim['mpk'];
 
+            $stmtClaimStatus = $conn->prepare('
+              SELECT * FROM status WHERE id = ' . $claimStatusId . '
+            ');
+            $stmtClaimStatus->execute();
+
+            $claimStatus = $stmtClaimStatus->fetchAll()[0]['stakey'];
+
             // need to ask about mpk
             $claimBillDate = $claim['bill_date'];
             $claimOrganizationTypeId = $claim['organization_type_id'];
@@ -89,18 +99,27 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
             //new claim here
 
-            $sd_claim = new Claim();
+            $sd_claim = new ClaimDepartment();
+            //$sd_claim->setTypes();
+            $sd_claim->setStatus($claimStatus);//!!!
+            //$sd_claim->setImportance();
             $sd_claim->setCreatedAt($claimCreateDatetime);
             $sd_claim->setClosedAt($claimCloseDatetime);
+            $sd_claim->setText($claimDescription);
             $sd_claim->setDisabled(false);
-            // problem?? $sd_claim->setImportance();
-            //$sd_claim->setStatus();
+            $department = $doctrine
+                ->getRepository('ListsDepartmentBundle:Departments')
+                ->find($claimDepartmentId);
+            $sd_claim->setDepartment($department);
+            //$sd_claim->setMessages();
+            //$sd_claim->setCustomer();
+            //$sd_claim->addClaimPerformerRules();
 
             /*
             * claim user
             */
             $stmtClaimUser = $conn->prepare('
-              SELECT * FROM claimusers WHERE claim_id='.$claimId.'
+              SELECT * FROM claimusers WHERE claim_id=' . $claimId . '
             ');
             $stmtClaimUser->execute();
 
@@ -113,23 +132,22 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                 $userType = $claimUser['userkey'];
                 $isRead = $claimUser['isread'];
 
-                //set curators, clients and performers here due to userkey
+                //set clients and performers here due to userkey
                 // but firstly create them
                 //if client
-                /*
-                 * client_info
-                 */
-                $stmtClient = $conn->prepare('
-                  SELECT * FROM client
-                    LEFT JOIN sf_guard_user ON client.user_id = sf_guard_user.id
+                if ($userType == 'client') {
+                    /*
+                     * client_info
+                     */
+                    $stmtClient = $conn->prepare('
+                      SELECT * FROM client WHERE user_id=' . $userId . '
+                    ');
+                    $stmtClient->execute();
 
-                ');
-                $stmtClient->execute();
-
-                $clients = $stmtClient->fetchAll();
-                //getting client info
-                foreach($clients as $client) {
-                    $clientId = $client['client.id'];
+                    $client = $stmtClient->fetchAll()[0];
+                    //getting client info
+                    //foreach($clients as $client) {
+                    $clientId = $client['id'];
                     $clientPhone = $client['phone'];
                     $clientMobilephone = $client['mobilephone'];
 
@@ -138,32 +156,55 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     /*
                      * user_info
                      */
-                    $stmtClient = $conn->prepare('
-                      SELECT * FROM sf_guard_user WHERE id = '.$client['user.id'].'
-                    ');
-                    $clFirstName = $client['first_name'];
-                    $userLastName = $client['last_name'];
-                    $userMiddleName = $client['middle_name'];
-                    $userPosition = $client['position'];
-                    $userEmail = $client['email_address'];
-                    $username = $client['username'];
-                    $userAlgorithm = $client['algorithm'];
-                    $userSalt = $client['salt'];
-                    $userPassword = $client['password'];
-                    $userIsActive = $client['is_active'];
-                    $userIsSuperAdmin = $client['is_super_admin'];
-                    $userLastLogin = $client['last_login'];
-                    $userSexID = $client['sex_id'];
-                    $userCreatedAt = $client['created_at'];
+                    $stmtUser = $conn->prepare('
+                          SELECT * FROM sf_guard_user WHERE id = ' . $client['user_id'] . '
+                        ');
+                    $stmtUser->execute();
+
+                    $user = $stmtUser->fetchAll()[0];
+
+                    $userFirstName = $user['first_name'];
+                    $userLastName = $user['last_name'];
+                    $userMiddleName = $user['middle_name'];
+                    $userPosition = $user['position'];
+                    $userEmail = $user['email_address'];
+                    $username = $user['username'];
+                    $userAlgorithm = $user['algorithm'];
+                    $userSalt = $user['salt'];
+                    $userPassword = $user['password'];
+                    $userIsActive = $user['is_active'];
+                    $userIsSuperAdmin = $user['is_super_admin'];
+                    $userLastLogin = $user['last_login'];
+                    $userSexID = $user['sex_id'];
+                    $userCreatedAt = $user['created_at'];
+
+                    // new individual for client here
+                    $sd_individual = new Individual();
+                    $sd_individual->setMiddleName($userMiddleName);
+                    $sd_individual->setLastName($userLastName);
+                    $sd_individual->setFirstName($userFirstName);
+                    //contacts here
+
+
+                    // new client here
+                    $organization = $doctrine
+                        ->getRepository('ListsDepartmentBundle:Departments')
+                        ->find($claimDepartmentId);
+
+                    $sd_client = new CompanyClient();
+                    $sd_client->setIndividual($sd_individual);
+                    //$sd_client->addGrantedOrganization();
+                    //$sd_client->addOriginOrganization();
+
 
                     /*
                      * client departments
                      */
                     $stmtClientDepartment = $conn->prepare('
-                      SELECT * FROM client_departments
-                        WHERE client_id ='.$clientId.'
+                          SELECT * FROM client_departments
+                            WHERE client_id =' . $clientId . '
 
-                    ');
+                        ');
                     $stmtClientDepartment->execute();
 
                     $clientDepartments = $stmtClientDepartment->fetchAll();
@@ -171,15 +212,19 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     foreach ($clientDepartments as $clientDepartment) {
                         $clientId = $clientDepartment['client_id'];
                         $departmentId = $clientDepartment['departments_id'];
+
+                        $orgGranted = new OrganizationGrantedForOrder();
+                        $orgGranted->setCompanyClient($sd_client);
+                        //$orgGranted->add
                     }
 
                     /*
                      * client organization
                      */
                     $stmtClientOrganization = $conn->prepare('
-                      SELECT * FROM client_organization
-                        WHERE client_id ='.$clientId.'
-                    ');
+                          SELECT * FROM client_organization
+                            WHERE client_id =' . $clientId . '
+                        ');
                     $stmtClientOrganization->execute();
 
                     $clientOrganizations = $stmtClientOrganization->fetchAll();
@@ -192,17 +237,15 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     //$output->writeln($echo);
 
 
+                    //}
+                } else {
+                    //add performers here
                 }
-
 
 
             }
 
         }
-
-
-
-
 
 
     }
