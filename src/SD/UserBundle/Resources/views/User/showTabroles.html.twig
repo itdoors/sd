@@ -1,0 +1,8 @@
+{% trans_default_domain 'SDUserBundle' %}
+<div class="tab-pane active" id="tab_1_6">
+    <div class="row profile-account">
+        <div class="col-md-12">
+            {{ render(controller('SDUserBundle:User:showUserGroupsAndRoles', { id: userId })) }}
+        </div>
+    </div>
+</div>

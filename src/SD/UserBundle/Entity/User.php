@@ -13,6 +13,7 @@ use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Lists\TeamBundle\Entity\Team;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * User
@@ -56,11 +57,6 @@ class User extends BaseUser
      * @var \DateTime
      */
     private $birthday;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $groups;
 
     /**
      * Set id
@@ -649,5 +645,74 @@ class User extends BaseUser
     public function getPeerPassword()
     {
         return $this->peerPassword;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $groups;
+
+
+    /**
+     * Add group
+     *
+     * @param FOS\UserBundle\Model\GroupInterface $group
+     * 
+     * @return User
+     */
+    public function addGroup(GroupInterface $group)
+    {
+        $this->groups[] = $group;
+
+        return $this;
+    }
+
+    /**
+     * Remove group
+     *
+     * @param FOS\UserBundle\Model\GroupInterface $group
+     */
+    public function removeGroup(GroupInterface $group)
+    {
+        $this->groups->removeElement($group);
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\Position
+     */
+    private $userPosition;
+
+
+    /**
+     * Set userPosition
+     *
+     * @param \SD\UserBundle\Entity\Position $userPosition
+     *
+     * @return User
+     */
+    public function setUserPosition(\SD\UserBundle\Entity\Position $userPosition = null)
+    {
+        $this->userPosition = $userPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get userPosition
+     *
+     * @return \SD\UserBundle\Entity\Position 
+     */
+    public function getUserPosition()
+    {
+        return $this->userPosition;
     }
 }

@@ -16,7 +16,7 @@ var SD = (function() {
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
         assetsDir: '',
-        loadingImgPath: ''
+        loadingImgPath: 'templates/metronic/img/ajax-loading.gif'
     };
 
     function SD(){
@@ -272,35 +272,50 @@ var SD = (function() {
 
     SD.prototype.initAjaxDelete = function()
     {
+        console.log('SD.initAjaxDelete()');
         var selfSD = this;
 
         $('.' + this.params.ajaxDeleteClass).die('click');
         $('.' + this.params.ajaxDeleteClass).live('click', function(e) {
             e.preventDefault();
 
-            if (!confirm('Are you sure?'))
+            var parentElement = $(this).parents('tr');
+            var params = $(this).data('params');
+            var question = $(this).data('question');
+            var url = $(this).data('url');
+            
+            if (question === '' || question === undefined) {
+                question = 'Are you sure?';
+            }
+            if (url === '' || url === undefined) {
+                url = selfSD.params.ajaxDeleteUrl;
+            }
+            if (!confirm(question))
             {
                 return;
             }
 
-            var parentElement = $(this).parents('tr');
-            var params = $(this).data('params');
-
             parentElement.css('opacity', '0.5');
 
             $.ajax({
-                url: selfSD.params.ajaxDeleteUrl,
+                url: url,
                 type: 'POST',
+                dataType: "json",
                 data: {
                     params: params
                 },
                 success: function (response)
                 {
-                    parentElement.remove();
+                    if (response && response.error) {
+                        alert(response.error);
+                        parentElement.css('opacity', '1.0');
+                    } else {
+                        parentElement.remove();
+                    }
                 }
             });
-        })
-    }
+        });
+    };
 
     SD.prototype.blockUI = function (el, centerY) {
         var selfSD = this;
@@ -308,8 +323,9 @@ var SD = (function() {
         if (el.height() <= 400) {
             centerY = true;
         }
+        var urlImg = selfSD.params.loadingImgPath == undefined ? '/templates/metronic/img/ajax-loading.gif' : selfSD.params.loadingImgPath;
         el.block({
-            message: '<img src="' + selfSD.params.loadingImgPath + '" align="">',
+            message: '<img src="' + urlImg + '" align="">',
             centerY: centerY != undefined ? centerY : true,
             css: {
                 top: '10%',

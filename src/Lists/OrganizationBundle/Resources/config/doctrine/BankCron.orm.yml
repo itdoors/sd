@@ -1,0 +1,29 @@
+# src/Lists/OrganizationBundle/Resources/config/doctrine/BankCron.orm.yml
+Lists\OrganizationBundle\Entity\BankCron:
+    type: entity
+    table: bank_cron
+    repositoryClass: Lists\OrganizationBundle\Entity\BankCronRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        date:
+            type: datetime
+        status:
+            type: string
+            length: 64
+        description:
+            type: text
+        reason:
+            type: string
+            length: 255
+            nullable: true
+    manyToOne:
+        bank:
+            targetEntity: Bank
+            inversedBy: null
+            cascade: null
+            joinColumn:
+                name: bank_id
+                referencedColumnName: id

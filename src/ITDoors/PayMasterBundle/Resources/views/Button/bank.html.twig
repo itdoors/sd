@@ -1,0 +1,38 @@
+<a class="btn green" id="bank-add-btn-{{entity.id}}" href="#" data-toggle="modal">
+    {% trans from 'ITDoorsPayMasterBundle' %}Bank{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+   'selector' : '#bank-add-btn-'~ entity.id,
+   'formType' : 'payMasterBankForm',
+   'successFunctions' : {
+       'table_tab' : 'ITDoorsAjax.updateList'
+   },
+   'serviceDefault' : {
+       'alias' : 'it_doors_pay_master.service',
+       'method' : 'addPayMasterBankFormDefaults'
+   },
+   'serviceSave' : {
+       'alias' : 'it_doors_pay_master.service',
+       'method' : 'savePayMasterBankForm'
+   },
+   'defaults' : {
+       'payMasterId' : entity.id,
+       'organizationId' : entity.payer.id,
+   },
+   'target' : '#form_modal_payMasterBank',
+   'html' : 'ITDoorsPayMasterBundle:Form:payMasterBankForm.html.twig'
+}) }}
+<div id="form_modal_payMasterBank" class="modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}Bank{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

@@ -286,4 +286,18 @@ class ComparatorTaskAccess extends BasicTaskAccess
         return false;
 
     }
+    /**
+     * @return bool
+     */
+    public function canAddMatcher()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddMatcher()) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 }

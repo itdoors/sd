@@ -84,6 +84,10 @@ it_doors_controlling_invoice_grafic_individual_lists:
     pattern:  /controlling/invoice/analytic/grafic/individual/lists
     defaults: { _controller: ITDoorsControllingBundle:Analytic:graficIndividualLists}
     
+it_doors_controlling_invoice_customers_without_contacts:
+    pattern:  /controlling/invoice/customers/without/contacts
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:customersWithoutContacts}
+    
 
 
     

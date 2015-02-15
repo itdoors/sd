@@ -6,6 +6,10 @@ sd_common_ajax_organization:
     pattern:  /ajax/organization
     defaults: { _controller: SDCommonBundle:Ajax:organization }
 
+sd_common_ajax_organization_sing:
+    pattern:  /ajax/organization/sing
+    defaults: { _controller: SDCommonBundle:Ajax:organizationSing }
+
 sd_common_ajax_organization_first:
     pattern: /ajax/organization/first
     defaults: { _controller: SDCommonBundle:Ajax:organizationFirst }
@@ -109,10 +113,6 @@ sd_common_ajax_delete:
 sd_common_ajax_organization_save:
     pattern:  /ajax/organization/save
     defaults: { _controller: SDCommonBundle:Ajax:organizationSave }
-
-sd_common_ajax_handling_save:
-    pattern:  /ajax/handling/save
-    defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
 
 sd_common_ajax_handling_user_part_change:
     pattern:  /ajax/handling/user/part
@@ -232,14 +232,6 @@ sd_common_ajax_organization_lookup:
 sd_common_ajax_organization_lookup_by_ids:
     pattern:  /ajax/organization_lookup_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:organizationLookupByIds }
-
-sd_common_ajax_handling_status:
-    pattern:  /ajax/handling_status
-    defaults: { _controller: SDCommonBundle:Ajax:handlingStatus }
-
-sd_common_ajax_handling_result:
-    pattern:  /ajax/handling_result
-    defaults: { _controller: SDCommonBundle:Ajax:handlingResult }
 
 sd_common_ajax_handling_type:
     pattern:  /ajax/handling_type
@@ -361,3 +353,27 @@ sd_common_ajax_invoice_by_act_numbers:
 sd_common_ajax_invoice_by_ids:
     pattern:  /ajax/invoice_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:invoiceByIds }
+
+sd_common_ajax_department:
+    pattern:  /ajax/department
+    defaults: { _controller: SDCommonBundle:Ajax:department }
+
+sd_common_ajax_department_by_ids:
+    pattern:  /ajax/department_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByIdsAjax }
+
+sd_common_ajax_user_position_table:
+    pattern:  /ajax/user/position/table
+    defaults: { _controller: SDCommonBundle:Ajax:position }
+    
+sd_common_ajax_department_by_id:
+    pattern:  /ajax/department_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentByIdAjax }
+    
+sd_common_ajax_departments_by_city_id:
+    pattern:  /ajax/departments_by_city_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByCityIdAjax }
+    
+sd_common_ajax_individuals_by_city_id:
+    pattern:  /ajax/individuals_by_city_id
+    defaults: { _controller: SDCommonBundle:Ajax:getIndividualsByCityIdAjax }

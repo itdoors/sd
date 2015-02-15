@@ -1,0 +1,10 @@
+lists_department_appointment:
+    pattern:  /lists/department/appointment
+    defaults: { _controller: ListsDepartmentBundle:Department:appointment }
+lists_department_appointment_list:
+    pattern:  /lists/department/appointment/list
+    defaults: { _controller: ListsDepartmentBundle:Department:appointmentList }
+# ajaxController
+lists_department_ajax_save_appointment:
+    pattern:  /lists/department/ajax/save/appointment
+    defaults: { _controller: ListsDepartmentBundle:Ajax:appointmentSave }

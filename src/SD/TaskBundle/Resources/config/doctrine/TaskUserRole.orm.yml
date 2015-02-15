@@ -11,6 +11,11 @@ SD\TaskBundle\Entity\TaskUserRole:
         isViewed:
             type: boolean
             column: is_viewed
+        isUpdated:
+            type: boolean
+            column: is_updated
+            options:
+                default: false
     manyToOne:
         task:
             targetEntity: SD\TaskBundle\Entity\Task

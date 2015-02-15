@@ -6,8 +6,10 @@ parameters:
     sd_user.form.new.stuff.class: SD\UserBundle\Form\UserNewStuffForm
     stuff.filter.form.class: SD\UserBundle\Form\StuffFilterForm
     sd_user.form.avatar.class: SD\UserBundle\Form\UserAvatarForm
+    sd_user.form.stuff.department.class: SD\UserBundle\Form\StuffDepartmentForm
     sd_user_contactinfo.form.class: SD\UserBundle\Form\UserContactinfoForm
     sd_user.service.class: SD\UserBundle\Services\UserService
+    sd_user.add.user.email.template: 'SDUserBundle:EmailTemplate:addUser.txt.twig'
 
 services:
     sd_user.repository:
@@ -45,6 +47,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: userAvatarForm }
+            
+    sd.user.form.stuffDepartmentForm:
+        class: %sd_user.form.stuff.department.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: stuffDepartmentForm }
             
     sd.user.form.userContactinfoForm:
         class: %sd_user_contactinfo.form.class%

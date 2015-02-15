@@ -1,0 +1,7 @@
+parameters:
+#    it_doors_helper.example.class: ITDoors\HelperBundle\Example
+
+services:
+#    it_doors_helper.example:
+#        class: %it_doors_helper.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

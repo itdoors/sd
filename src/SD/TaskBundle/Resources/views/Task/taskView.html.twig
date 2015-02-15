@@ -8,9 +8,9 @@
 <script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
 {% endif %}
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $('#task_set_viewed').die('click')
-        $('#task_set_viewed').live('click', function(e){
+        $('#task_set_viewed').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_viewed');
             var sendData = {
@@ -20,7 +20,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -28,35 +28,49 @@
                     } else {
 
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
             })
         })
 
         $('.stageButton').die('click');
-        $('.stageButton').live('click', function(e){
+        $('.stageButton').live('click', function (e) {
             var stage = $(this).data('stage');
             //insertComment();
             updateTaskStage(stage);
         })
 
         $('#task_change_date').die('click');
-        $('#task_change_date').live('click', function(e){
+        $('#task_change_date').live('click', function (e) {
             $('#change_date_holder').toggle('blind', {}, 300)
         })
 
         $('#add_viewer_btn').die('click');
-        $('#add_viewer_btn').live('click', function(e){
+        $('#add_viewer_btn').live('click', function (e) {
             $('#add_viewer_holder').toggle('blind', {}, 300)
         })
+        $('#add_matcher_btn').die('click');
+        $('#add_matcher_btn').live('click', function (e) {
+            $('#add_matcher_holder').toggle('blind', {}, 300)
+        })
 
+        $('#cancel_add_matcher').die('click');
+        $('#cancel_add_matcher').live('click', function (e) {
+            $('#add_matcher_holder').hide('blind', {}, 300)
+        })
         $('#cancel_add_viewer').die('click');
-        $('#cancel_add_viewer').live('click', function(e){
+        $('#cancel_add_viewer').live('click', function (e) {
             $('#add_viewer_holder').hide('blind', {}, 300)
         })
 
 
         $('.answerButton').die('click');
-        $('.answerButton').live('click', function(e){
+        $('.answerButton').live('click', function (e) {
             var answer = $(this).data('value');
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_answer_date');
@@ -64,13 +78,13 @@
             var sendData = {
                 'id': id,
                 'answer': answer,
-                'comment' : comment
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -79,13 +93,19 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
         })
 
         $('.signUpButton').die('click');
-        $('.signUpButton').live('click', function(e){
+        $('.signUpButton').live('click', function (e) {
             var status = $(this).data('status');
 
             var id = $('#task_modal_info_holder').data('id');
@@ -95,13 +115,13 @@
             var sendData = {
                 'id': id,
                 'status': status,
-                'comment' : comment
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -109,6 +129,12 @@
                     } else {
 
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
@@ -116,7 +142,7 @@
 
 
         $('#add_viewer_submit').die('click');
-        $('#add_viewer_submit').live('click', function(e){
+        $('#add_viewer_submit').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_add_viewer');
 
@@ -125,13 +151,14 @@
 
                 var sendData = {
                     'id': id,
-                    'viewer' : viewer
+                    'viewer': viewer,
+                    'role': 'viewer'
                 }
                 $.ajax({
                     type: 'POST',
                     url: url,
                     data: sendData,
-                    success: function(data1) {
+                    success: function (data1) {
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
@@ -143,6 +170,56 @@
                                 alert('error');
                             }
                         }
+                    },
+                    beforeSend: function () {
+                        SD.blockUI($('#task_holder'));
+                    },
+                    complete: function () {
+                        SD.unblockUI($('#task_holder'));
+                    }
+
+                })
+            } else {
+                alert('{% trans %}Choose coworker{% endtrans %}');
+            }
+
+        });
+
+        $('#add_matcher_submit').die('click');
+        $('#add_matcher_submit').live('click', function (e) {
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_add_viewer');
+
+            var viewer = $("#matcher_select").select2("val");
+            if (viewer) {
+
+                var sendData = {
+                    'id': id,
+                    'viewer': viewer,
+                    'role': 'matcher'
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function (data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            updateTask();
+                        } else {
+                            if (data.error == 'already_in_task') {
+                                alert('{% trans %}This user already taking part in task{% endtrans %}');
+                            } else {
+                                alert('error');
+                            }
+                        }
+                    },
+                    beforeSend: function () {
+                        SD.blockUI($('#task_holder'));
+                    },
+                    complete: function () {
+                        SD.unblockUI($('#task_holder'));
                     }
 
                 })
@@ -154,7 +231,7 @@
 
 
         $('#task_add_resolution').die('click');
-        $('#task_add_resolution').live('click', function(e){
+        $('#task_add_resolution').live('click', function (e) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url-add_resolution');
             var comment = getComment();
@@ -166,19 +243,25 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
                         //insertComment()
                         updateTask();
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
         })
         $('.changeDateCalendar').die('click');
-        $('.changeDateCalendar').live('click', function(e){
+        $('.changeDateCalendar').live('click', function (e) {
             var value = $('#new_date_holder').val();
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_change_date');
@@ -193,7 +276,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -204,25 +287,31 @@
                         updateTask();
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
         })
 
         $('#description_edit_text').die('click');
-        $('#description_edit_text').live('click', function(e){
+        $('#description_edit_text').live('click', function (e) {
             $('#edit_description_div').removeClass('notDisplayed');
             $('#description_div').addClass('notDisplayed');
         })
 
         $('#cancel_edit_description').die('click');
-        $('#cancel_edit_description').live('click', function(e){
+        $('#cancel_edit_description').live('click', function (e) {
             $('#edit_description_div').addClass('notDisplayed');
             $('#description_div').removeClass('notDisplayed');
         })
 
         $('#save_edit_description').die('click');
-        $('#save_edit_description').live('click', function(e){
+        $('#save_edit_description').live('click', function (e) {
             var description = $('#wyswyg').code();
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_sd_task_editable');
@@ -239,7 +328,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -247,6 +336,12 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
             })
         })
@@ -273,7 +368,7 @@
                     type: 'POST',
                     url: url,
                     data: sendData,
-                    success: function(data1) {
+                    success: function (data1) {
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
@@ -288,7 +383,7 @@
 
         }
 
-        function updateTaskStage (stage) {
+        function updateTaskStage(stage) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_stage');
             var comment = getComment();
@@ -302,7 +397,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -310,11 +405,16 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
         }
-
 
 
         function updateTask() {
@@ -333,7 +433,7 @@
                 type: 'POST',
                 url: url,
                 data: sendData,
-                success: function(data1) {
+                success: function (data1) {
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
@@ -345,11 +445,12 @@
                 }
             })
         }
-/*
-        Metronic.initSlimScroll('.scroller');
-*/
+
+        /*
+         Metronic.initSlimScroll('.scroller');
+         */
         $('#new_date_holder').datetimepicker({
-            minView:1,
+            minView: 1,
             rtl: Metronic.isRTL(),
             autoclose: true,
             format: "dd.mm.yyyy hh:ii",
@@ -358,7 +459,7 @@
             minuteStep: 30,
             weekStart: 1,
             startDate: new Date()
-        }).on('changeDate', function(date){
+        }).on('changeDate', function (date) {
             console.log('_____')
             var newDate = new Date(date.date.setMinutes(0));
             console.log(newDate)
@@ -367,7 +468,42 @@
 
         })
 
-        $('#viewer_select').select2();
+        $('#viewer_select').select2({
+            minimumInputLength: 0,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "{{ path('sd_task_list_stuff') }}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('#matcher_select').select2({
+            minimumInputLength: 0,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "{{ path('sd_task_list_stuff') }}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
         {% if access.canEditDescription %}
 
         $('#wyswyg').summernote({
@@ -375,7 +511,7 @@
             lang: 'ru-RU',
             'disableDragAndDrop': true,
             'disableLinkTarget': true,
-            'onblur': function(){
+            'onblur': function () {
                 /*
                  $('.wyswyg').text($('.textear-edit').code());
                  */
@@ -388,10 +524,14 @@
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
                 ['insert', ['link']], // no insert buttons
-                ['table', ['table']] // no table button
+                ['table', ['table']], // no table button
+                ['view', ['fullscreen']]
                 //['help', ['help']] //no help button
             ]
         }).code($('#description_text').html());
+        {% endif %}
+        {% if updateTaskItemsId > 0 %}
+            updateTaskListsItems({{ updateTaskItemsId }});
         {% endif %}
 
     })
@@ -410,14 +550,15 @@
 #}
     <!-- TASK HEAD -->
     <div class="form">
+{#
         <div class="form-group">
             <div class="col-md-8 col-sm-8">
                 <div class="todo-taskbody-user">
                     <img class="todo-userpic pull-left" src="{{ web_image(app.user.photo is not empty ? userprofiles_url ~ app.user.id ~ '/' ~ app.user.photo : userprofiles_url ~ 'no_avatar.png').resize(50, 50) }}" width="50px" height="50px">
                     <span class="todo-username pull-left">{{ taskUserRole.user }}</span>
-{#
+&#123;&#35;
                     <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs">&nbsp;edit&nbsp;</button>
-#}
+&#35;&#125;
                 </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -432,6 +573,7 @@
                 </div>
             </div>
         </div>
+#}
         <!-- END TASK HEAD -->
         <!-- TASK TITLE -->
         <div class="form-group">
@@ -446,9 +588,11 @@
                             {{ taskUserRole.task.title }}
                         </a>
                         <script>
-                            $('#title').editable({
-                                url: '{{ path('sd_task_editable') }}'
-                            });
+                            $(document).ready(function() {
+                                $('#title').editable({
+                                    url: '{{ path('sd_task_editable') }}'
+                                });
+                            })
                         </script>
                     {% else %}
                         {{ taskUserRole.task.title }}
@@ -463,8 +607,8 @@
             <div class="col-md-12" >
                 {% if access.canEditDescription %}
 
-                    <div id="description_div">
-                        <span id="description_text" style="white-space: pre-line">{{ taskUserRole.task.description|raw }}</span>
+                    <div id="description_div" style="overflow-x: scroll;">
+                        <span id="description_text" style="white-space: pre-line;">{{ taskUserRole.task.description|raw }}</span>
                         <span id="description_edit_text">
                             <br><br>
                             <a href="#">{% trans %}Edit description{% endtrans %} <i class="fa fa-edit"></i></a>
@@ -489,7 +633,9 @@
                     </script>
 #}
                 {% else %}
+                    <div style="overflow: auto;">
                     {{ taskUserRole.task.description|raw }}
+                    </div>
                 {% endif %}
                 <br><br>
             </div>
@@ -522,19 +668,21 @@
                         }) }}
                     </a>
                         <script>
-                            $('#endDate').editable({
-                                clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
-                                type: 'date',
-                                url: '{{ path('sd_task_editable') }}',
-                                datetimepicker: {
-                                    autoclose: true,
-                                    format: "dd-mm-yyyy HH:ii",
-                                    language: "ru",
-                                    startView: 'month',
-                                    weekStart: 1,
-                                    minView: 1
-                                }
-                            });
+                            $(document).ready(function() {
+                                $('#endDate').editable({
+                                    clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                                    type: 'date',
+                                    url: '{{ path('sd_task_editable') }}',
+                                    datetimepicker: {
+                                        autoclose: true,
+                                        format: "dd-mm-yyyy HH:ii",
+                                        language: "ru",
+                                        startView: 'month',
+                                        weekStart: 1,
+                                        minView: 1
+                                    }
+                                });
+                            })
                         </script>
                     {% else %}
                         {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
@@ -599,6 +747,7 @@
                                 <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
                             {% endif %}
                         {% endif %}
+                        <br>
                     {% endfor %}
                 {% endif %}
 
@@ -649,7 +798,19 @@
                 <br>
             </div>
         </div>
-        <br><br>
+        <br>
+
+        <div class="form-group">
+            <div class="col-md-12" style="text-align: center;">
+                <a class="btn btn-circle btn-sm btn-default" target="_blank" href="{{ path('sd_task_print', {id:taskUserRole.id}) }}" style="margin-top:5px;">{% trans %}Print{% endtrans %}</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <br>
+            </div>
+        </div>
+
         {% if access.canLeaveComment %}
             <div class="form-group">
                 <div class="col-md-12" style="background-color: #f6fbfc;">
@@ -705,7 +866,8 @@
                 </div>
             </div>
         </div>
-        {% if access.canMakeDateRequest %}
+
+            {% if access.canMakeDateRequest %}
             <div class="form-group">
                 <div class="col-md-12" style="background-color: #f6fbfc;">
 
@@ -730,20 +892,22 @@
         {% if access.canAddViewer %}
             <div class="form-group">
                 <div class="col-md-12">
-                    <div class="form-actions right todo-form-actions" >
+                    <div class="form-actions right todo-form-actions" style="margin-bottom: 0; padding-bottom: 0">
                         <button id="add_viewer_btn" class="btn btn-circle btn-sm green-haze">{% trans %}Add viewer{% endtrans %}</button>
                         <br><br>
                     <div id="add_viewer_holder" style="display: none;">
                         <div class="form-group">
-                            <div class="col-md-8">
-                                <select id="viewer_select" data-placeholder="{% trans %}Choose coworker{% endtrans %}">
-                                    <option selected></option>
+                            <div class="col-md-6">
+                                <div id="viewer_select" style="width: 100%" {#data-placeholder="{% trans %}Choose coworker{% endtrans %}"#}>
+                                    {#<option selected></option>#}
+{#
                                     {% for user in usersCanBeViewed %}
                                         <option value="{{ user.id }}">{{ user }}</option>
                                     {% endfor %}
-                                </select>
+#}
+                                </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <button class="btn btn-circle btn-sm btn-default" id="add_viewer_submit">{% trans %}Add{% endtrans %}</button>
                                 <button class="btn btn-circle btn-sm btn-default" id="cancel_add_viewer">{% trans %}Cancel{% endtrans %}</button>
                             </div>
@@ -754,11 +918,40 @@
                 </div>
             </div>
         {% endif %}
+        {% if access.canAddMatcher %}
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="form-actions right todo-form-actions" >
+                    <button id="add_matcher_btn" class="btn btn-circle btn-sm green-haze">{% trans %}Add matcher{% endtrans %}</button>
+                    <br><br>
+                    <div id="add_matcher_holder" style="display: none;">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div id="matcher_select" style="width: 100%" {#data-placeholder="{% trans %}Choose coworker{% endtrans %}"#}>
+                                    {#<option selected></option>#}
+                                    {#
+                                                                        {% for user in usersCanBeViewed %}
+                                                                            <option value="{{ user.id }}">{{ user }}</option>
+                                                                        {% endfor %}
+                                    #}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-circle btn-sm btn-default" id="add_matcher_submit">{% trans %}Add{% endtrans %}</button>
+                                <button class="btn btn-circle btn-sm btn-default" id="cancel_add_matcher">{% trans %}Cancel{% endtrans %}</button>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     </div>
 
     <div class="tabbable-line">
-        <ul class="nav nav-tabs ">
+        <ul class="nav nav-tabs">
             <li class="active">
                 <a href="#tab_1" data-toggle="tab">
                     {% trans %}Protocol{% endtrans %} </a>
@@ -793,7 +986,7 @@
                                         <p class="todo-comment-head">
                                             <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
                                         </p>
-                                        <p class="todo-text-color" style="white-space: pre-line">{{ comment.value|raw  }} <br></p>
+                                        <p class="todo-text-color" style="white-space: pre-line; ">{{ comment.value|raw  }} <br></p>
                                     </div>
                                 </li>
                             {% endfor %}

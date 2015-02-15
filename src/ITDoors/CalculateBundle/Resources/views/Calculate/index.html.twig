@@ -1,0 +1,83 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'ITDoorsCalculateBundle' %}
+{% block body %}
+
+    <script>
+        $(document).ready(function() {
+            $('#calculate_submit').on('click', function() {
+                var linear = $('.input_linear');
+                var range = $('.input_range');
+                console.log(linear.length);
+                var price = 0;
+                $.each(linear, function(index, item) {
+                    var value = $(item).val();
+                    if (value) {
+                        price = price +$(item).data('koef') * parseFloat(value.replace(',', '.').replace(' ', ''));
+                    }
+                    console.log(price);
+                });
+                $.each(range, function(index, item) {
+                    var value = $(item).val();
+                    if (value) {
+                        console.log($(item).data('koef'));
+                        var info = $(item).data('koef');
+                        var koef = 0;
+                        value = parseFloat(value.replace(',', '.').replace(' ', ''));
+                        for (var i =0; i< info.length; i++) {
+                            console.log(info[i]);
+                            if (value >= info[i].from && value <= info[i].to) {
+                                koef = info[i].value;
+                                break;
+                            }
+                        }
+                        price = price +koef * value;
+                    }
+                    //console.log(price);
+                });
+
+                price.toFixed(2);
+                $('#calculate_result').text(price + 'грн');
+            })
+        })
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <ol>
+    {% for label in data %}
+                <li>
+                    <b>{{ label.name }}</b><br>
+                    <ul >
+                        {% for item in label.children %}
+                            <li style="padding: 5px;">{{ item.name }}
+                                {% if item.type == 'linear' %}
+                                    ({{ item.prices.unit }})
+                                    <input type="text" style="width: 100px;" class="form-control input_linear"
+                                            data-koef = "{{ item.prices.value }}"
+                                            >
+
+                                {% endif %}
+                                {% if item.type == 'range' %}
+                                    ({{ item.prices.0.unit }})
+                                    <input type="text" style="width: 100px;" class="form-control input_range"
+                                            data-koef = '{{ item.prices|json_encode|raw }}'
+                                            >
+
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+    {% endfor %}
+            </ol>
+            <br>
+
+        </div>
+    </div>
+
+    <br>
+    <button class="btn green" id="calculate_submit">{% trans %}Calculate{% endtrans %}</button>
+    <span
+            id="calculate_result"
+            style="color: #3781f7; font-size: 27px; margin-left: 140px; font-weight: bold; ">0грн</span>
+
+{% endblock %}

@@ -10,6 +10,9 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Lists\CompanystructureBundle\Entity\CompanystructureRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * UserNewForm
@@ -36,6 +39,8 @@ class UserNewStuffForm extends AbstractType
     {
 //        $user = $this->container->get('security.context')->getToken()->getUser();
 
+        $container = $this->container;
+
         $repository = $this->container->get('doctrine')->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $builder
@@ -46,37 +51,47 @@ class UserNewStuffForm extends AbstractType
                 'constraints' => new NotBlank()
             ))
             ->add('middleName')
-            ->add('birthday', 'text')
+//            ->add('birthday', 'text', array(
+//                'required' => false,
+//            ))
             ->add('username')
             ->add('email')
-            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'SDUserBundle'),
-                'first_options' => array('label' => 'form.new_password'),
-                'second_options' => array('label' => 'form.new_password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-        ));
+            ->add('userPosition', 'entity', array(
+                'mapped' => false,
+                'class' => 'SDUserBundle:Position',
+                'empty_value' => '',
+                'required' => true,
+                'property' => 'name'
+            ));
+//            ->add('plainPassword', 'repeated', array(
+//                'type' => 'password',
+//                'options' => array('translation_domain' => 'SDUserBundle'),
+//                'first_options' => array('label' => 'form.new_password'),
+//                'second_options' => array('label' => 'form.new_password_confirmation'),
+//                'invalid_message' => 'fos_user.password.mismatch',
+//        ));
 
         // Stuff
         $builder
-            ->add('mobilephone', 'text', array(
-                'mapped' => false,
-                'constraints' => new NotBlank()
-            ))
-            ->add('hiredate', 'text', array(
-                'mapped' => false,
-                'constraints' => new NotBlank()
-            ))
-            ->add('position', 'text')
-            ->add('education', 'textarea', array(
-                'constraints' => new NotBlank(),
-                'mapped' => false,
-                'required' => false
-            ))
-            ->add('issues', 'textarea', array(
-                'mapped' => false,
-                'constraints' => new NotBlank()
-            ))
+//            ->add('mobilephone', 'text', array(
+//                'mapped' => false,
+//                'required' => false
+//            ))
+//            ->add('hiredate', 'text', array(
+//                'mapped' => false,
+//                'constraints' => new NotBlank()
+//            ))
+//            ->add('position', 'text')
+//            ->add('education', 'textarea', array(
+//                'constraints' => new NotBlank(),
+//                'mapped' => false,
+//                'required' => false
+//            ))
+//            ->add('issues', 'textarea', array(
+//                'mapped' => false,
+//                'required' => false,
+//                'constraints' => new NotBlank()
+//            ))
             ->add('companystructure', 'entity', array(
                 'mapped' => false,
                 'class' => 'ListsCompanystructureBundle:Companystructure',
@@ -92,6 +107,26 @@ class UserNewStuffForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
+
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($container) {
+                /** @var User $newUser */
+                $newUser = $event->getData();
+                $form = $event->getForm();
+                $em = $container->get('doctrine')->getManager();
+                $existingUser = $em->getRepository('SDUserBundle:User')
+                    ->findOneBy(array('email' => $newUser->getEmail()));
+                if ($existingUser) {
+                    $form->get('email')->addError(new FormError($existingUser));
+                }
+                $existingUser = $em->getRepository('SDUserBundle:User')
+                    ->findOneBy(array('username' => $newUser->getUserName()));
+                if ($existingUser) {
+                        $form->get('username')->addError(new FormError($existingUser));
+                }
+            }
+        );
     }
 
     /**
@@ -101,7 +136,7 @@ class UserNewStuffForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'SD\UserBundle\Entity\User',
-            'validation_groups' => array('Registration'),
+            'validation_groups' => array('Profile'),
             'translation_domain' => 'SDUserBundle'
         ));
     }

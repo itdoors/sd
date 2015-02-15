@@ -1,0 +1,130 @@
+parameters:
+    # SERVICE
+    lists_project.service.class: Lists\ProjectBundle\Service\ProjectService
+    # FORM
+    lists_project.base.form.class: Lists\ProjectBundle\Form\ProjectBaseForm
+    lists_project.state_tender.form.class: Lists\ProjectBundle\Form\ProjectStateTenderForm
+    lists_project.state_tender_participation.form.class: Lists\ProjectBundle\Form\ProjectStateTenderParticipationForm
+    lists_project.state_tender_participant.form.class: Lists\ProjectBundle\Form\ProjectStateTenderParticipantForm
+    lists_project.project_add_manager.form.class: Lists\ProjectBundle\Form\AddManagerForm
+    lists_project.project_add_document.form.class: Lists\ProjectBundle\Form\AddDocumentForm
+    lists_project.close_project.form.class: Lists\ProjectBundle\Form\CloseProjectForm
+    lists_project.project_simple.form.class: Lists\ProjectBundle\Form\ProjectSimpleForm
+    lists_project.confirm_project.form.class: Lists\ProjectBundle\Form\ConfirmProjectForm
+    lists_project.project_add_message.form.class: Lists\ProjectBundle\Form\AddMessageForm
+     # VALIDATOR
+    lists_project.unique_state_tender.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderValidator
+    lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipantValidator
+    lists_project.manager_max_part.validator.class: Lists\ProjectBundle\Validator\ManagerMaxPartValidator
+    lists_project.manager_unique_user.validator.class: Lists\ProjectBundle\Validator\ManagerUniqueUserValidator
+
+services:
+    # SERVICE
+    lists_project.service:
+        class: %lists_project.service.class%
+        arguments: [@security.context, @doctrine.orm.entity_manager]
+
+    # FORM
+    lists_project.projectBaseForm:
+        class: %lists_project.base.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectBaseForm }
+
+    lists_project.projectStateTenderForm:
+        class: %lists_project.state_tender.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectStateTenderForm }
+    lists_project.projectStateTenderParticipationForm:
+        class: %lists_project.state_tender_participation.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectStateTenderParticipationForm }
+    lists_project.projectStateTenderParticipantForm:
+        class: %lists_project.state_tender_participant.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectStateTenderParticipantForm }
+    lists_project.addManagerForm:
+        class: %lists_project.project_add_manager.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addManagerForm }
+    lists_project.addDocumentForm:
+        class: %lists_project.project_add_document.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addDocumentForm }
+    lists_project.closeProjectForm:
+        class: %lists_project.close_project.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: closeProjectForm }
+    lists_project.projectSimpleForm:
+        class: %lists_project.project_simple.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: projectSimpleForm }
+    lists_project.addMessageForm:
+        class: %lists_project.project_add_message.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addMessageForm }
+    lists_project.confirmProjectForm:
+        class: %lists_project.confirm_project.form.class%
+        tags:
+            - { name: form.type, alias: confirmProjectForm }
+        
+    # VALIDATOR
+    lists.project.uniqueProjectStateTenderValidator:
+        class: %lists_project.unique_state_tender.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: unique_state_tender }
+    lists.project.uniqueProjectStateTenderParticipantValidator:
+        class: %lists_project.unique_state_tender_participant.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: unique_state_tender_participant }
+    lists.project.managerMaxPartValidator:
+        class: %lists_project.manager_max_part.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: manager_max_part }
+    lists.project.managerUniqueUserValidator:
+        class: %lists_project.manager_unique_user.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: manager_unique_user }

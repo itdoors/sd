@@ -30,6 +30,11 @@ class Companystructure
     private $name;
 
     /**
+     * @ORM\Column(name="is_hidden", type="boolean")
+     */
+    private $is_hidden;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $mpk;
@@ -97,6 +102,15 @@ class Companystructure
     public function getId ()
     {
         return $this->id;
+    }
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection()
+     */
+    public function getChildren ()
+    {
+        return $this->children;
     }
     /**
      * Set name
@@ -393,4 +407,24 @@ class Companystructure
      * @ORM\Column(name="root", type="integer", nullable=true)
      */
     private $root;
+    /**
+     * Set lvl
+     * 
+     * @param string $level
+     *
+     * @return string 
+     */
+    public function setLevel($level)
+    {
+        $this->lvl = $level;
+    }
+    /**
+     * Get lvl
+     *
+     * @return string 
+     */
+    public function getLevel()
+    {
+        return $this->lvl;
+    }
 }

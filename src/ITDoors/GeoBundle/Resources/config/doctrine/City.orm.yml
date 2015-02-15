@@ -1,0 +1,23 @@
+ITDoors\GeoBundle\Entity\City:
+    type: entity
+    table: geo_city
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+        long:
+            type: float
+        lat:
+            type: float
+    manyToOne:
+        region:
+            targetEntity: ITDoors\GeoBundle\Entity\Region
+            inversedBy: cities
+        district:
+            targetEntity: ITDoors\GeoBundle\Entity\District
+            inversedBy: cities

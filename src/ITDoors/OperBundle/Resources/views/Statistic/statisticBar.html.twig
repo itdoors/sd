@@ -1,0 +1,92 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat blue-madison" style="height: 110px;">
+            <div class="visual">
+                <i class="fa fa-comments"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    {{ totalVisits }}
+                </div>
+                <div class="desc">
+                    {% trans %}Total Visits{% endtrans %}
+                </div>
+            </div>
+            {#
+                                                <a class="more" href="#">
+                                                    View more <i class="m-icon-swapright m-icon-white"></i>
+                                                </a>
+            #}
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat red-intense" style="height: 110px;">
+            <div class="visual">
+                <i class="fa fa-bar-chart-o"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    {{ totalVisitsCommented }}
+                </div>
+                <div class="desc">
+                    {% trans %}Total Visits With Comments{% endtrans %}
+                </div>
+            </div>
+            {#
+                                                <a class="more" href="#">
+                                                    View more <i class="m-icon-swapright m-icon-white"></i>
+                                                </a>
+            #}
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat green-haze" style="height: 110px;">
+            <div class="visual">
+                <i class="fa fa-tachometer"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    {{ averagePerDay|number_format(2) }}
+                </div>
+                <div class="desc">
+                    {% trans %}Avarage Visits Per Day{% endtrans %}
+                </div>
+            </div>
+            {#
+                                                <a class="more" href="#">
+                                                    View more <i class="m-icon-swapright m-icon-white"></i>
+                                                </a>
+            #}
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat purple-plum" style="height: 110px;">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    {% if comparingLast30Days is not empty %}
+                        {% if comparingLast30Days>0 %}+{% endif %}
+                        {{ comparingLast30Days|number_format(2) }}%
+                        {% if difference30Days is not empty %}
+                            {% if difference30Days>0 %}+{% endif %}
+                            <span style="font-size: smaller;">({{ difference30Days }})</span>
+                        {% endif %}
+                    {% else %}
+                        XX%
+                    {% endif %}
+                </div>
+                <div class="desc">
+                    {% trans %}Comparing to last 30 days{% endtrans %}
+                </div>
+            </div>
+            {#
+                                                <a class="more" href="#">
+                                                    View more <i class="m-icon-swapright m-icon-white"></i>
+                                                </a>
+            #}
+        </div>
+    </div>
+</div>

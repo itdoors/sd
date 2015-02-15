@@ -1,0 +1,46 @@
+Lists\OrganizationBundle\Entity\OrganizationCurrentAccount:
+    type: entity
+    table: organization_current_account
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationCurrentAccountRepository
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                comment: Р/С
+    manyToOne:
+        typeAccount:
+            targetEntity: OrganizationCurrentAccountType
+            inversedBy: null
+            joinColumn:
+                name: type_id
+                referencedColumnName: id
+        organization:
+            targetEntity: Organization
+            inversedBy: currentAccounts
+            joinColumn:
+                name: organization_id
+                referencedColumnName: id
+        bank:
+            targetEntity: Bank
+            inversedBy: currentAccounts
+            joinColumn:
+                name: bank_id
+                referencedColumnName: id
+        currency:
+            targetEntity: Currency
+            inversedBy: null
+            nullable: false
+            joinColumn:
+                name: currency_id
+                referencedColumnName: id
+    uniqueConstraints:
+        unique_organization_current_account_idx:
+          columns: [name, organization_id, bank_id, currency_id]

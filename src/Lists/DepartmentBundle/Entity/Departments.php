@@ -2,10 +2,12 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
+use ITDoors\HelperBundle\Classes\HiddenFields;
+
 /**
  * Departments
  */
-class Departments
+class Departments extends HiddenFields
 {
     /**
      * @var integer
@@ -511,7 +513,7 @@ class Departments
      */
     public function __toString()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -552,5 +554,17 @@ class Departments
     public function getMpk()
     {
         return $this->mpk;
+    }
+    /**
+     * onPrePersist
+     */
+    public function onPrePersist()
+    {
+        if ($this->isdeleted == null) {
+            $this->isdeleted = false;
+        }
+        if (!empty($this->statusDate) && gettype($this->statusDate) == 'string') {
+            $this->statusDate = new \DateTime($this->statusDate);
+        }
     }
 }

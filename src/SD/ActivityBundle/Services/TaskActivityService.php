@@ -51,15 +51,17 @@ class TaskActivityService extends ActivityAbstract
         $minDate = new \DateTime();
         $minDate->sub(new \DateInterval('P'.$this->numberShowLastDays.'D'));
 
-        $comment = $this->container
-            ->get('doctrine')->getManager()
-            ->getRepository('SDTaskBundle:Comment')
-            ->getCommentsForTasksId($idsAvailable, $minDate);
+        if (count($idsAvailable)) {
+            $comment = $this->container
+                ->get('doctrine')->getManager()
+                ->getRepository('SDTaskBundle:Comment')
+                ->getCommentsForTasksId($idsAvailable, $minDate);
 
-        $activity = $comment;
-        //var_dump(count($activity));
-        $activity = $this->container
-            ->get('activity.sentence.maker.service')->makeSentenceTaskActivity($activity);
+            $activity = $comment;
+            //var_dump(count($activity));
+            $activity = $this->container
+                ->get('activity.sentence.maker.service')->makeSentenceTaskActivity($activity);
+        }
 
 
         return $activity;

@@ -21,9 +21,6 @@ Lists\HandlingBundle\Entity\Handling:
         createdatetime:
             type: datetime
             nullable: false
-        closedatetime:
-            type: datetime
-            nullable: true
         statusDescription:
             type: text
             nullable: true
@@ -68,6 +65,23 @@ Lists\HandlingBundle\Entity\Handling:
             type: boolean
             nullable: true
             column: is_closed
+            options:
+                comment: Статус проекта (закрыт, открыт)
+        datetimeClosed:
+            type: datetime
+            nullable: true
+            column: datetime_closed
+            options:
+                comment: Дата закрытия проекта
+        closedatetime:
+            type: datetime
+            nullable: true
+        reasonClosed:
+            type: text
+            nullable: true
+            column: reason_closed
+            options:
+                comment: Причина закрытия проекта
         budgetClient:
             type: string
             length: 128
@@ -84,7 +98,7 @@ Lists\HandlingBundle\Entity\Handling:
             column: next_handling_date
         createdate:
             type: date
-            nullable: false
+            nullable: true
             column: createdate
         organization_id:
             type: integer
@@ -128,7 +142,22 @@ Lists\HandlingBundle\Entity\Handling:
         handlingUsers:
           targetEntity: HandlingUser
           mappedBy: handling
+        files:
+          targetEntity: ProjectFile
+          mappedBy: project
     manyToOne:
+        closedUser:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: closed_user_id
+                nullable: true
+                options:
+                    comment: Кто закрыл проект
+                referencedColumnName: id
+            orphanRemoval: false
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             cascade: {  }
@@ -183,17 +212,6 @@ Lists\HandlingBundle\Entity\Handling:
                     referencedColumnName: id
             orphanRemoval: false
     manyToMany:
-#        users:
-#            targetEntity: SD\UserBundle\Entity\User
-#            inversedBy: handlings
-#            joinTable:
-#              name: handling_user
-#              joinColumns:
-#                handling_id:
-#                  referencedColumnName: id
-#              inverseJoinColumns:
-#                user_id:
-#                  referencedColumnName: id
         handlingServices:
             targetEntity: HandlingService
             inversedBy: handlings

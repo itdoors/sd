@@ -1,4 +1,5 @@
 <td>
+    {% if access.canAddDopDogovor %}
     <a id="dogovor_list_new" class="btn green ajax-form"
        data-toggle="modal"
        href="#form_modal_dop_dogovor"
@@ -9,8 +10,11 @@
        data-model="DopDogovor"
        data-model-id="{{ item.id }}"
     >
+    {% endif %}
         {{ item.id }}
+    {% if access.canAddDopDogovor %}
     </a>
+    {% endif %}
 </td>
 <td>{{ item.dopDogovorType }}</td>
 <td>{{ item.number }}</td>
@@ -29,11 +33,11 @@
 <td>{{ item.total }}</td>
 <td class="see-document-{{ item.id }}">
     {% if item.filepath %}
-        <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
-            {% trans from 'messages' %}See document{% endtrans %}
-        </a>
+{#         <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">{% trans from 'messages' %}See document{% endtrans %}</a>#}
+        <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ item.filepath }}">{% trans from 'messages' %}See document{% endtrans %}</a>
     {% endif %}
 </td>
+{% if access.canAddDopDogovor %}
 <td>
     {% if not item.departmentCount %}
         <a
@@ -45,3 +49,4 @@
         </a>
     {% endif %}
 </td>
+{% endif %}

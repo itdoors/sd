@@ -1,0 +1,26 @@
+it_doors_pay_master_index:
+    path:     /itdoors/paymaster/index
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:index }
+
+it_doors_pay_master_new:
+    path:     /itdoors/paymaster/new
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:new }
+
+it_doors_pay_master_tab:
+    path:     /itdoors/paymaster/tab
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:tab }
+    
+# ajaxController
+it_doors_pay_master_ajax_remove:
+    path:     /itdoors/paymaster/ajax/remove/{id}
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:remove }
+    requirements:
+        id:  \d+
+        
+it_doors_pay_master_ajax_save_editable:
+    path:     /itdoors/paymaster/ajax/save/editable
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:editableSave }
+    
+it_doors_pay_master_ajax_status_list:
+    path:     /itdoors/paymaster/ajax/status/ist
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:statusList }

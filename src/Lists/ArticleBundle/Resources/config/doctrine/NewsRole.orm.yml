@@ -1,0 +1,27 @@
+Lists\ArticleBundle\Entity\NewsRole:
+    type: entity
+    table: news_role
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        vote:
+            type: boolean
+            nullable: true
+            column: vote
+            
+    manyToOne:
+        news:
+            targetEntity: Lists\ArticleBundle\Entity\Article
+            inversedBy: null
+            joinColumns:
+                news_id:
+                    referencedColumnName: id
+        roles:
+            targetEntity: SD\UserBundle\Entity\Group
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id

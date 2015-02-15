@@ -5,6 +5,10 @@ namespace Lists\DogovorBundle\Services;
 use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Response;
+use Lists\DogovorBundle\Entity\Dogovor;
+use Lists\DogovorBundle\Classes\DogovorAccessFactory;
+use SD\UserBundle\Entity\User;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 /**
  * Invoice Service class
@@ -16,7 +20,10 @@ class DogovorService
      * @var Container $container
      */
     protected $container;
-
+    /**
+     * @var Translator $translator
+     */
+    protected $translator;
     /**
      * __construct
      *
@@ -25,6 +32,7 @@ class DogovorService
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->translator = $container->get('translator');
     }
 
     /**
@@ -75,5 +83,83 @@ class DogovorService
         $em->flush();
 
         return 'ok: ' . $countOk . "\t\n" .' errors: ' . $countErr;
+    }
+    /**
+     * checkAccess
+     * 
+     * @param User    $user
+     * @param Dogovor $dogovor
+     * 
+     * @return mixed[]
+     */
+    public function checkAccess(User $user, Dogovor $dogovor = null)
+    {
+        $role = array();
+        $role[] = 'base';
+        if ($dogovor) {
+            $organization = $dogovor->getCustomer();
+            if ($organization) {
+                $managers = $organization->getOrganizationUsers();
+                foreach ($managers as $manager) {
+                    $rol = $manager->getRole();
+                    if ($rol && $rol->getLukey() == 'manager_organization' && $manager->getUser() == $user) {
+                        $role[] = 'manager_organization';
+                    }
+                }
+            }
+        }
+        if ($user->hasRole('ROLE_CONTROLLING')) {
+            $role[] = 'controlling';
+        }
+        if ($user->hasRole('ROLE_DOGOVORADMIN')) {
+            $role[] = 'admin';
+        }
+        if ($user->hasRole('ROLE_DOGOVOR_VIEWER')) {
+            $role[] = 'dogovor_viewer';
+        }
+        if ($user->hasRole('ROLE_SALES')) {
+            $role[] = 'sales';
+        }
+        if ($user->hasRole('ROLE_OPER')) {
+            $role[] = 'oper';
+        }
+
+        return DogovorAccessFactory::createAccess($role);
+    }
+    /**
+     * Returns choices for is active
+     *
+     * @return mixed[]
+     */
+    public function getIsActiveChoices()
+    {
+        return array(
+            'No' => $this->translator->trans("No", array(), 'messages'),
+            'Yes' => $this->translator->trans("Yes", array(), 'messages')
+        );
+    }
+    /**
+     * Returns choices for prolongation
+     *
+     * @return mixed[]
+     */
+    public function getProlongationChoices()
+    {
+        return array(
+            'No' => $this->translator->trans("No", array(), 'messages'),
+            'Yes' => $this->translator->trans("Yes", array(), 'messages')
+        );
+    }
+    /**
+     * Returns choices for mashtab
+     *
+     * @return mixed[]
+     */
+    public function getMashtabChoices()
+    {
+        return array(
+            'm_local' => $this->translator->trans("Local", array(), 'ListsDogovorBundle'),
+            'm_global' => $this->translator->trans("Global", array(), 'ListsDogovorBundle')
+        );
     }
 }

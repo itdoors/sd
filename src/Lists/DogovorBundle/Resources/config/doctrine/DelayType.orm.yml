@@ -1,0 +1,24 @@
+Lists\DogovorBundle\Entity\DelayType:
+    type: entity
+    table: delay_type
+    id:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            fixed: false
+            options:
+                comment: Тип дня отстрочки
+        shortName:
+            type: string
+            length: 255
+            fixed: false
+            column: short_name
+            options:
+                comment: Сокращеное название

@@ -6,7 +6,6 @@
         <li>
             <i class="fa fa-home"></i>
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
         </li>
         <li><a href="" title="{% trans %}Competitors{% endtrans %}">{% trans %}Competitors{% endtrans %}</a></li>
     </ul>
@@ -36,7 +35,7 @@
     {% if is_granted('ROLE_INTRANETADMIN') or is_granted('ROLE_DOGOVORADMIN') %}
     <div class="table-toolbar">
         <div class="btn-group">
-            <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}">
+            <a class="btn green" id="add_organization" href="{{ path('lists_organization_new') }}">
                 {% trans %}Add competitor{% endtrans %} <i class="fa fa-plus"></i>
             </a>
         </div>
@@ -44,8 +43,8 @@
         {% endif %}
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list') }}">
-                {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list')) }}
+            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list',{type:type}) }}">
+                {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list',{type:type})) }}
             </div>
         </div>
     </div>

@@ -1,27 +1,27 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
 <td>
-    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}">
+    <a href="{{ path('lists_dogovor_dogovor_show', { id: item.dogovorId }) }}">
         {{ item.dogovorId|e }}
     </a>
 </td>
 <td>{{ item.dogovorNumber|e }}</td>
 <td>
     {% if item.organizationId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.organizationId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.organizationId }) }}" target="_blank">
             {{ item.organizationName|e }}
         </a>
     {% endif %}
 </td>
 <td>
     {% if item.customerId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.customerId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.customerId }) }}" target="_blank">
             {{ item.customerName|e }}
         </a>
     {% endif %}
 </td>
 <td>
     {% if item.performerId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.performerId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.performerId }) }}" target="_blank">
             {{ item.performerName|e }}
         </a>
     {% endif %}
@@ -74,6 +74,7 @@
         </a>
     {% endif %}
 </td>
+{% if access.canProlongate %}
 <td>
     {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
     {% if needToProlongate %}
@@ -91,3 +92,4 @@
         </a>
     {% endif %}
 </td>
+{% endif %}

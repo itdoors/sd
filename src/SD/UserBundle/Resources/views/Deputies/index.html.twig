@@ -1,0 +1,113 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDUserBundle' %}
+{% block title %}{% trans %}Deputies{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Deputies{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('sd_user_deputies') }}" title="{% trans %}Deputies{% endtrans %}">{% trans %}Deputies{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/css/pages/profile.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins//select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-scrollable" style="clear: right;">
+                <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info" id="deputies_table">
+                    <thead>
+                        <tr role="row" class="heading">
+                            <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}№{% endtrans %}</th>
+                            <th width="15%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}Chief{% endtrans %}</th>
+                            <th width="30%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}Department{% endtrans %}</th>
+                            <th width="50%" class="sorting_disabled" role="columnheader" tabindex="0" rowspan="1" colspan="1">{% trans %}Deputies{% endtrans %}</th>
+                        </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                        {% for key,chief in chiefs %}
+                            <tr>
+                                <td>{{ key+1 }}</td>
+                                <td>
+                                    <a href="{{ path('sd_user_show', { id : chief['id'] }) }}">
+                                        {{ chief['lastName'] }} {{ chief['firstName'] }}
+                                    </a>
+                                </td>
+                                <td>{{ chief['name'] }}</td>
+                                <td>
+                                    <a href="#" class="deputies"
+                                                data-type="select2" 
+                                                data-pk="{{ chief['stuffId'] }}"
+                                                data-value="{% if chief['deputy'].deputyStuffs is defined %}
+                                                                {% for index,deputyStuff in chief['deputy'].deputyStuffs %}
+                                                                    {{ deputyStuff.user.id }}
+                                                                    {% if index+1 < chief['deputy'].deputyStuffs | length %},{% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}" 
+                                                data-original-title="{% trans %}Deputies{% endtrans %}">
+                                                            {% if chief['deputy'].deputyStuffs is defined %}
+                                                                {% for index,deputyStuff in chief['deputy'].deputyStuffs %}
+                                                                    {{ deputyStuff.user }}
+                                                                    {% if index+1 < chief['deputy'].deputyStuffs | length %},{% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $(document).ready(function(){
+            $.fn.editable.defaults.mode = 'inline';
+            $.each($('.deputies'), function(){
+                $(this).editable({
+                    url: '{{ path('sd_user_deputies_save') }}',
+                    source: '{{ path('sd_common_ajax_user_all_stuff') }}',
+                    emptytext: '{% trans %}Add deputy{% endtrans %}',
+                    allowClear: true,
+                    select2: {
+                        minimumInputLength: 0,
+                        width: 250,
+                        multiple: true,
+                        initSelection: function(element, callback) {
+                            return $.ajax({
+                                type: "GET",
+                                url: '{{ path('sd_common_ajax_user_by_ids') }}',
+                                dataType: 'json',
+                                data: { id: element.val()},
+                                success: function(data){
+                                	callback(data);
+                                }
+                            })
+                      }
+                   }
+                });
+            });
+        });
+    </script>
+{% endblock body %}

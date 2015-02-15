@@ -13,6 +13,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * UserController
@@ -134,6 +135,9 @@ class UserController extends BaseController
         } else {
             $options['settings'] = false;
         }
+        
+        $options['isAdmin'] = $isAdmin;
+        $options['currentUser'] = $isCurrentUser;
         $tabs = $service->getTabs($options);
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':show.html.twig', array(
@@ -148,7 +152,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Execute show action
+     * Execute showtabs action
      * 
      * @return string
      */
@@ -179,16 +183,19 @@ class UserController extends BaseController
         /** @var Usercontactinfo $usercontactinfo */
         $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
 
+        $coachStatus = $this->get('lists_coach.coach.service')->isCoach($userId);
 
         return $this->render('SDUserBundle:User:showTab' . $tab . '.html.twig', array(
+                'userId' => $userId,
                 'item' => $item,
                 'isAdmin' => $isAdmin,
                 'usercontactinfo' => $usercontactinfo,
+                'coachStatus' => $coachStatus
         ));
     }
 
     /**
-     * Execute show action
+     * Execute contactinfo action
      * 
      * @return string
      */
@@ -243,6 +250,70 @@ class UserController extends BaseController
                 'modelId' => $id,
                 'notice' => $notice
         ));
+    }
+
+    /**
+     * Renders Roles tab at user profile
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function showUserGroupsAndRolesAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $userRepository = $this->get('sd_user.repository');
+        $user = $userRepository->find($id);
+        $groups = $em->getRepository('SDUserBundle:Group')->findAll();
+
+        $userService = $this->container->get($this->service);
+        $data = $userService->getGroupsAndRolesForUser($user);
+
+        return $this->render('SDUserBundle:User:rolesList.html.twig', array(
+                'userId' => $id,
+                'groups' => $groups,
+                'roles' => $data['roles'],
+                'userGroups' => $data['groups'],
+                'userRoles' => $data['roles']
+        ));
+    }
+
+    /**
+     * Ajax user roles and groups editing
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function assignGroupOrRoleAction(Request $request)
+    {
+        $id = $request->get('id');
+        $action = $request->get('action');
+        $value = $request->get('value');
+        $checked = $request->get('checked') == 'true';
+
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+
+        $userRepository = $this->get('sd_user.repository');
+        $user = $userRepository->find($id);
+
+        $groupRepository = $em->getRepository('SDUserBundle:Group');
+
+        switch ($action) {
+            case 'groups':
+                $group = $groupRepository->find($value);
+                $checked ? $user->addGroup($group) : $user->removeGroup($group);
+                $um->updateUser($user);
+                break;
+
+            case 'roles':
+                //NOP
+                break;
+        }
+
+        return new Response();
     }
 
     /**
@@ -308,7 +379,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Executes new action
+     * Executes newstuff action
      * 
      * @param Request $request
      * 
@@ -331,12 +402,12 @@ class UserController extends BaseController
             try {
                 $user = $form->getData();
                 $formData = $request->request->get($form->getName());
-                $user->setBirthday(new \DateTime($formData['birthday']));
+//                $user->setBirthday(new \DateTime($formData['birthday']));
                 $user->setEnabled(true);
-
-
+                $user->setPassword('password');
                 $em->persist($user);
                 $em->flush();
+                $this->sendEmailUserAction($user);
 
                 $companystructure =
                     $em->getRepository('ListsCompanystructureBundle:Companystructure')
@@ -345,16 +416,16 @@ class UserController extends BaseController
                 $stuff = new Stuff();
 
                 $stuff->setUser($user);
-                $stuff->setMobilephone($formData['mobilephone']);
+                $stuff->setMobilephone('');
                 if ($companystructure) {
                     $stuff->setCompanystructure($companystructure);
                 }
-                if (!empty($formData['hiredate'])) {
-                    $stuff->setDateHire(new \DateTime($formData['hiredate']));
-                }
-                $stuff->setEducation($formData['education']);
-                $stuff->setIssues($formData['issues']);
+                $stuff->setEducation('');
+                $stuff->setIssues('');
                 $stuff->setStuffclass('stuff');
+                $status = $em->getRepository('ListsLookupBundle:Lookup')
+                    ->findOneBy(array('lukey' => 'worked'));
+                $stuff->setStatus($status);
 
                 $em->persist($stuff);
 
@@ -376,7 +447,7 @@ class UserController extends BaseController
         ));
     }
     /**
-     * Executes new action
+     * Executes uploadPhoto action
      * 
      * @param Request $request
      * 
@@ -392,7 +463,7 @@ class UserController extends BaseController
         $result = array();
 
         $em = $this->getDoctrine()->getManager();
-        $files=$request->files->get('userAvatarForm');
+        $files = $request->files->get('userAvatarForm');
 
         $file = $files['photo'];
         $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
@@ -424,5 +495,84 @@ class UserController extends BaseController
         }
 
         return new Response(json_encode($result));
+    }
+    /**
+     * sendEmailUser
+     * 
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    private function sendEmailUserAction ($user)
+    {
+        if (null === $user) {
+            return $this->render('FOSUserBundle:Resetting:request.html.twig', array(
+                'invalid_username' => ''
+            ));
+        }
+
+        if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
+            return $this->render('FOSUserBundle:Resetting:passwordAlreadyRequested.html.twig');
+        }
+
+        if (null === $user->getConfirmationToken()) {
+            /** @var $tokenGenerator \FOS\UserBundle\Util\TokenGeneratorInterface */
+            $tokenGenerator = $this->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
+
+        $template = $this->container->getParameter('sd_user.add.user.email.template');
+        $url = $this->generateUrl('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
+        $rendered = $this->renderView($template, array(
+            'user' => $user,
+            'confirmationUrl' => $url
+        ));
+        $renderedLines = explode("\n", trim($rendered));
+        $subject = $renderedLines[0];
+        $body = implode("\n", array_slice($renderedLines, 1));
+
+        $emailFrom = $this->container->getParameter('email.from');
+        $nameFrom = $this->container->getParameter('name.from');
+        $from = array($emailFrom => $nameFrom);
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($user->getEmail())
+            ->setBody($body);
+
+        $mailer = $this->container->get('mailer');
+        $mailer->send($message);
+
+        $user->setPasswordRequestedAt(new \DateTime());
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        $cron = $this->get('it_doors_cron.service');
+        $cron->addSendEmails();
+
+        return new RedirectResponse(
+            $this->generateUrl(
+                'fos_user_resetting_check_email',
+                array('email' => $this->getObfuscatedEmail($user))
+            )
+        );
+    }
+    /**
+     * Get the truncated email displayed when requesting the resetting.
+     *
+     * The default implementation only keeps the part following @ in the address.
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
+     * @return string
+     */
+    protected function getObfuscatedEmail(User $user)
+    {
+        $email = $user->getEmail();
+        if (false !== $pos = strpos($email, '@')) {
+            $email = '...' . substr($email, $pos);
+        }
+
+        return $email;
     }
 }

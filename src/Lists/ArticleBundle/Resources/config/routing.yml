@@ -30,3 +30,46 @@ list_article_vote_decision_show:
 list_article_vote_decision_add:
     pattern:  /dashboard/vote/decision/add
     defaults: { _controller: ListsArticleBundle:Decision:add }
+    
+# Product Blog
+list_article_blog:
+    pattern:  /dashboard/blog/{type}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:index, type:'' }
+    requirements:
+        type: manual|''
+    
+list_article_blog_list:
+    pattern:  /dashboard/blog/list
+    defaults: { _controller: ListsArticleBundle:ProdBlog:list }
+
+list_article_blog_show:
+    pattern:  /dashboard/blog/show/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:show }
+    
+list_article_blog_add:
+    pattern:  /dashboard/blog/add
+    defaults: { _controller: ListsArticleBundle:ProdBlog:add }
+    
+list_article_blog_edit:
+    pattern:  /dashboard/blog/edit/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:edit }
+    
+list_article_blog_delete:
+    pattern:  /dashboard/blog/delete/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:delete }
+
+list_article_blog_viewed:
+    pattern:  /dashboard/blog/viewed/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:setViewed }
+    
+list_article_blog_whoViewed:
+    pattern:  /dashboard/blog/whoViewed/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:whoViewed }    
+    
+list_article_blog_upload:
+    pattern:  /dashboard/blog/upload
+    defaults: { _controller: ListsArticleBundle:ProdBlog:upload }
+    
+list_article_blog_last:
+    pattern:  /dashboard/blog/last
+    defaults: { _controller: ListsArticleBundle:ProdBlog:getLastNew }

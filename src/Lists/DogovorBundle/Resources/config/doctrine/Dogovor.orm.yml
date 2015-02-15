@@ -18,113 +18,176 @@ Lists\DogovorBundle\Entity\Dogovor:
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: Название договора
         startdatetime:
             type: datetime
             nullable: false
+            options:
+                comment: Дата начала
         stopdatetime:
             type: datetime
             nullable: true
+            options:
+                comment: Дата окончания
         subject:
             type: string
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: Тема договора
         filepath:
             type: string
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: Название файла
         isActive:
             type: boolean
             nullable: true
             column: is_active
+            options:
+                comment: Статус договора (активный | не активный)
         mashtab:
             type: string
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: ?
         prolongation:
             type: boolean
             nullable: true
+            options:
+                comment: прологнация
         number:
             type: string
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: Номер договора
         total:
             type: float
             nullable: true
+            options:
+                comment: ?
         maturity:
             type: string
             length: 255
             fixed: false
             nullable: true
+            options:
+                comment: Отстрочка (старое поле)
+        delayComment:
+            type: string
+            length: 255
+            nullable: true
+            column: delay_comment
+            options:
+                comment: Комментарий к отстрочке
         completionNotice:
             type: boolean
             nullable: true
             column: completion_notice
+            options:
+                comment: ?
         paymentDeferment:
             type: integer
             unsigned: false
             nullable: true
             column: payment_deferment
+            options:
+                comment: Отстрочка (количество дней)
         prolongationTerm:
             type: string
             length: 255
             fixed: false
             nullable: true
             column: prolongation_term
+            options:
+                comment: ?
         prolongationDate:
             type: datetime
             nullable: true
             column: prolongation_date
+            options:
+                comment: Дата пролонгации
         launchDate:
             type: date
             nullable: true
             column: launch_date
+            options:
+                comment: ?
         summMonthVat:
             type: float
             nullable: true
             column: summ_month_vat
+            options:
+                comment: ?
         plannedPf1:
             type: float
             nullable: true
             column: planned_pf1
+            options:
+                comment: Плановый ПФ1
         plannedPf1Percent:
             type: float
             nullable: true
             column: planned_pf1_percent
+            options:
+                comment: Плановый ПФ1, %
         customerId:
             type: integer
             column: customer_id
+            options:
+                comment: Заказчик
         performerId:
             type: integer
             column: performer_id
+            options:
+                comment: Исполнитель
         sallerId:
             type: integer
             column: saller_id
             nullable: true
+            options:
+                comment: Кто продал
         organizationId:
             type: integer
             column: organization_id
             nullable: true
+            options:
+                comment: Организация (старое поле, нужно удалить)
         cityId:
             type: integer
             column: city_id
+            options:
+                comment: Город
         dogovorTypeId:
             type: integer
             column: dogovor_type_id
+            options:
+                comment: Тип договора
         dogovorGuid:
             type: string
             length: 512
             column: dogovor_guid
+            options:
+                comment: Guid из 1С
         createDateTime:
             type: datetime
             nullable: true
             column: create_date_time
+            options:
+                comment: Дата созадния договора
         deletedAt:
             type: datetime
             nullable: true
+            options:
+                comment: Дата удаления договора
     manyToOne:
         customer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
@@ -211,6 +274,12 @@ Lists\DogovorBundle\Entity\Dogovor:
             targetEntity: SD\UserBundle\Entity\User
             joinColumns:
                 saller_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        delayType:
+            targetEntity: DelayType
+            joinColumns:
+                delay_type_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

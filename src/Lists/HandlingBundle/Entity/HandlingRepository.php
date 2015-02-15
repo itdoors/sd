@@ -47,13 +47,9 @@ class HandlingRepository extends BaseRepository
 
         $this->processOrdering($sql);
 
-        $query = $sql
-//                ->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")
-                ->getQuery();
+        $query = $sql->getQuery();
 
-        $count = $sqlCount
-//                ->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")
-                ->getQuery()->getSingleScalarResult();
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $count);
 
@@ -124,8 +120,7 @@ class HandlingRepository extends BaseRepository
                             SDUserBundle:User u
                         LEFT JOIN u.handlingUsers hu
                         WHERE hu.handlingId = h.id
-                    ), ','
-                ) as fullNames"
+                    ), ',') as fullNames"
             )
             ->addSelect(
                 "
@@ -191,7 +186,7 @@ class HandlingRepository extends BaseRepository
     public function processCount($sql)
     {
         $sql
-            ->select('COUNT(DISTINCT h.id) as handlingcount');
+            ->select('COUNT(DISTINCT h.id)');
 
     }
 
@@ -217,7 +212,7 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('h.status', 'status')
             ->leftJoin('h.result', 'result')
             ->leftJoin('h.handlingUsers', 'handlingUsers')
-             ->leftJoin('h.HandlingMessages', 'hm', 'WITH', $subQueryCase)
+            ->leftJoin('h.HandlingMessages', 'hm', 'WITH', $subQueryCase)
             ->leftJoin('handlingUsers.user', 'users')
             ->leftJoin('handlingUsers.lookup', 'lookup');
 
@@ -243,9 +238,7 @@ class HandlingRepository extends BaseRepository
      */
     public function processOrdering($sql)
     {
-        $sql
-            //->orderBy('h.createdatetime', 'DESC');
-            ->addOrderBy('h.id', 'DESC');
+        $sql->addOrderBy('h.id', 'DESC');
     }
 
     /**
@@ -264,6 +257,12 @@ class HandlingRepository extends BaseRepository
                 }
                 switch ($key) {
                     case 'organization_id':
+                        $sql
+                            ->andWhere("h.organization_id = :organizationId");
+
+                        $sql->setParameter(':organizationId', $value);
+                        break;
+                    case 'organization':
                         $sql
                             ->andWhere("h.organization_id = :organizationId");
 

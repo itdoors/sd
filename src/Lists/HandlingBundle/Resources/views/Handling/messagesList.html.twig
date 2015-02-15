@@ -1,0 +1,244 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+<div class="row">
+    <div class="col-md-12">
+        <ul class="timeline">
+            {% for item in messages %}
+                <li id="handling_message_{{ item.id }}" class="timeline-{% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}blue{% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
+                    <div class="timeline-time">
+                            <span class="date">{{ item.createdate|date('d.m.Y') }}</span>
+                            <span class="time">{{ item.createdate|date('H:i') }}</span>
+                    </div>
+                    <div class="timeline-icon">
+                            <i class="fa 
+                               {% if item.type.id == 3 %}
+                                    fa-user
+                               {% elseif item.type.id == 5 %}
+                                    fa-suitcase
+                               {% elseif item.type.id == 1 %}
+                                    fa-envelope-o
+                               {% elseif item.type.id == 6 %}
+                                    fa-comments
+                               {% elseif item.type.id == 7 %}
+                                    fa-comments
+                               {% else %}
+                                    fa-tachometer
+                               {% endif %}
+                               "></i>
+                    </div>
+                    <div class="timeline-body">
+                            <h2>{{ item.type }} | {{ item.contact }} | {{ item.user }}{% if item.isBusinessTrip %} | {% trans %}Business trip{% endtrans %}{% endif %}</h2>
+                            <div class="timeline-content">
+                                    {{ item.description }} <br /><br>
+                                    {% if usersFromOurSide['message'~item.id] is not empty%}
+                                        {% trans %}Persons from our side{% endtrans %}: <br>
+                                        {% for person in usersFromOurSide['message'~item.id] %}
+                                            &#9679; {{ person.handlingUser.user.fullName }}<br>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <br>
+                                    {% if usersFromTheirSide['message'~item.id] is not empty%}
+                                        {% trans %}Persons from their side{% endtrans %}: <br>
+                                        {% for person in usersFromTheirSide['message'~item.id] %}
+                                            &#9679; {{ person.modelContact.fullName }}<br>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if item.files | length > 0 %}
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
+                                                <div class="panel-body">
+                                                     {% for key,file in item.files %}
+                                                    <a href="{{  asset(file.getWebPath()) }}" target="_blank">
+                                                        {% if item.filename and key == 0 %}
+                                                            {{ item.filename }}
+                                                        {% else %}
+                                                            {% trans %}Noname File{% endtrans %}
+                                                        {% endif %}
+                                                    </a><br>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                    {% endif %}
+                                    {% if calls[item.id] is defined %}
+                                        {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
+                                    {% endif %}
+                            </div>
+                    </div>
+                </li>
+                                                
+            {% endfor %}
+						{#<li class="timeline-yellow">
+							<div class="timeline-time">
+								<span class="date">
+								4/10/13 </span>
+								<span class="time">
+								18:30 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-trophy"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>ICT 2013 20th International Conference</h2>
+								<div class="timeline-content">
+									<img class="timeline-img pull-left" src="../../assets/admin/pages/media/blog/2.jpg" alt="">
+									Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo. Winter purslane courgette pumpkin quandong komatsuna fennel green bean cucumber watercress. Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo.
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="nav-link pull-right">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-blue">
+							<div class="timeline-time">
+								<span class="date">
+								4/11/13 </span>
+								<span class="time">
+								12:04 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-video-camera"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>Management Meeting</h2>
+								<div class="timeline-content">
+									<img class="timeline-img pull-right" src="../../assets/admin/pages/media/blog/1.jpg" alt="">
+									Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi..
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="nav-link">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-green">
+							<div class="timeline-time">
+								<span class="date">
+								4/13/13 </span>
+								<span class="time">
+								05:36 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-comments"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>New Project Launch</h2>
+								<div class="timeline-content">
+									<img class="timeline-img pull-left" src="../../assets/admin/pages/media/blog/3.jpg" alt="">
+									Winter purslane courgette pumpkin quandong komatsuna fennel green bean cucumber watercress. Pea sprouts wattle seed rutabaga okra yarrow cress avocado grape radish bush tomato ricebean. Pea sprouts wattle seed rutabaga okra yarrow cress avocado grape radish bush tomato ricebean.
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="nav-link">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-purple">
+							<div class="timeline-time">
+								<span class="date">
+								4/15/13 </span>
+								<span class="time">
+								13:15 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-music"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>Promotion Day</h2>
+								<div class="timeline-content">
+									<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 175px;"><div class="scroller" data-height="175px" data-always-visible="1" data-rail-visible1="1" data-initialized="1" style="overflow: hidden; width: auto; height: 175px;">
+										<p>
+											<img class="timeline-img pull-right" src="../../assets/admin/pages/media/blog/4.jpg" alt="">
+											Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi. coriander bitterleaf epazote radicchio shallot winter purslane collard.
+										</p>
+										<p>
+											 Coriander bitterleaf epazote radicchio shallot winter purslane collard. Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi.
+										</p>
+										<p>
+											<img class="timeline-img pull-left" src="../../assets/admin/pages/media/blog/6.jpg" alt=""> Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi radicchio shallot winter purslane collard greens spring onion squash lentil.
+										</p>
+										<p>
+											 Coriander bitterleaf epazote radicchio shallot winter purslane collard. Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi.
+										</p>
+									</div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 85.0694444444444px; background: rgb(187, 187, 187);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(234, 234, 234);"></div></div>
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="btn blue">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-red">
+							<div class="timeline-time">
+								<span class="date">
+								4/16/13 </span>
+								<span class="time">
+								21:30 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-rss"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>Daily Feeds</h2>
+								<div class="timeline-content">
+									<img class="timeline-img pull-left" src="../../assets/admin/pages/media/blog/5.jpg" alt="">
+									Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo. Sierra leone bologi komatsuna celery peanut swiss chard silver beet squash dandelion maize chicory burdock tatsoi dulse radish wakame beetroot.
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="btn green pull-right">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-grey">
+							<div class="timeline-time">
+								<span class="date">
+								4/17/13 </span>
+								<span class="time">
+								12:11 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>Staff Meeting</h2>
+								<div class="timeline-content">
+									 Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce. Celery coriander bitterleaf epazote radicchio shallot winter purslane collard greens spring onion squash lentil. Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi.
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="nav-link pull-right">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-blue timeline-noline">
+							<div class="timeline-time">
+								<span class="date">
+								4/18/13 </span>
+								<span class="time">
+								09:56 </span>
+							</div>
+							<div class="timeline-icon">
+								<i class="fa fa-bar-chart-o"></i>
+							</div>
+							<div class="timeline-body">
+								<h2>Demo Europe 2013</h2>
+								<div class="timeline-content">
+									<img class="timeline-img pull-left" src="../../assets/admin/pages/media/blog/2.jpg" alt="">
+									Parsnip lotus root celery yarrow seakale tomato collard greens tigernut epazote ricebean melon tomatillo soybean chicory broccoli beet greens peanut salad. Lotus root burdock bell pepper chickweed shallot groundnut pea sprouts welsh onion wattle seed pea salsify turnip scallion peanut arugula bamboo shoot onion swiss chard.
+								</div>
+								<div class="timeline-footer">
+									<a href="#" class="nav-link">
+									Read more <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+							</div>
+						</li>#}
+        </ul>
+    </div>
+</div>

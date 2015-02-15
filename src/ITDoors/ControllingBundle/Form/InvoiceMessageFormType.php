@@ -43,6 +43,9 @@ class InvoiceMessageFormType extends AbstractType
             ->add('note', 'textarea', array(
                 'required' => false,
                 'mapped' => false
+            ))
+            ->add('file', 'file', array(
+                'required' => false
             ));
 
         /** @var User $user */
@@ -55,7 +58,6 @@ class InvoiceMessageFormType extends AbstractType
                 'data' => $user
             ))
             ->add('createdate', 'hidden');
-//        }
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
@@ -69,8 +71,7 @@ class InvoiceMessageFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'ITDoors\ControllingBundle\Entity\InvoiceMessage',
-            'validation_groups' => array('new'),
-            'translation_domain' => 'ListsHandlingBundle'
+            'translation_domain' => 'ITDoorsControllingBundle'
         ));
     }
 

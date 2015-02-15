@@ -1,0 +1,33 @@
+<a class="btn green margin-bottom-20" id="project-add-message-add-btn" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Add message{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+    'selector' : '#project-add-message-add-btn',
+    'formType' : 'addMessageForm',
+    'successFunctions' : {
+        'messages_list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'lists_project.service',
+        'method' : 'addMessageFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'lists_project.service',
+        'method' : 'saveAddMessageForm'
+    },
+    'defaults' : {
+        'project' : object.id
+    },
+    'target' : '#create-message-in-project',
+    'html' : 'ListsProjectBundle:Form:addMessageForm.html.twig'
+}) }}
+<div id="create-message-in-project" style="display: none;"></div>
+<script>
+    $(document).ready(function(){
+        $('a#project-add-message-add-btn').on('click', function() {
+            var $target = $(this);
+            $('html, body').animate({scrollTop: ($target.offset().top-$target.height()-30)}, 1000);
+        });
+    });
+</script>
+

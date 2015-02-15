@@ -10,7 +10,7 @@ Past event: Прошедшее
 Select type active: Выберите тип активности
 
 Date start: Дата начала
-Date stop: Дата окончания
+Date stop: Срок выполнения
 Enter date start: Введите дату начала
 Enter date stop: Введите дату окончания
 Title: Название
@@ -43,7 +43,7 @@ done: Выполнено
 closed: Закрыто
 created: Создано
 
-End date: Дата окончания
+End date: Срок выполнения
 Description: Описание задачи
 Title: Название
 My role: Моя роль
@@ -100,7 +100,7 @@ Comments: Комментарии
 
 Accepted the date request: Принял запрос переноса даты
 Rejected the date request: Отказал в запросе переноса даты
-Changed the end date: Сменил дату окончания
+Changed the end date: Сменил срок выполнения
 Made the end date request: Создал запрос на перенос даты окончания
 Changed the task stage: Изменил статус задачи
 List tasks: Список задач
@@ -114,7 +114,7 @@ Contol: Управление
 
 Change the end date: Перенести срок исполнения
 
-New date end: Новая дата окончания
+New date end: Новый срок выполнения
 Change: Изменить
 Files: Файлы
 Add file: Добавить файл
@@ -165,7 +165,7 @@ New matching result: Новый результат согласования
 Task: Задача
 New date request: Новый запрос переноса даты
 Requested date: Запрошенная дата
-New date end: Новая дата окончания
+New date end: Новый срок выполнения
 New file uploaded: Был загружен новый файл
 File name: Имя файла
 Link: Ссылка
@@ -183,8 +183,13 @@ On performing: На исполнении
 On controlling: На контроле
 On matching: На согласовании
 On viewing: На ознакомлении
-End date to this task is soon: Скоро наступит дата окончания задачи
+End date to this task is soon: Скоро наступит срок выполнения задачи
 Task end date soon: Срок задачи подходит к концу
-Task end date: Дата окончания
+Task end date: Срок выполнения
 Make task done: Установил, что задача выполнена
 Checking by controller: Проверяется контролирующим
+Print: Распечатать
+Show list: Показать
+Hide list: Скрыть
+Add matcher: Добавить согласующего
+Added matcher: Добавил согласующего

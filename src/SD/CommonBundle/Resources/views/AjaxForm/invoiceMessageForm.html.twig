@@ -5,12 +5,12 @@
         <div class="portlet box green">
             <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Create New Message{% endtrans %}</div></div>
             <div class="portlet-body">
-                {% if form.vars.valid %}
-                {% else %}
-                <div class="alert alert-danger">
-                    <button class="close" data-close="alert"></button>
-                    {{ form_errors(form) }}
-                </div>
+                {% if form.vars.valid == false %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
                 {% endif %}
 
                 {{ form_start(form, {
@@ -37,6 +37,11 @@
                                 <div class="form-group">
                                     {{ form_label(form.contactid, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
                                     {{ form_widget(form.contactid, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                </div>
+                                <div class="form-group{% if form.file.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.file, 'Scan document'|trans, {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.file, {'attr' : {'class' : 'form-control', 'placeholder': 'Scan document', 'accept' : 'application/pdf, image/jpeg'} } ) }}
+                                    {{ form_errors(form.file) }}
                                 </div>
 
                             </div>

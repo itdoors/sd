@@ -54,3 +54,7 @@ Lists\IndividualBundle\Entity\Individual:
             fixed: false
             nullable: true
             column: phone
+    manyToMany:
+        actions:
+            targetEntity: Lists\CoachBundle\Entity\Action
+            mappedBy: individuals

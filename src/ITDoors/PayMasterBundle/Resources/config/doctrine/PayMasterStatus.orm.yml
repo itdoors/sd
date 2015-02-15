@@ -1,0 +1,17 @@
+# src/ITDoors/PayMasterBundle/Resources/config/doctrine/PayMasterStatus.orm.yml
+ITDoors\PayMasterBundle\Entity\PayMasterStatus:
+    type: entity
+    table: pay_master_status
+    repositoryClass: ITDoors\PayMasterBundle\Entity\PayMasterStatusRepository
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            options:
+                comment: Название статуса платежа

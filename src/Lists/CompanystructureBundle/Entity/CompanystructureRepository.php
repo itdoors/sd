@@ -30,6 +30,39 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Searches all chiefs of all Companystructures
+     *
+     * @param bool $withHidden
+     *
+     * @return array
+     */
+    public function getAllChiefs($withHidden = false)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('c.stuffId')
+            ->addSelect('c.name')
+            ->addSelect('u.firstName')
+            ->addSelect('u.lastName')
+            ->addSelect('u.id')
+            ->addSelect('d as deputy')
+            ->join('SD\UserBundle\Entity\Stuff', 's', 'WITH', 'c.stuffId = s.id')
+            ->leftJoin('SD\UserBundle\Entity\Deputy', 'd', 'WITH', 'c.stuffId = d.forStuff')
+            ->join('s.user', 'u')
+            ->where($qb->expr()->isNotNull('c.stuffId'))
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery();
+
+        if (!$withHidden) {
+            $qb->andWhere($qb->expr()->eq('c.is_hidden', 'false'));
+        }
+
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
+    }
+
     /**
      * Returns results for interval future invoice
      * 
@@ -142,4 +175,75 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $entity;
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param ListsCompanystructureBundle:Companystructure $node
+     * @param integer                                      $level
+     * 
+     * @return Companystructure
+     */
+    public function getParent ($node, $level)
+    {
+        $result = null;
+        if ($node->getLevel() == 0) {
+            $result = null;
+        } elseif ($node->getLevel() == $level) {
+            $result = $node;
+        } elseif ($node->getLevel() > $level) {
+            $result = $this->getParent($node->getParent(), $level);
+        } else {
+            throw new \Exception('Wrong param');
+        }
+
+        return $result;
+    }
+
+    // @codingStandardsIgnoreStart
+    /**
+     * @see getChildrenQuery
+     */
+    public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        $qb = $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode);
+        if (!$withHidden)
+            $qb->andWhere($qb->expr()->eq('node.is_hidden', 'false'));
+    
+        return $qb->getQuery();
+    }
+
+    /**
+     * @see getChildren
+     */
+    public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        $q = $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+
+        return $q->getResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildren($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false, $withHidden = false)
+    {
+        return $this->children($node, $direct, $sortByField, $direction, $includeNode, $withHidden);
+    }
+    // @codingStandardsIgnoreEnd
 }

@@ -1,0 +1,129 @@
+Project: Проект
+Create tender: Cоздание тендера
+create tender: создание тендера
+Dashboard: Рабочий стол
+Tenders: Тендеры
+Create: Создать
+Organization name: Название оранизации
+Enter EDRPOU or name organization: Введите ЕДРПОУ или название оранизации
+VDZ: ВДЗ
+Advert: Объявления
+Type of procedure: Процедура закупки
+Place: Место
+Contract time: Срок действия договора
+Datetime deadline: Дата и время конечного срока
+Datetime opening: Дата и время раскрытия
+Software: Обеспечение
+Yes: Да
+No: Нет
+Kveds: КВЕДы
+Expected value: Ожидаемая стоимость закупки
+Square: Площадь
+Enter square: Введите площадь
+Branch: Отрасль
+Description: Описание
+Enter vdz: Введите ВДЗ
+Enter advert: Введите объявление
+Enter type of procedure: Введите процедуру закупки
+Enter place: Введите место
+Enter contract time: Введите срок действия договора
+Enter datetime deadline: Введите дату и время подачи тендера
+Enter datetime opening: Введите дату и время раскрытия тендера
+Enter software: Введите обеспечение
+Select kveds: Выберите КВЕДы
+Enter budget: Введите бюджет
+Enter square: Введите площадь
+Enter description: Введите описание
+Select branch: Выберите отрасль
+You have some form errors. Please check below.: При заполнении формы допущены ошибки. Пожалуйста, перепроверьте данные.
+Project status: Статус проекта
+New: Новый
+User created: Автор проекта
+Date created: Дата создания
+State tender: Государственный тендер
+See state tender: Просмотр государственного тендера
+see state tender: просмотр государственного тендера
+Tender: Тендер
+Enter value: Введите значение
+Budget: Бюджет
+Participation: Участие
+Reason: Причина
+Close project: Закрыть проект
+Select service offered: Выберите услуги
+PF: ПФ1
+Enter PF: Введите ПФ1
+State tenders: Государственные тендеры
+List of tenders: Список тендеров
+list of tenders: списко тендеров
+Projects: Проекты
+Add new: Добавить новый
+Select participation: Укажите участие
+Enter reason: Введите причину
+Closed: Закрыт
+Select status: Выберите статус
+Customer: Заказчик
+Responsibility: Отвественный
+Managers: Менеджеры
+Manager project: Менеджер прокта
+Manager: Менеджер
+FirstName, LastName: Имя, Фамилия
+Mobile: Мобильный
+Role: Роль
+Percentage of participation: Процент участия
+Action: Действия
+Add manager: Добавить менеджера
+Add manager in project: Добавить менеджера в проект
+Save: Сохранить
+Cancel: Отмена
+Delete: Удалить
+Delete manager: Удалить менеджера
+Contacts: Контакты
+Add contact: Добавить контакт
+Organization: Организация
+Participants: Участники
+Add participant: Добавить участника
+Winner: Победитель
+Summa: Сумма
+Name: Название
+Documents: Документы
+Document: Документ
+Author: Автор
+Date upload: Дата загрузки
+Add document: Добавить документ
+dd.mm.yyyy: дд.мм.гггг
+dd.mm.yyyy hh:mm: дд.мм.гггг чч:мм
+Upload new document: Загрузить новый документ
+Participant: Участник
+Select participant: Выберите участника
+Enter summa: Введите сумму
+Create project: Создать проект
+create project: создать проект
+Create date: Дата создания проекта
+Enter create date: Введите дату создания проекта
+Type: Тип
+Select type: Выберите тип
+Negotiation procedure: Переговорная процедура
+Commercial tender: Коммерческий тендер
+Electronic trading: Електронные торги
+Not approved by the manager: Не утвержден менеджером
+See project: Просмотр проекта
+list of projects: список проектов
+List of projects: Список проектов
+Confirm: Подтвердить
+Select confirm: Укажите подтверждение
+Confirm project: Подтвердить проект
+Status: Статус
+No confirm: Не подтвержден
+Closed: Закрыт
+Messages: Обращения
+Add message: Добавить обращение
+Create new message: Создать новое обращение
+Current message: Текущее обращение
+Planned message: Следущее обращение
+Event datetime: Дата обращения
+Contact: Контакт
+Select contact: Выберите контакт
+Type document: Тип документа
+Download please: Загрузите пожалуйста документ
+Attached files: Прикрепленные файлы
+Add a file: Добавить файл

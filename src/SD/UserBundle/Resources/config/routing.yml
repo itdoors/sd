@@ -31,6 +31,14 @@ sd_user_new_stuff:
 sd_user_new:
     pattern:  /user/new
     defaults: { _controller: SDUserBundle:User:new }
+    
+sd_user_deputies:
+    pattern:  /user/deputies
+    defaults: { _controller: SDUserBundle:Deputies:index }
+    
+sd_user_deputies_save:
+    pattern:  /user/deputies/save
+    defaults: { _controller: SDUserBundle:Deputies:save }
 
 sd_user_change_password_form:
     pattern:  /user/change_password_form/{id}
@@ -39,6 +47,26 @@ sd_user_change_password_form:
 sd_user_resetting_send_email:
     pattern:  /resetting/user/send-email
     defaults: { _controller: SDUserBundle:Resetting:sendEmail }
+    
+sd_user_assign_group_or_role:
+    pattern:  /user/send-email
+    defaults: { _controller: SDUserBundle:User:assignGroupOrRole }
+    
+sd_user_positions_groups:
+    pattern:  /user/positions
+    defaults: { _controller: SDUserBundle:UserPositions:index }
+    
+sd_user_ajax_groups_by_ids:
+    pattern:  /user/groups_by_ids
+    defaults: { _controller: SDUserBundle:UserPositions:groupsByIds }
+    
+sd_user_ajax_groups:
+    pattern:  /user/groups
+    defaults: { _controller: SDUserBundle:UserPositions:groups }
+    
+sd_user_ajax_position_save_groups:
+    pattern:  /user/position/save groups
+    defaults: { _controller: SDUserBundle:UserPositions:saveGroups }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
@@ -64,3 +92,43 @@ fos_user:
 fos_user_upload_photo:
     pattern:  /user/photo/upload
     defaults: { _controller: SDUserBundle:User:uploadPhoto }
+
+sd_user_show_login_history:
+    pattern:  /user/loginHistory/{id}
+    defaults: { _controller: SDUserBundle:UserStatistic:showLoginHistory }
+    
+sd_user_show_groups_and_roles:
+    pattern:  /user/groups_and_roles/{id}
+    defaults: { _controller: SDUserBundle:UserStatistic:showUserGroupsAndRoles }
+    
+sd_user_active_users:
+    pattern:  /users/online
+    defaults: { _controller: SDUserBundle:UserStatistic:activeUsers }
+    
+sd_user_kill_users:
+    pattern:  /user/kill
+    defaults: { _controller: SDUserBundle:UserStatistic:kill }
+    
+sd_user_time_online:
+    pattern:  /user/timeOnline
+    defaults: { _controller: SDUserBundle:UserStatistic:timeOnline }
+    
+sd_user_time_online_list:
+    pattern:  /user/timeOnline/list
+    defaults: { _controller: SDUserBundle:UserStatistic:timeOnlineList }
+    
+sd_user_statistic_for_users:
+    pattern:  /user/timeOnline/statistic
+    defaults: { _controller: SDUserBundle:UserStatistic:statisticForUsers }
+    
+sd_user_find_inactive_users:
+    pattern:  /user/timeOnline/inactiveUsers
+    defaults: { _controller: SDUserBundle:UserStatistic:findInactiveUsers }
+    
+sd_user_keep_alive:
+    pattern:  /user/keepAlive
+    defaults: { _controller: SDUserBundle:UserStatistic:keepAlive }
+    
+sd_user_stat_download:
+    pattern:  /user/stat_download
+    defaults: { _controller: SDUserBundle:UserStatistic:downloadStatistic }

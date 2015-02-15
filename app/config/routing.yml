@@ -1,3 +1,35 @@
+lists_project:
+    resource: "@ListsProjectBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_api:
+    resource: "@ITDoorsApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_calculate:
+    resource: "@ITDoorsCalculateBundle/Resources/config/routing.yml"
+    prefix:   /
+
+i_tdoors_file_access:
+    resource: "@ITDoorsFileAccessBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_pay_master:
+    resource: "@ITDoorsPayMasterBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_coach:
+    resource: "@ListsCoachBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_geo:
+    resource: "@ITDoorsGeoBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_helper:
+    resource: "@ITDoorsHelperBundle/Resources/config/routing.yml"
+    prefix:   /
+
 sd_activity:
     resource: "@SDActivityBundle/Resources/config/routing.yml"
     prefix:   /
@@ -90,6 +122,10 @@ lists_handling:
     resource: "@ListsHandlingBundle/Resources/config/routing.yml"
     prefix:   /
 
+lists_mpk:
+    resource: "@ListsMpkBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_lookup:
     resource: "@ListsLookupBundle/Resources/config/routing.yml"
     prefix:   /
@@ -117,3 +153,7 @@ lists_organization:
 fos_user_group:
     resource: "@FOSUserBundle/Resources/config/routing/group.xml"
     prefix: /group
+
+itd:
+    resource: "@MainErrorBundle/Resources/config/routing.yml"
+    prefix: /

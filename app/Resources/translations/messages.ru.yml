@@ -74,6 +74,7 @@ New Dogovor: Новый договор
 #CRM
 #contacts 
 Position: Должность
+Positions: Должности
 Birthday: Дата рождения
 Email: Email
 Mobile: Мобильный
@@ -160,9 +161,43 @@ Analytics: Аналитика
 My tasks: Мои задачи
 Impel griffin: Импел Гриффин
 Structure company: Структура компании
+Active users: Сотрудники он-лайн
+Time online: Время он-лайн
+Training: Обучение
 
 Holidays: Праздники
 Catalog: Справочник
 
 This field is required.: Это поле обязательное для заполнения.
 Please enter a valid email address.: Пожалуйста введите правильный email адрес
+Organizer: Органайзер
+
+Statistic: Статистика
+
+My news: Мои новости
+My manuals: Мои инструкции
+You have: У Вас
+new messages: новых сообщений
+See all messages: Просмотреть все
+Ok: Ознакомлен!
+
+# Истечение сессий
+Your session is about to expire.: Время Вашей сессии истекло.
+You session will be locked in: Сессия будет заблокирована через
+Logout in: Выход через
+seconds.: секунд.
+Do you want to continue your session?: Хотите продолжить?
+No, Logout: Нет, выйти
+Yes, Keep Working: Да, продолжить
+Want to leave?: Уже уходите?
+Session will be closed automatically.: Сессия будет закрыта автоматически.
+Appointment: Назначение
+Deputies: Заместители
+Calculator: Калькулятор
+Organization don`t found: Организация не найдена
+Create tender: Создать тендер
+List tenders: Список тендеров
+Activies: Активные
+Closed: Закрытые
+List project: Список проектов
+Add a file: Добавить файл

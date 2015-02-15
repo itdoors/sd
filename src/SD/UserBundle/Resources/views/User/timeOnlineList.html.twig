@@ -1,0 +1,111 @@
+{% trans_default_domain 'SDUserBundle' %}
+
+<div class="navigation">
+    {{ ajax_paginator_render(
+            items, namespase, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+<div class="table-scrollable" style="clear: right">
+    {% if items|length %}
+        <table class="table table-striped table-bordered table-advance table-hover" id="user-list">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" class="group-checkable" data-name="users">
+                </th>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Last name{% endtrans %} </th>
+                <th>{% trans %}First name{% endtrans %} </th>
+                <th>{% trans %}Middle name{% endtrans %} </th>
+                <th>{% trans %}Mobile phone{% endtrans %} </th>
+                <th>{% trans %}Email{% endtrans %} </th>
+                <th>{% trans %}Position{% endtrans %} </th>
+                <th>{% trans %}Subdivision{% endtrans %} </th>
+                <th>{% trans %}Status{% endtrans %} </th>
+                <th>{% trans %}Fired{% endtrans %} </th>
+            </tr>
+            </thead>
+            {% for item in items %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>
+                        <input name="users[]" type="checkbox" class="checkboxes" value="{{ item.id }}">
+                    </td>
+                    <td>
+                        <a href="{{ path('sd_user_show', { id : item.id }) }}">
+                            {{ item.id|e }}
+                        </a>
+                    </td>
+                    <td>{{ item.lastName|e }}</td>
+                    <td>{{ item.firstName|e }}</td>
+                    <td>{{ item.middleName|e }}</td>
+                    <td>{{ item.mobilephone }} </td>
+                    <td>{{ item.email|e }}</td>
+                    <td>{{ item.position|e }}</td>
+                    <td>{{ item.company|e }}</td>
+                    <td>{% if item.locked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
+                    <td>{{ item.statusName|e }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</div>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            items, namespase, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+<a class="btn green" style="float:right" id="add-to-chart">{% trans %}Add to chart{% endtrans %}</a>
+
+<script>
+    $(document).ready(function(){
+    	$('.checkboxes, .group-checkable').uniform();
+        $('.group-checkable').change(function(){
+            var name = $(this).data('name');
+            $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
+            $.each($('input[name="'+name+'[]"]'), function(key, val){
+                    $(val).uniform();
+            });
+        });
+        $('#add-to-chart').click(function(){
+        	var ids = $('input[name="users[]"]:checked').map(function(){
+                return $(this).val();
+            }).toArray();
+            var start = $('#reportrange').data('daterangepicker').startDate;
+            var end = $('#reportrange').data('daterangepicker').endDate;
+
+            // check if an element exists in array using a comparer function
+            // comparer : function(currentElement)
+            Array.prototype.inArray = function(comparer) { 
+                for(var i=0; i < this.length; i++) { 
+                    if(comparer(this[i])) return true; 
+                }
+                return false; 
+            }; 
+    
+            // adds an element to the array if it does not already exist using a comparer 
+            // function
+            Array.prototype.pushIfNotExist = function(element, comparer) { 
+                if (!this.inArray(comparer)) {
+                    this.push(element);
+                }
+            };
+            
+            ids.forEach(
+        	    function addUser(value) {
+            	    var user = {id:value, name:null, online:null, total:null};
+        	    	users.pushIfNotExist(user, function(e) { 
+                        return e.id == user.id; 
+                    });
+            	}
+            );
+            
+            generateChartData(start, end);
+        });
+    });
+</script>

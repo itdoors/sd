@@ -1,0 +1,114 @@
+{% trans_default_domain 'ListsProjectBundle' %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        {% if access.canEditProjectSimple %}
+            $('.editable-project').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                pk: {{object.id}}
+            });
+            $('#status').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_project_ajax_search_status_simple') }}'
+            });
+            $('#services').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_project_ajax_services_simple_search') }}',
+                select2: {
+                    multiple: true,
+                    width: '250px',
+                    initSelection: function(element, callback) {
+                        return $.ajax({
+                            type: "GET",
+                            url: '{{ path('lists_project_ajax_services_by_ids') }}',
+                            dataType: 'json',
+                            data: { ids: element.val()},
+                            success: function(data){
+                                    callback(data);
+                            }
+                        });
+                    }
+                }
+            });
+        {% endif %}
+    });
+</script>
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+        <tr> {# 1 #}
+            <td style="width:15%">{% trans %}ID{% endtrans %} ({% trans %}Type{% endtrans %})</td>
+            <td style="width:35%">{{ object.id }} ({{ object.getProjectType|trans}})</td>
+            <td style="width:15%">{% trans %}Project status{% endtrans %}</td>
+            <td style="width:35%">
+                {%  if object.isClosed  == true %}
+                    {% if object.datetimeClosed %}
+                        {% trans %}Closed{% endtrans %}  ({{object.reasonClosed}})<br>
+                        {{ object.userClosed }}  ({{ object.datetimeClosed|date("d.m.y, H:i") }})
+                    {% endif %}
+                {% else %}
+                    {% if object.statusAccess is null %}
+                        {% trans %}Not approved by the manager{% endtrans %}
+                        {% if access.canConfirmProject %}
+                            {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig')}}
+                        {% endif %}
+                    {% endif %}
+                    {% if access.canEditProjectSimple %}
+                    <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status ? object.status.id : '' }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                    {% endif %}
+                        {{ object.status }}
+                        {% if object.statusChangeDate %}
+                            {{ object.statusChangeDate|date("d.m.y, H:i") }}
+                        {% endif %}
+                    {% if access.canEditProjectSimple %}
+                    </a>
+                    {% endif %}
+                {% endif %}
+                {% if object.isClosed  != true and access.canCloseProject %}
+                    {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig')}}
+                {% endif %}
+            </td>
+        </tr>
+        <tr> {# 2 #}
+            <td>{% trans %}Organization name{% endtrans %}</td>
+            <td>{{ object.organization.name }}</td>
+            <td>{% trans %}User created{% endtrans %} ({% trans %}Date created{% endtrans %})</td>
+            <td>{{ object.userCreated }} ({{ object.createdatetime is empty ? '' : object.createdatetime|date("d.m.y H:i") }})</td>
+        </tr>
+        <tr>
+            <td>{% trans %}Branch{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectSimple %}
+                <a href="#" id="services" data-type="select2" data-pk="{{ object.id }}" data-placement="right" data-value="{% for key,service in object.services %}{{ key > 0 ? ',' : ''}}{{ service.id }}{% endfor %}" data-placeholder="{% trans %}Select service offered{% endtrans %}" data-original-title="{% trans %}Select service offered{% endtrans %}">
+                {% endif %}
+                    {{ object.services|join('<br>')|raw }}
+                {% if access.canEditProjectSimple %}
+                </a>
+                {% endif %}
+                <span class="help-block">Если предлагаемых услуг нет в списке - обратитесь к администратору.</span>
+
+            </td>
+            <td>{% trans %}Square{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectSimple %}
+                <a class="editable-project" href="#" id="square" data-type="text" data-pk="{{ object.id }}" data-value="{{ object.square }}" data-original-title="{% trans %}Enter square{% endtrans %}">
+                {% endif %}
+                    {{ object.square }}
+                {% if access.canEditProjectSimple %}
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans %}Description{% endtrans %}</td>
+            <td>
+                {% if access.canEditProjectSimple %}<a class="editable-project" href="#" id="description" data-type="textarea" data-pk="{{ object.id }}" data-value="{{ object.description }}" data-original-title="{% trans %}Enter description{% endtrans %}">{% endif %}{{ object.description }}{% if access.canEditProjectSimple %}</a>{% endif %}
+            </td>
+            <td></td>
+            <td></td>
+        </tr> 
+        </tbody>
+    </table>
+</div>

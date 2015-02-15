@@ -1,0 +1,29 @@
+Lists\HandlingBundle\Entity\ProjectFileType:
+    type: entity
+    table: project_file_type_old
+    id:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        alias:
+            type: string
+            length: 64
+            nullable: true
+            options:
+                comment: Альтернативное название документа
+        name:
+            type: string
+            length: 128
+            nullable: false
+            options:
+                comment: Название типа документа
+        group:
+            type: string
+            length: 64
+            nullable: false
+            options:
+                comment: Группа документов

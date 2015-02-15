@@ -115,12 +115,18 @@
 
                 if (data.performer) {
                     $('#' + '{{ form.vars.name }}' + '_performer').select2("val", data.performer)
+                } else {
+                    $('#' + '{{ form.vars.name }}' + '_performer').select2("val", '')
                 }
                 if (data.controller) {
                     $('#' + '{{ form.vars.name }}' + '_controller').select2("val", data.controller)
+                } else {
+                    $('#' + '{{ form.vars.name }}' + '_controller').select2("val", '')
                 }
                 if (data.matcher) {
                     $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", data.matcher)
+                } else {
+                    $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", '')
                 }
             }
 
@@ -156,7 +162,8 @@
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['insert', ['link']], // no insert buttons
-                    ['table', ['table']] // no table button
+                    ['table', ['table']], // no table button
+                    ['view', ['fullscreen']]
                     //['help', ['help']] //no help button
                 ]
             });
@@ -171,7 +178,9 @@
         -o-transition: opacity 1s;
         transition: opacity 1s;
     }
-
+    .fullscreen{
+        margin-top: 46px;
+    }
     .patterns-animation:hover{
         opacity: 1;
     }
@@ -210,7 +219,7 @@
                     </div>
                      <div class="form-group col-md-6">
                         {{ form_label(form.endDate, 'Date stop'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.endDate, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'|trans({}, 'SDCalendarBundle')} } ) }}
+                        {{ form_widget(form.endDate, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop task'|trans({}, 'SDCalendarBundle')} } ) }}
                         <span class="help-block">{{ form_errors(form.endDate) }}</span>
                     </div>
                     <div class="form-group col-md-12">

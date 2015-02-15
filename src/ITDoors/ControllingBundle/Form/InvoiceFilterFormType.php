@@ -126,6 +126,10 @@ class InvoiceFilterFormType extends AbstractType
                         '0' => $translator->trans('Acts places without', array(), 'ITDoorsControllingBundle'),
                         '1' => $translator->trans('Acts in stock', array(), 'ITDoorsControllingBundle')
                     )
+            ))
+            ->add('withoutContacts', 'checkbox', array(
+                'label'     => $translator->trans('Without contacts', array(), 'ITDoorsControllingBundle'),
+                'required'  => false,
             ));
 
         $builder

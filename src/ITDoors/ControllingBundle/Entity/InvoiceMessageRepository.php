@@ -23,6 +23,8 @@ class InvoiceMessageRepository extends EntityRepository
     {
         $res = $this->createQueryBuilder('i_m')
             ->select('i_m.note')
+            ->addSelect('i_m as object')
+            ->addSelect('i_m.file')
             ->addSelect('i_m.id')
             ->addSelect('i_m.createdate')
             ->addSelect('u.firstName')

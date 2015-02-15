@@ -1,0 +1,46 @@
+Lists\ProjectBundle\Entity\Manager:
+    type: entity
+    table: project_manager
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectManagerRepository
+    discriminatorColumn:
+        name: discriminator
+        type: string
+    discriminatorMap:
+        manager: ManagerType
+        manager_project: ManagerProjectType
+    id:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        part:
+            type: integer
+            nullable: true
+            column: part
+            options:
+                comment: Процент участия
+    manyToOne:
+        project:
+            targetEntity: Project
+            cascade: {  }
+            mappedBy: null
+            inversedBy: managers
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    uniqueConstraints:
+        unique_project_manager:
+            columns: [project_id, user_id]

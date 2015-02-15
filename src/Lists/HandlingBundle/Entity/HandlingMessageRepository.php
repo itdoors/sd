@@ -25,7 +25,7 @@ class HandlingMessageRepository extends EntityRepository
         return $this->createQueryBuilder('hm')
             ->where('hm.handling_id = :handlingId')
             ->setParameter(':handlingId', $handlingId)
-            ->orderBy('hm.createdatetime')
+            ->orderBy('hm.createdate', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -70,38 +70,59 @@ class HandlingMessageRepository extends EntityRepository
         $q = $this->createQueryBuilder('hm')
             ->where('hm.createdate >= :createdateFrom')
             ->andWhere('hm.createdate <= :createdateTo')
+            ->andWhere('hm.additionalType is null')
             ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.type', 't')
             ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME);
         if ($manager) {
-            $q->andWhere('hm.user in (:managers)')
-                ->setParameter(':managers', $manager);
+            $q->andWhere('hm.user in (:managers)')->setParameter(':managers', $manager);
         }
-        $q = $q
-            ->orderBy('hm.createdate')
-            ->getQuery()
-            ->getResult();
+        $res = $q->orderBy('t.name, hm.createdate')->getQuery()->getResult();
 
-        if (!sizeof($q)) {
+        if (!sizeof($res)) {
             return array();
         }
 
-        $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')
-            ->getList();
+        $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')->getList();
 
         $result = array();
 
-        foreach ($q as $handlingMessage) {
+        foreach ($res as $handlingMessage) {
             if (!isset ( $result[$handlingMessage->getUserId()] )) {
                 $result[$handlingMessage->getUserId()] = array();
                 $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
                 $result[$handlingMessage->getUserId()]['actions'] = array();
+                $result[$handlingMessage->getUserId()]['count'] =
+                    $this->getAdvancedCountResult($from, $to, $handlingMessage->getUserId());
             }
-
             $result[$handlingMessage->getUserId()]['actions'][] = $handlingMessage;
         }
 
         return $result;
+    }
+    /**
+     * @param datetime $from
+     * @param datetime $to
+     * @param string   $userId
+     *
+     * @return array
+     */
+    public function getAdvancedCountResult($from, $to, $userId)
+    {
+        return $this->createQueryBuilder('hm')
+                    ->select('count(hm.id) as countAction, t.name as typeAction')
+                    ->leftJoin('hm.type', 't')
+                    ->where('hm.user = :userId')
+                    ->andWhere('hm.createdate >= :createdateFrom')
+                    ->andWhere('hm.createdate <= :createdateTo')
+                    ->andWhere('hm.additionalType is null')
+                    ->setParameter(':userId', $userId)
+                    ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
+                    ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
+                    ->groupBy('t.name')
+                    ->orderBy('t.name')
+                    ->getQuery()->getResult();
     }
 
     /**

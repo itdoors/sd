@@ -32,6 +32,9 @@
 <div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item task_{{ taskUserRole.task.id }}" data-id="{{ taskUserRole.id }}" style="border-width: 3px;" id="taskListItem_{{ taskUserRole.id }}">
     <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}">
     <div class="todo-tasklist-item-title">
+        {% if taskUserRole.isUpdated %}
+            <i class="fa fa-comments" style="color: #019660"></i>
+        {% endif %}
          {{ taskUserRole.task.title|length > 30 ? taskUserRole.task.title|slice(0, 30) ~ '...' : taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
     </div>
     <div class="todo-tasklist-item-text">
@@ -58,5 +61,11 @@
             }}
         </span>
         <span class="label label-sm {{ labelStage }}">{{ stage|trans }}</span>
+        <span class="{#todo-tasklist-date#}" style="color: #abbfca; margin-left: 5px;">
+            {% if taskUserRole.task.editedDate is not empty %}
+                <i class="fa fa-pencil"></i>
+                {{ taskUserRole.task.editedDate|date('d.m.Y H:i') }}
+            {% endif %}
+        </span>
     </div>
 </div>

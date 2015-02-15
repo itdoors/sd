@@ -48,7 +48,7 @@ Department: Отделение
 
 Status Date: Дата статуса
 Rs: Р/С
-Inn: Свидетельство
+Inn: ИНН
 Edrpou: ЕДРПОУ
 Certificate: Свидетельство
 Organization address: Адрес организации
@@ -71,6 +71,7 @@ Coordinates refreshed: Координаты обновлены
 Id: ID
 Surname: Фамилия
 Name: Имя
+First Name: Имя
 Middle Name: Отчество
 Date accepted: Дата приема офиц
 Date faired: Дата увольнения офиц
@@ -260,3 +261,46 @@ Performer: Исполнитель
 Contacts: Контакты
 Self organization: Своя организация
 Export: Експорт
+
+Organizer: Органайзер
+Edit time: Редактирование времени
+Drag departments to calendar: Перетаскивайте отделения на календарь
+Save: Сохранить
+Action: Действие
+Claimtype: Услуги
+Userkey: Роль
+User: Пользователь
+Add comment: Добавить комментарий
+No departments available: Нет доступных отделений
+Can't delete, because of existing comment: Невозможно удалить событие, если в нем есть комментарии
+Calendar: Календарь
+Select an opermanager: Выберите оперменеджера
+Add report: Добавить отчет
+Statistic: Статистика
+Visits statistic: Статистика посещений
+Filter: Фильтр
+Total Visits: Всего назначено посещений
+Total Visits With Comments: Всего посещений с отчетами
+Avarage Visits Per Day: Среднее число посещений за день
+Comparing to last month: В сравнении с пред. месяцем
+Comparing to last 30 days: В сравнении с пред. 30 днями
+No reports found: Отчеты не найдены
+Reports: Отчеты
+All reports: Все отчеты
+Enter department: Введите отделение
+Once visit: Разовые работы
+Other: Прочее
+Visits: Посещения
+Export reports: Экспорт отчетов
+typeName: Тип
+organizationName: Организация
+departmentName: Название отделения
+departmentAddress: Адресс Отделения
+startDatetime: Дата начала посещения
+endDatetime: Дата окончания посещения
+userName: Пользователь
+commentValue: Комментарий
+commentDate: Дата комментария
+Transaction statistic: Статистика транзакций
+Enter company structure: Выберите структуру компании
+Enter date range: Выберите период

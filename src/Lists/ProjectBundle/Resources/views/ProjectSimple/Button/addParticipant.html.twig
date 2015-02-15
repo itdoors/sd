@@ -1,0 +1,23 @@
+<a class="btn green" id="participant-add-btn" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Add participant{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+    'selector' : '#participant-add-btn',
+    'formType' : 'projectStateTenderParticipantForm',
+    'successFunctions' : {
+        'list_participants' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'lists_project.service',
+        'method' : 'projectStateTenderParticipantFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'lists_project.service',
+        'method' : 'saveProjectStateTenderParticipantForm'
+    },
+    'defaults' : {
+        'projectStateTender' : object.id
+    },
+    'target' : '#form_modal_block',
+    'html' : 'ListsProjectBundle:Form:projectStateTenderParticipationtForm.html.twig'
+}) }}

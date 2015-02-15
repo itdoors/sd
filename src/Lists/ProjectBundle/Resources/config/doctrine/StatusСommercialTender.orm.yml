@@ -1,0 +1,3 @@
+Lists\ProjectBundle\Entity\StatusСommercialTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\StatusСommercialTenderRepository

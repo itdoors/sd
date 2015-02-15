@@ -971,6 +971,22 @@ class Organization
         $this->organizationUsers->removeElement($organizationUsers);
     }
     /**
+     * isManager
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     */
+    public function isManager (\SD\UserBundle\Entity\User $user)
+    {
+        $managers = $this->getOrganizationUsers();
+        foreach ($managers as $manager) {
+            if ($manager->getUser() == $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
      * Get organizationUsers
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -1099,5 +1115,116 @@ class Organization
     public function getOrganizationsigns()
     {
         return $this->organizationsigns;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $departments;
+
+
+    /**
+     * Add departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     * 
+     * @return Organization
+     */
+    public function addDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments[] = $departments;
+
+        return $this;
+    }
+
+    /**
+     * Remove departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     */
+    public function removeDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments->removeElement($departments);
+    }
+
+    /**
+     * Get departments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDepartments()
+    {
+        return $this->departments;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $currentAccounts;
+
+
+    /**
+     * Add departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     *
+     * @return Organization
+     */
+    public function addDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments[] = $departments;
+
+        return $this;
+    }
+
+    /**
+     * Remove departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     */
+    public function removeDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments->removeElement($departments);
+    }
+
+    /**
+     * Add currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     *
+     * @return Organization
+     */
+    public function addCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts[] = $currentAccounts;
+
+        return $this;
+    }
+
+    /**
+     * Remove currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     */
+    public function removeCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts->removeElement($currentAccounts);
+    }
+
+    /**
+     * Get currentAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCurrentAccounts()
+    {
+        return $this->currentAccounts;
+    }
+    /**
+     * Get currentAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEdrpouName()
+    {
+        return $this->getEdrpou().' | '. $this->getName();
     }
 }

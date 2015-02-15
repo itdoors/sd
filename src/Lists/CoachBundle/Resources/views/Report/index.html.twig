@@ -1,0 +1,62 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsCoachBundle' %}
+{% block title %}{% trans %}Training{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Training{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('lists_coach_index') }}" title="{% trans %}Training{% endtrans %}">{% trans %}Training{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/css/pages/profile.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins//select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jstree/dist/jstree.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Reports{% endtrans %}</a></li>
+                {% if is_granted('ROLE_COACHADMIN') %}
+                    <li><a href="#tab_1" data-toggle="tab">{% trans %}Settings{% endtrans %}</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">{% trans %}Coaches{% endtrans %}</a></li>
+                {% endif %}
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_0">{{ render(controller('ListsCoachBundle:CoachReport:showtabs', {tab: 'reports'})) }}</div>
+                {% if is_granted('ROLE_COACHADMIN') %}
+                    <div class="tab-pane" id="tab_1">{{ render(controller('ListsCoachBundle:CoachReport:showtabs', {tab: 'settings'})) }}</div>
+                    <div class="tab-pane" id="tab_2">{{ render(controller('ListsCoachBundle:CoachReport:showtabs', {tab: 'coaches'})) }}</div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

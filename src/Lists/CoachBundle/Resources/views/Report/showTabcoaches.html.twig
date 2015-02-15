@@ -1,0 +1,63 @@
+{% trans_default_domain 'ListsCoachBundle' %}
+    <script>
+        $("#tab_coaches").ready(function(){
+            $("#tree").jstree({
+            "core" : {
+                "themes" : {
+                    "responsive": true
+                }, 
+                // so that create works
+                "check_callback" : true,
+                'data' : {
+                    'url' : function (node) {
+                      return '{{ path('list_companystructure_employees_get_list') }}';
+                    },
+                    'data' : function (node) {
+                      return { 'parent' : node.id };
+                    }
+                }
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-state-warning icon-lg"
+                }
+            },
+            "state" : { "key" : "demo3" }/*,
+            "plugins" : [ "dnd", "state", "types" ]*/
+        });
+        $('a[data-href]').live('click', function(){
+            document.location.href = $(this).attr('href');
+        });
+        });
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet blue box">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>{% trans%}Add coach{% endtrans%}
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="tree" class="tree-demo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet green box">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>{% trans%}Coach list{% endtrans%}
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    {{ render(controller('ListsCoachBundle:Coach:coachList')) }}
+                </div>
+            </div>
+        </div>
+    </div>

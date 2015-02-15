@@ -33,7 +33,7 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
-        $allowedDepartments = $accessService->getAllowedDepartmentsId();
+        $allowedDepartments = $accessService->getAllowedDepartmentsId(null, false);
 
         //$allowedDepartments = array(2111);
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');

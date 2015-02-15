@@ -1,0 +1,3 @@
+it_doors_calculate_homepage:
+    path:     /calculate/page
+    defaults: { _controller: ITDoorsCalculateBundle:Calculate:page }

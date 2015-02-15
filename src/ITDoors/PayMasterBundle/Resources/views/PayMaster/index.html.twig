@@ -1,0 +1,52 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsPayMasterBundle' %}
+{% block title %}{% trans %}List of accounts{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Accounts{% endtrans %} <small>{% trans %}List of accounts{% endtrans %}</small>
+</h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+         <i class="fa fa-home"></i>
+         <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+    </li>
+    <li>
+        <a href="" title="{% trans %}Accounts{% endtrans %}">{% trans %}Accounts{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            {{ ajax_tab_render( tabs, tab, nameSpacePayMaster ) }}
+            <div class="tab-content" id="tab_content">
+                <div class="tab-pane active" id="tab_0">
+                    {% if access.canAdd   %}    
+                        <a class="btn btn-circle green" href="{{ path('it_doors_pay_master_new') }}">{% trans %}Add new account{% endtrans %}</a>
+                    {% endif %}
+                    <div class="tab-content-block" id="table_tab" data-url="{{ url('it_doors_pay_master_tab') }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab')) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

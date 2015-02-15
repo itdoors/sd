@@ -1,0 +1,136 @@
+Lists\ProjectBundle\Entity\Project:
+    type: entity
+    table: project
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedDatetime
+          time_aware: false
+    discriminatorColumn:
+        name: discriminator
+        type: string
+    discriminatorMap:
+        project_state_tender: ProjectStateTender
+        project_simple: ProjectSimple
+        project_commercial_tender: ProjectCommercialTender
+        project_electronic_trading: ProjectElectronicTrading
+    id:
+        id:
+            id: true
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        createDatetime:
+            type: datetime
+            nullable: false
+            options:
+                comment: Дата внесения проекта в систему (создается автоматически)
+        statusAccess:
+            type: boolean
+            nullable: true
+            options:
+                comment: Статус доступа создания проекта (контролирует менеджер организации)
+        square:
+            type: float
+            nullable: true
+            options:
+                comment: Площадь
+        description:
+            type: text
+            nullable: true
+            options:
+                comment: Заметки
+        isClosed:
+            type: boolean
+            column: is_closed
+            nullable: true
+            options:
+                comment: Статус проекта (закрыт, открыт)
+        datetimeClosed:
+            type: datetime
+            nullable: true
+            column: datetime_closed
+            options:
+                comment: Дата закрытия проекта
+        reasonClosed:
+            type: text
+            nullable: true
+            column: reason_closed
+            options:
+                comment: Причина закрытия проекта
+        statusChangeDate:
+            type: datetime
+            nullable: true
+            column: status_change_date
+            options:
+                comment: Дата изменения статуса
+        statusText:
+            type: string
+            length: 128
+            nullable: true
+            column: status_text
+            options:
+                comment: Причина изменения статуса
+        createDate:
+            type: date
+            nullable: true
+            column: create_date
+            options:
+                comment: Дата создания проекта
+        deletedDatetime:
+            type: datetime
+            nullable: true
+            column: deleted_datetime
+            options:
+                comment: Дата удаления проекта
+    oneToMany:
+        messages:
+            targetEntity: Message
+            mappedBy: project
+        managers:
+            targetEntity: Manager
+            mappedBy: project
+        files:
+            targetEntity: FileProject
+            mappedBy: project
+    manyToOne:
+        userCreated:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        userClosed:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: closed_user_id
+                nullable: true
+                options:
+                    comment: Кто закрыл проект
+                referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        status:
+            targetEntity: Status
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false

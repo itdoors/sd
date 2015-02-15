@@ -36,7 +36,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
     {% endblock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <!-- END THEME STYLES -->
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}" />
     {% block google_analytics %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -61,7 +61,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 </div>
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2013 &copy; ITDoors <a href="http://www.itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>
+    {{ "now"|date("Y") }} &copy; ITDoors <a href="http://www.itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>
 </div>
 <!-- END COPYRIGHT -->
 
@@ -204,6 +204,36 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
             });
         });
     </script>
+    
+    <script type="text/javascript">
+		var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+		$(document).ready(function() {
+		    if(is_chrome || detectmob()) {
+				$("#block_login").show();
+			} else {
+				$("#block_login").remove();
+				$("#block_non_chrome").show();
+			}
+		    sessionStorage.removeItem("showed");
+		    $('#username').focus();
+		})
+		
+		function detectmob() { 
+			if( navigator.userAgent.match(/Android/i)
+			 || navigator.userAgent.match(/webOS/i)
+			 || navigator.userAgent.match(/iPhone/i)
+			 || navigator.userAgent.match(/iPad/i)
+			 || navigator.userAgent.match(/iPod/i)
+			 || navigator.userAgent.match(/BlackBerry/i)
+			 || navigator.userAgent.match(/Windows Phone/i)
+			){
+				return true;
+			} else {
+				return false;
+			}
+		}
+    </script>
+
     <!-- END JAVASCRIPTS -->
 	{% endblock %}
 

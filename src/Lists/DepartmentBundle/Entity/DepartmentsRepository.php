@@ -71,6 +71,7 @@ class DepartmentsRepository extends EntityRepository
             ->select('d.id as id')
             ->addSelect('d.statusDate as statusDate')
             ->addSelect('d.coordinates')
+            ->addSelect('d.name')
             ->addSelect('m.name as mpk')
             ->addSelect('m.active as mpkActive')
             ->addSelect('d.address as address')
@@ -157,7 +158,7 @@ class DepartmentsRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getFilteredDepartments($filters, $allowedDepartments, $type = 'data')
+    public function getFilteredDepartments($filters, $allowedDepartments = false, $type = 'data')
     {
         if ($type == 'data') {
             $sql = $this->getAllDepartmentsBuilder();
@@ -274,5 +275,77 @@ class DepartmentsRepository extends EntityRepository
         $query = $sql->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @param array $allowedDepartments
+     *
+     * @return array
+     */
+    public function getDepartmentsFromAccess($allowedDepartments)
+    {
+        $sql = $this->createQueryBuilder('d');
+        $sql->leftJoin('d.organization', 'o');
+        $sql->leftJoin('d.status', 's');
+
+        if ($allowedDepartments !== false) {
+            if (count($allowedDepartments)>0) {
+                $sql->andWhere('d.id in (:idsDepartments)');
+                $sql->setParameter(':idsDepartments', $allowedDepartments);
+            } else {
+                $sql->andWhere('d.id < 0');
+            }
+        } else {
+            $sql->andWhere('d.id < 0');
+        }
+        $sql->andWhere('s.slug = :active');
+        $sql->setParameter(':active', 'active');
+
+        $sql->orderBy('o.name', 'ASC');
+
+        return $sql->getQuery()->getResult();
+    }
+
+    /**
+     * getSearchQuery
+     * 
+     * @param string $q
+     * 
+     * @return array
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->leftJoin('d.status', 's')
+            ->where('lower(d.name) LIKE :q')
+            ->orWhere('lower(d.address) LIKE :q')
+
+            ->andWhere('s.slug = :active')
+
+            ->setParameter(':active', 'active')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
+
+    /**
+     * getDepartmentsForCityQuery
+     *
+     * @param string  $searchText
+     * @param integer $cityId
+     *
+     * @return array
+     */
+    public function getDepartmentsForCityQuery($searchText, $cityId)
+    {
+        $sql = $this->createQueryBuilder('d')
+        ->innerJoin('d.city', 'c')
+        ->where('lower(d.name) LIKE :q')
+        ->orWhere('lower(d.address) LIKE :q')
+        ->andWhere('c.id = :cityId')
+        ->setParameter(':cityId', $cityId)
+        ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
     }
 }

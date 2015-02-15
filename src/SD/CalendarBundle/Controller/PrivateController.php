@@ -121,7 +121,8 @@ class PrivateController extends SalesController
     public function getEventsByUserIds($userIds, $startTimestamp, $endTimestamp)
     {
         $events = array();
-
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
         /** get handling */
         if (
             $this->getUser()->hasRole('ROLE_SALES')
@@ -138,11 +139,16 @@ class PrivateController extends SalesController
                 ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
 
             foreach ($handlingMessages as $handlingMessage) {
+                $url = $this->generateUrl('lists_handling_show', array(
+                        'id' => $handlingMessage['handlingId'],
+                        'type' => 'my'
+                    ));
+
                 $events[] = array(
                     'hover_title' => $this->getEventHoverTitle($handlingMessage),
                     'title' => $this->getEventTitle($handlingMessage),
                     'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
-                    'url' => $this->getEventUrl($handlingMessage),
+                    'url' => $url,
                     'className' => $this->getEventCssClass($handlingMessage),
 //                    'allDay' => false,s
                 );
@@ -182,8 +188,6 @@ class PrivateController extends SalesController
         /** @var User[] $users get birthdays */
         $users = $em->getRepository('SDUserBundle:User')
                 ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
-        /** @var Translator $translator */
-        $translator = $this->container->get('translator');
         foreach ($users as $user) {
             $fullName = $user->getFullname();
             $events[] = array(
@@ -200,7 +204,6 @@ class PrivateController extends SalesController
         /** @var Holiday[] $holidays */
         $holidays = $em->getRepository('SDCalendarBundle:Holiday')
                 ->getListForDate($startTimestamp, $endTimestamp);
-        /** @var Translator $translator */
         foreach ($holidays as $holiday) {
             $name = $holiday->getName();
             $events[] = array(
@@ -209,6 +212,22 @@ class PrivateController extends SalesController
                 'start' => date('Y').'-'.$holiday->getDate()->format('m').'-'.$holiday->getDate()->format('d'),
                 'end' => date('Y').'-'.$holiday->getDate()->format('m').'-'.$holiday->getDate()->format('d'),
                 'allDay' => true
+                );
+        }
+        /** @var GosTender[] $gosTenders */
+        $gosTenders = $em->getRepository('ListsHandlingBundle:ProjectGosTender')
+                ->getListForDate($startTimestamp, $endTimestamp, $this->getUser());
+        foreach ($gosTenders as $tender) {
+            $name = $translator->trans('Tender', array(), 'ListsHandlingBundle').' | '. $tender
+                ->getProject()->getOrganization()->getCity();
+            $events[] = array(
+                'hover_title' => '',
+                'title' => $name,
+                'url' => $this->generateUrl('lists_project_gostender_show', array(
+                        'id' => $tender->getId()
+                    )),
+                'start' => $tender->getDatetimeDeadline()->format('Y-m-d H:i'),
+                'end' => $tender->getDatetimeDeadline()->format('Y-m-d H:i')
                 );
         }
 

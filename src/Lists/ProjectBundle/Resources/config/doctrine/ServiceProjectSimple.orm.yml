@@ -1,0 +1,3 @@
+Lists\ProjectBundle\Entity\ServiceProjectSimple:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ServiceProjectSimpleRepository

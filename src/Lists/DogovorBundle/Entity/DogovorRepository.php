@@ -121,7 +121,7 @@ class DogovorRepository extends EntityRepository
                 . ' OR '
                 . '(d.isActive = true AND d.prolongationDate < :date)'
             )
-            ->setParameter(':date', $date->modify('-2 month'));
+            ->setParameter(':date', $date->modify('-3 month'));
         $sqlCount
             ->andWhere(
                 'd.stopdatetime is NULL'
@@ -132,7 +132,7 @@ class DogovorRepository extends EntityRepository
                 . ' OR '
                 . '(d.isActive = true AND d.prolongationDate < :date)'
             )
-            ->setParameter(':date', $date->modify('-2 month'));
+            ->setParameter(':date', $date->modify('-3 month'));
 
         $this->processOrdering($sql);
 
@@ -152,9 +152,11 @@ class DogovorRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('d.id as dogovorId')
+            ->select('d.id')
+            ->addSelect('d.id as dogovorId')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.filepath')
+            ->addSelect('d.paymentDeferment')
             ->addSelect('d.startdatetime as dogovorStartdatetime')
             ->addSelect('d.stopdatetime as dogovorStopdatetime')
             ->addSelect('d.prolongationDate as dogovorProlongationDate')
@@ -315,6 +317,13 @@ class DogovorRepository extends EntityRepository
                                 ->andWhere("d.subject LIKE :subject")
                                 ->setParameter(':subject', "{$value}%");
                         break;
+                    case 'isActive':
+                        if ($value == 'true') {
+                            $sql->andWhere("d.isActive = TRUE");
+                        } elseif ($value == 'false') {
+                            $sql->andWhere("d.isActive = FALSE");
+                        }
+                        break;
 
                 }
             }
@@ -336,6 +345,9 @@ class DogovorRepository extends EntityRepository
             ->addSelect('d.number as number')
             ->addSelect('d.subject as subject')
             ->addSelect('d.filepath as filepath')
+            ->addSelect('d.paymentDeferment')
+            ->addSelect('d.delayComment')
+            ->addSelect('delayType.name as delayTypeName')
             ->addSelect('d.prolongation as prolongation')
             ->addSelect('d.prolongationTerm as prolongationTerm')
             ->addSelect('d.startdatetime as startdatetime')
@@ -356,6 +368,7 @@ class DogovorRepository extends EntityRepository
             ->addSelect('creator.lastName as creatorLastName')
             ->addSelect('creator.middleName as creatorMiddleName')
             ->leftJoin('d.saller', 'saller')
+            ->leftJoin('d.delayType', 'delayType')
             ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
             ->leftJoin('d.organization', 'organization')
@@ -485,5 +498,25 @@ class DogovorRepository extends EntityRepository
             ->getQuery()->getResult();
 
         return $query;
+    }
+    /**
+     * Searches organization by $q
+     *
+     * @param string  $q
+     * @param integer $organizationId
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q, $organizationId = null)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->where('lower(d.number) LIKE :q')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+        if ($organizationId) {
+            $sql->andWhere('d.customer = :organizationId')
+                ->setParameter(':organizationId', $organizationId);
+        }
+
+        return $sql->getQuery()->getResult();
     }
 }

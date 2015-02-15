@@ -1,0 +1,20 @@
+SD\UserBundle\Entity\UserActivityRecord:
+    type: entity
+    table: login_user_activity
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: IDENTITY
+        lastActivity:
+            type: datetime
+
+    oneToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false

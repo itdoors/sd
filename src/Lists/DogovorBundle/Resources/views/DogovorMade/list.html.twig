@@ -18,7 +18,6 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
 </div>
 
@@ -55,18 +54,9 @@
             {% for item in dogovors %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}
                                               id="dogovorItem{{ item.dogovorId|e }}"
-                                              data-url="{{ path('lists_dogovor_ajax_element', {
-                        id: item.dogovorId,
-                    }) }}"
+                                              data-url="{{ path('lists_dogovor_ajax_element', { id: item.dogovorId }) }}"
                                               >
-                    {{  include(
-                        'ListsDogovorBundle:Dogovor:element.html.twig',
-                            {
-                                item: item,
-                                baseRoutePrefix: 'dogovor',
-                            }
-                        )
-                    }}
+                    {{  include('ListsDogovorBundle:Dogovor:element.html.twig')}}
                 </tr>
             {% endfor %}
         </tbody>
@@ -108,19 +98,8 @@
         </thead>
         <tbody>
             {% for item in dopDogovors %}
-                <tr id="dop-dogovor-element-{{ item.id }}"
-                    data-url="{{ path('lists_dopdogovor_ajax_element', {
-                id: item.id,
-            }) }}"
-                    >
-                {{  include(
-                'ListsDogovorBundle:DopDogovor:element.html.twig',
-                    {
-                        item: item,
-                        baseRoutePrefix: 'dopdogovor',
-                    }
-                )
-                    }}
+                <tr id="dop-dogovor-element-{{ item.id }}" data-url="{{ path('lists_dopdogovor_ajax_element', { id: item.id }) }}" >
+                    {{ include('ListsDogovorBundle:DopDogovor:element.html.twig')}}
                 </tr>
             {% endfor %}
         </tbody>

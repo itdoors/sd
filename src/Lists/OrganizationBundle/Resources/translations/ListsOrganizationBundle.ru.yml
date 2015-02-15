@@ -220,3 +220,27 @@ Performer dont have edrpou: У исполнителя не указан ЕДРП
 
 Transfer organizations: Перенос организаций
 Transfer departmens: Перенос отделений
+Departmens: Отделения
+Enter child organization: Укажите дочернюю организацию
+Organizations: Организации
+Organization not found: Организация не найдена
+You don`t access: У Вас нет доступа
+Organization <small>not found</small>: Организация <small>не найдена</small>
+Add bank: Добавить банк
+New bank: Новый банк
+Current account: Расчетный счет
+MFO: МФО
+Enter name: Введите название
+Enter mfo: Введите МФО
+Banks: Банки
+Enter current account: Введите расчетный счет
+Bank: Банк
+Type account: Тип счета
+Enter name or mfo: Введите название или МФО
+Self organization: Собственная организация
+Enter user: Укажите польователя
+Specify the user to assign: Укажите польователя для назначения
+Select object: Выберите обьект
+New organization: Новая организация
+Short name: Короткое название
+Enter short name: Введите короткое описание

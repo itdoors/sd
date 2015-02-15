@@ -1,7 +1,16 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
+{% if access.canAddDopDogovor %}
 <script type="text/javascript">
     $(document).ready(function(){
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    });
+    $('.doclink').click(function(){
+    	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+    	url += '?';
+    	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+    	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+    	url += encodeURI('role') + '=' + encodeURI($(this).attr('role'));
+    	window.location = url;
     });
 </script>
 
@@ -33,17 +42,9 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
 </div>
-
-<div id="dop-dogovor-list"
-     data-url="{{ path('lists_dogovor_dopdogovor_list', {
-            dogovorId: dogovor.id
-        }) }}"
-     data-params='{"dogovorId":{{ dogovor.id }}}'
->
-    {{ render(controller('ListsDogovorBundle:DopDogovor:List', {
-        dogovorId: dogovor.id,
-    })) }}
+{% endif %}
+<div id="dop-dogovor-list" data-url="{{ path('lists_dogovor_dopdogovor_list', {dogovorId: dogovor.id }) }}" data-params='{"dogovorId":{{ dogovor.id }}}'>
+    {{ render(controller('ListsDogovorBundle:DopDogovor:List', { dogovorId: dogovor.id })) }}
 </div>

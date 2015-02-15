@@ -1,0 +1,27 @@
+ITDoors\CalculateBundle\Entity\CalculatorPrice:
+    type: entity
+    table: calculator_price
+    repositoryClass: ITDoors\CalculateBundle\Entity\CalculatorPriceRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        value:
+            type: float
+        unit:
+            type: string
+            length: 20
+    manyToOne:
+        calculatorItem:
+            targetEntity: ITDoors\CalculateBundle\Entity\CalculatorItem
+            cascade: {  }
+            mappedBy: null
+            inversedBy: calculatorPrices
+            joinColumns:
+                calculator_item_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

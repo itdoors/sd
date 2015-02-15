@@ -24,6 +24,9 @@ class DopDogovorController extends BaseController
      */
     public function listAction($dogovorId)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
         /** @var \Lists\DogovorBundle\Entity\DopDogovorRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DopDogovor');
@@ -33,10 +36,11 @@ class DopDogovorController extends BaseController
 
         $items = $query->getResult();
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate. ':list.html.twig', array(
+        return $this->render('ListsDogovorBundle:DopDogovor:list.html.twig', array(
             'items' => $items,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
 
@@ -49,6 +53,8 @@ class DopDogovorController extends BaseController
      */
     public function elementAction($id)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
         /** @var DopDogovorRepository $ddr */
         $ddr = $this->get('lists_dogovor.dopdogovor.repository');
 
@@ -61,6 +67,7 @@ class DopDogovorController extends BaseController
             'item' => $item,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
 }

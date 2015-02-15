@@ -44,6 +44,10 @@ Lists\ArticleBundle\Entity\Article:
             type: datetime
             column: date_unpublick
             nullable: true
+        file:
+            type: string
+            length: 255
+            nullable: true
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
@@ -56,3 +60,4 @@ Lists\ArticleBundle\Entity\Article:
         ration:
             targetEntity: Ration
             mappedBy: article
+            orphanRemoval: true

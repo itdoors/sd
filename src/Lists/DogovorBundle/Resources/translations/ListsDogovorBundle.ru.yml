@@ -68,8 +68,8 @@ Comments: Комментарии
 Add departments: Добавить отделения
 You must pick dop dogovor for plonongation: Выберите доп. соглашение для пролонгации
 Stopdate can't greater then prolongation date: Дата пролонгации не может быть меньше даты окончания
-From: До действия
-To: После действия
+From: До прологнации
+To: После пролонгации
 Dogovor new: Новый Договор
 Dogovor<small>dogovor new</small>: Договор<small>новый договор</small>
 Create Dogovor: Создание договора
@@ -121,3 +121,9 @@ Select date: Выберите тип даты
 This document has already been added: Этот договор уже добавлен
 Change last date dogovor: Изменение конечной даты договора
 Last date action dogovors: Конечная дата действия договора
+You don`t access: У Вас нет доступа
+Select status: Укажитые статус
+History prolongation: История пролонгации
+Enter delay: Введите отстрочку
+Enter delay comment: Введите комментарий к отсрочке
+Select delay type: Укажите тип дня отстрочки

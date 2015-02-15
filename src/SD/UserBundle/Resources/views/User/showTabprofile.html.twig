@@ -1,5 +1,18 @@
 {% trans_default_domain 'SDUserBundle' %}
-{% if isAdmin %}
+{% if is_granted('ROLE_COACHADMIN') %}
+<script>
+    $(document).ready(function(){
+    	$('#is_coach').editable({
+            url: '{{ path('lists_coach_ajax_set_coach') }}',
+            source: [
+                     {value: 1, text: '{% trans from "ListsCoachBundle" %}is_coach{% endtrans %}'},
+                     {value: 0, text: '{% trans from "ListsCoachBundle" %}not_coach{% endtrans %}'}
+                 ]
+        });
+    });
+</script>
+{% endif %}
+{% if isAdmin  or app.user.id == item.id %}
 <script>
     $(document).ready(function(){
         $('#changeAvatar').on('hidden.bs.modal', function () {
@@ -60,6 +73,19 @@
                     allowClear: true
                 }
             });
+
+            $('#userPosition').editable({
+                url: '{{ path('sd_common_ajax_user_save') }}',
+                source: '{{ path('sd_common_ajax_user_position_table') }}',
+                emptytext: '{% trans %}Enter value{% endtrans %}',
+                select2: {
+                    placeholder: '{% trans %}Select position{% endtrans %}',
+                    minimumInputLength: 0,
+                    width: 250,
+                    allowClear: true
+                }
+            });
+
         {% endif %}
         
         $('.sd-stuff-date').live('mouseover', function(e){
@@ -137,6 +163,11 @@
       height: 200px;
       overflow: hidden;
     }
+    @media (max-width: 1024px) {
+    .jcrop-holder #preview-pane {
+        right: 0;
+    }
+}
 </style>
 
 <link href="{{ asset('templates/metronic/plugins/jcrop/css/jquery.Jcrop.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -199,7 +230,7 @@
                                     <i class="fa fa-calendar"></i> {{ item.birthday == '' ? '' : item.birthday|date('d.m.Y') }}
                                 </li>
                                 <li>
-                                    <i class="fa fa-briefcase"></i> {{ item.position }}
+                                    <i class="fa fa-briefcase"></i> {{ item.userPositionName }} {{ item.position }}
                                 </li>
                             </ul>
                         </div>
@@ -213,62 +244,78 @@
                                     <table class="table table-striped table-bordered table-advance table-hover">
                                         <tbody>
                                             {% if item.stuffId is not empty %}
+                                                <tr>
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Subdivision{% endtrans %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if isAdmin %}
+                                                         <a href="#" id="companystructureId" data-type="select2" data-pk="{{ item.stuffId }}" data-original-title="{% trans %}Companustructure{% endtrans %}">
+                                                            {{ item.companyName }}
+                                                         </a>
+                                                         {% else %}
+                                                            {{ item.companyName }}
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
                                             <tr>
                                                 <td class="hidden-xs">
-                                                    {% trans %}Subdivision{% endtrans %} 
+                                                    {% trans %}Position{% endtrans %}
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
-                                                     <a href="#" id="companystructureId" data-type="select2" data-pk="{{ item.stuffId }}" data-original-title="{% trans %}Companustructure{% endtrans %}">
-                                                        {{ item.companyName }}
-                                                     </a>
-                                                     {% else %}
-                                                        {{ item.companyName }}
+                                                    {% if isAdmin or app.user.id == item.id %}
+                                                        <a href="#" id="userPosition" data-type="select" {#data-value="{{ item.locked }}"#} data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Choose position{% endtrans %}" data-original-title="{% trans %}Choose position{% endtrans %}">
+                                                            {{ item.userPositionName }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.userPositionName }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% endif %}
-                                            {% if isAdmin %}
-                                            <tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}Position{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                        <a href="#" id="position" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter position{% endtrans %}" data-original-title="{% trans %}Enter position{% endtrans %}">
+                                            {% if isAdmin or app.user.id == item.id %}
+                                                <tr>                                                                                                
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Position description{% endtrans %}
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" id="position" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter position description{% endtrans %}" data-original-title="{% trans %}Enter position description{% endtrans %}">
                                                             {{ item.position }}
                                                         </a>
-                                                </td>
-                                            </tr>
-                                            <tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}Last name{% endtrans %} 
-                                                </td>
-                                                <td>
+                                                    </td>
+                                                </tr>
+                                                <tr>                                                                                                
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Last name{% endtrans %} 
+                                                    </td>
+                                                    <td>
                                                         <a href="#" id="lastName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter last name{% endtrans %}" data-original-title="{% trans %}Enter last name{% endtrans %}">
                                                             {{ item.lastName }}
                                                         </a>
-                                                </td>
-                                            </tr><tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}First Name{% endtrans %} 
-                                                </td>
-                                                <td>
+                                                    </td>
+                                                </tr>
+                                                <tr>                                                                                                
+                                                    <td class="hidden-xs">
+                                                        {% trans %}First Name{% endtrans %} 
+                                                    </td>
+                                                    <td>
                                                         <a href="#" id="firstName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter first name{% endtrans %}" data-original-title="{% trans %}Enter first name{% endtrans %}">
                                                             {{ item.firstName }}
                                                         </a>
-                                                </td>
-                                            </tr><tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}Middle Name{% endtrans %} 
-                                                </td>
-                                                <td>
+                                                    </td>
+                                                </tr>
+                                                <tr>                                                                                                
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Middle Name{% endtrans %} 
+                                                    </td>
+                                                    <td>
                                                         <a href="#" id="middleName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter middle name{% endtrans %}" data-original-title="{% trans %}Enter middle name{% endtrans %}">
                                                             {{ item.middleName }}
                                                         </a>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
                                             
-                                             {% endif %}
+                                            {% endif %}
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
                                                     {% trans %}Username{% endtrans %} 
@@ -283,7 +330,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            <tr>  
+                                            <tr>
                                                 <td class="hidden-xs">
                                                     {% trans %}Blocked{% endtrans %} 
                                                 </td>
@@ -314,7 +361,7 @@
                                                     {% trans %}Email{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
+                                                    {% if isAdmin or app.user.id == item.id %}
                                                         <a href="#" id="email" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter email{% endtrans %}" data-original-title="{% trans %}Enter email{% endtrans %}">
                                                             {{ item.email }}
                                                         </a>
@@ -324,87 +371,87 @@
                                                 </td>
                                             </tr>
                                             {% if item.stuffId is not empty %}
-                                            <tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}Mobile phone{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                    {% if isAdmin %}
-                                                        <a href="#" id="mobilephone" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter mobilephone{% endtrans %}" data-original-title="{% trans %}Enter mobilephone{% endtrans %}">
+                                                <tr>                                                                                                
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Corporate mobile{% endtrans %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if isAdmin or app.user.id == item.id %}
+                                                            <a href="#" id="mobilephone" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter mobilephone{% endtrans %}" data-original-title="{% trans %}Enter mobilephone{% endtrans %}">
+                                                                {{ item.mobilephone }}
+                                                            </a>
+                                                        {% else %}
                                                             {{ item.mobilephone }}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ item.mobilephone }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                            <tr>  
-                                                <td class="hidden-xs">
-                                                    {% trans %}Personale phone{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                    {% if isAdmin %}
-                                                        <a href="#" id="phonePersonal" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phonePersonal{% endtrans %}" data-original-title="{% trans %}Enter phonePersonal{% endtrans %}">
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>  
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Personale phone{% endtrans %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if isAdmin or app.user.id == item.id %}
+                                                            <a href="#" id="phonePersonal" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phonePersonal{% endtrans %}" data-original-title="{% trans %}Enter phonePersonal{% endtrans %}">
+                                                                {{ item.phonePersonal }}
+                                                            </a>
+                                                        {% else %}
                                                             {{ item.phonePersonal }}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ item.phonePersonal }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                            <tr>  
-                                                <td class="hidden-xs">
-                                                    {% trans %}Inside phone{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                    {% if isAdmin %}
-                                                        <a href="#" id="phoneInside" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phoneInside{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>  
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Inside phone{% endtrans %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if isAdmin or app.user.id == item.id %}
+                                                            <a href="#" id="phoneInside" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phoneInside{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
+                                                                {{ item.phoneInside }}
+                                                            </a>
+                                                        {% else %}
                                                             {{ item.phoneInside }}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ item.phoneInside }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                            <tr>  
-                                                <td class="hidden-xs">
-                                                    {% trans %}Place of birth{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                    {% if isAdmin %}
-                                                        <a href="#" id="birthPlace" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter birthPlace{% endtrans %}" data-original-title="{% trans %}Enter birthPlace{% endtrans %}">
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>  
+                                                    <td class="hidden-xs">
+                                                        {% trans %}Place of birth{% endtrans %} 
+                                                    </td>
+                                                    <td>
+                                                        {% if isAdmin or app.user.id == item.id %}
+                                                            <a href="#" id="birthPlace" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter birthPlace{% endtrans %}" data-original-title="{% trans %}Enter birthPlace{% endtrans %}">
+                                                                {{ item.birthPlace }}
+                                                            </a>
+                                                        {% else %}
                                                             {{ item.birthPlace }}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ item.birthPlace }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
                                             {% endif %}
-                                             {% if isAdmin %}
-                                             <tr>                                                                                                
-                                                <td class="hidden-xs">
-                                                    {% trans %}Birthday{% endtrans %} 
-                                                </td>
-                                                <td>
-                                                     <a href="#"
-                                                        class="sd-user-date sd-user-editable {% if item.birthday is empty %} editable-empty {% endif %}"
-                                                        data-name="birthday"
-                                                        data-type="text"
-                                                        data-pk="{{ item.id }}"
-                                                             {% if item.birthday %}
-                                                                 data-value="{{ item.birthday|date("d.m.Y") }}"
-                                                             {% endif %}
-                                                        data-original-title="{% trans %}Enter birthday{% endtrans %}"
-                                                             >
-                                                         {% if item.birthday %}
-                                                             {{ item.birthday|date("d.m.Y") }}
-                                                         {% else %}
-                                                             {% trans from 'messages' %}Enter value{% endtrans %}
-                                                         {% endif %}
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                            {% if isAdmin or app.user.id == item.id%}
+                                                <tr>                                                                                                
+                                                   <td class="hidden-xs">
+                                                       {% trans %}Birthday{% endtrans %} 
+                                                   </td>
+                                                   <td>
+                                                        <a href="#"
+                                                           class="sd-user-date sd-user-editable {% if item.birthday is empty %} editable-empty {% endif %}"
+                                                           data-name="birthday"
+                                                           data-type="text"
+                                                           data-pk="{{ item.id }}"
+                                                                {% if item.birthday %}
+                                                                    data-value="{{ item.birthday|date("d.m.Y") }}"
+                                                                {% endif %}
+                                                           data-original-title="{% trans %}Enter birthday{% endtrans %}"
+                                                                >
+                                                            {% if item.birthday %}
+                                                                {{ item.birthday|date("d.m.Y") }}
+                                                            {% else %}
+                                                                {% trans from 'messages' %}Enter value{% endtrans %}
+                                                            {% endif %}
+                                                       </a>
+                                                   </td>
+                                               </tr>
                                             {% endif %}
                                             {% if item.stuffId is not empty %}
                                             <tr>  
@@ -412,14 +459,14 @@
                                                     {% trans %}Education{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {% if isAdmin %}
+                                                    {% if isAdmin or app.user.id == item.id %}
                                                         <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter education{% endtrans %}">{{ item.education }}</a>
                                                     {% else %}
                                                         {{ item.education }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% if isAdmin %}
+                                            {% if isAdmin or app.user.id == item.id %}
                                             <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Enter issues{% endtrans %} 
@@ -513,6 +560,25 @@
                                                     <td>{{ contact.value }}</td>
                                                 </tr>
                                             {% endfor %}
+                                            
+                                            {% if is_granted('ROLE_COACHADMIN') %}
+                                            <tr>  
+                                                <td class="hidden-xs">
+                                                    {% trans from "ListsCoachBundle" %}Coach{% endtrans %}? 
+                                                </td>
+                                                <td>
+                                                    <a href="#" 
+                                                            id="is_coach" 
+                                                            class="status-edit" 
+                                                            data-type="select" 
+                                                            data-pk="{{ item.username }}"
+                                                            data-value="{{ coachStatus }}" 
+                                                            data-placement="right" 
+                                                            data-original-title="{% trans from "ListsCoachBundle" %}Add to coaches{% endtrans %}">
+                                                     </a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
                                         </tbody>
                                     </table>
                                 </div>

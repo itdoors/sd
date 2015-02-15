@@ -1,10 +1,12 @@
 security:
+    session_fixation_strategy:  none
+    
     encoders:
         FOS\UserBundle\Model\UserInterface: sha1
 
     role_hierarchy:
         ROLE_SALESADMIN:  ROLE_SALES
-        ROLE_ADMIN:       [ROLE_ARTICLEADMIN, ROLE_HRADMIN, ROLE_HOLIDAY, ROLE_CRONADMIN, ROLE_USER, ROLE_SALESADMIN, ROLE_SALESDISPATCHER, ROLE_OPER, ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN:       [ROLE_ARTICLEADMIN, ROLE_HRADMIN, ROLE_HOLIDAY, ROLE_CRONADMIN, ROLE_USER, ROLE_SALESADMIN, ROLE_SALESDISPATCHER, ROLE_OPER, ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_ALLOWED_TO_SWITCH, ROLE_COACHADMIN]
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
@@ -19,23 +21,26 @@ security:
         resetting_firewall:
             pattern: ^/resetting
             anonymous:  ~
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         main:
             pattern: ^/*
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
-                default_target_path: /
-                always_use_default_target_path: true
-            logout:       true
+            logout:
+                invalidate_session: true
+                success_handler: sd_user.handler.logout_success_handler
             anonymous:    false
-            
+
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
         - { path: ^/lists/sales, role: [ROLE_SALES, ROLE_OPER] }
-        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_DOGOVOR_VIEWER,  ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_SALES' }
         - { path: ^/lists/dogovor/made, role: ROLE_DOGOVORADMIN }
         - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -45,8 +50,13 @@ security:
         - { path: ^/cron-manager, role: ROLE_CRONADMIN }
         - { path: ^/lists/competitors/organization/new, roles: 'ROLE_INTRANETADMIN, ROLE_DOGOVORADMIN' }
         - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
-        - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_CONTROLLING_VIEWER' }
         - { path: ^/controlling/invoice/analytic, role: ROLE_CONTROLLING }
         - { path: ^/holiday, roles: 'ROLE_HRADMIN, ROLE_HOLIDAY' }
-        - { path: ^/lists/organization, roles: 'ROLE_SALESADMIN, ROLE_HRADMIN' }
+        - { path: ^/lists/organization, roles: 'ROLE_OPER, ROLE_SALES, ROLE_SALESADMIN, ROLE_HRADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_DOGOVORADMIN' }
+        - { path: ^/dashboard/blog/add, role: ROLE_ARTICLEADMIN }
+        - { path: ^/dashboard/blog/edit, role: ROLE_ARTICLEADMIN }
+        - { path: ^/user/timeOnline, roles: 'ROLE_SUPERVISOR, ROLE_TIMEONLINE_VIEWER' }
+        - { path: ^/training, roles: 'ROLE_COACH, ROLE_COACHADMIN' }
+        - { path: ^/user/deputies, roles: 'ROLE_SUPERVISOR, ROLE_HRADMIN' }
         

@@ -69,12 +69,21 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function basicAction($id)
     {
+        $accessEdit = false;
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $this->clearPaginator($filterNamespace);
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
-
         $department = $repository->getDepartmentInfoById($id);
+        $oper = $this->getDoctrine()
+            ->getRepository('SDUserBundle:StuffDepartments')
+            ->findOneBy(array(
+                'stuff' => $this->getUser()->getStuff(),
+                'departments' => $id
+            ));
+        if ($oper || $this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
+            $accessEdit = true;
+        }
         $mpks = $repository->find($id)->getMpks();
         $oldMpks = false;
         foreach ($mpks as $mpk) {
@@ -85,6 +94,7 @@ class OperDepartmentInfoController extends BaseFilterController
         }
 
         return $this->render('ITDoorsOperBundle:DepartmentInfo:basic.html.twig', array(
+            'accessEdit' => $accessEdit,
             'department' => $department,
             'mpks' => $mpks,
             'oldMpks' => $oldMpks
@@ -188,6 +198,49 @@ class OperDepartmentInfoController extends BaseFilterController
             'counter' => $counter
         ));
     }
+    /**
+     * resposibleAction
+     *
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function resposibleAction($id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $department = $em->getRepository('ListsDepartmentBundle:Departments')->find($id);
+        if (!$department) {
+            throw new \Exception('Departmen not found', 404);
+        }
+
+        $stuffDepartments = $em->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array('departments' => $department));
+
+        $result = array();
+        foreach ($stuffDepartments as $stuffDepartment) {
+            $idStuff = $stuffDepartment->getStuff()->getId();
+            $userkey = $stuffDepartment->getUserkey();
+            if (!isset($result[$idStuff])) {
+                $result[$idStuff] = array();
+            }
+            if (!isset($result[$idStuff]['userkey'])) {
+                $result[$idStuff]['userkey'] = array();
+            }
+            if (!isset($result[$idStuff]['userkey'][$userkey])) {
+                $result[$idStuff]['userkey'][$userkey] = array();
+            }
+            $result[$idStuff]['userkey'][$userkey][] = $stuffDepartment;
+            $result[$idStuff]['user'] = $stuffDepartment->getStuff()->getUser();
+            $result[$idStuff]['stuffId'] = $stuffDepartment->getStuff()->getId();
+        }
+
+        return $this->render('ITDoorsOperBundle:DepartmentInfo:resposible.html.twig', array(
+            'stuffDepartments' => $result,
+            'departmentId' => $id
+        ));
+    }
 
     /**
      * Render table for user (individual) info by id
@@ -244,5 +297,35 @@ class OperDepartmentInfoController extends BaseFilterController
         $response = $serviceExport->getResponse($excelObject, 'Contacts');
 
         return $response;
+    }
+
+    /**
+     * Render reports for department
+     *
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function reportListAction($id)
+    {
+
+        $department = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+
+        $organizer = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:OperOrganizer')->findBy(array(
+                'department' => $department
+            ));
+        $organizerReports = array();
+        if ($organizer) {
+            $organizerReports = $this->getDoctrine()
+                ->getRepository('ITDoorsOperBundle:CommentOrganizer')->findBy(array(
+                    'organizer' => $organizer
+                ));
+        }
+
+        return $this->render('ITDoorsOperBundle:DepartmentInfo:reports.html.twig', array(
+            'organizerReports' => $organizerReports
+        ));
     }
 }

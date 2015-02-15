@@ -32,9 +32,20 @@ class HandlingController extends BaseFilterController
 
         $results = $hdr->getList($dogovorId);
 
+         /** @var DogovorRepository $dogovorRepository */
+        $dogovorRepository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('ListsDogovorBundle:Dogovor');
+
+        $dogovor = $dogovorRepository->find($dogovorId);
+
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser(), $dogovor);
+
         return $this->render('ListsDogovorBundle:Handling:list.html.twig', array(
             'dogovorId' => $dogovorId,
-            'results' => $results
+            'results' => $results,
+            'access' => $access
         ));
     }
 
@@ -45,6 +56,20 @@ class HandlingController extends BaseFilterController
      */
     public function formAction($dogovorId)
     {
+        /** @var DogovorRepository $dogovorRepository */
+        $dogovorRepository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('ListsDogovorBundle:Dogovor');
+
+        $dogovor = $dogovorRepository->find($dogovorId);
+
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser(), $dogovor);
+
+        if (!$access->canEdit()) {
+            return $this->render('ListsDogovorBundle:Dogovor:noAccess.html.twig');
+        }
+
         return $this->render('ListsDogovorBundle:Handling:form.html.twig', array(
             'dogovorId' => $dogovorId
         ));

@@ -24,6 +24,11 @@ parameters:
         - dogovor
         - companystructure
         - call
+        - departments
+        - pay_master
+        - fos_user
+        - stuff
+        - project_gos_tender
     sd.host: http://itdoors.jelastic.neohost.net
     # AMI CONFIG
     ami.host: 193.242.166.54
@@ -32,3 +37,8 @@ parameters:
     sip.host.proxy: 192.168.4.4
     sip.port.udp: 5060
     sip.port.ws: 10060
+	# Auto-logout
+    cron_timeout: 16 # минуты (время ПОСЛЕ последней активности, по истечению которого сессия считается доступной для удаления кроном)
+    idle_after: 900 # секунды (время бездействия, по истечению которого вылетает окно с предупреждением об авто-логауте)
+    modal_timeout: 30 # секунды (обратный отсчёт в окне с предупреждением)
+    polling_interval: 900 # секунды (интервал между ajax-ами, обновляющими время последней активности на сервере)

@@ -32,6 +32,11 @@ class Article
     /**
      * @var string
      */
+    private $file;
+
+    /**
+     * @var string
+     */
     private $textShort;
 
     /**
@@ -144,6 +149,30 @@ class Article
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     *
+     * @return Article
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**

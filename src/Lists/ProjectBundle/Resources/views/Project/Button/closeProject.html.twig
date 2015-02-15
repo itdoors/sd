@@ -1,0 +1,22 @@
+<a class="btn green" id="close-add-btn-{{object.id}}" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Close project{% endtrans %}
+</a>
+{% if isList is defined %}
+    {% set arrayUpdate = { 'projectList' : 'ITDoorsAjax.updateList'} %}
+{% else %}
+     {% set arrayUpdate = { 'project_edit' : 'ITDoorsAjax.updateList', 'list_participants' : 'ITDoorsAjax.updateList','list_documents' : 'ITDoorsAjax.updateList'} %}
+{% endif %}
+{{ ajax_form_render_btn({
+   'selector' : '#close-add-btn-'~ object.id,
+   'formType' : 'closeProjectForm',
+   'successFunctions' : arrayUpdate,
+   'serviceSave' : {
+       'alias' : 'lists_project.service',
+       'method' : 'saveCloseProjectForm'
+   },
+   'defaults' : {
+       'projectId' : object.id
+   },
+   'target' : '#form_modal_block',
+   'html' : 'ListsProjectBundle:Form:closeProjectForm.html.twig'
+}) }}

@@ -51,6 +51,21 @@ class OrganizationRepository extends EntityRepository
         return $query;
     }
     /**
+     * Get organization by own
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getOrganizationSignOwnQuery()
+    {
+        $query = $this->createQueryBuilder('o')
+            ->innerJoin('o.organizationsigns', 'sign')
+            ->where('sign.lukey = :lukey')
+            ->setParameter(':lukey', 'organization_sign_own')
+            ->orderBy('o.name');
+
+        return $query;
+    }
+    /**
      * @param int[]   $userIds
      * @param mixed[] $filters
      *
@@ -81,9 +96,7 @@ class OrganizationRepository extends EntityRepository
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
-        //$sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
         $this->processBaseQuery($sqlCount);
-        //$sqlCount->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
@@ -383,6 +396,8 @@ class OrganizationRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        $sql->leftJoin('o.organizationUsers', 'oUser')
+                            ->leftJoin('oUser.user', 'users');
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
@@ -433,10 +448,18 @@ class OrganizationRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getSearchQuery ($q, $organizationSignId = null)
+    public function getSearchQuery($q, $organizationSignId = null)
     {
-        $sql = $this->createQueryBuilder('o')
-            ->where('lower(o.name) LIKE :q')
+        $sql = $this->createQueryBuilder('o');
+        $sql
+            ->where(
+                $sql->expr()->orX(
+                    $sql->expr()->like($sql->expr()->lower('o.name'), ':q'),
+                    $sql->expr()->like($sql->expr()->lower('o.shortname'), ':q'),
+                    $sql->expr()->like($sql->expr()->lower('o.edrpou'), ':q')
+                )
+                
+            )
             ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
 
@@ -444,6 +467,25 @@ class OrganizationRepository extends EntityRepository
             $sql->andWhere('o.organizationSignId = :organizationSignId')
                 ->setParameter(':organizationSignId', $organizationSignId);
         }
+
+        return $sql->getQuery()->getResult();
+    }
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchSingQuery($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->innerJoin('o.lookup', 'sign')
+            ->where('lower(o.name) LIKE :q')
+            ->andWhere('sign.lukey = :lukey')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
+            ->setParameter(':lukey', 'organization_sign_own')
+            ->orderBy('o.name');
 
         return $sql->getQuery()->getResult();
     }
@@ -548,7 +590,7 @@ class OrganizationRepository extends EntityRepository
     public function searchSelfOrganization ($q)
     {
         $sql = $this->createQueryBuilder('o')
-            ->leftJoin('o.role', 'l')
+            ->leftJoin('o.lookup', 'l')
             ->where('lower(o.name) LIKE :q')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->andWhere('l.lukey = :key')
@@ -946,19 +988,70 @@ class OrganizationRepository extends EntityRepository
         return $res;
     }
     /**
-     * Searches organization by $q
-     *
-     * @param string $userId
-     *
+     * Returns results for interval future invoice
+     * 
+     * @param integer $companystryctyreId
+     * 
      * @return mixed[]
      */
-    public function isManager ($userId)
+    public function getWithoutContactsForInvoice ($companystryctyreId)
     {
-        $sql = $this->createQueryBuilder('o')
-            ->where('lower(o.name) LIKE :q')
-            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
-            ->getQuery();
+        $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT i.customerId 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    LEFT JOIN i.invoicecompanystructure ic
+                    LEFT JOIN ic.companystructure c
+                    WHERE c.id in (:companystructureId)
+                    or
+                    c.id in 
+                        (
+                            SELECT
+                                cc.id
+                            FROM
+                                ListsCompanystructureBundle:Companystructure cp
+                            LEFT JOIN 
+                                ListsCompanystructureBundle:Companystructure cc 
+                            WHERE
+                                cp.root = cc.root
+                            AND
+                                cp.lft < cc.lft
+                            AND 
+                                cp.rgt > cc.rgt
+                            AND
+                                cp in (:companystructureId)
+                        )
+                )'
+            )
+            ->andWhere(
+                'o.id not in (
+                    SELECT mco.modelId
+                    FROM  ListsContactBundle:ModelContact mco
+                    WHERE mco.modelName = :modelNameOrganization
+                    AND mco.modelId is not null
+                )'
+            )
+            ->andWhere(
+                'o.id not in (
+                    SELECT do.id
+                    FROM  ListsContactBundle:ModelContact mcd
+                    LEFT JOIN  Lists\DepartmentBundle\Entity\Departments d 
+                        WITH mcd.modelName = :modelNameDepartments AND mcd.modelId = d.id
+                    LEFT JOIN d.organization as do
+                    WHERE do.id is not null
+                )'
+            )
+            ->setParameter(':modelNameOrganization', 'organization')
+            ->setParameter(':modelNameDepartments', 'departments')
+            ->setParameter(':companystructureId', $companystryctyreId)
+            ->orderBy('customerName')
+            ->getQuery()
+            ->getResult();
 
-        return $sql->getResult();
+        return $res;
     }
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SD\UserBundle\Entity\User;
 
 /**
  * UserService
@@ -53,12 +54,28 @@ class UserService
                 'text' => $translator->trans('Settings profile', array(), 'SDUserBundle')
             );
         }
-        $tabs['plan'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'plan',
-            'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-            'text' => $translator->trans('Plan', array(), 'SDUserBundle')
-        );
+        if ($options['isAdmin']) {
+            $tabs['roles'] = array(
+                'blockupdate' => 'ajax-tab-holder',
+                'tab' => 'roles',
+                'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
+                'text' => $translator->trans('Groups and Roles', array(), 'SDUserBundle')
+            );
+        }
+//        $tabs['plan'] = array(
+//            'blockupdate' => 'ajax-tab-holder',
+//            'tab' => 'plan',
+//            'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
+//            'text' => $translator->trans('Plan', array(), 'SDUserBundle')
+//        );
+        if ($options['currentUser']) {
+            $tabs['loginHistory'] = array(
+             'blockupdate' => 'ajax-tab-holder',
+             'tab' => 'loginHistory',
+             'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
+             'text' => $translator->trans('Login History', array(), 'SDUserBundle')
+            );
+        }
 //        if($pass){
 //          $tabs['pass'] = array(
 //            'blockupdate' => 'ajax-tab-holder',
@@ -118,5 +135,23 @@ class UserService
             }
         }
         $em->flush();
+    }
+
+    /**
+     * Returns all user's Roles and Groups of Roles
+     *
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getGroupsAndRolesForUser(User $user)
+    {
+        $groups = $user->getGroups();
+        $roles = $user->getRoles();
+
+        $result['groups'] = $groups;
+        $result['roles'] = $roles;
+
+        return $result;
     }
 }

@@ -1,193 +1,15 @@
-#SALES ROUTES
-lists_sales_organization_index:
-    pattern:  /lists/sales/organization/index
-    defaults: { _controller: ListsOrganizationBundle:Sales:index }
-    
-lists_sales_organization_index_list:
-    pattern:  /lists/sales/organization/index/list
-    defaults: { _controller: ListsOrganizationBundle:Sales:list }
-
-lists_sales_organization_new:
-    pattern:  /lists/sales/organization/new
-    defaults: { _controller: ListsOrganizationBundle:Sales:new }
-
-lists_sales_organization_show:
-    pattern:  /lists/sales/organization/show/{id}
-    defaults: { _controller: ListsOrganizationBundle:Sales:show }
-
-lists_sales_organization_show_empty:
-    pattern:  /lists/salesdispatcher/organization/show/
-
-lists_sales_organization_filter:
-    pattern:  /lists/sales/organization/filter
-    defaults: { _controller: ListsOrganizationBundle:Sales:filter }
-
-lists_sales_organization_filter_clear:
-    pattern:  /lists/sales/organization/filter_clear
-    defaults: { _controller: ListsOrganizationBundle:Sales:filterClear }
-
-lists_sales_organization_ajax_index:
-    pattern:  /lists/sales/organization/ajax/index
-    defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }
-
-lists_sales_organization_ajax_users:
-    pattern:  /lists/sales/organization/ajax/users/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:Sales:organizationUsers }
-
-lists_sales_organization_export_excel:
-    pattern:  /lists/sales/organization/export/excel
-    defaults: { _controller: ListsOrganizationBundle:Sales:exportExcel }
-
-lists_sales_organization_service_cover_list:
-    pattern:  /lists/sales/organization/service/cover/list/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
-    methods:   [GET, POST]
-
-lists_sales_organization_show_list_document:
-    pattern:  /lists/sales/organization/show/list/document/{id}
-    defaults: { _controller: ListsOrganizationBundle:Sales:listDocument }
-
-lists_sales_organization_show_list_dogovor:
-    pattern:  /lists/sales/organization/show/list/dogovor/{id}
-    defaults: { _controller: ListsOrganizationBundle:Sales:listDogovor }
-
-lists_sales_organization_show_list_coea:
-    pattern:  /lists/sales/organization/show/list/coea/{id}
-    defaults: { _controller: ListsOrganizationBundle:Sales:listCoea }
-
-lists_sales_organization_show_list_kved:
-    pattern:  /lists/sales/organization/show/list/kved/{id}
-    defaults: { _controller: ListsOrganizationBundle:Sales:listKved }
-#SALES DISPATCHER ROUTES
-
-lists_sales_dispatcher_organization_index:
-    pattern:  /lists/salesdispatcher/organization/index
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:index }
-    
-lists_sales_dispatcher_organization_index_list:
-    pattern:  /lists/salesdispatcher/organization/index/list
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:list }
-
-lists_sales_dispatcher_organization_new:
-    pattern:  /lists/salesdispatcher/organization/new
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:new }
-
-lists_sales_dispatcher_organization_show:
-    pattern:  /lists/salesdispatcher/organization/show/{id}
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:show }
-
-lists_sales_dispatcher_organization_show_empty:
-    pattern:  /lists/salesdispatcher/organization/show/
-
-lists_sales_dispatcher_organization_filter:
-    pattern:  /lists/salesdispatcher/organization/filter
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filter }
-
-lists_sales_dispatcher_organization_filter_clear:
-    pattern:  /lists/salesdispatcher/organization/filter_clear
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filterClear }
-
-lists_sales_dispatcher_organization_ajax_index:
-    pattern:  /lists/salesdispatcher/organization/ajax/index
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:ajaxIndex }
-
-lists_sales_dispatcher_organization_ajax_users:
-    pattern:  /lists/salesdispatcher/organization/ajax/users/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:organizationUsers }
-
-#SALES ADMIN ROUTES
-
-lists_sales_admin_organization_index:
-    pattern:  /lists/salesadmin/organization/index
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:index }
-    
-lists_sales_admin_organization_index_list:
-    pattern:  /lists/salesadmin/organization/index/list
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:list }
-
-lists_sales_admin_organization_new:
-    pattern:  /lists/salesadmin/organization/new
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:new }
-
-lists_sales_admin_organization_show:
-    pattern:  /lists/salesadmin/organization/show/{id}
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:show }
-
-lists_sales_admin_organization_show_empty:
-    pattern:  /lists/salesdispatcher/organization/show/
-
-lists_sales_admin_organization_filter:
-    pattern:  /lists/salesadmin/organization/filter
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:filter }
-
-lists_sales_admin_organization_filter_clear:
-    pattern:  /lists/salesadmin/organization/filter_clear
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:filterClear }
-
-lists_sales_admin_organization_ajax_index:
-    pattern:  /lists/salesadmin/organization/ajax/index
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:ajaxIndex }
-
-lists_sales_admin_organization_ajax_users:
-    pattern:  /lists/salesadmin/organization/ajax/users/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationUsers }
-
-lists_sales_admin_organization_for_user:
-    pattern:  /lists/salesadmin/organization/for/user
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationForUser }
-
-lists_sales_admin_organization_export_excel:
-    pattern:  /lists/salesadmin/organization/export/excel
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:exportExcel }
-
-# Dogovor Admin route
-lists_dogovor_admin_organization_index:
-    pattern:  /lists/dogovor/admin/organization/index
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:index }
-    
-lists_dogovor_admin_organization_index_list:
-    pattern:  /lists/dogovor/admin/organization/index/list
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:list }
-
-lists_dogovor_admin_organization_new:
-    pattern:  /lists/dogovor/admin/organization/new
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:new }
-
-lists_dogovor_admin_organization_show:
-    pattern:  /lists/dogovor/admin/organization/show/{id}
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:show }
-
-lists_dogovor_admin_organization_show_empty:
-    pattern:  /lists/salesdispatcher/organization/show/
-
-lists_dogovor_admin_organization_filter:
-    pattern:  /lists/dogovor/admin/organization/filter
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:filter }
-
-lists_dogovor_admin_organization_filter_clear:
-    pattern:  /lists/dogovor/admin/organization/filter_clear
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:filterClear }
-
-lists_dogovor_admin_organization_ajax_index:
-    pattern:  /lists/dogovor/admin/organization/ajax/index
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:ajaxIndex }
-
-lists_dogovor_admin_organization_ajax_users:
-    pattern:  /lists/dogovor/admin/organization/ajax/users/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:organizationUsers }
-    
-lists_dogovor_admin_organization_export_excel:
-    pattern:  /lists/dogovor/admin/organization/export/excel
-    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:exportExcel }
-    
 # Competitors 
 lists_competitors_organization_index:
-    pattern:  /lists/competitors/organization/index
-    defaults: { _controller: ListsOrganizationBundle:Competitors:index }
+    pattern:  /lists/competitors/organization/index/{type}
+    defaults: { _controller: ListsOrganizationBundle:Competitors:index, type: '' }
+    requirements:
+        type: my|''
 
 lists_competitors_organization_index_list:
-    pattern:  /lists/competitors/organization/index/list
-    defaults: { _controller: ListsOrganizationBundle:Competitors:list }
+    pattern:  /lists/competitors/organization/index/list/{type}
+    defaults: { _controller: ListsOrganizationBundle:Competitors:list, type: '' }
+    requirements:
+        type: my|''
 
 lists_competitors_organization_new:
     pattern:  /lists/competitors/organization/new
@@ -204,49 +26,51 @@ lists_competitors_organization_filter:
     pattern:  /lists/competitors/organization/filter
     defaults: { _controller: ListsOrganizationBundle:Competitors:filter }
 
-# for all
-lists_organization_export_excel:
-    pattern:  /lists/organization/export/excel
-    defaults: { _controller: ListsOrganizationBundle:Sales:exportExcel }
-    
 # Contractor
 lists_contractor_index:
     pattern:  /lists/contractor/index
     defaults: { _controller: ListsOrganizationBundle:Contractor:index }
 
-# Всех переключаем на организации это все нужно будет удалить + контроллер + вюхи
-#lists_contractor_export:
-#    pattern:  /lists/contractor/export
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:exportContractors }
-#
-#lists_contractor_index_list:
-#    pattern:  /lists/contractor/index/list
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:list }
-#    
-#lists_contractor_new:
-#    pattern:  /lists/contractor/new
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:new }
-#    
-#lists_contractor_show:
-#    pattern:  /lists/contractor/show/{id}
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:show }
-#    
-#lists_contractor_show_list_document:
-#    pattern:  /lists/contractor/show/list/document/{id}
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:listDocument }
-#
-#lists_contractor_show_list_dogovor:
-#    pattern:  /lists/contractor/show/list/dogovor/{id}
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:listDogovor }
-#lists_contractor_show_list_coea:
-#    pattern:  /lists/contractor/show/list/coea/{id}
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:listCoea }
-#
-#lists_contractor_show_list_kved:
-#    pattern:  /lists/contractor/show/list/kved/{id}
-#    defaults: { _controller: ListsOrganizationBundle:Contractor:listKved }
-
 # organization
+lists_organization_index:
+    pattern:  /lists/organization/index/{type}
+    defaults: { _controller: ListsOrganizationBundle:Organization:index, type: '' }
+    requirements:
+        type: my|
+    
+lists_organization_index_list:
+    pattern:  /lists/organization/index/list/{type}
+    defaults: { _controller: ListsOrganizationBundle:Organization:list, type: '' }
+    requirements:
+        type: my|
+
+lists_organization_new:
+    pattern:  /lists/organization/new
+    defaults: { _controller: ListsOrganizationBundle:Organization:new }
+
+lists_organization_create:
+    pattern:  /lists/organization/create
+    defaults: { _controller: ListsOrganizationBundle:Organization:create }
+
+lists_organization_show:
+    pattern:  /lists/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:show }
+
+lists_organization_ajax_users:
+    pattern:  /lists/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:Organization:organizationUsers }
+
+lists_organization_show_list_document:
+    pattern:  /lists/organization/show/list/document/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:listDocument }
+
+lists_organization_show_list_kved:
+    pattern:  /lists/organization/show/list/kved/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:listKved }
+
+lists_organization_ajax_save:
+    pattern:  /lists/organization/ajax/save
+    defaults: { _controller: ListsOrganizationBundle:Organization:ajaxSave }
 
 lists_organization_transfer:
     pattern:  /lists/organization/transfer
@@ -259,3 +83,116 @@ lists_organization_for_user:
 lists_organization_transfer_for_user:
     pattern:  /lists/organization/transfer/for/user
     defaults: { _controller: ListsOrganizationBundle:Organization:organizationTransferForUser }
+
+lists_organization_departments_list:
+    pattern:  /lists/organization/departments/list/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:departmentsList }
+    requirements:
+        id:  \d+
+
+lists_organization_bank_list:
+    pattern:  /lists/organization/bank/list/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:bankList }
+    requirements:
+        id:  \d+
+
+lists_organization_export_excel:
+    pattern:  /lists/organization/export/excel/{type}
+    defaults: { _controller: ListsOrganizationBundle:Organization:exportExcel, type: '' }
+    requirements:
+        type: my|
+    
+lists_organization_service_cover_list:
+    pattern:  /lists/sales/organization/service/cover/list/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
+    methods:   [GET, POST]
+
+lists_organization_show_empty:
+    pattern:  /lists/organization/show/
+    
+# ajaxController
+lists_organization_ajax_search:
+    pattern:  /lists/organization/ajax/search
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationSearch }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organization_search_signs:
+    pattern:  /lists/organization/ajax/organization/search/signs
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationSearchSing }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organization_by_id:
+    pattern:  /lists/organization/ajax/organization_by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationById }
+    methods:   [GET, POST]
+    
+lists_organization_ajax_organization_by_ids:
+    pattern:  /lists/organization/ajax/organization_by_ids
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationByIds }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organizationsigns_search:
+    pattern:  /lists/organization/ajax/organizationsigns/search
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationsignsSearch }
+    methods:   [GET, POST]
+
+lists_organization_ajax_save_organization:
+    pattern:  /lists/organization/ajax/save/organization
+    defaults: { _controller: ListsOrganizationBundle:Ajax:ajaxSaveOrganization }
+
+lists_organization_ajax_organization_for_creation:
+    pattern:  /lists/organization/ajax/organization/for/creation
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationForCreation }
+
+lists_organization_ajax_search_current_account_dependent:
+    pattern:  /lists/organization/ajax/search/current_account/dependent
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationCurrentAccountSearchDependent }
+    methods:   [GET]
+
+lists_organization_ajax_current_account_by_id:
+    pattern:  /lists/organization/ajax/current_account/by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationCurrentAccountById }
+    methods:   [GET]
+
+lists_organization_ajax_bank_by_id:
+    pattern:  /lists/organization/ajax/bank/by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankById }
+    methods:   [GET]
+
+lists_organization_ajax_bank_by_one:
+    pattern:  /lists/organization/ajax/bank/by_one
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankByOne }
+    methods:   [GET]
+
+lists_organization_ajax_bank_searh_dependent_field:
+    pattern:  /lists/organization/ajax/bank/search/dependent/field
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankSearchFieldDependent }
+    methods:   [GET]
+
+lists_organization_ajax_bank_get_field:
+    pattern:  /lists/organization/ajax/bank/get/field
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankGetField }
+    methods:   [GET]
+
+lists_organization_ajax_bank_searh_name_and_mfo:
+    pattern:  /lists/organization/ajax/bank/search/name_and_mfo
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankSearch }
+    methods:   [GET]
+lists_organization_ajax_bank_name_and_mfo_by_id:
+    pattern:  /lists/organization/ajax/bank/name_and_mfo_by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankNameAndMfoById }
+    methods:   [GET]
+
+lists_organization_ajax_search_kved:
+    pattern:  /lists/organization/ajax/search/kved
+    defaults: { _controller: ListsOrganizationBundle:Ajax:kvedSearch }
+    methods:   [GET]
+
+lists_organization_ajax_kved_by_ids:
+    pattern:  /lists/organization/ajax/kved/by_ids
+    defaults: { _controller: ListsOrganizationBundle:Ajax:kvedByIds }
+    methods:   [GET]
+    
+lists_organization_ajax_create:
+    pattern:  /lists/organization/ajax/create
+    defaults: { _controller: ListsOrganizationBundle:Ajax:create }

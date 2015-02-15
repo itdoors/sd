@@ -120,11 +120,12 @@ class EmailService
         $result = null;
         if ($send) {
             $last = $em->getRepository('TSSAutomailerBundle:Automailer')
-                    ->createQueryBuilder('a')
-                    ->orderBy('a.id', 'DESC')
-                    ->getQuery()
-                    ->getResult();
-            $result = $last[0]->getId();
+                ->createQueryBuilder('a')
+                ->select('MAX(a.id) as maxId')
+                ->getQuery()
+                ->getResult();
+
+            $result = $last[0]['maxId'];
         }
 
         return $result;

@@ -14,6 +14,12 @@ Lists\HandlingBundle\Entity\HandlingStatus:
             length: 128
             fixed: false
             nullable: false
+        alias:
+            type: string
+            length: 64
+            nullable: true
+            options:
+                comment: Альтернативное название (уникальное)
         sortorder:
             type: integer
             nullable: true

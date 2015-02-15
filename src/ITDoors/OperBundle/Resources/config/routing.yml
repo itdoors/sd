@@ -26,6 +26,12 @@ it_doors_oper_department_info_coworker_table:
     pattern:  /oper/department/info/coworker/table/{id}
     defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:userInfoTable }
 
+it_doors_oper_department_info_resposible:
+    pattern:  /oper/department/info/resposible/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:resposible }
+    requirements:
+        id:  \d+
+
 it_doors_oper_schedule:
     pattern:  /oper/schedule/{id}
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:index }
@@ -141,3 +147,63 @@ it_doors_oper_supervisor_coworkers_export:
 it_doors_oper_supervisor_contacts_excel:
     pattern:  /oper/supervisor/contacts/excel
     defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:getAllContactsExcel }
+
+it_doors_oper_organizer_index:
+    pattern:  /oper/organizer/
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:index }
+
+it_doors_oper_organizer_events:
+    pattern:  /oper/organizer/events
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:getOrganizerEvents }
+
+it_doors_oper_organizer_insert:
+    pattern:  /oper/organizer/insert
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:insertOrganizerData }
+
+it_doors_oper_rendered_departments:
+    pattern:  /oper/rendered/departments
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:getRenderedDepartments }
+
+it_doors_oper_edit_organizer:
+    pattern:  /oper/edit/organizer
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:editOrganizer }
+
+it_doors_oper_delete_organizer:
+    pattern:  /oper/delete/organizer
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:deleteOrganizer }
+
+it_doors_oper_add_comment:
+    pattern:  /oper/add/comment
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:addComment }
+
+it_doors_oper_get_comments:
+    pattern:  /oper/get/comments
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:renderComments }
+
+it_doors_oper_statistic:
+    pattern:  /oper/statistic/index
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:index }
+
+it_doors_oper_department_report_list:
+    pattern:  /oper/department/info/report/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:reportList }
+
+it_doors_oper_ajax_get_oper_manager:
+    pattern:  /oper/statistic/ajax/get/oper/manager
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:getOperManagerAjax }
+
+it_doors_oper_statistic_render_filter_result:
+    pattern:  /oper/statistic/render/filter/result
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:renderFilterResult }
+
+it_doors_oper_statistic_coworker_render_filter_result:
+    pattern:  /oper/statistic/render/filter/coworker/result
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:renderFilterCoworkerResult }
+
+it_doors_oper_statistic_report_export:
+    pattern:  /oper/statistic/report/export
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:exportReport }
+
+it_doors_oper_department_all_export:
+    pattern:  /oper/department/all/export
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:exportDepartmentInfo }

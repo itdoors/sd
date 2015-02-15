@@ -85,3 +85,11 @@ sd_task_add_resolution:
 sd_task_list_item:
     path:     /tasks/item/list
     defaults: { _controller: SDTaskBundle:Task:listItem }
+
+sd_task_list_stuff:
+    path:     /tasks/stuff/list
+    defaults: { _controller: SDTaskBundle:Task:getAllStuffAjax }
+
+sd_task_print:
+    path:     /tasks/print/{id}
+    defaults: { _controller: SDTaskBundle:Task:print }

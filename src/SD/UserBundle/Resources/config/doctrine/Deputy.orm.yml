@@ -1,0 +1,17 @@
+SD\UserBundle\Entity\Deputy:
+    repositoryClass: SD\UserBundle\Entity\DeputyRepository
+    type: entity
+    table: deputy
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToMany:
+        deputyStuffs:
+            targetEntity: Stuff
+    oneToOne:
+        forStuff:
+            targetEntity: Stuff

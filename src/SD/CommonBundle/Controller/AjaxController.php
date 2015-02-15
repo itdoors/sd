@@ -46,6 +46,7 @@ use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
 use ITDoors\SipBundle\Entity\Call;
+use SD\UserBundle\Entity\StuffDepartments;
 
 /**
  * AjaxController class.
@@ -102,6 +103,32 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
+    public function organizationSingAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations = $organizationsRepository->getSearchSingQuery($searchText);
+
+        $result = array();
+
+        foreach ($organizations as $organization) {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
     /**
      * Returns list of organizations in json
      *
@@ -427,16 +454,15 @@ class AjaxController extends BaseFilterController
      */
     public function cityByIdAction()
     {
-        $ids = explode(',', $this->get('request')->query->get('id'));
+        $id = $this->get('request')->query->get('id');
 
-        $cityList = $this->getDoctrine()
+        $city = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
-            ->findBy(array('id'=>$ids));
+            ->find($id);
 
-        $result = array();
-
-        foreach ($cityList as $city) {
-            $result[] = $this->serializeObject($city);
+        $result = [];
+        if ($city) {
+            $result = $this->serializeObject($city);
         }
 
         return new Response(json_encode($result));
@@ -534,6 +560,35 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+
+    /**
+     * Returns json position list
+     *
+     * @return string
+     */
+    public function positionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Position');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] =  array(
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getName(),
+                'text' => $object->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
     /**
      * Returns json organization type list
      *
@@ -564,7 +619,7 @@ class AjaxController extends BaseFilterController
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
-        $dogovorTypes = $lr->getOnlyDogovorTypeQuery()
+        $dogovorTypes = $lr->getOnlyDogovorTypeGroupQuery()
             ->getQuery()
             ->getResult();
 
@@ -834,55 +889,6 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
-
-    /**
-     * Returns json organization list for contacts query
-     *
-     * @return string
-     */
-    public function handlingStatusAction()
-    {
-        $objects = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingStatus')
-            ->createQueryBuilder('s')
-            ->orderBy('s.sortorder')
-            ->getQuery()
-            ->getResult();
-
-        $result = array();
-
-        foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
-        }
-
-        return new Response(json_encode($result));
-    }
-
-    /**
-     * Returns json handling result list
-     *
-     * @return string
-     */
-    public function handlingResultAction()
-    {
-        $objects = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingResult')
-            ->createQueryBuilder('s')
-            ->orderBy('s.sortorder')
-            ->getQuery()
-            ->getResult();
-
-        $result = array();
-
-        $result[] = $this->getEmptyResult();
-
-        foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
-        }
-
-        return new Response(json_encode($result));
-    }
-
     /**
      * Returns empty result array
      *
@@ -1035,7 +1041,7 @@ class AjaxController extends BaseFilterController
     /**
      * Returns json users list
      *
-     * @return string
+     * @return Response
      */
     public function userFIOAction()
     {
@@ -1046,7 +1052,7 @@ class AjaxController extends BaseFilterController
 
         $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
-            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
@@ -1700,9 +1706,9 @@ class AjaxController extends BaseFilterController
      */
     public function userSaveAction()
     {
-        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
-            return false;
-        }
+//        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            return false;
+//        }
         $translator = $this->get('translator');
 
         $pk = $this->get('request')->request->get('pk');
@@ -1726,6 +1732,11 @@ class AjaxController extends BaseFilterController
             if (in_array($type, array('integer'))) {
                 $value = null;
             }
+        }
+        if ($name == 'userPosition') {
+            $value = $this->getDoctrine()
+                ->getRepository('SDUserBundle:Position')
+                ->find((int) $value);
         }
 
         $user->$methodSet($value);
@@ -1763,9 +1774,9 @@ class AjaxController extends BaseFilterController
      */
     public function stuffSaveAction()
     {
-        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
-            return false;
-        }
+//        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            return false;
+//        }
         $translator = $this->get('translator');
 
         $pk = $this->get('request')->request->get('pk');
@@ -1795,7 +1806,6 @@ class AjaxController extends BaseFilterController
             ->getRepository('ListsLookupBundle:Lookup:Stuff')
             ->find((int) $value);
         }
-
         $user->$methodSet($value);
 
         $validator = $this->get('validator');
@@ -2191,12 +2201,16 @@ class AjaxController extends BaseFilterController
      */
     public function dogovorHistoryFormSave($form, $user, $request)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($user);
+
+        if (!$access->canProlongate()) {
+            throw new \Exception('No access', 403);
+        }
         /** @var Dogovor $dogovor */
         $dogovor = $form->getData();
 
         $requestParams = $request->request->get($form->getName());
-
-        $user = $this->getUser();
 
         $dogovorHistory = new DogovorHistory();
 
@@ -2265,21 +2279,27 @@ class AjaxController extends BaseFilterController
 
         $data->setCreatedatetime(new \DateTime());
 
-        $user = $this->getUser();
-
         if (!$data->getUser()) {
             $data->setUser($user);
         }
 
         $data->setHandling($handling);
 
-        $file = $form['file']->getData();
-
-        if ($file) {
-            $data->upload();
-        }
+        $files = $form['files']->getData();
 
         $em = $this->getDoctrine()->getManager();
+        if ($files) {
+            foreach ($files as $file) {
+                if (!empty($file)) {
+                    $handlingMessageFile = new \Lists\HandlingBundle\Entity\HandlingMessageFile();
+                    $handlingMessageFile->setHandlingMessage($data);
+                    $handlingMessageFile->setFileTemp($file);
+                    $handlingMessageFile->upload();
+                    $em->persist($handlingMessageFile);
+                }
+            }
+        }
+
         $em->persist($data);
         $em->flush();
         $em->refresh($data);
@@ -2522,18 +2542,18 @@ class AjaxController extends BaseFilterController
      */
     public function invoiceMessageFormSave(Form $form, $user, $request)
     {
-        /** @var InvoiceMessage $data */
-        $data = $form->getData();
+        /** @var InvoiceMessage $invoiceMessage */
+        $invoiceMessage = $form->getData();
 
         $formData = $request->request->get($form->getName());
 
-        $invoiceId = $data->getInvoiceId();
+        $invoiceId = $invoiceMessage->getInvoiceId();
 
         /** @var Invoice $invoice */
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
-        $data->setInvoice($invoice);
+        $invoiceMessage->setInvoice($invoice);
 
         $contactid = $formData['contactid'];
 
@@ -2542,17 +2562,23 @@ class AjaxController extends BaseFilterController
             $contact = $this->getDoctrine()
                 ->getRepository('ListsContactBundle:ModelContact')
                 ->find($contactid);
-            $data->setContact($contact);
+            $invoiceMessage->setContact($contact);
+        }
+        $file = $form['file']->getData();
+
+        if ($file) {
+            $invoiceMessage->setFileTepm($file);
+            $invoiceMessage->upload();
         }
 
-        $data->setUser($this->getUser());
+        $invoiceMessage->setUser($this->getUser());
 
-        $data->setNote($formData['note']);
+        $invoiceMessage->setNote($formData['note']);
 
-        $data->setCreatedate(new \DateTime());
+        $invoiceMessage->setCreatedate(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
+        $em->persist($invoiceMessage);
         $em->flush();
 
         return true;
@@ -2620,6 +2646,7 @@ class AjaxController extends BaseFilterController
         $formData = $request->request->get($form->getName());
 
         $data->setCreateDate(new \DateTime());
+        $data->setEditedDate(new \DateTime());
         $data->setAuthor($user);
         $data->setStartDate(new \DateTime($formData['startDate']));
 
@@ -2711,6 +2738,7 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setUser($user);
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(true);
+        $taskUserRole->setIsUpdated(false);
         $em->persist($taskUserRole);
         $em->flush();
 
@@ -2729,6 +2757,8 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setUser($performer);
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(false);
+        $taskUserRole->setIsUpdated(false);
+
         $em->persist($taskUserRole);
         $em->flush();
 
@@ -2747,6 +2777,8 @@ class AjaxController extends BaseFilterController
                 $taskUserRole->setUser($matcher);
                 $taskUserRole->setTask($data);
                 $taskUserRole->setIsViewed(false);
+                $taskUserRole->setIsUpdated(false);
+
                 $em->persist($taskUserRole);
                 $taskUserRolesEmail[] = $taskUserRole;
             }
@@ -2761,6 +2793,8 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setRole($controllerRole);
         $taskUserRole->setUser($controller);
         $taskUserRole->setTask($data);
+        $taskUserRole->setIsUpdated(false);
+
         if ($controller == $user) {
             $taskUserRole->setIsViewed(true);
         } else {
@@ -2777,17 +2811,6 @@ class AjaxController extends BaseFilterController
         $taskService->sendEmailInform($taskUserRolesEmail, 'new');
 
         return true;
-/*        }
-
-        return $this->render('SDCommonBundle:AjaxForm:taskForm1.html.twig', array(
-            'form' => $form->createView(),
-            'formName' => $formName,
-            'postFunction' => $postFunction,
-            'postTargetId' => $postTargetId,
-            'targetId' => $targetId,
-            'model' => $model,
-            'modelId' => $modelId,
-        ));*/
     }
 
 
@@ -3080,8 +3103,8 @@ class AjaxController extends BaseFilterController
 
         $email = $this->get('it_doors_email.service');
         $url = $this->generateUrl(
-            'lists_sales_handling_show',
-            array('id' => $handling->getId()),
+            'lists_handling_show',
+            array('id' => $handling->getId(), 'type' => 'my'),
             true
         );
         $email->send(
@@ -3287,17 +3310,22 @@ class AjaxController extends BaseFilterController
             ->find($id);
 
           /** @var Invoice $invoice */
-        $invoice = $em
-            ->getRepository('ITDoorsControllingBundle:Invoice')
-            ->find($object->getInvoiceId());
+        $invoice = $object->getInvoice();
 
-        if ($invoice && $invoice->getDogovorId()) {
+        if ($invoice && $invoice->getDogovor()) {
             /** @var Dogovor $dogovor */
-            $dogovor = $em
-               ->getRepository('ListsDogovorBundle:Dogovor')
-               ->find($invoice->getDogovorId());
+            $dogovor = $invoice->getDogovor();
 
             if ($dogovor) {
+                $dogovorCompany =  $em
+                    ->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                    ->findOneBy(array(
+                        'dogovorId' => $invoice->getDogovorId(),
+                        'companystructureId' => $object->getCompanystructureId()
+                    ));
+                if ($dogovorCompany) {
+                    $em->remove($dogovorCompany);
+                }
                 /** @var Invoice $invoices */
                 $invoices = $em
                 ->getRepository('ITDoorsControllingBundle:Invoice')
@@ -3346,6 +3374,45 @@ class AjaxController extends BaseFilterController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function stuffDepartmensDelete($params)
+    {
+//        if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            throw new \Exception('You don`t have access', 403);
+//        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $departmentId = $params['departmentId'];
+        $stuffId = $params['stuffId'];
+
+        /** @var Department $department */
+        $department = $em
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($stuffId);
+        /** @var StuffDepartments $objects */
+        $objects = $em
+            ->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'departments' => $department,
+                'stuff' => $stuff
+            ));
+        foreach ($objects as $object) {
+            $em->remove($object);
+        }
+
         $em->flush();
     }
     /**
@@ -3716,84 +3783,6 @@ class AjaxController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function handlingSaveAction()
-    {
-        $translator = $this->get('translator');
-
-        $pk = $this->get('request')->request->get('pk');
-        $name = $this->get('request')->request->get('name');
-        $value = $this->get('request')->request->get('value');
-
-        $methodSet = 'set' . ucfirst($name);
-
-        /** @var Handling $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($pk);
-
-        if (!$value) {
-            $methodGet = 'get' . ucfirst($name);
-            $type = gettype($object->$methodGet());
-
-            if (in_array($type, array('integer', 'object'))) {
-                $value = null;
-            }
-        }
-
-        $object->$methodSet($value);
-
-        $validator = $this->get('validator');
-
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
-        $errors = $validator->validate($object, array('edit'));
-
-        if (sizeof($errors)) {
-            $return = $this->getFirstError($errors);
-
-            return new Response($return, 406);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($object);
-
-        try {
-            $em->flush();
-
-            $em->refresh($object);
-        } catch (\ErrorException $e) {
-            $return = array('msg' => $translator->trans('Wrong input data'));
-
-            return new Response(json_encode($return));
-        }
-
-        $return = array(
-            'success' => 1,
-            'handling' => array(
-                'id' => $object->getId()
-            )
-        );
-
-        $result = $object->getResult();
-        $status = $object->getStatus();
-
-        if ($result && $result->getProgress()) {
-            $return['handling']['progress'] = $result->getProgress();
-            $return['handling']['progressString'] = $result->getPercentageString();
-        } elseif ($status && $status->getProgress()) {
-            $return['handling']['progress'] = $status->getProgress();
-            $return['handling']['progressString'] = $status->getPercentageString();
-        } else {
-            $return['handling']['progress'] = null;
-            $return['handling']['progressString'] = null;
-        }
-
-        return new Response(json_encode($return));
-    }
-    /**
-     * Saves object to db
-     *
-     * @return mixed[]
-     */
     public function handlingUserPartChangeAction()
     {
         $translator = $this->get('translator');
@@ -3812,16 +3801,18 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
 
-        $history = new History();
-        $history->setCreatedatetime(new \DateTime());
-        $history->setFieldName($name);
-        $history->setModelName('handling_user');
-        $history->setModelId($pk);
-        $history->setUser($this->getUser());
-        $history->setOldValue($object->$methodGet);
-        $history->setValue($value);
-        $history->setMore('change '.$name);
-        $em->persist($history);
+        if (method_exists($object, $methodGet)) {
+            $history = new History();
+            $history->setCreatedatetime(new \DateTime());
+            $history->setFieldName($name);
+            $history->setModelName('handling_user');
+            $history->setModelId($pk);
+            $history->setUser($this->getUser());
+            $history->setOldValue($object->$methodGet());
+            $history->setValue($value);
+            $history->setMore('change '.$name);
+            $em->persist($history);
+        }
 
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
@@ -3888,8 +3879,8 @@ class AjaxController extends BaseFilterController
             $em->refresh($object);
             $email = $this->get('it_doors_email.service');
             $url = $this->generateUrl(
-                'lists_sales_handling_show',
-                array('id' => $object->getHandlingId()),
+                'lists_handling_show',
+                array('id' => $object->getHandlingId(), 'type' => 'my'),
                 true
             );
             $email->send(
@@ -3948,7 +3939,11 @@ class AjaxController extends BaseFilterController
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($pk);
-
+        if ($name == 'delayType') {
+            $value = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:DelayType')
+            ->find((int) $value);
+        }
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
@@ -4591,7 +4586,70 @@ class AjaxController extends BaseFilterController
                 }
             ));
     }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function departmentFormProcessDefaults($form, $defaultData)
+    {
+        $organizationId = $defaultData['organizationId'];
 
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        if ($organization) {
+            $form
+                ->add('organization', 'text', array(
+                    'data' => (string) $organization,
+                    'disabled' => true
+                ));
+        }
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('opermanager', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function ($repository) use ($repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->orderBy('u.lastName');
+                }
+            ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function mpkFormProcessDefaults($form, $defaultData)
+    {
+        $departmentId = $defaultData['departmentId'];
+
+        /** @var \Lists\DepartmentBundle\Entity\Departments $department */
+        $department = $this->getDoctrine()->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        if ($department) {
+            $form
+                ->add('department', 'text', array(
+                    'data' => (string) $department,
+                    'disabled' => true
+                ))
+                ->add('departmentId', 'hidden', array(
+                    'data' => $departmentId,
+                    'mapped' => false
+                ));
+        }
+    }
     /**
      * Renders handling more information
      *
@@ -4674,6 +4732,9 @@ class AjaxController extends BaseFilterController
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
+        if (!$user->hasRole('ROLE_SALESADMIN') && !$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
         $data = $form->getData();
 
         $organizationId = $data['organizationId'];
@@ -4681,6 +4742,11 @@ class AjaxController extends BaseFilterController
         $organizationChildId = $data['organizationChildId'];
 
         $em = $this->getDoctrine()->getManager();
+
+        $manager = $em->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array(
+                'lukey' => 'manager'
+            ));
 
         /** @var Connection $connection */
         $connection = $em->getConnection();
@@ -4833,7 +4899,8 @@ class AjaxController extends BaseFilterController
             UPDATE
                 organization_user
             SET
-                organization_id = :organizationId
+                organization_id = :organizationId,
+                role_id = :roleId
             WHERE
                 organization_id = :organizationChildId AND
             NOT EXISTS (
@@ -4847,6 +4914,7 @@ class AjaxController extends BaseFilterController
             )";
             $statement = $connection->prepare($sql);
             $statement->execute(array(
+                ':roleId' => $manager->getId(),
                 ':organizationId' => $organizationId,
                 ':organizationChildId' => $organizationChildId
             ));
@@ -4933,6 +5001,110 @@ class AjaxController extends BaseFilterController
         $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves stuffDepartment ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function stuffDepartmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_HRADMIN') && !$user->hasRole('ROLE_SUPERVISOR')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $formData = $request->request->get($form->getName());
+
+        $claimtypes = $formData['claimtype'];
+        $userkey = $formData['userkey'];
+        $stuffId = (int) $formData['stuff'];
+        $departmenId = (int) $formData['departments'];
+
+        $departmen =  $em->getRepository('ListsDepartmentBundle:Departments')->find($departmenId);
+        $suff = $em->getRepository('SDUserBundle:User')->find($stuffId)->getStuff();
+        $oldStuffDepartmens = $em->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'stuff' => $suff,
+                'departments' => $departmen
+            ));
+        foreach ($oldStuffDepartmens as $oldStuffDepartmen) {
+            $em->remove($oldStuffDepartmen);
+        }
+        $em->flush();
+        foreach ($claimtypes as $claimtype) {
+            $claim = $em->getRepository('SDUserBundle:Claimtype')->find((int) $claimtype);
+
+            $stuffDepartmen = new StuffDepartments();
+            $stuffDepartmen->setDepartments($departmen);
+            $stuffDepartmen->setStuff($suff);
+            $stuffDepartmen->setClaimtypes($claim);
+            $stuffDepartmen->setUserkey($userkey);
+            $em->persist($stuffDepartmen);
+        }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves departmentForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function departmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find((int) $formData['organizationId']);
+
+        $data->setOrganization($organization);
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves mpkForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function mpkFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $department = $em->getRepository('ListsDepartmentBundle:Departments')
+            ->find((int) $formData['departmentId']);
+
+        $data->setDepartment($department);
         $em->persist($data);
         $em->flush();
 
@@ -5601,6 +5773,14 @@ class AjaxController extends BaseFilterController
                     ->getRepository('SDUserBundle:User')
                     ->find($value);
             }
+        } elseif ($name == 'city') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsCityBundle:City')
+                    ->find((int) $value);
+            }
         } elseif ($name == 'statusDate') {
             $value = new \DateTime($value);
         } elseif ($name == 'type') {
@@ -6005,5 +6185,141 @@ class AjaxController extends BaseFilterController
         );
 
         return new Response(json_encode($return));
+    }
+
+
+    /**
+     * @return Response
+     */
+    public function getDepartmentsByIdsAjaxAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $objects = $repository
+            ->findBy(array(
+                'id' => $ids
+            ));
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function getDepartmentByIdAjaxAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $department = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+
+        $result = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getOrganization()->getName() . ', ' . $department->getName(),
+                'text' => $department->getOrganization()->getName() . ', ' . $department->getName()
+            );
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function getDepartmentsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
+        $searchText = $this->get('request')->query->get('query');
+
+        $result = [];
+        $departments = $this
+                ->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:Departments')
+                ->getDepartmentsForCityQuery($searchText, $cityId);
+
+        foreach ($departments as $department) {
+            $result[] = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getOrganization()->getName() . ', ' . $department->getName(),
+                'text' => $department->getOrganization()->getName() . ', ' . $department->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function departmentAction()
+    {
+
+        $searchText = $this->get('request')->query->get('query');
+
+        $departmentRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $departments = $departmentRepository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($departments as $department) {
+            $result[] = $this->serializeObject($department);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function getIndividualsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
+        $searchText = $this->get('request')->query->get('query');
+
+        $result = [];
+        $city = $this
+            ->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->find($cityId);
+
+        $regionId = $city->getRegion()->getId();
+
+        $indIds = $this
+            ->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->getIndividualsByRegionIdQuery($searchText, $regionId);
+
+        $i = [];
+        foreach ($indIds as $ind) {
+            $i[] = $ind['1'];
+        }
+
+        $individuals = $this
+            ->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $i));
+
+        foreach ($individuals as $individual) {
+            $result[] = array(
+                'id' => $individual->getId(),
+                'value' => $individual->getId(),
+                'name' => $individual->__toString(),
+                'text' => $individual->__toString()
+            );
+        }
+
+        return new Response(json_encode($result));
     }
 }

@@ -1,0 +1,53 @@
+<a class="btn green" id="participation-add-btn-{{item.id}}" href="#" data-toggle="modal">
+    {% trans from 'ListsHandlingBundle'%}Participation{% endtrans %}
+</a>
+{% if edit is defined %}
+{{ ajax_form_render_btn({
+   'selector' : '#participation-add-btn-'~ item.id,
+   'formType' : 'gosTenderParticipationForm',
+   'successFunctions' : {
+        'project_edit' : 'ITDoorsAjax.updateList',
+        'list_participants' : 'ITDoorsAjax.updateList',
+        'list_documents' : 'ITDoorsAjax.updateList'
+   },
+   'serviceSave' : {
+       'alias' : 'lists_handling.service',
+       'method' : 'saveGosTenderParticipationForm'
+   },
+   'defaults' : {
+       'gosTenderId' : item.id
+   },
+   'target' : '#form_modal_gosTenderParticipationForm'~item.id,
+   'html' : 'ListsHandlingBundle:Form:gosTenderParticipationForm.html.twig'
+}) }}
+{% else %}
+    {{ ajax_form_render_btn({
+       'selector' : '#participation-add-btn-'~ item.id,
+       'formType' : 'gosTenderParticipationForm',
+        'successFunctions' : {
+           'gosTenderList' : 'ITDoorsAjax.updateList'
+       },
+       'serviceSave' : {
+           'alias' : 'lists_handling.service',
+           'method' : 'saveGosTenderParticipationForm'
+       },
+       'defaults' : {
+           'gosTenderId' : item.id
+       },
+       'target' : '#form_modal_gosTenderParticipationForm'~item.id,
+       'html' : 'ListsHandlingBundle:Form:gosTenderParticipationForm.html.twig'
+    }) }}
+{% endif %}
+<div id="form_modal_gosTenderParticipationForm{{item.id}}" class="modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans from 'ListsHandlingBundle' %}Participation{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
+            </div>
+        </div>
+    </div>
+</div>

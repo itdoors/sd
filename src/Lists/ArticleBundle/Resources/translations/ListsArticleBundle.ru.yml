@@ -59,3 +59,42 @@ Term stop: Срок окончания
 Select rating: Выберите оценку
 
 Selected users will be sent a notification: Выбранным пользователям будут отправлены уведомления
+
+#Роли пользователей
+Roles: Роли пользователей
+SALES: продажники
+SALESADMIN: сейлс админ
+SALESDISPATCHER: сейлс диспетчер
+DOGOVORADMIN: договор админ
+OPER: опер
+SUPERVISOR: супервайзер
+CONTROLLING: контроллинг
+ARTICLEADMIN: артикл админ
+CRONADMIN: крон админ
+HRADMIN: HR админ
+CONTROLLING_OPER: контроллинг опер
+HOLIDAY: холидей
+ADMIN: админ
+
+#Мои новости
+My news: Мои новости
+Inbox: Входящие
+new: новое
+Add: Добавить
+add: новая
+Text: Текст
+Viewed on: Прочитано
+Actions: Действия
+Ok: Ознакомлен!
+Voteable: Разрешить голосование
+Manual: Это инструкция
+Edit: Изменить
+edit: изменить
+Delete: Удалить
+Receivers: Получатели
+Who viewed: Просмотрели:
+
+File: Файл
+Select file: Выберите файл
+Change: Изменить
+Download attachment: Скачать прикреплённый файл

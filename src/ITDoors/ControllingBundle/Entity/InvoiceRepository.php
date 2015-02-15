@@ -136,6 +136,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('d.startdatetime as dogovorStartDatetime')
             ->addSelect('i.dogovorDate as invoiceDogovorDate')
             ->addSelect('h.note as description')
+            ->addSelect('h.file')
             ->addSelect('h.createdate as descriptiondate');
 
         return $res;
@@ -150,6 +151,45 @@ class InvoiceRepository extends EntityRepository
     public function selectInvoicePeriodCount (QueryBuilder $res)
     {
         $res->select('COUNT(i.id)');
+
+        return $res;
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res
+     * @param mixed[]      $orders
+     * 
+     * @return QueryBuilder
+     */
+    public function orderInvoicePeriod (QueryBuilder $res, $orders = null)
+    {
+        if ($orders) {
+            foreach ($orders as $key => $value) {
+                switch ($key) {
+                    case 'responsible':
+                        $res->orderBy('responsibles', $value);
+                        break;
+                    case 'notes':
+                        $res->orderBy('h.createdate', $value);
+                        break;
+                    case 'bank':
+                        $res->orderBy('i.bank', $value);
+                        break;
+                    case 'dogovorNumber':
+                        $res->orderBy('d.number', $value);
+                        break;
+                    case 'invoiceId':
+                        $res->orderBy('i.invoiceId', $value);
+                        break;
+                    case 'customer':
+                        $res->orderBy('i.customerName', $value);
+                        break;
+                }
+            }
+        } else {
+            $res->orderBy('i.customerName', 'ASC');
+        }
 
         return $res;
     }
@@ -213,17 +253,21 @@ class InvoiceRepository extends EntityRepository
         if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
-                if (!$value) {
-                    continue;
-                }
+
                 switch ($key) {
                     case 'customer':
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere("customer.id in (:customerIds)");
                         $sql->setParameter(':customerIds', $arr);
                         break;
                     case 'performer':
                         if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        if (!$value) {
                             break;
                         }
                         $arr = explode(',', $value);
@@ -234,11 +278,17 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere('i.id in (:ids)');
                         $sql->setParameter(':ids', $arr);
                         break;
                     case 'actNumber':
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->innerJoin('i.acts', 'i_act_number');
                         $sql->andWhere("i_act_number.number in (:actNumbers)");
@@ -248,13 +298,49 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
                         $sql->innerJoin('ics_fil.companystructure', 'cs_fil');
                         $sql->andWhere("cs_fil.id in (:companystructures)");
                         $sql->setParameter(':companystructures', $arr);
                         break;
+                    case 'withoutContacts':
+                        if (!$value) {
+                            break;
+                        }
+                        if (!$value) {
+                            break;
+                        }
+                        $sql
+                            ->andWhere(
+                                'customer.id not in (
+                                    SELECT mco.modelId
+                                    FROM  ListsContactBundle:ModelContact mco
+                                    WHERE mco.modelName = :modelNameOrganization
+                                    AND mco.modelId is not null
+                                )'
+                            )
+                            ->andWhere(
+                                'customer.id not in (
+                                    SELECT do.id
+                                    FROM  ListsContactBundle:ModelContact mcd
+                                    LEFT JOIN  Lists\DepartmentBundle\Entity\Departments departments_contact 
+                                        WITH mcd.modelName = :modelNameDepartments
+                                        AND mcd.modelId = departments_contact.id
+                                    LEFT JOIN departments_contact.organization as do
+                                    WHERE do.id is not null
+                                )'
+                            )
+                            ->setParameter(':modelNameOrganization', 'organization')
+                            ->setParameter(':modelNameDepartments', 'departments');
+                        break;
                     case 'daterange':
+                        if (!$value) {
+                            break;
+                        }
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
                         $to = new \DateTime($daterange[1]);
@@ -263,7 +349,7 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':dateTo', $to);
                         break;
                     case 'act':
-                        if (in_array($value, array(0,1))) {
+                        if (in_array($value, array(0,1)) && $value !== null) {
                             $sql->andWhere(
                                 "i.id in (
                                     SELECT iao.id
@@ -345,11 +431,12 @@ class InvoiceRepository extends EntityRepository
      * @param integer $periodmin
      * @param integer $periodmax
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
+     * @param array   $orders
      *
      * @return mixed[]
      */
-    public function getInvoicePeriod ($periodmin, $periodmax, $filters, $companystryctyre)
+    public function getInvoicePeriod ($periodmin, $periodmax, $filters, $companystructure, $orders = null)
     {
         $res = $this->createQueryBuilder('i');
 
@@ -362,7 +449,7 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         /** controlling_oper (role) */
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $res->innerJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -389,21 +476,21 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':company', $companystryctyre);
+            ->setParameter(':company', $companystructure);
         }
+        $this->orderInvoicePeriod($res, $orders);
 
-        return $res
-                ->orderBy('i.customerName', 'ASC')->getQuery();
+        return $res->getQuery();
     }
     /**
      * Returns results for interval future invoice
      * 
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      *
      * @return mixed[]
      */
-    public function getAll ($filters, $companystryctyre = null)
+    public function getAll ($filters, $companystructure = null)
     {
         if (!sizeof($filters)) {
             return array();
@@ -417,7 +504,7 @@ class InvoiceRepository extends EntityRepository
         /** filters */
         $this->processFilters($invoices, $filters);
         /** controlling_oper (role) */
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $invoices->innerJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -444,7 +531,7 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':company', $companystryctyre);
+            ->setParameter(':company', $companystructure);
         }
 
         $res = $invoices
@@ -509,11 +596,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getForExel ($companystryctyre)
+    public function getForExel ($companystructure)
     {
         $res = $this->createQueryBuilder('i');
 
@@ -521,7 +608,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -547,7 +634,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':company', $companystryctyre);
+                ->setParameter(':company', $companystructure);
         }
 
         $date = date('Y-m-d', time() - 2592000);
@@ -562,11 +649,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getForExelNoDogovor ($companystryctyre)
+    public function getForExelNoDogovor ($companystructure)
     {
         $res = $this->createQueryBuilder('i');
 
@@ -574,7 +661,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -600,7 +687,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':company', $companystryctyre);
+                ->setParameter(':company', $companystructure);
         }
 
         $date = date('Y-m-d', time() - 2592000);
@@ -620,11 +707,11 @@ class InvoiceRepository extends EntityRepository
      * @param integer $periodmin
      * @param integer $periodmax
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      *
      * @return integer count
      */
-    public function getInvoicePeriodCount ($periodmin, $periodmax, $filters, $companystryctyre)
+    public function getInvoicePeriodCount ($periodmin, $periodmax, $filters, $companystructure)
     {
         $rescount = $this->createQueryBuilder('i');
 
@@ -637,7 +724,7 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
         /** controlling_oper (role) */
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $rescount->innerJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -664,7 +751,7 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':company', $companystryctyre);
+            ->setParameter(':company', $companystructure);
         }
 
         return $rescount
@@ -674,11 +761,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      *
      * @return integer count
      */
-    public function getAllCount ($filters, $companystryctyre)
+    public function getAllCount ($filters, $companystructure)
     {
         $rescount = $this->createQueryBuilder('i');
 
@@ -689,7 +776,7 @@ class InvoiceRepository extends EntityRepository
         /** filters*/
         $this->processFilters($rescount, $filters);
         /** controlling_oper (role) */
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $rescount->innerJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -716,7 +803,7 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':company', $companystryctyre);
+            ->setParameter(':company', $companystructure);
         }
 
         return $rescount
@@ -763,12 +850,12 @@ class InvoiceRepository extends EntityRepository
      *
      * @param integer $periodmin
      * @param integer $periodmax
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * @param array   $filters
      *
      * @return float summa
      */
-    public function getInvoicePeriodSum ($periodmin, $periodmax, $companystryctyre, $filters = null)
+    public function getInvoicePeriodSum ($periodmin, $periodmax, $companystructure, $filters = null)
     {
         $res = $this->createQueryBuilder('i');
 
@@ -781,7 +868,7 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         /** controlling_oper (role)*/
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -808,7 +895,7 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':companystructureId', $companystryctyre);
+            ->setParameter(':companystructureId', $companystructure);
         }
 
         return $res->getQuery()->getResult();
@@ -827,7 +914,7 @@ class InvoiceRepository extends EntityRepository
         /** select */
         $this->selectInvoiceSum($res);
         /** where */
-        $res->andWhere(":date  = i.dateEnd or i.delayDate = :date")
+        $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
             ->setParameter(':date', $date)
             ->andWhere("i.dateFact is NULL");
 
@@ -859,12 +946,13 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param array   $filters
-     * @param integer $companystryctyre
+     * @param mixed[] $filters
+     * @param integer $companystructure
+     * @param mixed[] $orders
      * 
      * @return mixed[]
      */
-    public function getInvoiceCourt ($filters, $companystryctyre)
+    public function getInvoiceCourt ($filters, $companystructure, $orders = null)
     {
         $id = 1;
 
@@ -876,7 +964,7 @@ class InvoiceRepository extends EntityRepository
         /** filters */
         $this->processFilters($res, $filters);
         /** controlling_oper (role)*/
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -903,24 +991,24 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':companystructureId', $companystryctyre);
+            ->setParameter(':companystructureId', $companystructure);
         }
+        $res->andWhere("i.court = :id")
+            ->setParameter(':id', $id);
 
-        return $res
-                ->andWhere("i.court = :id")
-                ->setParameter(':id', $id)
-                ->orderBy('i.customerName', 'ASC')
-                ->getQuery();
+        $this->orderInvoicePeriod($res, $orders);
+
+        return $res->getQuery();
     }
     /**
      * Returns results for interval future invoice
      *
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * @param array   $filters
      * 
      * @return mixed[]
      */
-    public function getInvoiceCourtSum ($companystryctyre, $filters = null)
+    public function getInvoiceCourtSum ($companystructure, $filters = null)
     {
         $id = 1;
 
@@ -932,7 +1020,7 @@ class InvoiceRepository extends EntityRepository
         /** filters */
         $this->processFilters($res, $filters);
         /** controlling_oper (role)*/
-        if ($companystryctyre) {
+        if ($companystructure) {
             if (!isset($filters['companystructure'])) {
                 $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
             }
@@ -959,7 +1047,7 @@ class InvoiceRepository extends EntityRepository
                         )
                 '
             )
-            ->setParameter(':companystructureId', $companystryctyre);
+            ->setParameter(':companystructureId', $companystructure);
         }
 
         return $res
@@ -970,11 +1058,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return integer count
      */
-    public function getInvoiceCourtCount ($filters, $companystryctyre)
+    public function getInvoiceCourtCount ($filters, $companystructure)
     {
         $id = 1;
 
@@ -983,7 +1071,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriodCount($rescount);
         /** join */
         $this->joinInvoicePeriod($rescount);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1009,7 +1097,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $this->processFilters($rescount, $filters);
 
@@ -1022,12 +1110,13 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param array   $filters
-     * @param integer $companystryctyre
+     * @param mixed[] $filters
+     * @param integer $companystructure
+     * @param mixed[] $orders
      * 
      * @return mixed[]
      */
-    public function getInvoicePay ($filters, $companystryctyre)
+    public function getInvoicePay ($filters, $companystructure, $orders = null)
     {
         $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
@@ -1037,7 +1126,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         /** where */
         $this->processFilters($res, $filters);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1063,11 +1152,11 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $res->andWhere("i.dateFact is not NULL")
-            ->andWhere("i.dateFact >= :date")->setParameter(':date', $date)
-            ->orderBy('i.customerName', 'ASC');
+            ->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
+        $this->orderInvoicePeriod($res, $orders);
 
         return $res->getQuery();
     }
@@ -1075,11 +1164,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceAll ($filters, $companystryctyre)
+    public function getInvoiceAll ($filters, $companystructure)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
@@ -1088,7 +1177,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         /** where */
         $this->processFilters($res, $filters);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1114,7 +1203,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $res->orderBy('i.customerName', 'ASC');
 
@@ -1123,12 +1212,13 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param array   $filters
-     * @param integer $companystryctyre
+     * @param mixed[] $filters
+     * @param integer $companystructure
+     * @param mixed[] $orders
      * 
      * @return mixed[]
      */
-    public function getInvoiceFlow ($filters, $companystryctyre)
+    public function getInvoiceFlow ($filters, $companystructure, $orders)
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('i');
@@ -1138,7 +1228,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         /** where */
         $this->processFilters($res, $filters);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1164,12 +1254,12 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $res
             ->andWhere("i.dateFact is NULL")
-            ->andWhere("i.delayDate >= :date")->setParameter(':date', $date)
-            ->orderBy('i.customerName', 'ASC');
+            ->andWhere("i.delayDate >= :date")->setParameter(':date', $date);
+        $this->orderInvoicePeriod($res, $orders);
 
         return $res->getQuery();
     }
@@ -1177,18 +1267,18 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param string  $type
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceEmptyData ($type, $companystryctyre)
+    public function getInvoiceEmptyData ($type, $companystructure)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1214,7 +1304,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         /** where */
         switch ($type) {
@@ -1279,21 +1369,21 @@ class InvoiceRepository extends EntityRepository
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
             case 'today':
                 $date = date('Y-m-d');
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
             case 'yesterday':
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') - 1, date('Y')));
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
@@ -1308,7 +1398,7 @@ class InvoiceRepository extends EntityRepository
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
@@ -1316,6 +1406,8 @@ class InvoiceRepository extends EntityRepository
                 $days = 2;
                 if (date("w") == 0) {
                     $days = 3;
+                } elseif (date("w") == 2) {
+                    $days = 1;
                 } elseif (date("w") == 6) {
                     $days = 4;
                 } elseif (date("w") == 5) {
@@ -1323,7 +1415,7 @@ class InvoiceRepository extends EntityRepository
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
@@ -1331,6 +1423,10 @@ class InvoiceRepository extends EntityRepository
                 $days = 3;
                 if (date("w") == 0) {
                     $days = 4;
+                } elseif (date("w") == 2) {
+                    $days = 2;
+                } elseif (date("w") == 3) {
+                    $days = 1;
                 } elseif (date("w") == 6) {
                     $days = 5;
                 } elseif (date("w") == 5) {
@@ -1338,7 +1434,7 @@ class InvoiceRepository extends EntityRepository
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
@@ -1346,14 +1442,21 @@ class InvoiceRepository extends EntityRepository
                 $days = 4;
                 if (date("w") == 0) {
                     $days = 5;
+                } elseif (date("w") == 2) {
+                    $days = 3;
+                } elseif (date("w") == 3) {
+                    $days = 2;
+                } elseif (date("w") == 4) {
+                    $days = 1;
                 } elseif (date("w") == 6) {
                     $days = 6;
                 } elseif (date("w") == 5) {
                     $days = 7;
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+
                 $res
-                    ->andWhere("i.delayDate = :date")
+                    ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)
                     ->orderBy('performerName', 'DESC');
                 break;
@@ -1365,16 +1468,16 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param string  $type
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceEmptyDataCount ($type, $companystryctyre)
+    public function getInvoiceEmptyDataCount ($type, $companystructure)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriodCount($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1400,7 +1503,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         /** where */
         switch ($type) {
@@ -1540,18 +1643,18 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param date    $date
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceWhen ($date, $companystryctyre)
+    public function getInvoiceWhen ($date, $companystructure)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1577,7 +1680,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
 
         return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
@@ -1590,18 +1693,18 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param date    $date
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getForToday ($date, $companystryctyre)
+    public function getForToday ($date, $companystructure)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1627,7 +1730,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
 
         return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
@@ -1638,12 +1741,12 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * @param mixed   $filters
      * 
      * @return mixed[]
      */
-    public function getInvoicePaySum ($companystryctyre, $filters = null)
+    public function getInvoicePaySum ($companystructure, $filters = null)
     {
         $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
@@ -1654,7 +1757,7 @@ class InvoiceRepository extends EntityRepository
 
         $this->processFilters($res, $filters);
         /** where */
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1680,7 +1783,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $res->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
 
@@ -1689,12 +1792,12 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * @param mixed   $filters
      *
      * @return mixed[]
      */
-    public function getInvoiceFlowSum ($companystryctyre, $filters = null)
+    public function getInvoiceFlowSum ($companystructure, $filters = null)
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('i');
@@ -1704,7 +1807,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
 
         /** where */
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1730,7 +1833,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $this->processFilters($res, $filters);
 
@@ -1741,12 +1844,12 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * @param mixed   $filters
      *
      * @return mixed[]
      */
-    public function getInvoiceAllSum ($companystryctyre, $filters = null)
+    public function getInvoiceAllSum ($companystructure, $filters = null)
     {
         $res = $this->createQueryBuilder('i');
         /** select */
@@ -1754,7 +1857,7 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
-        if ($companystryctyre) {
+        if ($companystructure) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1780,7 +1883,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $this->processFilters($res, $filters);
         $res->andWhere("i.dateFact is NULL");
@@ -1791,11 +1894,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoicePayCount ($filters, $companystryctyre)
+    public function getInvoicePayCount ($filters, $companystructure)
     {
         $date = date('Y-m-d', time() - 2592000);
         $rescount = $this->createQueryBuilder('i');
@@ -1806,7 +1909,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($rescount);
         /** where */
         $this->processFilters($rescount, $filters);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1832,7 +1935,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $rescount
             ->andWhere("i.dateFact is not NULL")
@@ -1845,11 +1948,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceFlowCount ($filters, $companystryctyre)
+    public function getInvoiceFlowCount ($filters, $companystructure)
     {
         $date = date('Y-m-d');
         $rescount = $this->createQueryBuilder('i');
@@ -1860,7 +1963,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($rescount);
         /** where */
         $this->processFilters($rescount, $filters);
-        if ($companystryctyre) {
+        if ($companystructure) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1886,7 +1989,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $rescount
             ->andWhere("i.dateFact is NULL")
@@ -1899,18 +2002,18 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param date    $date
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getInvoiceWhenCount ($date, $companystryctyre)
+    public function getInvoiceWhenCount ($date, $companystructure)
     {
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
         /** where */
-        if ($companystryctyre) {
+        if ($companystructure) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1936,7 +2039,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $rescount
             ->andWhere("i.dateEnd = :date or i.delayDate = :date")
@@ -1949,18 +2052,18 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param date    $date
-     * @param integer $companystryctyre
+     * @param integer $companystructure
      * 
      * @return mixed[]
      */
-    public function getFortodayCount ($date, $companystryctyre)
+    public function getFortodayCount ($date, $companystructure)
     {
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
         /** where */
-        if ($companystryctyre) {
+        if ($companystructure) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
@@ -1986,7 +2089,7 @@ class InvoiceRepository extends EntityRepository
                             )
                     '
                 )
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->setParameter(':companystructureId', $companystructure);
         }
         $rescount
             ->andWhere("i.dateEnd = :date or i.delayDate = :date")
@@ -1999,86 +2102,87 @@ class InvoiceRepository extends EntityRepository
      *
      * @param string  $period
      * @param array   $filters
-     * @param integer $companystryctyre
+     * @param integer $companystructure
+     * @param array   $orders
      * 
      * @return mixed[]
      */
-    public function getEntittyCountSum ($period, $filters, $companystryctyre)
+    public function getEntittyCountSum ($period, $filters, $companystructure, $orders = null)
     {
         $result = array ();
         switch ($period) {
             case 30:
-                $result['entities'] = $this->getInvoicePeriod(1, 30, $filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePeriodCount(1, 30, $filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePeriod(1, 30, $filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePeriodCount(1, 30, $filters, $companystructure);
                 break;
             case 60:
-                $result['entities'] = $this->getInvoicePeriod(31, 60, $filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePeriodCount(31, 60, $filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePeriod(31, 60, $filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePeriodCount(31, 60, $filters, $companystructure);
                 break;
             case 120:
-                $result['entities'] = $this->getInvoicePeriod(61, 120, $filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePeriodCount(61, 120, $filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePeriod(61, 120, $filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePeriodCount(61, 120, $filters, $companystructure);
                 break;
             case 180:
-                $result['entities'] = $this->getInvoicePeriod(121, 180, $filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePeriodCount(121, 180, $filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePeriod(121, 180, $filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePeriodCount(121, 180, $filters, $companystructure);
                 break;
             case 181:
-                $result['entities'] = $this->getInvoicePeriod(181, 0, $filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePeriodCount(181, 0, $filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePeriod(181, 0, $filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePeriodCount(181, 0, $filters, $companystructure);
                 break;
             case 'court':
-                $result['entities'] = $this->getInvoiceCourt($filters, $companystryctyre);
-                $result['count'] = $this->getInvoiceCourtCount($filters, $companystryctyre);
+                $result['entities'] = $this->getInvoiceCourt($filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoiceCourtCount($filters, $companystructure);
                 break;
             case 'pay':
-                $result['entities'] = $this->getInvoicePay($filters, $companystryctyre);
-                $result['count'] = $this->getInvoicePayCount($filters, $companystryctyre);
+                $result['entities'] = $this->getInvoicePay($filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoicePayCount($filters, $companystructure);
                 break;
             case 'flow':
-                $result['entities'] = $this->getInvoiceFlow($filters, $companystryctyre);
-                $result['count'] = $this->getInvoiceFlowCount($filters, $companystryctyre);
+                $result['entities'] = $this->getInvoiceFlow($filters, $companystructure, $orders);
+                $result['count'] = $this->getInvoiceFlowCount($filters, $companystructure);
                 break;
             case 'today':
                 $date = date('Y-m-d');
-                $result['entities'] = $this->getForToday($date, $companystryctyre);
-                $result['count'] = $this->getForTodayCount($date, $companystryctyre);
+                $result['entities'] = $this->getForToday($date, $companystructure);
+                $result['count'] = $this->getForTodayCount($date, $companystructure);
                 break;
             case 'toFriday':
-                $result['entities'] = $this->getInvoiceEmptyData('toFriday', $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount('toFriday', $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData('toFriday', $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount('toFriday', $companystructure);
                 break;
             case 'nextWeek':
-                $result['entities'] = $this->getInvoiceEmptyData('nextWeek', $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount('nextWeek', $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData('nextWeek', $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount('nextWeek', $companystructure);
                 break;
             case 'tomorrow':
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y')));
-                $result['entities'] = $this->getInvoiceWhen($date, $companystryctyre);
-                $result['count'] = $this->getInvoiceWhenCount($date, $companystryctyre);
+                $result['entities'] = $this->getInvoiceWhen($date, $companystructure);
+                $result['count'] = $this->getInvoiceWhenCount($date, $companystructure);
                 break;
             case 'delay':
-                $result['entities'] = $this->getInvoiceEmptyData('delay', $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount('delay', $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData('delay', $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount('delay', $companystructure);
                 break;
             case 'act':
-                $result['entities'] = $this->getInvoiceEmptyData('act', $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount('act', $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData('act', $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount('act', $companystructure);
                 break;
             case 'dogovor':
-                $result['entities'] = $this->getInvoiceEmptyData('dogovor', $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount('dogovor', $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData('dogovor', $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount('dogovor', $companystructure);
                 break;
             case 'all':
-                $result['entities'] = $this->getAll($filters, $companystryctyre);
-                $result['count'] = $this->getAllCount($filters, $companystryctyre);
+                $result['entities'] = $this->getAll($filters, $companystructure);
+                $result['count'] = $this->getAllCount($filters, $companystructure);
                 break;
             case 'allExel':
-                $result['entities'] = $this->getInvoiceAll($filters, $companystryctyre);
+                $result['entities'] = $this->getInvoiceAll($filters, $companystructure);
                 break;
             default:
-                $result['entities'] = $this->getInvoiceEmptyData($period, $companystryctyre);
-                $result['count'] = $this->getInvoiceEmptyDataCount($period, $companystryctyre);
+                $result['entities'] = $this->getInvoiceEmptyData($period, $companystructure);
+                $result['count'] = $this->getInvoiceEmptyDataCount($period, $companystructure);
         }
 
         return $result;
@@ -2125,7 +2229,6 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      * 
      * @param integer $invoiceid Description
-     * 
      * @param string  $tab       Description
      * 
      * @return mixed[]
@@ -2241,6 +2344,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('d.stopdatetime')
                     ->addSelect('d.prolongation')
                     ->addSelect('d.paymentDeferment')
+                    ->addSelect('dT.name as delayType')
                     ->addSelect('d.prolongationDate')
                     ->addSelect('d.isActive')
                     ->addSelect('d.subject')
@@ -2256,6 +2360,7 @@ class InvoiceRepository extends EntityRepository
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('d.performer', 'performer')
                     ->leftJoin('d.dogovorType', 'type')
+                    ->leftJoin('d.delayType', 'dT')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid);
                 $entitie = $entitie->getQuery()

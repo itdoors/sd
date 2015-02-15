@@ -1,0 +1,15 @@
+ITDoors\OperBundle\Entity\OperOrganizerType:
+    type:  entity
+    table: oper_organizer_type
+    repositoryClass: ITDoors\OperBundle\Entity\OrganizerTypeRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+            column: name

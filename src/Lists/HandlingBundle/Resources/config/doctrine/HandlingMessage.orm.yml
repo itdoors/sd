@@ -17,30 +17,44 @@ Lists\HandlingBundle\Entity\HandlingMessage:
         createdatetime:
             type: datetime
             nullable: true
+            options:
+                comment: Дата создания (создается автоматически)
         description:
             type: text
             nullable: true
+            options:
+                comment: Описание
         createdate:
             type: datetime
             nullable: false
+            options:
+                comment: Дата создания (указывается пользователем)
         filepath:
             type: string
             length: 128
             fixed: false
             nullable: true
+            options:
+                comment: Это старое поле (нужно будет удалить после пересохранения звонков)
         filename:
             type: string
             length: 128
             fixed: false
             nullable: true
+            options:
+                comment: Название документа
         handling_id:
             type: integer
             nullable: true
             column: handling_id
+            options:
+                comment: ID проекта
         user_id:
             type: integer
             nullable: true
             column: user_id
+            options:
+                comment: ID пользователя (который создал)
         type_id:
             type: integer
             nullable: true
@@ -60,6 +74,11 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             type: integer
             nullable: true
             column: contact_id
+    oneToMany:
+        files:
+            targetEntity: HandlingMessageFile
+            mappedBy: handlingMessage
+            orphanRemoval: true
     manyToOne:
         handling:
             targetEntity: Handling

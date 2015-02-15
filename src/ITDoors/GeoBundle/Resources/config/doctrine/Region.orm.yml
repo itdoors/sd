@@ -1,0 +1,19 @@
+ITDoors\GeoBundle\Entity\Region:
+    type: entity
+    table: geo_region
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+    oneToMany:
+        cities:
+            targetEntity: ITDoors\GeoBundle\Entity\City
+            mappedBy: region
+        districts:
+            targetEntity: ITDoors\GeoBundle\Entity\District
+            mappedBy: region

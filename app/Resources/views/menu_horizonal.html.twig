@@ -14,11 +14,12 @@ Muzyka Dmytro
 <div class="top-menu">
 
 <ul class="nav navbar-nav pull-right">			
-	{#{% include 'notification_dropdown.html.twig' %}
-	{% include 'inbox_dropdown.html.twig' %}
-	{% include 'todo_dropdown.html.twig' %}
-	#}
+{#  {% include 'notification_dropdown.html.twig' %}#}
+{# 	{% include 'inbox_dropdown.html.twig' %}#}
+{# 	{% include 'todo_dropdown.html.twig' %}#}
+	
 	{#{% include 'language_dropdown.html.twig' %}#}
+	{{ render(controller('ListsArticleBundle:ProdBlog:shortList')) }}
 	<!-- BEGIN USER LOGIN DROPDOWN -->
 	<li class="dropdown dropdown-user">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">

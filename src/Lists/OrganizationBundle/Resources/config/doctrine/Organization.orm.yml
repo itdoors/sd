@@ -182,6 +182,12 @@ Lists\OrganizationBundle\Entity\Organization:
         organizationUsers:
             targetEntity: OrganizationUser
             mappedBy: organization
+        departments:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            mappedBy: organization
+        currentAccounts:
+            targetEntity: OrganizationCurrentAccount
+            mappedBy: organization
     manyToMany:
         organizationsigns:
             targetEntity: Lists\LookupBundle\Entity\Lookup

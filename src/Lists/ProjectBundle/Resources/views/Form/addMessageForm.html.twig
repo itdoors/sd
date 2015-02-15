@@ -1,0 +1,175 @@
+{% trans_default_domain 'ListsProjectBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+<script type="text/javascript">
+
+    $(document).ready(function (){
+
+       /* $(".form_datetime").datetimepicker({
+            autoclose: true,
+            isRTL: Metronic.isRTL(),
+            format: "dd.mm.yyyy hh:ii",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            weekStart: 1,
+            //startDate: new Date(1000{#{ form.mindate.vars.value }#})
+        });*/
+
+       // $('#handlingMessageForm_next_is_business_trip').uniform();
+
+       /* $('#' + '{{ form.vars.name }}' + '_type').die('click');
+        $('#' + '{{ form.vars.name }}' + '_type').live('click', function(e){
+            var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val(); //options of type
+            var labelDescription = $('#label_description').find('label')[0];
+            var textareaDescription = $('#' + '{{ form.vars.name }}' + '_description');
+            var otherPersonsSelect =  $('#contact_many_holder');
+            var insidePersonsSelect = $('#usersFromOurSide_holder');
+            var contacts = $('#contact_holder');
+            if (option == 3) {
+                labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+                otherPersonsSelect.show();
+                insidePersonsSelect.show();
+                $('#name').prop('selectedIndex',0);
+                contacts.hide();
+            } else if (option == 2) {
+                labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+                otherPersonsSelect.show();
+                insidePersonsSelect.show();
+                contacts.hide();
+            } else {
+                labelDescription.innerHTML="{% trans %}Description{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Description{% endtrans %}");
+                $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
+                $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
+                otherPersonsSelect.hide();
+                insidePersonsSelect.hide();
+                contacts.show();
+            }
+        })*/
+
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').attr("multiple", true);
+
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').select2({
+            //multiple: true
+       // });
+
+       // $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
+        //$('#contact_many_holder').hide();
+
+        //$('#' + '{{ form.vars.name }}' + '_usersFromOurSide').attr("multiple", true);
+
+       // $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2({
+            //multiple: true
+       // });
+
+       // $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
+        //$('#usersFromOurSide_holder').hide();
+    })
+
+   /* SD.select2('#' + '{{ form.vars.name }}' + '_user', {
+        allowClear: false
+    });
+
+    SD.select2('#' + '{{ form.vars.name }}' + '_userNext', {
+        allowClear: false
+    });*/
+
+    $(document).ready(function (){
+        $('.inputmask-date').inputmask("d.m.y",{ "placeholder": "{% trans %}dd.mm.yyyy{% endtrans %}", "clearIncomplete": true });
+        $('.inputmask-datetime').inputmask("d.m.y h:s",{ "placeholder": "{% trans %}dd.mm.yyyy hh:mm{% endtrans %}", "clearIncomplete": true });
+    });
+    
+
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Create new message{% endtrans %}</div></div>
+            <div class="portlet-body">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('it_doors_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'itdoors-ajax-form'
+                    }
+                }) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Current message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group{% if form.current.eventDatetime.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.current.eventDatetime, 'Event datetime', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.current.eventDatetime, {'attr' : {'class' : 'form-control inputmask-datetime', 'placeholder': "Event datetime" } }) }}
+                                    {{ form_errors(form.current.eventDatetime) }}
+                                </div>
+                                <div class="form-group{% if form.current.contact.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.current.contact, 'Contact', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.current.contact, {'attr' : {'class' : 'form-control', 'placeholder': "Select contact" } }) }}
+                                    {{ form_errors(form.current.contact) }}
+                                </div>
+                                <div class="form-group{% if form.current.type.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.current.type, 'Type', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.current.type, {'attr' : {'class' : 'form-control', 'placeholder': "Select type" } }) }}
+                                    {{ form_errors(form.current.type) }}
+                                </div>
+                                <div class="form-group{% if form.current.description.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.current.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.current.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description" } }) }}
+                                    {{ form_errors(form.current.description) }}
+                                </div>
+                                {{ form_widget(form.current.files)|raw }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Planned message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group{% if form.planned.eventDatetime.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.planned.eventDatetime, 'Event datetime', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.planned.eventDatetime, {'attr' : {'class' : 'form-control inputmask-datetime', 'placeholder': "Event datetime" } }) }}
+                                    {{ form_errors(form.planned.eventDatetime) }}
+                                </div>
+                                <div class="form-group{% if form.planned.contact.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.planned.contact, 'Contact', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.planned.contact, {'attr' : {'class' : 'form-control', 'placeholder': "Select contact" } }) }}
+                                    {{ form_errors(form.planned.contact) }}
+                                </div>
+                                <div class="form-group{% if form.planned.type.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.planned.type, 'Type', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.planned.type, {'attr' : {'class' : 'form-control', 'placeholder': "Select type" } }) }}
+                                    {{ form_errors(form.planned.type) }}
+                                </div>
+                                <div class="form-group{% if form.planned.description.vars.errors|length %} has-error{% endif %}">
+                                    {{ form_label(form.planned.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.planned.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description" } }) }}
+                                    {{ form_errors(form.planned.description) }}
+                                </div>
+                                {{ form_widget(form.planned.files)|raw }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form_widget(form.current.project) }}
+                {{ form_widget(form.planned.project) }}
+                <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                <div class="form-actions">
+                    {{ form_widget(form.submit, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default itdoors-form-cancel-btn'} } ) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,24 +1,4 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-<script>
-    $(document).ready(function() {
-        $('.datesave').editable({
-            type: 'date',
-            name: 'DateEnd',
-            url: '{{ path('sd_common_ajax_invoice_save') }}',
-            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
-                        clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
-                        datepicker: {
-                            rtl: Metronic.isRTL(),
-                            autoclose: true,
-                            format: "dd.mm.yyyy",
-                            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
-                            language: "{{ app.request.locale }}",
-                            startView: 'month',
-                            weekStart: 1
-                        }
-                    });
-                });
-</script>
 <div class="col-md-12">
     <table id="handling" class="table table-bordered table-striped">
         <tbody>

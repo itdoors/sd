@@ -55,7 +55,18 @@ class AppKernel extends Kernel
             new ITDoors\SipBundle\ITDoorsSipBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new SD\ActivityBundle\SDActivityBundle(),
-            new Gregwar\ImageBundle\GregwarImageBundle()
+            new Gregwar\ImageBundle\GregwarImageBundle(),
+            new ITDoors\HelperBundle\ITDoorsHelperBundle(),
+            new Main\ErrorBundle\MainErrorBundle(),
+            new Main\FilterBundle\MainFilterBundle(),
+            new ITDoors\GeoBundle\ITDoorsGeoBundle(),
+            new ITDoors\PayMasterBundle\ITDoorsPayMasterBundle(),
+            new Lists\CoachBundle\ListsCoachBundle(),
+            new ITDoors\FileAccessBundle\ITDoorsFileAccessBundle(),
+            new ITDoors\CalculateBundle\ITDoorsCalculateBundle(),
+            new ITDoors\ApiBundle\ITDoorsApiBundle(),
+            new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+            new Lists\ProjectBundle\ListsProjectBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

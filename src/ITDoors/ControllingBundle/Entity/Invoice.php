@@ -924,4 +924,60 @@ class Invoice
     {
         return $this->debitSum;
     }
+    /**
+     * @var string
+     */
+    private $guid;
+
+    /**
+     * Set guid
+     *
+     * @param string $guid
+     * 
+     * @return Invoice
+     */
+    public function setGuid($guid)
+    {
+        $this->guid = $guid;
+
+        return $this;
+    }
+
+    /**
+     * Get guid
+     *
+     * @return string 
+     */
+    public function getGuid()
+    {
+        return $this->guid;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $updateDatetime;
+
+    /**
+     * Set updateDatetime
+     *
+     * @param \DateTime $updateDatetime
+     * 
+     * @return Invoice
+     */
+    public function setUpdateDatetime($updateDatetime)
+    {
+        $this->updateDatetime = $updateDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get updateDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateDatetime()
+    {
+        return $this->updateDatetime;
+    }
 }

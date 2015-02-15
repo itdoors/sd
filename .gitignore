@@ -1,6 +1,5 @@
 /web/bundles/
-/web/uploads/document/
-/web/uploads/task/
+/web/uploads/*
 /web/files/email/*
 /web/files/upload/*
 /app/bootstrap.php.cache
@@ -20,13 +19,13 @@
 /logs
 /build.properties
 /*~
-/nbproject
-nbproject/*
 /app/share/1c/debt/
-/web/uploads/dogovor/
-/web/uploads/handling_message/
-/web/uploads/document/
 /composer.lock
 /components/
 /web/cache/*
-/web/uploads/userprofiles/*
+/tests/_output/
+.buildpath
+.project
+.settings/
+.externalToolBuilders/
+/app/share/1c/bank/

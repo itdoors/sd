@@ -1,0 +1,145 @@
+# src/ITDoors/PayMasterBundle/Resources/config/doctrine/PayMaster.orm.yml
+ITDoors\PayMasterBundle\Entity\PayMaster:
+    type: entity
+    table: pay_master
+    repositoryClass: ITDoors\PayMasterBundle\Entity\PayMasterRepository
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDatetime:
+            type: datetime
+            column: create_datetime
+            options:
+                comment: Дата создания счета (создается автоматически)
+        invoiceDate:
+            type: date
+            column: invoice_date
+            options:
+                comment: Дата счета
+        expectedDate:
+            type: date
+            column: expected_date
+            options:
+                comment: Ожидаемая дата оплаты
+        paymentDate:
+            type: date
+            column: payment_date
+            nullable: true
+            options:
+                comment: Дата оплаты
+        invoiceAmount:
+            type: float
+            column: invoice_amount
+            options:
+                comment: Сумма счета
+        vat:
+            type: boolean
+            options:
+                comment: Сумма счета с НДС (да||нет)
+                default: 0
+        isAcceptance:
+            type: boolean
+            nullable: true
+            column: is_acceptance
+            options:
+                comment: Акцепт (1 - подтвержен, 0 - отклонен)
+        toPay:
+            type: boolean
+            nullable: true
+            column: to_pay
+            options:
+                comment: Отметка на оплату
+        description:
+            type: text
+            nullable: true
+        reason:
+            type: text
+            nullable: true
+            options:
+                comment: Причина отклонения
+        scan:
+            type: string
+            length: 255
+            options:
+                comment: Скан счета (имя файла) (/uploaded/paymaster/{id})
+    manyToOne:
+        status:
+            targetEntity: PayMasterStatus
+            inversedBy: null
+            nullable: true
+            options:
+                comment: Статус счета
+            joinColumn:
+                name: status_id
+                referencedColumnName: id
+        payer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            options:
+                comment: Платильщик
+            joinColumn:
+                name: payer_id
+                referencedColumnName: id
+        contractor:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            options:
+                comment: Подрядчик
+            joinColumn:
+                name: contractor_id
+                referencedColumnName: id
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            inversedBy: null
+            joinColumn:
+                name: dogovor_id
+                referencedColumnName: id
+        creator:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumn:
+                name: creator_id
+                referencedColumnName: id
+        currentAccount:
+            targetEntity: Lists\OrganizationBundle\Entity\OrganizationCurrentAccount
+            inversedBy: null
+            joinColumn:
+                name: current_account_id
+                referencedColumnName: id
+        bank:
+            targetEntity: Lists\OrganizationBundle\Entity\Bank
+            inversedBy: null
+            options:
+                comment: Банк с которого будет произведена оплата
+            joinColumn:
+                name: bank_id
+                referencedColumnName: id
+    manyToMany:
+        mpks:
+            targetEntity: Lists\MpkBundle\Entity\Mpk
+            inversedBy: null
+            joinTable:
+                name: pay_master_mpk
+                joinColumns:
+                    pay_master_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    mpk_id:
+                        referencedColumnName: id
+            orphanRemoval: true
+        customers:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinTable:
+                name: pay_master_customer
+                joinColumns:
+                    pay_master_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    customer_id:
+                        referencedColumnName: id
+            orphanRemoval: true

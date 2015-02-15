@@ -1,5 +1,5 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
-
+{% if accessEdit %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -7,13 +7,21 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#description').editable({
+        $('#description, #address, #name').editable({
             url: '{{ path('sd_common_ajax_editable_department') }}'
         });
 
         $('#status').editable({
             url: '{{ path('sd_common_ajax_editable_department') }}',
             source: '{{ path('sd_common_ajax_department_status') }}'
+        });
+        $('#city').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            source: '{{ path('sd_common_ajax_city') }}',
+            tpl: "<input type='text' style='min-width: 200px'>",
+            select2: {
+                     minimumInputLength: 2
+                }
         });
 
         $('#type').editable({
@@ -34,24 +42,28 @@
             }
         });
 
-
         $('#typeId').editable({
             url: '{{ path('sd_common_ajax_handling_save') }}',
             source: '{{ path('sd_common_ajax_handling_type') }}'
         });
-
-        $('#opermanager').editable({
-            url: '{{ path('sd_common_ajax_editable_department') }}',
-            source: '{{ path('sd_common_ajax_user') }}',
-            select2: {
-                multiple: false,
-                width: '250px'
-            }
-        });
-    })
+        {% if is_granted('ROLE_DOGOVORADMIN') %}
+            $('#opermanager').editable({
+                clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                url: '{{ path('sd_common_ajax_editable_department') }}',
+                source: '{{ path('sd_common_ajax_user') }}',
+                emptytext: '{% trans %}Enter value{% endtrans %}',
+                select2: {
+                    multiple: false,
+                    width: '250px',
+                    allowClear: true
+                    
+                }
+            });
+        {% endif %}
+    });
 
 </script>
-
+{% endif %}
 
 <div class="tab-pane active" id="tab_0">
     <div class="col-md-12">
@@ -60,48 +72,68 @@
             <tr> {# 1 #}
                 <td style="width:15%">{% trans %}Mpk{% endtrans %}</td>
                 <td style="width:35%">
+                    {% if mpks|length >0 %}
+                            {% for mpk in mpks %}
+                                {% if mpk.active %}
+                                    {{ mpk.name }}
+                                {% endif %}
+                            {% endfor %}
+                            {% if oldMpks == true %}
+                                <span class="popovers"  id="pop1" data-html="true" style="color: grey;" data-trigger="hover" data-content="
+                                    {% for mpk in mpks %}
+                                        {% if mpk.active == false %}
+                                            {{ mpk.name }} ( {% trans %}From{% endtrans %}
+                                            {% if mpk.startDate is not empty %}
+                                                {{ mpk.startDate|date('d-m-Y') }}
+                                            {% else %}
+                                                {% trans %}Not defined{% endtrans %}
+                                            {% endif %}
 
-                {% if mpks|length >0 %}
-                        {% for mpk in mpks %}
-                            {% if mpk.active %}
-                                {{ mpk.name }}
+                                            {% trans %}To{% endtrans %}
+                                            {% if mpk.endDate is not empty %}
+                                                {{ mpk.endDate|date('d-m-Y') }}
+                                            {% else %}
+                                                {% trans %}Not defined{% endtrans %}
+                                            {% endif %}
+                                            )<br>
+                                        {% endif %}
+                                    {% endfor %}
+                                " data-original-title="{% trans %}Old mpks{% endtrans %}">{% trans %}history{% endtrans %}</span>
+                                <script>
+                                    $(document).ready(function(){
+                                        jQuery('.popovers').popover();
+                                    });
+                                </script>
+
                             {% endif %}
-                        {% endfor %}
-                        {% if oldMpks == true %}
-                            <span class="popovers"  id="pop1" data-html="true" style="color: grey;" data-trigger="hover" data-content="
-                                {% for mpk in mpks %}
-                                    {% if mpk.active == false %}
-                                        {{ mpk.name }} ( {% trans %}From{% endtrans %}
-                                        {% if mpk.startDate is not empty %}
-                                            {{ mpk.startDate|date('d-m-Y') }}
-                                        {% else %}
-                                            {% trans %}Not defined{% endtrans %}
-                                        {% endif %}
-
-                                        {% trans %}To{% endtrans %}
-                                        {% if mpk.endDate is not empty %}
-                                            {{ mpk.endDate|date('d-m-Y') }}
-                                        {% else %}
-                                            {% trans %}Not defined{% endtrans %}
-                                        {% endif %}
-                                        )<br>
-                                    {% endif %}
-                                {% endfor %}
-                            " data-original-title="{% trans %}Old mpks{% endtrans %}">{% trans %}history{% endtrans %}</span>
-                            <script>
-                                $(document).ready(function(){
-                                    jQuery('.popovers').popover();
-                                })
-                            </script>
-
-                        {% endif %}
-                {% endif %}
+                    {% endif %}
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a class=" btn default btn-xs" href="#" data-target="#mpkListTpl" data-toggle="modal">
+                            {% trans %}Edit{% endtrans %}
+                        </a>
+                        <div class="modal fade" id="mpkListTpl" role="basic" aria-hidden="true" style="display: none;">
+                            <div class="page-loading page-loading-boxed">
+                                    <img src="{{ web_image('assets/global/img/loading-spinner-grey.gif') }}" alt="" class="loading">
+                                    <span>&nbsp;&nbsp;Loading... </span>
+                            </div>
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    {{ render(controller('ListsMpkBundle:Mpk:modal', {'departmentId': department.0.id })) }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                
                 </td>
                 <td style="width:15%">{% trans %}Object type{% endtrans %}</td>
                 <td style="width:35%">
-                    <a href="#" id="type" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select Type{% endtrans %}">
+                    {% if accessEdit %}
+                        <a href="#" id="type" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select Type{% endtrans %}">
+                            {{ department.0.typeName }}
+                        </a>
+                    {% else %}
                         {{ department.0.typeName }}
-                    </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr> {# 2 #}
@@ -117,42 +149,83 @@
                 <td>{{ department.0.regionName }}</td>
                 <td>{% trans %}Description{% endtrans %}</td>
                 <td>
-                    <a href="#" id="description" data-type="textarea" data-pk="{{ department.0.id }}" data-value="{{ department.0.description }}" data-placement="right" data-original-title="{% trans %}Enter Description{% endtrans %}">{{ department.0.description }}</a>
+                    {% if accessEdit %}
+                        <a href="#" id="description" data-type="textarea" data-pk="{{ department.0.id }}" data-value="{{ department.0.description }}" data-placement="right" data-original-title="{% trans %}Enter Description{% endtrans %}">{{ department.0.description }}</a>
+                    {% else %}
+                        {{ department.0.description }}
+                    {% endif %}
                 </td>
             </tr>
             <tr> {# 4 #}
                 <td>{% trans %}City{% endtrans %}</td>
-                <td>{{ department.0.cityName }}</td>
+                <td>
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a href="#" id="city" data-type="select2" data-pk="{{ department.0.id }}" data-placement="right" data-value="" data-placeholder="{% trans %}Select city{% endtrans %}" data-original-title="{% trans %}City{% endtrans %}">
+                            {{ department.0.cityName }}
+                        </a>
+                    {% else %}
+                        {{ department.0.cityName }}
+                    {% endif %}
+                </td>
                 <td>{% trans %}Oper manager{% endtrans %}</td>
                 <td>
-                    <a href="#" id="opermanager" data-type="select2" data-pk="{{ department.0.id }}" data-placement="right" data-value="" data-placeholder="{% trans %}Select opermanger{% endtrans %}" data-original-title="{% trans %}Type opermanger{% endtrans %}">{{ department.0.opermanagerName }}</a>
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a href="#" id="opermanager" data-type="select2" data-pk="{{ department.0.id }}" data-value="{{ department.0.opermanagerName }}" data-placeholder="{% trans %}Select opermanger{% endtrans %}" data-original-title="{% trans %}Type opermanger{% endtrans %}">
+                            {{ department.0.opermanagerName }}
+                        </a>
+                    {% else %}
+                        {{ department.0.opermanagerName }}
+                    {% endif %}
                 </td>
             </tr>
             <tr>{# 5 #}
                 <td>{% trans %}Address{% endtrans %}</td>
                 <td>
-                    {{ department.0.address }}
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a href="#" id="address" data-type="text" data-pk="{{ department.0.id }}" data-value="{{ department.0.address }}" data-placement="right" data-original-title="{% trans %}Enter address{% endtrans %}">{{ department.0.address }}</a>
+                    {% else %}
+                        {{ department.0.address }}
+                    {% endif %}
                 </td>
                 <td>{% trans %}Rs{% endtrans %}</td>
                 <td>
                     {{ department.0.rs }}
                 </td>
             </tr>
-            <tr> {# 6 #}
-                <td>{% trans %}Status{% endtrans %}</td>
+            <tr>{# 5 #}
+                <td>{% trans %}Name{% endtrans %}</td>
                 <td>
-                    <a href="#" id="status" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
-                        {{ department.0.statusName }}
-                    </a>
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a href="#" id="name" data-type="text" data-pk="{{ department.0.id }}" data-value="{{ department.0.name }}" data-placement="right" data-original-title="{% trans %}Enter name{% endtrans %}">{{ department.0.name }}</a>
+                    {% else %}
+                        {{ department.0.name }}
+                    {% endif %}
                 </td>
                 <td>{% trans %}Edrpou{% endtrans %}</td>
                 <td>
                     {{ department.0.edrpou }}
                 </td>
             </tr>
+            <tr> {# 6 #}
+                <td>{% trans %}Status{% endtrans %}</td>
+                <td>
+                    {% if accessEdit %}
+                        <a href="#" id="status" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                            {{ department.0.statusName }}
+                        </a>
+                    {% else %}
+                        {{ department.0.statusName }}
+                    {% endif %}
+                </td>
+                <td>{% trans %}Inn{% endtrans %}</td>
+                <td>
+                    {{ department.0.inn }}
+                </td>
+            </tr>
             <tr>{# 7 #}
                 <td>{% trans %}Status Date{% endtrans %}</td>
                 <td>
+                    {% if accessEdit %}
                     <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}"
                        data-original-title="{% trans %}Enter Status Date{% endtrans %}"
                        data-format="dd-mm-yyyy"
@@ -163,16 +236,17 @@
                        ">
                         {% if department.0.statusDate is not empty %}
                             {{ department.0.statusDate|date('d-m-Y') }}
-{#
-                        {% else %}
-                            {% trans %}Not defined{% endtrans %}
-#}
                         {% endif %}
                     </a>
+                    {% else %}
+                        {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('d-m-Y') }}
+                        {% endif %}
+                    {% endif %}
                 </td>
-                <td>{% trans %}Inn{% endtrans %}</td>
+                <td>{% trans %}Organization address{% endtrans %}</td>
                 <td>
-                    {{ department.0.inn }}
+                    {{ department.0.organizationAddress }}
                 </td>
             </tr> {# 8 #}
             <tr>
@@ -180,10 +254,8 @@
                 <td>
                     {{ department.0.certificate }}
                 </td>
-                <td>{% trans %}Organization address{% endtrans %}</td>
-                <td>
-                    {{ department.0.organizationAddress }}
-                </td>
+                <td></td>
+                <td></td>
             </tr>
 
             </tbody>

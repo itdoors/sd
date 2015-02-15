@@ -68,7 +68,7 @@ class OperScheduleController extends BaseFilterController
         if ($id == 0) {
             /** @var AccessService $accessService */
             $accessService = $this->get('access.service');
-            $idDepartment = $accessService->getAllowedDepartmentsId();
+            $idDepartment = $accessService->getAllowedDepartmentsId(null, false);
         }
         if (is_array($idDepartment) || $idDepartment === false) {
             $departmentIsArray = true;
@@ -538,8 +538,8 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $officially = $request->request->get('officially');
-        $fromTime = $request->request->get('fromTime');
-        $toTime = $request->request->get('toTime');
+        $fromTime = str_replace(array('<font>', '</font>'), '', $request->request->get('fromTime'));
+        $toTime = str_replace(array('<font>', '</font>'), '', $request->request->get('toTime'));
         $idTimeGrafik = $request->request->get('idTimeGrafik');
         $idReplacement = $request->request->get('idReplacement');
 

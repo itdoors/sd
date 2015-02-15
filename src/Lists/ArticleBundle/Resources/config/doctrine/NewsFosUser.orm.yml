@@ -1,0 +1,31 @@
+Lists\ArticleBundle\Entity\NewsFosUser:
+    type: entity
+    table: news_fos_user
+    repositoryClass: Lists\ArticleBundle\Entity\NewsFosUserRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        viewed:
+            type: datetime
+        manual:
+            type: boolean
+        
+    manyToOne:
+        news:
+            targetEntity: Lists\ArticleBundle\Entity\Article
+            inversedBy: null
+            joinColumns:
+                news_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+       

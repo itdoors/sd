@@ -22,9 +22,14 @@ parameters:
     project.web.dir: '%project.dir%/web'
     log.file.path: "%project.dir%/log.txt"
     1C.file.path: "%project.dir%/app/share/1c/debt/"
+    1C.file.path.bank: "%project.dir%/app/share/1c/bank/"
     email.file.path: "%project.dir%/web/uploads/email/"
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
+    invoice.scan.file.path: "/uploads/invoice/scan/"
+    blogfiles.image.path: "/uploads/blogimages/"
+    blogfiles.file.path: "/uploads/blogfiles/"
+    reports.file.path: "/uploads/coach/reports/"
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
     listener.history.table: %listener.history.tables%
@@ -32,6 +37,11 @@ parameters:
     call.port: "81"
     call.directory: "m"
     call.extension: "mp3"
+    pdo.db_options:
+        db_table:    session
+        db_id_col:   session_id
+        db_data_col: session_value
+        db_time_col: session_time
 
 framework:
     #esi:             ~
@@ -48,7 +58,8 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_proxies: ~
-    session:         ~
+    session: 
+        handler_id: session.handler.pdo
     fragments:       ~
     http_method_override: true
     serializer:
@@ -64,6 +75,7 @@ twig:
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
         ajax_filter_namespace_report_invoice: %ajax.filter.namespace.report.invoice%
         sd_holiday: %sd.holiday%
+        invoice_scan_file_path: %invoice.scan.file.path%
         it_doors_namespace_history: %it_doors.history.namespace%
         filter_namespace_article: %filter.namespace.article%
         it_doors_namespace_email: %it.doors.email.namespace%
@@ -85,6 +97,12 @@ twig:
         sip_port_ws: %sip.port.ws%
         call_url: "http://%call.ip%:%call.port%/%call.directory%/"
         call_extension: "%call.extension%"
+        
+        cron_timeout: %cron_timeout%
+        idle_after: %idle_after%
+        modal_timeout: %modal_timeout%
+        polling_interval: %polling_interval%
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
@@ -135,13 +153,16 @@ doctrine:
                         array_to_string: ITDoors\CommonBundle\DQL\ArrayToStringDQL
                         array: ITDoors\CommonBundle\DQL\ArrayDQL
                         select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
-                    #datetime_functions:
+                        cast: Oro\ORM\Query\AST\Functions\Cast
+                    datetime_functions:
+                        date:  Oro\ORM\Query\AST\Functions\SimpleFunction
                     numeric_functions:
                         dayofyear: Oro\ORM\Query\AST\Functions\SimpleFunction
                         year: Oro\ORM\Query\AST\Functions\SimpleFunction
                         month: Oro\ORM\Query\AST\Functions\SimpleFunction
                         day: Oro\ORM\Query\AST\Functions\SimpleFunction
-                        timestampdiff: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        timestampdiff: Oro\ORM\Query\AST\Functions\Numeric\TimestampDiff
+                        date: Oro\ORM\Query\AST\Functions\SimpleFunction
                         
 stof_doctrine_extensions:
      orm:
@@ -190,18 +211,43 @@ knp_paginator:
         sortable: ITDoorsCommonBundle:Pagination:sortable_link.html.twig # sort link template
 
 services:
+    pdo:
+        class: PDO
+        arguments:
+            - "pgsql:host=%database_host%;port=%database_port%;dbname=%database_name%"
+            - "%database_user%"
+            - "%database_password%"
+        calls:
+            - [setAttribute, [3, 2]] # \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        arguments: ["@pdo", "%pdo.db_options%"]
+        
     get_set_method_normalizer:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
          
     gedmo.listener.softdeleteable:
-        class:        Gedmo\SoftDeleteable\SoftDeleteableListener
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
-
+            
+    sd_user.handler.login_success_handler:
+        class:  SD\UserBundle\Handler\LoginSuccessHandler
+        arguments:  [@service_container, @router, @security.context]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onAuthenticationSuccess } 
+            
+    sd_user.handler.logout_success_handler:
+        class:  SD\UserBundle\Handler\LogoutSuccessHandler
+        arguments:  [@service_container]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' } 
+            
 doctrine_migrations:
     dir_name: %kernel.root_dir%/DoctrineMigrations
     namespace: Application\Migrations

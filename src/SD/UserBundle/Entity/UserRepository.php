@@ -38,7 +38,7 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
-                ->leftJoin('u.stuff', 'stuff')
+                ->join('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
     /**
@@ -73,7 +73,9 @@ class UserRepository extends EntityRepository
                 ->addselect('s.dateFire')
                 ->addselect('s.education')
                 ->addselect('c.name as companyName')
+                ->addselect('userPosition.name as userPositionName')
                 ->leftJoin('u.stuff', 's')
+                ->leftJoin('u.userPosition', 'userPosition')
                 ->leftJoin('s.status', 'st')
                 ->leftJoin('s.companystructure', 'c')
                 ->where('u.id = :id')
@@ -295,14 +297,46 @@ class UserRepository extends EntityRepository
             ->andWhere('st.lukey = :status OR st.id IS NULL')
             ->setParameter(':status', 'worked');
         if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
-            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
-                ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
+            $res->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date)) "
+                . "END + dayofyear(u.birthday) >= :dayofyearStart"
+            )
+            ->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
+                . "END + dayofyear(u.birthday) <= :dayofyearStop"
+            );
         } else {
-            $res->andWhere('(dayofyear(u.birthday) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
+            $res->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date)) "
+                . "END + dayofyear(u.birthday) <= :dayofyearStart"
+                . " OR "
+                . "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
+                . "END + dayofyear(u.birthday) >= :dayofyearStop"
+            );
         }
+        $dayofyearStart = date('z', $startTimestamp)+1;
+        $dayofyearStop = date('z', $endTimestamp)+1;
         $res
-            ->setParameter(':dayofyearStart', date('z', $startTimestamp)+1)
-            ->setParameter(':dayofyearStop', date('z', $endTimestamp)+1);
+            ->setParameter(
+                ':dayofyearStart',
+                $dayofyearStart > 60 && !date('L', $startTimestamp) ? $dayofyearStart+1 : $dayofyearStart
+            )
+            ->setParameter(
+                ':dayofyearStop',
+                $dayofyearStop > 60 && !date('L', $dayofyearStop) ? $dayofyearStop+1 : $dayofyearStop
+            );
 
         return $res->getQuery()->getResult();
     }
@@ -321,5 +355,82 @@ class UserRepository extends EntityRepository
             ->orderBy('u.lastName', 'asc');
 
         return $result->getQuery()->getResult();
+    }
+
+    /**
+     * findByRole
+     * 
+     * @param string $role
+     *
+     * @return array
+     */
+    public function findByRole($role)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->select('u')
+            ->leftJoin('u.groups', 'g')
+            ->where('g.roles LIKE :roles')
+            ->setParameter(':roles', '%"' . $role . '"%');
+
+        return $qb->getQuery()->getResult();
+    }
+    /**
+     * getUsersForOperStatisticByFilter
+     * 
+     * @param string $filters
+     * 
+     * @return array
+     */
+    public function getUsersForOperStatisticByFilter($filters = null)
+    {
+
+        $sql = $this->createQueryBuilder('u')
+            ->select('u')
+            ->leftJoin('u.stuff', 's')
+            ->leftJoin('s.companystructure', 'c')
+            ->innerJoin('u.groups', 'g')
+            ->where('g.roles LIKE :roles')
+            ->setParameter(':roles', '%ROLE_OPER%')
+            ->leftJoin('s.status', 'st')
+            ->andWhere("st.id is NULL or st.lukey = :status")
+            ->setParameter(':status', 'worked');
+
+        if ($filters) {
+            if (isset($filters['companyStructure']) && $filters['companyStructure']) {
+                $companyStructureFilter = explode(',', $filters['companyStructure']);
+
+                $sql = $sql->andWhere(
+                    "c.id in (:companyStructure) or c.id in
+                    (
+                        SELECT
+                            cc.id
+                        FROM
+                            ListsCompanystructureBundle:Companystructure cp
+                        LEFT JOIN
+                            ListsCompanystructureBundle:Companystructure cc
+                        WHERE
+                            cp.root = cc.root
+                        AND
+                            cp.lft < cc.lft
+                        AND
+                            cp.rgt > cc.rgt
+                        AND
+                            cp in (:companyStructure)
+                    )"
+                );
+                $sql->setParameter(':companyStructure', $companyStructureFilter);
+
+            }
+            if (isset($filters['user']) && $filters['user']) {
+                $usersFilter = explode(',', $filters['user']);
+                $sql = $sql
+                    ->andWhere("u.id IN (:users)")
+                    ->setParameter(':users', $usersFilter);
+            }
+        }
+        $result = $sql->getQuery()->getResult();
+
+        return $result;
     }
 }

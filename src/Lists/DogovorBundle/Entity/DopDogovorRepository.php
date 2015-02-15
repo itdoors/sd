@@ -129,7 +129,7 @@ class DopDogovorRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('dd.id as id')
+            ->select('dd.id')
             ->addSelect('dd.number as number')
             ->addSelect('dd.subject as subject')
             ->addSelect('dd.dogovorId as dogovorId')
@@ -144,7 +144,7 @@ class DopDogovorRepository extends EntityRepository
             ->addSelect(
                 '(
                 SELECT
-                    COUNT(ddd.id) as countId
+                    COUNT(ddd.id)
                 FROM
                     ListsDogovorBundle:DogovorDepartment ddd
                 WHERE

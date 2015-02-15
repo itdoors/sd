@@ -13,6 +13,7 @@ Date start: Дата начала
 Date stop: Дата окончания
 Enter date start: Введите дату начала
 Enter date stop: Введите дату окончания
+Enter date stop task: Введите срок выполнения
 Title: Название
 Description: Описание
 Enter title: Введите название
@@ -46,6 +47,7 @@ Title: Название
 My role: Моя роль
 
 Enter performer: Введите исполнителя
+Enter controller: Введите контролирующего
 Creator: Автор
 Created: Созданные
 Go to: Перейти
@@ -108,3 +110,9 @@ Cancel: Отмена
 Events for today: События на сегодня
 Events for week: События на неделю
 Birthdays: Дни рождения
+for: за
+days: дней
+Organization: Организация
+Tenders: Тендеры
+City: Город
+See: Просмотреть
