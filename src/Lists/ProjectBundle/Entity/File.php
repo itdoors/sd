@@ -22,7 +22,7 @@ class File
     /**
      * @var string
      */
-    private $path = '/uploads/projects/';
+    private $path = '/uploads/project/';
     /**
      * Get path
      *
