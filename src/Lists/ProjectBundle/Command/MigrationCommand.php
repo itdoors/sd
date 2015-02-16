@@ -245,11 +245,11 @@ class MigrationCommand extends ContainerAwareCommand
             $message->setType($type);
             
             $this->em->persist($message);
-            $this->copyFileMessage($messageOld, $project, $messageOld->getAbsolutePath(), $output);
+            $this->copyFileMessage($messageOld, $project, $output);
         }
        
     }
-     private function copyFileMessage($handlingMessage, $project, $fileNAme, $output){
+     private function copyFileMessage($handlingMessage, $project, $output){
         if (!$project->getId()) {
             $output->writeln('PROJECT ID NOT FOUND FOR directory');
         }
@@ -264,17 +264,21 @@ class MigrationCommand extends ContainerAwareCommand
         if (!is_dir($dirNew)){
             mkdir($dirNew);
         }
-        $fileOld = $handlingMessage->getAbsolutePath();
-        $fileNew = $dirNew.'/'.$fileNAme;
-        if (!is_file($fileOld)) {
-            $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$handlingMessage->getId());
-            return false;
+        $filesMessage = $handlingMessage->getFiles();
+        foreach ($filesMessage as $file) {
+            $fileOld = $file->getAbsolutePath();
+            $fileNew = $dirNew.'/'.$file->getFile();
+            if (!is_file($fileOld) && $file->getFile() != '') {
+                $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$file->getId());
+                return false;
+            }
+            if (!is_dir($dirNew)) {
+                $output->writeln('Directory dont found: '.$dirNew);
+                return false;
+            }
+            copy($fileOld, $fileNew);
         }
-        if (!is_dir($dirNew)) {
-            $output->writeln('Directory dont found: '.$dirNew);
-            return false;
-        }
-        copy($fileOld, $fileNew);
+        
     }
     private function copyFileType($project)
     {
