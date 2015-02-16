@@ -267,7 +267,7 @@ class MigrationCommand extends ContainerAwareCommand
         $fileOld = $handlingMessage->getAbsolutePath();
         $fileNew = $dirNew.'/'.$fileNAme;
         if (!is_file($fileOld)) {
-            $output->writeln('File dont found: '.$fileOld);
+            $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$handlingMessage->getId());
             return false;
         }
         if (!is_dir($dirNew)) {
@@ -276,7 +276,7 @@ class MigrationCommand extends ContainerAwareCommand
         }
         copy($fileOld, $fileNew);
     }
-    private function copyFile($project)
+    private function copyFileType($project)
     {
        $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
             ->findBy(array ('group' => 'commercial_offer'));
