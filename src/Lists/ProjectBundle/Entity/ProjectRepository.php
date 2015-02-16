@@ -41,4 +41,21 @@ class ProjectRepository extends EntityRepository
 
         return $sql->getQuery();
     }
+    /**
+     * @param integer $id Organization.id
+     *
+     * @return Query
+     */
+    public function getForOrganization($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+
+        $query = $sql
+                ->andWhere("o.organization = :organization")
+                ->setParameter(':organization', $id)
+                ->getQuery()->getResult();
+
+        return $query;
+    }
 }
