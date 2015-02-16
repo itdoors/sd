@@ -308,9 +308,15 @@ class MigrationCommand extends ContainerAwareCommand
         }
         $this->em->flush();
          // перенос сообщений
-        foreach ($handlings as $val) {
-            $project = $this->handlingToProject($val, $output);
-            $this->message($val, $project, $output);
+        foreach ($handlings as $val1) {
+            $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
+            array(
+                'createDatetime' => $val1->getCreatedatetime(),
+                'organization' => $val1->getOrganization(),
+                'createDate' => $val1->getCreatedate(),
+                'userCreated' => $val1->getUser()
+            ));
+            $this->message($val1, $project, $output);
         }
         
          // перенос проектов гос тендеры
