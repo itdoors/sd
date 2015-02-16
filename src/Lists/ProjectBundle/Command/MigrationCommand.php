@@ -36,6 +36,7 @@ class MigrationCommand extends ContainerAwareCommand
           ->setName('lists:project:migration')
           ->setDescription('Mifration handling to project');
     }
+// Услуги
     private function saveService($service)
     {
         $servicesNew = $this->em->getRepository('ListsProjectBundle:Service')->findOneBy(
@@ -60,6 +61,7 @@ class MigrationCommand extends ContainerAwareCommand
         }
         return $servicesNew;
     }
+// статусы
     private function saveStatus($val)
     {
         if (!$val) {
@@ -80,26 +82,9 @@ class MigrationCommand extends ContainerAwareCommand
         }
         return $statusNew;
     }
-    private function saveType($val)
-    {
-        $type = $this->em->getRepository('ListsProjectBundle:MessageType')->findOneBy(
-            array(
-                'name' => $val->getName()
-            ));
-        if (!$type) {
-            $type = new \Lists\ProjectBundle\Entity\MessageType();
-            $type->setName($val->getName());
-            $type->setIsReport($val->getIsReport());
-            $type->setReportName($val->getReportName());
-            $type->setReportSortorder($val->getReportSortorder());
-            $type->setSlug($val->getSlug());
-            $type->setSortorder($val->getSortorder());
-            $type->setStayActionTime($val->getStayActionTime());
-            $this->em->persist($type);
-        }
-        return $type;
-    }
-    private function saveManager($handling, $project)
+
+// менеджеры
+    private function saveManager($handling, $project, $output)
     {
        $managers = $handling->getHandlingUsers();
        $part = 0;
@@ -138,24 +123,158 @@ class MigrationCommand extends ContainerAwareCommand
                 } else {
                     $projectManager = new \Lists\ProjectBundle\Entity\ManagerType();
                 }
-                $projectManager->setPart(($part+$manager->getPart()) > 100 ? (100-$part) : $manager->getPart());
                 $projectManager->setProject($project);
                 $projectManager->setUser($user);
-                $this->em->persist($projectManager);
-           }
-       }
-    }
-    private function addFile($project)
-    {
-       $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
-            ->findBy(array ('group' => 'commercial_offer'));
-        foreach ($fileTypes as $type) {
-            $file = new \Lists\ProjectBundle\Entity\FileProject();
-            $file->setProject($project);
-            $file->setType($type);
-            $file->setUser($project->getUser());
-            $this->em->persist($file);
+            }
+            $projectManager->setPart(($part+$manager->getPart()) > 100 ? (100-$part) : $manager->getPart());
+            $this->em->persist($projectManager);
         }
+        if ($part != 100) {
+            $output->writeln('ERROR PART IN HANDLING ID: '.$handling->getId(), ' PROJECT ID: '.$project->getId());
+        }
+    }
+// проект
+    private function handlingToProject($handling, $output)
+    {
+        $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
+            array(
+                'createDatetime' => $handling->getCreatedatetime(),
+                'organization' => $handling->getOrganization(),
+                'createDate' => $handling->getCreatedate(),
+                'userCreated' => $handling->getUser(),
+            ));
+        $isAddProject = false;
+        if (!$project) {
+            $type = $handling->getType();
+            if ($type) {
+                if($type->getId() == 2) {
+                    $project = new \Lists\ProjectBundle\Entity\ProjectCommercialTender();
+                    $services = $handling->getHandlingServices();
+                    foreach ($services as $service) {
+                        $serviceProject = $this->saveService($service);
+                        $project->addService($serviceProject);
+                    }
+                } elseif ($type->getId() == 8) {
+                    $project = new \Lists\ProjectBundle\Entity\ProjectElectronicTrading();
+                } elseif ($type->getId() == 4) {
+                    return null;
+                } else {
+                    $project = new \Lists\ProjectBundle\Entity\ProjectSimple();
+                }
+            } else {
+                $project = new \Lists\ProjectBundle\Entity\ProjectSimple();
+            }
+            $isAddProject = true;
+        }
+        $project->setCreateDate($handling->getCreatedate());
+        $project->setCreateDatetime($handling->getCreatedatetime());
+        $project->setDatetimeClosed($handling->getDatetimeClosed()?$handling->getDatetimeClosed():$handling->getClosedatetime());
+        $project->setDeletedDatetime($handling->getDeletedAt());
+        $project->setDescription($handling->getDescription());
+        $project->setIsClosed($handling->getIsClosed());
+        $project->setOrganization($handling->getOrganization());
+        $project->setReasonClosed($handling->getReasonClosed());
+        $project->setSquare($handling->getSquare()); 
+        $project->setUserCreated($handling->getUser()); 
+        $project->setStatusAccess(true);
+        $project->setStatusChangeDate($handling->getStatusChangeDate());
+        $project->setUserClosed($handling->getClosedUser()? $handling->getClosedUser(): $handling->getCloser());
+
+        $this->em->persist($project);
+        $output->writeln(($isAddProject?'ADD PROJECT':'UPDATE PROJECT ID:').' '. $project->getId());
+
+        $this->saveManager($handling, $project, $output);
+        $output->writeln('AND MIGRATION MANAGER');
+
+        $this->message($handling, $project, $output);
+        $output->writeln('ADD FILE MESSAGES');
+
+        return $project;
+    }
+// типы обращений
+    private function saveType($val)
+    {
+        if (!$val) {
+            return null;
+        } 
+        $type = $this->em->getRepository('ListsProjectBundle:MessageType')->findOneBy(
+            array(
+                'name' => $val->getName()
+            ));
+        if (!$type) {
+            $type = new \Lists\ProjectBundle\Entity\MessageType();
+            $type->setName($val->getName());
+            $type->setIsReport($val->getIsReport());
+            $type->setReportName($val->getReportName());
+            $type->setReportSortorder($val->getReportSortorder());
+            $type->setSlug($val->getSlug());
+            $type->setSortorder($val->getSortorder());
+            $type->setStayActionTime($val->getStayActionTime());
+            $this->em->persist($type);
+        }
+        return $type;
+    }
+    
+// обращения
+    private function message($handling, $project, $output)
+    {
+        $messages = $handling->getHandlingMessages();
+        foreach ($messages as $messageOld) {
+            $message = $this->em->getRepository('ListsProjectBundle:Message')->findOneBy(
+                array(
+                    'createDatetime' => $messageOld->getCreatedatetime(),
+                    'eventDatetime' => $messageOld->getCreatedate(),
+                    'user' => $messageOld->getUser(),
+                ));
+            $type = $this->saveType($messageOld->getType());
+
+            if(!$message) {
+                if ($messageOld->getAdditionalType() == 'fm') {
+                    $message = new \Lists\ProjectBundle\Entity\MessagePlanned();
+                } else {
+                    $message = new \Lists\ProjectBundle\Entity\MessageCurrent();
+                }
+            }
+            
+            $message->setContact($messageOld->getContact());
+            $message->setCreateDatetime($messageOld->getCreatedatetime());
+            $message->setDescription($messageOld->getDescription());
+            $message->setEventDatetime($messageOld->getCreatedate());
+            $message->setProject($project);
+            $message->setUser($messageOld->getUser());
+            $message->setType($type);
+            
+            $this->em->persist($message);
+            $this->copyFileMessage($messageOld, $project, $messageOld->getAbsolutePath(), $output);
+        }
+       
+    }
+     private function copyFileMessage($handlingMessage, $project, $fileNAme, $output){
+        if (!$project->getId()) {
+            $output->writeln('PROJECT ID NOT FOUND FOR directory');
+        }
+
+        $dir = __DIR__.'/../../../../web/uploads';
+        
+        $dirNew = $dir.'/project';
+        if (!is_dir($dirNew)){
+            mkdir($dirNew);
+        }
+        $dirNew .= '/'.$project->getId();
+        if (!is_dir($dirNew)){
+            mkdir($dirNew);
+        }
+        $fileOld = $handlingMessage->getAbsolutePath();
+        $fileNew = $dirNew.'/'.$fileNAme;
+        if (!is_file($fileOld)) {
+            $output->writeln('File dont found: '.$fileOld);
+            return false;
+        }
+        if (!is_dir($dirNew)) {
+            $output->writeln('Directory dont found: '.$dirNew);
+            return false;
+        }
+        copy($fileOld, $fileNew);
     }
     private function copyFile($project)
     {
@@ -177,20 +296,6 @@ class MigrationCommand extends ContainerAwareCommand
         $output->writeln('START');
         /** @var \Doctrine\ORM\EntityManager $em */
         $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        // перенос сервисов
-        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
-        foreach ($services as $service) {
-            $this->saveService($service);
-        }
-        $output->writeln('END SERVICE');
-
-        // перенос статусов
-        $status = $this->em->getRepository('ListsHandlingBundle:HandlingStatus')->findAll();
-        foreach ($status as $val) {
-            $this->saveStatus($val);
-        }
-        $output->writeln('END STATUS');
         
         // перенос типы обращений
         $types = $this->em->getRepository('ListsHandlingBundle:HandlingMessageType')->findBy(array(), array('id' => 'ASC'));
@@ -202,60 +307,15 @@ class MigrationCommand extends ContainerAwareCommand
          // перенос проектов
         $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
         foreach ($handlings as $val) {
-            $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
-                array(
-                    'createDatetime' => $val->getCreatedatetime(),
-                    'organization' => $val->getOrganization(),
-                    'createDate' => $val->getCreatedate(),
-                    'userCreated' => $val->getUser(),
-                ));
-            if (!$project) {
-                $type = $val->getType();
-                if ($type) {
-                    if($type->getId() == 2) {
-                        $project = new \Lists\ProjectBundle\Entity\ProjectCommercialTender();
-                        $services = $val->getHandlingServices();
-                        foreach ($services as $service) {
-                            $serviceProject = $this->saveService($service);
-                            $project->addService($serviceProject);
-                        }
-                        
-                    } elseif ($type->getId() == 8) {
-                        $project = new \Lists\ProjectBundle\Entity\ProjectElectronicTrading();
-                    } elseif ($type->getId() == 4) {
-                        continue;
-                    } else {
-                        $project = new \Lists\ProjectBundle\Entity\ProjectSimple();
-                    }
-                } else {
-                    $project = new \Lists\ProjectBundle\Entity\ProjectSimple();
-                }
-                $project->setCreateDate($val->getCreatedate());
-                $project->setCreateDatetime($val->getCreatedatetime());
-                $project->setDatetimeClosed($val->getDatetimeClosed()?$val->getDatetimeClosed():$val->getClosedatetime());
-                $project->setDeletedDatetime($val->getDeletedAt());
-                $project->setDescription($val->getDescription());
-                $project->setIsClosed($val->getIsClosed());
-                $project->setOrganization($val->getOrganization());
-                $project->setReasonClosed($val->getReasonClosed());
-                $project->setSquare($val->getSquare()); 
-                $project->setStatusAccess(true);
-                $project->setStatusChangeDate($val->getStatusChangeDate());
-                $project->setUserClosed($val->getClosedUser()? $val->getClosedUser(): $val->getCloser());
-                $project->setUserCreated($val->getUser());
-                
-                $output->writeln('ADD PROJECT');
-                
-                $this->addFile($project);
-                
-                $output->writeln('END FILE');
-                $this->em->persist($project);
-                
-                $this->saveManager($val, $project);
-                $output->writeln('ADD MANAGER');
-            }
+            $this->handlingToProject($val, $output);
         }
-        $output->writeln('END PROJECT');
+        $this->em->flush();
+         // перенос сообщений
+        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
+        foreach ($handlings as $handling) {
+            $project = $this->handlingToProject($val, $output);
+            $this->message($handling, $project, $output);
+        }
         
          // перенос проектов гос тендеры
         $gosTenders = $this->em->getRepository('ListsHandlingBundle:ProjectGosTender')->findAll();
@@ -298,26 +358,57 @@ class MigrationCommand extends ContainerAwareCommand
                 $project->setAdvert($val->getAdvert());
                 
                 $files = $val->getProject()->getFiles();
+                $this->em->persist($project);
+                $this->em->flush();
                 foreach ($files as $file) {
-                    $addFile = new \Lists\HandlingBundle\Entity\ProjectFile();
+                    $type = $this->em->getRepository('ListsProjectBundle:ProjectFileType')->find($file->getType()->getId());
+                    $addFile = new \Lists\ProjectBundle\Entity\FileProject();
                     $addFile->setCreateDatetime($file->getCreateDatetime());
                     $addFile->setDeletedDatetime($file->getDeletedDatetime());
                     $addFile->setFile($file->getFile());
                     $addFile->setName($file->getName());
                     $addFile->setProject($project);
                     $addFile->setShortText($file->getShortText());
-                    $addFile->setType($file->getType());
+                    $addFile->setType($type);
                     $addFile->setUser($file->getUser());
                     $this->em->persist($addFile);
+                    
+                    $this->copyFile($file, $project, $file->getFile(), $output);
+                    
                 }
-                $this->em->persist($project);
                 
-                $this->saveManager($val->getProject(), $project);
+                
+                $this->saveManager($val->getProject(), $project, $output);
             }
         }
+        
+        
         $output->writeln('END PROJECT GOS TENDER');
 
         $this->em->flush();
         $output->writeln('END');
     }
+    private function copyFile($handling, $project, $fileNAme, $output){
+        if (!$project->getId()) {
+            $output->writeln('PROJECT ID NOT FOUND FOR directory');
+        }
+        
+        $dir = __DIR__.'/../../../../web/uploads';
+        
+        $dirOld = $dir.'/projects';
+        $dirNew = $dir.'/project';
+        if (!is_dir($dirNew)){
+            mkdir($dirNew);
+        }
+        
+        $dirNew .= '/'.$project->getId();
+        if (!is_dir($dirNew)){
+            mkdir($dirNew);
+        }
+        $fileOld = $dirOld.'/'.$handling->getId().'/'.$fileNAme;
+        $fileNew = $dirNew.'/'.$fileNAme;
+                
+        copy($fileOld, $fileNew);
+    }
+   
 }
