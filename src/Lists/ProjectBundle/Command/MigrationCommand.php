@@ -240,10 +240,10 @@ class MigrationCommand extends ContainerAwareCommand
             $message->setType($type);
 
             $this->em->persist($message);
-            $this->copyFileMessage($messageOld, $project, $output);
+            $this->copyFileMessage($messageOld, $project, $message, $output);
         }
     }
-     private function copyFileMessage($handlingMessage, $project, $output){
+     private function copyFileMessage($handlingMessage, $project, $message, $output){
         if (!$project) {
             $output->writeln('PROJECT is OLD GOS TENDER');
         }
@@ -261,17 +261,34 @@ class MigrationCommand extends ContainerAwareCommand
         }
         $filesMessage = $handlingMessage->getFiles();
         foreach ($filesMessage as $file) {
-            $fileOld = $file->getAbsolutePath();
-            $fileNew = $dirNew.'/'.$file->getFile();
-            if (!is_file($fileOld) && $file->getFile() != '') {
-                $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$file->getId());
-               // return false;
+            $addFile = $this->em->getRepository('ListsProjectBundle:FileMessage')->findOneBy(
+                array(
+                    'message' => $message,
+                    'createDatetime' => $file->getCreatedate(),
+                    'name' => $file->getName(),
+                ));
+            if (!$addFile) {
+                $addFile = new \Lists\ProjectBundle\Entity\FileMessage();
+                $addFile->setCreateDatetime($file->getCreateDatetime());
+                $addFile->setDeletedDatetime($file->getDeletedDatetime());
+                $addFile->setMessage($message);
+                $addFile->setName($file->getName());
+                $addFile->setShortText($file->getShortText());
+                $addFile->setUser($file->getUser());
+                $this->em->persist($addFile);
+                
+                $fileOld = $file->getAbsolutePath();
+                $fileNew = $dirNew.'/'.$file->getFile();
+                if (!is_file($fileOld) && $file->getFile() != '') {
+                    $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$file->getId());
+                    return false;
+                }
+                if (!is_dir($dirNew)) {
+                    $output->writeln('Directory dont found: '.$dirNew);
+                    return false;
+                }
+                copy($fileOld, $fileNew);
             }
-            if (!is_dir($dirNew)) {
-                $output->writeln('Directory dont found: '.$dirNew);
-               // return false;
-            }
-            copy($fileOld, $fileNew);
         }
         
     }
