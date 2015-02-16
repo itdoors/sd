@@ -245,6 +245,9 @@ class MigrationCommand extends ContainerAwareCommand
         }
     }
      private function copyFileMessage($handlingMessage, $project, $output){
+        if (!$project) {
+            var_dump($project); die;
+        }
         if (!$project->getId()) {
             $output->writeln('PROJECT ID NOT FOUND FOR directory');
         }
