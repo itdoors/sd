@@ -126,7 +126,7 @@ class MigrationCommand extends ContainerAwareCommand
                 $projectManager->setProject($project);
                 $projectManager->setUser($user);
             }
-            $projectManager->setPart(($part+$manager->getPart()) > 100 ? (100-$part) : $manager->getPart());
+            $projectManager->setPart($isMax ? 0 : $manager->getPart());
             $this->em->persist($projectManager);
         }
         if ($part != 100) {
