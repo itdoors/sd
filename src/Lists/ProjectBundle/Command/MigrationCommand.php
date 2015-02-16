@@ -103,9 +103,14 @@ class MigrationCommand extends ContainerAwareCommand
     {
        $managers = $handling->getHandlingUsers();
        $part = 0;
+       $isMax = false;
        foreach ($managers as $manager) {
            $user = $manager->getUser();
-           $part = ($part+$manager->getPart()) > 100 ? $part :  ($part+$manager->getPart());
+           if (($part+$manager->getPart()) > 100) {
+               $isMax = true;
+           } else {
+               $part += $manager->getPart();
+           }
            if ($project->getId()) {
             $projectManager = $this->em->getRepository('ListsProjectBundle:Manager')->findOneBy(
              array(
@@ -141,6 +146,18 @@ class MigrationCommand extends ContainerAwareCommand
        }
     }
     private function addFile($project)
+    {
+       $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+            ->findBy(array ('group' => 'commercial_offer'));
+        foreach ($fileTypes as $type) {
+            $file = new \Lists\ProjectBundle\Entity\FileProject();
+            $file->setProject($project);
+            $file->setType($type);
+            $file->setUser($project->getUser());
+            $this->em->persist($file);
+        }
+    }
+    private function copyFile($project)
     {
        $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
             ->findBy(array ('group' => 'commercial_offer'));
