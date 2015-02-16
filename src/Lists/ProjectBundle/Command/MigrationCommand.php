@@ -245,7 +245,7 @@ class MigrationCommand extends ContainerAwareCommand
     }
      private function copyFileMessage($handlingMessage, $project, $output){
         if (!$project) {
-            var_dump($project); die;
+            $output->writeln('PROJECT is OLD GOS TENDER');
         }
         if (!$project->getId()) {
             $output->writeln('PROJECT ID NOT FOUND FOR directory');
@@ -318,10 +318,9 @@ class MigrationCommand extends ContainerAwareCommand
                 'createDate' => $val1->getCreatedate(),
                 'userCreated' => $val1->getUser()
             ));
-            if (!$project) {
-                var_dump($project, $val1->getId()); die;
+            if ($project) {
+                $this->message($val1, $project, $output);
             }
-            $this->message($val1, $project, $output);
         }
         
          // перенос проектов гос тендеры
