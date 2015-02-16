@@ -2564,5 +2564,7 @@ ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
 ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
 ALTER TABLE organization ALTER is_payer SET NOT NULL;
 COMMENT ON COLUMN organization.is_payer IS 'Компания плательщик (true=да, flase=нет)';
-
+ALTER TABLE organization ADD is_self BOOLEAN DEFAULT 'false' NOT NULL;
+COMMENT ON COLUMN organization.is_self IS 'Собственная организаци (true=да, flase=нет)';
+UPDATE "public".organization SET "is_self" = true WHERE organization_sign_id = 60;
 -- prod +++

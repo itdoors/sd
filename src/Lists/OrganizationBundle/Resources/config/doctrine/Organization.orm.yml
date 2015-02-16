@@ -46,6 +46,13 @@ Lists\OrganizationBundle\Entity\Organization:
             options:
                 comment: Компания плательщик (true=да, flase=нет)
                 default: 0
+        isSelf:
+            type: boolean
+            nullable: false
+            column: is_self
+            options:
+                comment: Собственная организаци (true=да, flase=нет)
+                default: 0
         mailingAddress:
             type: string
             length: 255
@@ -131,11 +138,6 @@ Lists\OrganizationBundle\Entity\Organization:
             inversedBy: organizations
             joinColumn:
                 name: city_id
-                referencedColumnName: id
-        lookup:
-            targetEntity: Lists\LookupBundle\Entity\Lookup
-            joinColumn:
-                name: organization_sign_id
                 referencedColumnName: id
         scope:
             targetEntity: Lists\LookupBundle\Entity\Lookup

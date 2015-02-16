@@ -201,6 +201,8 @@ class Organization
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setIsSmeta(false);
+        $this->setIsPayer(false);
+        $this->setIsSelf(false);
     }
     /**
      * Get users
@@ -917,34 +919,6 @@ class Organization
     }
 
     /**
-     * @var \Lists\LookupBundle\Entity\Lookup
-     */
-    private $lookup;
-
-    /**
-     * Set lookup
-     *
-     * @param \Lists\LookupBundle\Entity\Lookup $lookup
-     *
-     * @return Organization
-     */
-    public function setLookup (\Lists\LookupBundle\Entity\Lookup $lookup = null)
-    {
-        $this->lookup = $lookup;
-
-        return $this;
-    }
-    /**
-     * Get lookup
-     *
-     * @return \Lists\LookupBundle\Entity\Lookup 
-     */
-    public function getLookup ()
-    {
-        return $this->lookup;
-    }
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $organizationUsers;
@@ -1237,11 +1211,39 @@ class Organization
      * 
      * @return mixed[]
      */
-    public static function getChoiceIsPayer ()
+    public static function choiceYesNo ()
     {
         return array (
             true => 'Yes',
             false => 'No'
         );
+    }
+    /**
+     * @var boolean
+     */
+    private $isSelf;
+
+
+    /**
+     * Set isSelf
+     *
+     * @param boolean $isSelf
+     * @return Organization
+     */
+    public function setIsSelf($isSelf)
+    {
+        $this->isSelf = $isSelf;
+    
+        return $this;
+    }
+
+    /**
+     * Get isSelf
+     *
+     * @return boolean 
+     */
+    public function getIsSelf()
+    {
+        return $this->isSelf;
     }
 }
