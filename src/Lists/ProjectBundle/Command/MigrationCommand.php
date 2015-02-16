@@ -141,7 +141,7 @@ class MigrationCommand extends ContainerAwareCommand
                 'createDatetime' => $handling->getCreatedatetime(),
                 'organization' => $handling->getOrganization(),
                 'createDate' => $handling->getCreatedate(),
-                'userCreated' => $handling->getUser(),
+                'userCreated' => $handling->getUser()
             ));
         $isAddProject = false;
         if (!$project) {
@@ -232,7 +232,6 @@ class MigrationCommand extends ContainerAwareCommand
                     $message = new \Lists\ProjectBundle\Entity\MessageCurrent();
                 }
             }
-            
             $message->setContact($messageOld->getContact());
             $message->setCreateDatetime($messageOld->getCreatedatetime());
             $message->setDescription($messageOld->getDescription());
@@ -240,19 +239,16 @@ class MigrationCommand extends ContainerAwareCommand
             $message->setProject($project);
             $message->setUser($messageOld->getUser());
             $message->setType($type);
-            
+
             $this->em->persist($message);
             $this->copyFileMessage($messageOld, $project, $output);
         }
-       
     }
      private function copyFileMessage($handlingMessage, $project, $output){
         if (!$project->getId()) {
             $output->writeln('PROJECT ID NOT FOUND FOR directory');
         }
-
         $dir = __DIR__.'/../../../../web/uploads';
-        
         $dirNew = $dir.'/project';
         if (!is_dir($dirNew)){
             mkdir($dirNew);
@@ -277,18 +273,18 @@ class MigrationCommand extends ContainerAwareCommand
         }
         
     }
-    private function copyFileType($project)
-    {
-       $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
-            ->findBy(array ('group' => 'commercial_offer'));
-        foreach ($fileTypes as $type) {
-            $file = new \Lists\ProjectBundle\Entity\FileProject();
-            $file->setProject($project);
-            $file->setType($type);
-            $file->setUser($project->getUser());
-            $this->em->persist($file);
-        }
-    }
+//    private function copyFileType($project)
+//    {
+//       $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+//            ->findBy(array ('group' => 'commercial_offer'));
+//        foreach ($fileTypes as $type) {
+//            $file = new \Lists\ProjectBundle\Entity\FileProject();
+//            $file->setProject($project);
+//            $file->setType($type);
+//            $file->setUser($project->getUser());
+//            $this->em->persist($file);
+//        }
+//    }
     /**
      * {@inheritdoc}
      */
@@ -312,10 +308,9 @@ class MigrationCommand extends ContainerAwareCommand
         }
         $this->em->flush();
          // перенос сообщений
-        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
-        foreach ($handlings as $handling) {
+        foreach ($handlings as $val) {
             $project = $this->handlingToProject($val, $output);
-            $this->message($handling, $project, $output);
+            $this->message($val, $project, $output);
         }
         
          // перенос проектов гос тендеры
