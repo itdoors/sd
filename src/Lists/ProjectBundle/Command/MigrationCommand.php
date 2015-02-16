@@ -319,7 +319,7 @@ class MigrationCommand extends ContainerAwareCommand
                 'userCreated' => $val1->getUser()
             ));
             if (!$project) {
-                var_dump($project, $val1); die;
+                var_dump($project, $val1->getId()); die;
             }
             $this->message($val1, $project, $output);
         }
