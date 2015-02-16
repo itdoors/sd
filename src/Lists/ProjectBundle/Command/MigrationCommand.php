@@ -265,11 +265,11 @@ class MigrationCommand extends ContainerAwareCommand
             $fileNew = $dirNew.'/'.$file->getFile();
             if (!is_file($fileOld) && $file->getFile() != '') {
                 $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$file->getId());
-                return false;
+               // return false;
             }
             if (!is_dir($dirNew)) {
                 $output->writeln('Directory dont found: '.$dirNew);
-                return false;
+               // return false;
             }
             copy($fileOld, $fileNew);
         }
