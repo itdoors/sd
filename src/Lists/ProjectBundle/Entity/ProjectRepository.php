@@ -52,9 +52,10 @@ class ProjectRepository extends EntityRepository
         $sql = $this->createQueryBuilder('p');
 
         $query = $sql
-                ->andWhere("p.organization = :organization")
-                ->setParameter(':organization', $id)
-                ->getQuery()->getResult();
+            ->innerJoin('p.organization', 'o')
+            ->andWhere("o.id = :organizationId")
+            ->setParameter(':organizationId', $id)
+            ->getQuery()->getResult();
 
         return $query;
     }
