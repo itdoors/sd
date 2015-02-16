@@ -1,5 +1,9 @@
 /web/bundles/
-/web/uploads/*
+/web/uploads/project/*
+/web/uploads/projects/*
+/web/uploads/userprofile/*
+/web/uploads/handling_message/*
+/web/uploads/dogovor/*
 /web/files/email/*
 /web/files/upload/*
 /app/bootstrap.php.cache
