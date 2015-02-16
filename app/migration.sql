@@ -2567,4 +2567,5 @@ COMMENT ON COLUMN organization.is_payer IS 'Компания плательщи�
 ALTER TABLE organization ADD is_self BOOLEAN DEFAULT 'false' NOT NULL;
 COMMENT ON COLUMN organization.is_self IS 'Собственная организаци (true=да, flase=нет)';
 UPDATE "public".organization SET "is_self" = true WHERE organization_sign_id = 60;
+UPDATE "public".lookup SET "group" = 'organization_sign_self' WHERE id = 60;
 -- prod +++

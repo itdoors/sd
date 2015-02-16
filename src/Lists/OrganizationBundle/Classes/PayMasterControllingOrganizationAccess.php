@@ -3,9 +3,9 @@
 namespace Lists\OrganizationBundle\Classes;
 
 /**
- * DogovorAdminOrganizationAccess class
+ * PayMasterControllingOrganizationAccess class
  */
-class DogovorAdminOrganizationAccess extends BasicOrganizationAccess
+class PayMasterControllingOrganizationAccess extends BasicOrganizationAccess
 {
     /**
      * @return bool
@@ -81,6 +81,13 @@ class DogovorAdminOrganizationAccess extends BasicOrganizationAccess
      * @return bool
      */
     public function canAddBank ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditIsPayer ()
     {
         return true;
     }

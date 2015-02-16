@@ -154,32 +154,28 @@
                 </td>
                 <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
             </tr>
+            {% if access.canEditSelf %}
             <tr>
                 <td>{% trans %}Self organization{% endtrans %}</td>
                 <td>
-                    {% if access.canEditSelf %}
                     <a href="#" id="isSelf" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isSelf is not null ? (organization.isSelf ? '1' : '0') : '' }}" data-original-title="{% trans %}Self organization{% endtrans %}">
-                    {% endif %}
                         {{  organization.isSelf is not null ? organization.choiceYesNo[organization.isSelf]|trans : '' }}
-                    {% if access.canEditSelf %}
                     </a>
-                    {% endif %}
                 </td>
                 <td><span class="text-muted">{% trans %}Enter self organization{% endtrans %}</span></td>
             </tr>
+            {% endif %}
+            {% if access.canEditIsPayer %}
             <tr>
                 <td>{% trans %}Payer{% endtrans %}</td>
                 <td>
-                    {% if access.canEditIsPayer %}
-                        <a href="#" id="isPayer" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isPayer is not null ? (organization.isPayer ? '1' : '0') : '' }}" data-original-title="{% trans %}Payer{% endtrans %}">
-                    {% endif %}
+                    <a href="#" id="isPayer" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isPayer is not null ? (organization.isPayer ? '1' : '0') : '' }}" data-original-title="{% trans %}Payer{% endtrans %}">
                         {{  organization.isPayer is not null ? organization.choiceYesNo[organization.isPayer]|trans : '' }}
-                    {% if access.canEditIsPayer %}
                     </a>
-                    {% endif %}
                 </td>
                 <td><span class="text-muted">{% trans %}Enter is payer{% endtrans %}</span></td>
             </tr>
+            {% endif %}
             <tr>
                 <td>{% trans %}View{% endtrans %}</td>
                 <td>
