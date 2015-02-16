@@ -186,9 +186,6 @@ class MigrationCommand extends ContainerAwareCommand
         $this->saveManager($handling, $project, $output);
         $output->writeln('AND MIGRATION MANAGER');
 
-        $this->message($handling, $project, $output);
-        $output->writeln('ADD FILE MESSAGES');
-
         return $project;
     }
 // типы обращений
