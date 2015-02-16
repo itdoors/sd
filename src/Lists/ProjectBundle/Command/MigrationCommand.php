@@ -319,6 +319,11 @@ class MigrationCommand extends ContainerAwareCommand
                 'createDate' => $val1->getCreatedate(),
                 'userCreated' => $val1->getUser()
             ));
+            if (!$project) {
+            var_dump($project);
+            var_dump($val1);
+            die;
+        }
             $this->message($val1, $project, $output);
         }
         
