@@ -184,7 +184,6 @@ class MigrationCommand extends ContainerAwareCommand
         $output->writeln(($isAddProject?'ADD PROJECT':'UPDATE PROJECT ID:').' '. $project->getId());
 
         $this->saveManager($handling, $project, $output);
-        $output->writeln('AND MIGRATION MANAGER');
 
         return $project;
     }
@@ -320,10 +319,8 @@ class MigrationCommand extends ContainerAwareCommand
                 'userCreated' => $val1->getUser()
             ));
             if (!$project) {
-            var_dump($project);
-            var_dump($val1);
-            die;
-        }
+                var_dump($project, $val1); die;
+            }
             $this->message($val1, $project, $output);
         }
         
