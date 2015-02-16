@@ -267,8 +267,9 @@ class OrganizationController extends BaseController
      */
     public function showAction ($id)
     {
+        $em = $this->getDoctrine()->getManager();
         /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
-        $organization = $this->getDoctrine()
+        $organization = $em
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
         if (!$organization) {
@@ -289,8 +290,7 @@ class OrganizationController extends BaseController
                 'id' => $organization->getParentId()
             )));
         }
-        $lookups = $this->getDoctrine()
-                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+        $lookups = $em->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
 
         $managerForm = $this->createForm('organizationUserForm');
 

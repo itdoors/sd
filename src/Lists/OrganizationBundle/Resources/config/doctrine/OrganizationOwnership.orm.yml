@@ -2,13 +2,14 @@ Lists\OrganizationBundle\Entity\OrganizationOwnership:
     type: entity
     table: organization_ownership
     repositoryClass: Lists\OrganizationBundle\Entity\OrganizationOwnershipRepository
-    fields:
+    id:
         id:
             id: true
             type: bigint
             nullable: false
             generator:
                 strategy: IDENTITY
+    fields:
         shortname:
             type: string
             length: 10

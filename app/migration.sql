@@ -2556,3 +2556,13 @@ ALTER TABLE task_pattern ADD CONSTRAINT FK_BC5DD664602AD315 FOREIGN KEY (respons
 ALTER TABLE task ADD responsible_id INT DEFAULT NULL;
 ALTER TABLE task ADD CONSTRAINT FK_527EDB25602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_527EDB25602AD315 ON task (responsible_id);
+
+-- prod ????
+ALTER TABLE organization DROP client_type_id;
+ALTER TABLE organization ALTER group_id TYPE INT;
+ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
+ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
+ALTER TABLE organization ALTER is_payer SET NOT NULL;
+COMMENT ON COLUMN organization.is_payer IS 'Компания плательщик (true=да, flase=нет)';
+
+-- prod +++

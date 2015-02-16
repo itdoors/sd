@@ -37,7 +37,15 @@ Lists\OrganizationBundle\Entity\Organization:
             type: boolean
             nullable: false
             column: is_smeta
-            default: false
+            options:
+                default: 0
+        isPayer:
+            type: boolean
+            nullable: false
+            column: is_payer
+            options:
+                comment: Компания плательщик (true=да, flase=нет)
+                default: 0
         mailingAddress:
             type: string
             length: 255
@@ -117,9 +125,6 @@ Lists\OrganizationBundle\Entity\Organization:
         deletedAt:
             type: datetime
             nullable: true
-        ownershipId:
-            nullable: true
-            column: ownership_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -171,6 +176,7 @@ Lists\OrganizationBundle\Entity\Organization:
             cascade: {  }
             mappedBy: null
             inversedBy: null
+            nullable: true
             joinColumns:
                 ownership_id:
                     referencedColumnName: id
@@ -200,16 +206,5 @@ Lists\OrganizationBundle\Entity\Organization:
               inverseJoinColumns:
                 organization_sign_id:
                   referencedColumnName: id
-#        users:
-#            targetEntity: SD\UserBundle\Entity\User
-#            inversedBy: organizations
-#            joinTable:
-#              name: organization_user
-#              joinColumns:
-#                organization_id:
-#                  referencedColumnName: id
-#              inverseJoinColumns:
-#                user_id:
-#                  referencedColumnName: id
     lifecycleCallbacks:
             prePersist: [ doOnPrePersist ]

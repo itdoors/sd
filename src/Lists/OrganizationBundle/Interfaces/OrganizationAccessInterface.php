@@ -59,4 +59,8 @@ interface OrganizationAccessInterface
      * @return bool
      */
     public function canEditSelf();
+    /**
+     * @return bool
+     */
+    public function canEditIsPayer();
 }
