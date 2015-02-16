@@ -344,4 +344,20 @@ class ProjectBaseController extends Controller
 //                'calls' => $calls
         ));
     }
+     /**
+     * Executes list action for dashboard
+     *
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function forOrganizationAction ($id)
+    {
+        $projects = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Project')->getForOrganization($id);
+
+        return $this->render('ListsProjectBundle:Project:Tab/forOrganization.html.twig', array (
+                'projects' => $projects
+        ));
+    }
 }

@@ -167,3 +167,9 @@ lists_project_messages_list:
     defaults: { _controller: ListsProjectBundle:ProjectBase:messagesList }
     requirements:
         id: \d+
+        
+lists_project_for_organization:
+    pattern:  /lists/project/for/organization/{id}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:forOrganization }
+    requirements:
+        id: \d+
