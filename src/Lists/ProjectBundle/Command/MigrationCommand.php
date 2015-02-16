@@ -265,16 +265,14 @@ class MigrationCommand extends ContainerAwareCommand
                 array(
                     'message' => $message,
                     'createDatetime' => $file->getCreatedate(),
-                    'name' => $file->getName(),
+                    'name' => $file->getFile(),
                 ));
             if (!$addFile) {
                 $addFile = new \Lists\ProjectBundle\Entity\FileMessage();
-                $addFile->setCreateDatetime($file->getCreateDatetime());
-                $addFile->setDeletedDatetime($file->getDeletedDatetime());
+                $addFile->setCreateDatetime($file->getCreatedate());
                 $addFile->setMessage($message);
-                $addFile->setName($file->getName());
-                $addFile->setShortText($file->getShortText());
-                $addFile->setUser($file->getUser());
+                $addFile->setName($file->getFile());
+                $addFile->setUser($file->getHandlingMessage()->getUser());
                 $this->em->persist($addFile);
                 
                 $fileOld = $file->getAbsolutePath();
