@@ -93,3 +93,7 @@ sd_task_list_stuff:
 sd_task_print:
     path:     /tasks/print/{id}
     defaults: { _controller: SDTaskBundle:Task:print }
+
+sd_task_reply:
+    path:     /tasks/reply/
+    defaults: { _controller: SDTaskBundle:Task:reply }

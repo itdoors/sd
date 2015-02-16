@@ -2537,12 +2537,37 @@ ALTER TABLE project_file ADD user_id DROP NOT NULL;
 ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_B50EFE08A76ED395 ON project_file (user_id);
 ALTER TABLE project_file ALTER user_id DROP NOT NULL;
+-- prod +++
+
+
+ALTER TABLE comment ADD parent_id INT DEFAULT NULL;
+ALTER TABLE comment ADD CONSTRAINT FK_9474526C727ACA70 FOREIGN KEY (parent_id) REFERENCES comment (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_9474526C727ACA70 ON comment (parent_id);
 ALTER TABLE project_gos_tender DROP branch;
 
 -- prod +++
 
 ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
 alter table article add column file varchar(255);
+
+
+ALTER TABLE task_pattern ADD responsible_id INT DEFAULT NULL;
+ALTER TABLE task_pattern ADD CONSTRAINT FK_BC5DD664602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE task ADD responsible_id INT DEFAULT NULL;
+ALTER TABLE task ADD CONSTRAINT FK_527EDB25602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_527EDB25602AD315 ON task (responsible_id);
+
+-- prod ????
+ALTER TABLE organization DROP client_type_id;
+ALTER TABLE organization ALTER group_id TYPE INT;
+ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
+ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
+ALTER TABLE organization ALTER is_payer SET NOT NULL;
+COMMENT ON COLUMN organization.is_payer IS 'Компания плательщик (true=да, flase=нет)';
+ALTER TABLE organization ADD is_self BOOLEAN DEFAULT 'false' NOT NULL;
+COMMENT ON COLUMN organization.is_self IS 'Собственная организаци (true=да, flase=нет)';
+UPDATE "public".organization SET "is_self" = true WHERE organization_sign_id = 60;
+UPDATE "public".lookup SET "group" = 'organization_sign_self' WHERE id = 60;
 -- prod +++
 CREATE TABLE project_file_old (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, type_id BIGINT DEFAULT NULL, user_id INT DEFAULT NULL, name VARCHAR(128) DEFAULT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_2D50D1A7166D1F9C ON project_file_old (project_id);
@@ -2847,3 +2872,4 @@ INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sorto
 	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
 INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
 	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
+-- prod ---

@@ -27,6 +27,10 @@ SD\TaskBundle\Entity\Comment:
             nullable: true
             length: 255
             column: addition_field
+    oneToMany:
+        children:
+            targetEntity: SD\TaskBundle\Entity\Comment
+            mappedBy: parent
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
@@ -35,5 +39,14 @@ SD\TaskBundle\Entity\Comment:
             inversedBy: null
             joinColumns:
                 user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        parent:
+            targetEntity: SD\TaskBundle\Entity\Comment
+            cascade: {  }
+            mappedBy: null
+            inversedBy: children
+            joinColumns:
+                parent_id:
                     referencedColumnName: id
             orphanRemoval: false

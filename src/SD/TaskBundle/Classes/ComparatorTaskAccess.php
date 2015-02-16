@@ -300,4 +300,18 @@ class ComparatorTaskAccess extends BasicTaskAccess
         return false;
 
     }
+    /**
+     * @return bool
+     */
+    public function canReply()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canReply()) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 }

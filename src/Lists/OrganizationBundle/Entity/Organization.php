@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Organization
 {
+
     /**
      * @var integer
      */
@@ -200,6 +201,8 @@ class Organization
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setIsSmeta(false);
+        $this->setIsPayer(false);
+        $this->setIsSelf(false);
     }
     /**
      * Get users
@@ -916,34 +919,6 @@ class Organization
     }
 
     /**
-     * @var \Lists\LookupBundle\Entity\Lookup
-     */
-    private $lookup;
-
-    /**
-     * Set lookup
-     *
-     * @param \Lists\LookupBundle\Entity\Lookup $lookup
-     *
-     * @return Organization
-     */
-    public function setLookup (\Lists\LookupBundle\Entity\Lookup $lookup = null)
-    {
-        $this->lookup = $lookup;
-
-        return $this;
-    }
-    /**
-     * Get lookup
-     *
-     * @return \Lists\LookupBundle\Entity\Lookup 
-     */
-    public function getLookup ()
-    {
-        return $this->lookup;
-    }
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $organizationUsers;
@@ -1077,11 +1052,11 @@ class Organization
     {
         return $this->ownershipId;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $organizationsigns;
-
 
     /**
      * Add organizationsigns
@@ -1090,37 +1065,35 @@ class Organization
      * 
      * @return Organization
      */
-    public function addOrganizationsign(\Lists\LookupBundle\Entity\Lookup $organizationsigns)
+    public function addOrganizationsign (\Lists\LookupBundle\Entity\Lookup $organizationsigns)
     {
         $this->organizationsigns[] = $organizationsigns;
 
         return $this;
     }
-
     /**
      * Remove organizationsigns
      *
      * @param \Lists\LookupBundle\Entity\Lookup $organizationsigns
      */
-    public function removeOrganizationsign(\Lists\LookupBundle\Entity\Lookup $organizationsigns)
+    public function removeOrganizationsign (\Lists\LookupBundle\Entity\Lookup $organizationsigns)
     {
         $this->organizationsigns->removeElement($organizationsigns);
     }
-
     /**
      * Get organizationsigns
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getOrganizationsigns()
+    public function getOrganizationsigns ()
     {
         return $this->organizationsigns;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $departments;
-
 
     /**
      * Add departments
@@ -1129,37 +1102,35 @@ class Organization
      * 
      * @return Organization
      */
-    public function addDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    public function addDepartmen (\Lists\DepartmentBundle\Entity\Departments $departments)
     {
         $this->departments[] = $departments;
 
         return $this;
     }
-
     /**
      * Remove departments
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $departments
      */
-    public function removeDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    public function removeDepartmen (\Lists\DepartmentBundle\Entity\Departments $departments)
     {
         $this->departments->removeElement($departments);
     }
-
     /**
      * Get departments
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getDepartments()
+    public function getDepartments ()
     {
         return $this->departments;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $currentAccounts;
-
 
     /**
      * Add departments
@@ -1168,23 +1139,21 @@ class Organization
      *
      * @return Organization
      */
-    public function addDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    public function addDepartment (\Lists\DepartmentBundle\Entity\Departments $departments)
     {
         $this->departments[] = $departments;
 
         return $this;
     }
-
     /**
      * Remove departments
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $departments
      */
-    public function removeDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    public function removeDepartment (\Lists\DepartmentBundle\Entity\Departments $departments)
     {
         $this->departments->removeElement($departments);
     }
-
     /**
      * Add currentAccounts
      *
@@ -1192,29 +1161,27 @@ class Organization
      *
      * @return Organization
      */
-    public function addCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    public function addCurrentAccount (\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
     {
         $this->currentAccounts[] = $currentAccounts;
 
         return $this;
     }
-
     /**
      * Remove currentAccounts
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
      */
-    public function removeCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    public function removeCurrentAccount (\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
     {
         $this->currentAccounts->removeElement($currentAccounts);
     }
-
     /**
      * Get currentAccounts
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCurrentAccounts()
+    public function getCurrentAccounts ()
     {
         return $this->currentAccounts;
     }
@@ -1223,8 +1190,76 @@ class Organization
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getEdrpouName()
+    public function getEdrpouName ()
     {
-        return $this->getEdrpou().' | '. $this->getName();
+        return $this->getEdrpou() . ' | ' . $this->getName();
+    }
+
+    /**
+     * @var boolean
+     */
+    private $isPayer;
+
+    /**
+     * Set isPayer
+     *
+     * @param boolean $isPayer
+     *
+     * @return Organization
+     */
+    public function setIsPayer ($isPayer)
+    {
+        $this->isPayer = $isPayer;
+
+        return $this;
+    }
+    /**
+     * Get isPayer
+     *
+     * @return boolean 
+     */
+    public function getIsPayer ()
+    {
+        return $this->isPayer;
+    }
+     /**
+     * getParticipations
+     * 
+     * @return mixed[]
+     */
+    public static function choiceYesNo ()
+    {
+        return array (
+            true => 'Yes',
+            false => 'No'
+        );
+    }
+    /**
+     * @var boolean
+     */
+    private $isSelf;
+
+
+    /**
+     * Set isSelf
+     *
+     * @param boolean $isSelf
+     * @return Organization
+     */
+    public function setIsSelf($isSelf)
+    {
+        $this->isSelf = $isSelf;
+    
+        return $this;
+    }
+
+    /**
+     * Get isSelf
+     *
+     * @return boolean 
+     */
+    public function getIsSelf()
+    {
+        return $this->isSelf;
     }
 }

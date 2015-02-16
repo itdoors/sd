@@ -128,6 +128,11 @@
                 } else {
                     $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", '')
                 }
+                if (data.responsible) {
+                    $('#' + '{{ form.vars.name }}' + '_responsible').val(data.responsible)
+                } else {
+                    $('#' + '{{ form.vars.name }}' + '_responsible').val('')
+                }
             }
 
             function showSpinner() {
@@ -248,7 +253,7 @@
                         <span class="help-block">{{ form_errors(form.matcher) }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        {{ form_label(form.files, 'Files (max size 2mb)'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.files, 'Files (max size 5mb)'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.files, {'attr' : {'class' : 'form-control'} } ) }}
                         <span class="help-block">{{ form_errors(form.files) }}</span>
                     </div>

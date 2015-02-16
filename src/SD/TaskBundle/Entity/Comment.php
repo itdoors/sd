@@ -186,4 +186,84 @@ class Comment
     {
         return $this->user;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $children;
+
+    /**
+     * @var \SD\TaskBundle\Entity\Comment
+     */
+    private $parent;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add children
+     *
+     * @param \SD\TaskBundle\Entity\Comment $children
+     * @return Comment
+     */
+/*
+    public function addChildren(\SD\TaskBundle\Entity\Comment $children)
+    {
+        $this->children[] = $children;
+    
+        return $this;
+    }
+*/
+
+    // always use this to setup a new parent/child relationship
+    public function addChild(\SD\TaskBundle\Entity\Comment $child) {
+        $this->children[] = $child;
+        $child->setParent($this);
+    }
+    /**
+     * Remove children
+     *
+     * @param \SD\TaskBundle\Entity\Comment $children
+     */
+    public function removeChildren(\SD\TaskBundle\Entity\Comment $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \SD\TaskBundle\Entity\Comment $parent
+     * @return Comment
+     */
+    public function setParent(\SD\TaskBundle\Entity\Comment $parent = null)
+    {
+        $this->parent = $parent;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \SD\TaskBundle\Entity\Comment 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 }

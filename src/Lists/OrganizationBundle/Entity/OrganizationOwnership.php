@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrganizationOwnership
 {
+
     /**
      * @var integer
      */

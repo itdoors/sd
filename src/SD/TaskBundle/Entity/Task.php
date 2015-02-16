@@ -296,4 +296,32 @@ class Task
     {
         return $this->editedDate;
     }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $responsible;
+
+
+    /**
+     * Set responsible
+     *
+     * @param \SD\UserBundle\Entity\User $responsible
+     * @return Task
+     */
+    public function setResponsible(\SD\UserBundle\Entity\User $responsible = null)
+    {
+        $this->responsible = $responsible;
+    
+        return $this;
+    }
+
+    /**
+     * Get responsible
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getResponsible()
+    {
+        return $this->responsible;
+    }
 }

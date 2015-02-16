@@ -2650,6 +2650,11 @@ class AjaxController extends BaseFilterController
         $data->setAuthor($user);
         $data->setStartDate(new \DateTime($formData['startDate']));
 
+        if (isset($formData['responsible']) && $formData['responsible']) {
+            $userResponsible = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($formData['responsible']);
+            $data->setResponsible($userResponsible);
+        }
+
         if (isset($formData['matcher']) && $formData['matcher']) {
             $stageMatching = $this->getDoctrine()
                 ->getRepository('SDTaskBundle:Stage')
@@ -2823,7 +2828,7 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
-    public function userContactinfoFormSave(Form $form, $user, $request)
+    public function userContactinfoFormSave (Form $form, $user, $request)
     {
         /** @var Usercontactinfo $data */
         $data = $form->getData();

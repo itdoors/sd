@@ -58,6 +58,11 @@
         $('#add_matcher_btn').live('click', function (e) {
             $('#add_matcher_holder').toggle('blind', {}, 300)
         })
+        $('.reply-button').die('click');
+        $('.reply-button').live('click', function (e) {
+            var commentId = $(this).data('comment_id');
+            $('#reply_block_'+commentId).toggle('blind', {}, 300)
+        })
 
         $('#cancel_add_matcher').die('click');
         $('#cancel_add_matcher').live('click', function (e) {
@@ -296,19 +301,52 @@
                 }
 
             })
-        })
+        });
 
         $('#description_edit_text').die('click');
         $('#description_edit_text').live('click', function (e) {
             $('#edit_description_div').removeClass('notDisplayed');
             $('#description_div').addClass('notDisplayed');
-        })
+        });
 
         $('#cancel_edit_description').die('click');
         $('#cancel_edit_description').live('click', function (e) {
             $('#edit_description_div').addClass('notDisplayed');
             $('#description_div').removeClass('notDisplayed');
-        })
+        });
+        $('.send-reply-button').die('click');
+        $('.send-reply-button').live('click', function (e) {
+            var commentId = $(this).data('comment_id');
+            var value = $('#reply_value_'+commentId).val();
+            var sendData = {
+                'id': commentId,
+                'value': value
+            }
+            console.log(sendData);
+            var url = $('#task_modal_info_holder').data('url_send_reply');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function (data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        updateTask();
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                },
+                beforeSend: function () {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function () {
+                    SD.unblockUI($('#task_holder'));
+                }
+            })
+
+
+        });
 
         $('#save_edit_description').die('click');
         $('#save_edit_description').live('click', function (e) {
@@ -578,6 +616,11 @@
         <!-- TASK TITLE -->
         <div class="form-group">
             <div class="col-md-12">
+                {% if taskUserRole.task.responsible is not empty%}
+                    <i>Ответсвенный по поводу вопросов заполнения и работы выбранного шаблона:
+                        <a target="_blank" href="{{ path('sd_user_show',{ 'id': taskUserRole.task.responsible.id}) }}" >
+                            {{ taskUserRole.task.responsible }}</a> ({{ taskUserRole.task.responsible.email }})</i>
+                {% endif %}
                 <br>
                 <h3>
                     {% if access.canEditDescription %}
@@ -975,20 +1018,60 @@
                     <div class="col-md-12">
                         <ul class="media-list">
                             {% for comment in comments %}
+                                {% if comment.parent is empty %}
                                 <li class="media">
                                     <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
                                         <img class="todo-userpic" src="{{ web_image(comment.user.photo is not empty ?  userprofiles_url ~ comment.user.id ~ '/' ~ comment.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}" width="27px" height="27px">
                                     </a>
                                     <div class="media-body todo-comment">
-                                        {#
-                                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
-                                        #}
+                                        {% if access.canReply %}
+                                            {% if comment.user != app.user %}
+                                                {% if comment.additionField == 'commit' %}
+                                                    {% if comment.children is empty %}
+
+                                                    <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs reply-button"
+                                                            data-comment_id="{{ comment.id }}">
+                                                        &nbsp;{% trans %}Reply{% endtrans %}&nbsp;
+                                                    </button>
+
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+
+
                                         <p class="todo-comment-head">
                                             <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
                                         </p>
                                         <p class="todo-text-color" style="white-space: pre-line; ">{{ comment.value|raw  }} <br></p>
+                                        <!-- reply comment-->
+                                        <div id="reply_block_{{ comment.id }}" style="display: none;">
+                                            <hr>
+                                            {% trans %}Reply{% endtrans %}:
+                                            <textarea id="reply_value_{{ comment.id }}" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий" style="margin-left: 0px; margin-right: 0px; width: 100%;"></textarea>
+                                            <br>
+                                            <button type="button" data-comment_id="{{ comment.id }}" class="pull-right btn btn-sm btn-circle green-haze send-reply-button"> &nbsp; {% trans %}Send{% endtrans %} &nbsp; </button>
+                                        </div>
+                                        {% if comment.children is not empty %}
+                                            {% for child in comment.children %}
+                                        <div class="media">
+                                            <a class="pull-left" href="{{ path('sd_user_show',{ 'id': child.user.id}) }}">
+                                                <img class="todo-userpic" src="{{ web_image(child.user.photo is not empty ?  userprofiles_url ~ child.user.id ~ '/' ~ child.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}" width="27px" height="27px">
+                                            </a>
+                                            <div class="media-body">
+                                                <p class="todo-comment-head">
+                                                    <span class="todo-comment-username">{{ child.user }}</span> &nbsp; <span class="todo-comment-date">{{ child.createDatetime|date('d-m-Y H:i ') }}</span>
+                                                </p>
+                                                <p class="todo-text-color" style="white-space: pre-line; ">
+                                                    {{ child.value|raw  }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </div>
@@ -1049,4 +1132,5 @@
        data-url_add_viewer="{{ path('sd_task_add_viewer') }}"
        data-url-add_resolution="{{ path('sd_task_add_resolution') }}"
        data-url_sd_task_editable="{{ path('sd_task_editable') }}"
+       data-url_send_reply="{{ path('sd_task_reply') }}"
         >

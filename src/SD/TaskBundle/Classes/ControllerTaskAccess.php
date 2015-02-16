@@ -15,7 +15,7 @@ class ControllerTaskAccess extends BasicTaskAccess
      */
     public function canSetDone()
     {
-/*
+
         if ($this->isViewed()) {
             if ($this->getStage() == 'created' ||
                 $this->getStage() == 'performing' ||
@@ -24,7 +24,6 @@ class ControllerTaskAccess extends BasicTaskAccess
                 return true;
             }
         }
-*/
 
         return false;
     }

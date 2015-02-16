@@ -34,7 +34,11 @@
 <td class="see-document-{{ item.id }}">
     {% if item.filepath %}
 {#         <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">{% trans from 'messages' %}See document{% endtrans %}</a>#}
-        <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="/uploads/dogovor/{{ item.filepath }}">{% trans from 'messages' %}See document{% endtrans %}</a>
+        {% if is_granted('ROLE_LAWYER') %}
+            <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~item.filepath ,timestamp:'now'|date('U') }) }}" >{% trans %}See document{% endtrans %}</a>
+        {% else %}
+            {% trans %}Недоступно{% endtrans %}
+        {% endif %}
     {% endif %}
 </td>
 {% if access.canAddDopDogovor %}
