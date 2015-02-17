@@ -294,7 +294,9 @@
                     {% endif %}
                 {% endif %}
                 {% if access.canEdit %}
-                <script>
+                {% if is_granted('ROLE_LAWYER') %}
+
+                    <script>
                     $(document).ready(function(){
                         $(function () {
                             $('#fileupload').fileupload({
@@ -324,7 +326,9 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>{% trans %}Upload new document{% endtrans %}</span>
                     <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_dogovor_upload_file', {'id': dogovor.id}) }}">
-                </span>               
+                </span>
+                {% endif %}
+
                 {% endif %}
             </td>
             <td>{% trans %}Dogovor Type{% endtrans %}</td>
