@@ -104,16 +104,16 @@ class SalesController extends BaseFilterController
     /**
      * Return specific event title
      *
-     * @param HandlingMessage $handlingMessage
+     * @param Message $message
      *
      * @return string
      */
-    public function getEventTitle($handlingMessage)
+    public function getEventTitle($message)
     {
-        $start = $this->getEventStart($handlingMessage);
+        $start = $this->getEventStart($message);
 
-        return (string) $handlingMessage['typeName']
-            . ' | '. $handlingMessage['organizationName']
+        return (string) $message->getType()
+            . ' | '. $message->getProject()->getOrganization()
             . ' (' . $start->format('H:i').')';
     }
 
@@ -132,13 +132,13 @@ class SalesController extends BaseFilterController
     /**
      * Return specific event start time
      *
-     * @param HandlingMessage $handlingMessage
+     * @param Message $message
      *
      * @return string
      */
-    public function getEventStart($handlingMessage)
+    public function getEventStart($message)
     {
-        return $handlingMessage['createdate'];
+        return $message->getEventDatetime();
     }
 
     /**
@@ -158,21 +158,21 @@ class SalesController extends BaseFilterController
     /**
      * Return specific event css class name
      *
-     * @param HandlingMessage $handlingMessage
+     * @param Message $message
      *
      * @return string
      */
-    public function getEventCssClass($handlingMessage)
+    public function getEventCssClass($message)
     {
-        $cssClass = $handlingMessage['typeName'] ? 'calendar-event-' . $handlingMessage['typeSlug'] : '';
+        $cssClass = $message->getType() ? 'calendar-event-' . $message->getType()->getSlug() : '';
 
-        if ($handlingMessage['createdate'] < new \DateTime()) {
+        if ($message->getEventDatetime() < new \DateTime()) {
             $cssClass .= ' sd-event-prev';
         } else {
             $cssClass .= ' sd-event-next';
         }
 
-        return $cssClass . ' ' . $this->getEventColorClassName($handlingMessage);
+        return $cssClass . ' ' . $this->getEventColorClassName($message);
     }
 
     /**
@@ -191,13 +191,13 @@ class SalesController extends BaseFilterController
     /**
      * Return addtional type of handling message
      *
-     * @param HandlingMessage $handlingMessage
+     * @param Message $message
      *
      * @return string
      */
-    public function getAdditionType($handlingMessage)
+    public function getAdditionType($message)
     {
-        return $handlingMessage['additionalType'];
+        return 'rf';
     }
 
     /**
@@ -219,47 +219,47 @@ class SalesController extends BaseFilterController
     /**
      * Return event color class name depending on handling type stay action
      *
-     * @param HandlingMessage $handlingMessage
+     * @param Message $message
      *
      * @return string
      */
-    public function getEventColorClassName($handlingMessage)
+    public function getEventColorClassName($message)
     {
         // Old messages (not used now( )
-        if (!$this->isFutureMessage($handlingMessage)) {
-            return HandlingMessageService::$eventColors['grey'];
+        if (!$this->isFutureMessage($message)) {
+            return 'sd-event-grey';
         }
 
-        $stayActiontime = $handlingMessage['typeStayactiontime'];
-
-        /** @var \DateTime $nextCreatedate */
-        $nextCreatedate = $this->getNextMessageCreatedate($handlingMessage);
-
-        /** @var \DateTime $creatdate */
-        $creatdate = $this->getEventStart($handlingMessage);
-
-        $now = new \DateTime();
-
-        // Future events
-
-        if ($creatdate > $now) {
-            return HandlingMessageService::$eventColors['green'];
-        }
-
-        $nextCreatedateU = $nextCreatedate ? $nextCreatedate->format('U') : $now->format('U');
-
-        $creatdateU = $creatdate->format('U');
-
-        $eventDateDiff = ($nextCreatedateU - $creatdateU) / 60;
-
-        if (($eventDateDiff - $stayActiontime) < 0) {
-            return HandlingMessageService::$eventColors['yellow'];
-        }
-
-        if (($eventDateDiff - $stayActiontime) > 0) {
-            return HandlingMessageService::$eventColors['red'];
-        }
-
-        return HandlingMessageService::$eventColors['red'];
+//        $stayActiontime = $handlingMessage['typeStayactiontime'];
+//
+//        /** @var \DateTime $nextCreatedate */
+//        $nextCreatedate = $this->getNextMessageCreatedate($handlingMessage);
+//
+//        /** @var \DateTime $creatdate */
+//        $creatdate = $this->getEventStart($handlingMessage);
+//
+//        $now = new \DateTime();
+//
+//        // Future events
+//
+//        if ($creatdate > $now) {
+//            return HandlingMessageService::$eventColors['green'];
+//        }
+//
+//        $nextCreatedateU = $nextCreatedate ? $nextCreatedate->format('U') : $now->format('U');
+//
+//        $creatdateU = $creatdate->format('U');
+//
+//        $eventDateDiff = ($nextCreatedateU - $creatdateU) / 60;
+//
+//        if (($eventDateDiff - $stayActiontime) < 0) {
+//            return HandlingMessageService::$eventColors['yellow'];
+//        }
+//
+//        if (($eventDateDiff - $stayActiontime) > 0) {
+//            return HandlingMessageService::$eventColors['red'];
+//        }
+//
+//        return HandlingMessageService::$eventColors['red'];
     }
 }

@@ -55,9 +55,7 @@
                 { "sType": "data-value" },
                 null,
                 null,
-                { "sType": "data-value" },
-                { "sType": "date-euro" },
-                { "sType": "date-euro" }
+                { "sType": "data-value" }
             ],
             "aaSorting": [[0, 'desc']],
             "aLengthMenu": [
@@ -109,10 +107,8 @@
                 <tr>
                     <th>{% trans %}ID{% endtrans %} </th>
                     <th>{% trans %}Name{% endtrans %} </th>
-                    <th>{% trans %}ServiceOffered{% endtrans %} </th>
-                    <th>{% trans %}Createdatetime{% endtrans %} </th>
-                    <th>{% trans %}LastHandlingDate{% endtrans %} </th>
-                    <th>{% trans %}NextHandlingDate{% endtrans %} </th>
+                    <th>{% trans %}Service{% endtrans %} </th>
+                    <th>{% trans %}Create date{% endtrans %} </th>
                 </tr>
                 </thead>
                 {% for item in projects %}
@@ -127,18 +123,8 @@
                                 {{ item.organization }}
                             </a>
                         </td>
-                        <td>{#{ item.serviceList|e }#}</td>
-                        <td>{{ item.createDate|date("d.m.y") }}</td>
-                        <td>
-                            {#% if item.handlingLastHandlingDate %}
-                                {{ item.handlingLastHandlingDate|date("d.m.y, H:i") }}
-                            {% endif %#}
-                        </td>
-                        <td>
-                            {#% if item.handlingNextHandlingDate %}
-                                {{ item.handlingNextHandlingDate|date("d.m.y, H:i") }}
-                            {% endif %#}
-                        </td>
+                        <td>{{ item.services|join('<br>')|raw }}</td>
+                        <td>{{ item.createDate|date("d.m.Y") }}</td>
                     </tr>
                 {% endfor %}
             </table>

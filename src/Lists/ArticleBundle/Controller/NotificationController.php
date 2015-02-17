@@ -18,19 +18,16 @@ use \Doctrine\Common\Collections\ArrayCollection;
 use Lists\ArticleBundle\Entity\NewsCompanystructure;
 
 /**
- * Class ProdBlogController
+ * Class NotificationController
  */
-class ProdBlogController extends BaseController
+class NotificationController extends BaseController
 {
 
-    protected $baseTemplate = 'ProdBlog';
+    protected $baseTemplate = 'Notification';
 
-    protected $articleType = 'blog';
+    protected $articleType = 'notification';
     
-    /**
-     * @var Article $filterNamespace
-     */
-    protected $filterNamespace = 'filter.namespace.article';
+    protected $filterNamespace = 'filter.namespace.notification';
 
     /**
      * @var KnpPaginatorBundle $paginator
@@ -44,17 +41,25 @@ class ProdBlogController extends BaseController
      */
     public function indexAction()
     {
-        $request = $this->getRequest();
-        $manual = $request->get('type') == 'manual';
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':index.html.twig');
+    }
+    /**
+     * @return string
+     */
+    public function listAction()
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $notifications = $em->getRepository('ListsArticleBundle:NewsFosUser')->getNotifications($user->getId());
 
-        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':index.html.twig', array(
-                        'manual' => $manual
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
+            'items' => $notifications
         ));
     }
 
     /**
      * Renders a blog article
-     * 
+     *           
      * @param Request $request            
      * @param integer $id            
      *
@@ -68,233 +73,15 @@ class ProdBlogController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         /**
-         * ArticleRepository $aR
+         * Article $article
          */
-        $aR = $em->getRepository('ListsArticleBundle:Article');
-
-        /**
-         * User $user
-         */
-        $user = $this->getUser();
-
-        $article = $aR->getArticle($id);
-        $voteValue = $aR->getVote($id, $user->getId());
-
-        /**
-         * VoteRepository $vR
-         */
-        $vR = $em->getRepository('ListsArticleBundle:Vote');
-        $votes = false;
-        $rationResult = false;
-        $ratValue = 0;
-        if ($user->hasRole('ROLE_ARTICLEADMIN')) {
-            $votes = $vR->getVoites($id);
-            $rationResult = $vR->getVoteForArticle($id);
-            if (! empty($rationResult['countVote'])) {
-                $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                $ratValue = $article['value'];
-            }
-        }
-        $formView = false;
-        if (! $voteValue) {
-            $vote = new Vote();
-            $form = $this->createFormBuilder($vote)
-                ->add('value', 'choice', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'placeholder' => 'Vote',
-                    'required' => 'required',
-                    'minimumInputLength' => 0,
-                    'data-empty' => $this->get('translator')
-                        ->trans('Select rating', array(), 'ListsArticleBundle')
-                ),
-                'choices' => array(
-                    '' => $this->get('translator')
-                        ->trans('Select rating', array(), 'ListsArticleBundle'),
-                    '1' => '1',
-                    '2' => '2',
-                    '3' => '3',
-                    '4' => '4',
-                    '5' => '5'
-                )
-            ))
-                ->getForm();
-
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                /**
-                 *
-                 * @var Connection $connection
-                 */
-                $connection = $this->getDoctrine()->getConnection();
-                $connection->beginTransaction();
-
-                try {
-                    $formData = $request->request->get($form->getName());
-                    $user = $this->getUser();
-                    $value = $formData['value'];
-
-                    $vote = new Vote();
-                    $vote->setUser($user);
-                    $vote->setModelName('article');
-                    $vote->setModelid($id);
-                    $vote->setValue($value);
-                    $vote->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
-
-                    $ration = $em->getRepository('ListsArticleBundle:Ration')->findOneBy(array(
-                        'articleId' => $id
-                    ));
-                    if (! $ration) {
-                        $ration = new Ration();
-                        $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
-                    }
-
-                    if (in_array($value, array(
-                        1,
-                        2,
-                        3,
-                        4,
-                        5
-                    ))) {
-                        if (! $rationResult) {
-                            $rationResult = $vR->getVoteForArticle($id);
-                            if (! empty($rationResult['countVote'])) {
-                                $rationResult['average'] =
-                                    round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                                $ratValue = $article['value'];
-                            }
-                        }
-                        $rationResult['sumVote'] = $rationResult['sumVote'] + $value;
-                        $rationResult['countVote'] = $rationResult['countVote'] + 1;
-                        $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                        $ratValue = round((($rationResult['countVote'] - 1) * $rationResult['average']) + 1, 2);
-
-                        $ration->setValue($ratValue);
-                        $em->persist($vote);
-                        $em->persist($ration);
-                        $em->flush();
-                        if (! $user->hasRole('ROLE_ARTICLEADMIN')) {
-                            $rationResult = false;
-                            $ratValue = false;
-                        }
-                    }
-                    $connection->commit();
-                } catch (\Exception $e) {
-                    $connection->rollBack();
-                    $em->close();
-                    throw $e;
-                }
-
-                return $this->redirect($this->generateUrl('list_article_blog_show', array(
-                    'id' => $id
-                )));
-            }
-            $formView = $form->createView();
-        }
-
-        /**
-         * NewsFosUser $nfu
-         */
-        $articleEntity = $aR->find($id);
-        $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
-            'news' => $articleEntity,
-            'user' => $user
-        ));
-
-        /**
-         * NewsRole $nr
-         */
-        $nr = $em->getRepository('ListsArticleBundle:NewsRole')->findOneBy(array(
-            'news' => $articleEntity
-        ));
-
-        /**
-         * NewsCompanystructure $nc
-         */
-        $nc = $em->getRepository('ListsArticleBundle:NewsCompanystructure')->findOneBy(array(
-                        'news' => $articleEntity
-        ));
-
-        $voteable = null;
-        if ($nr != null) {
-            $voteable = $nr->getVote();
-        } elseif ($nc != null) {
-            $voteable = $nc->getVote();
-        }
+        $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'item' => $article,
-            'vote' => $voteValue,
-            'form' => $formView,
-            'rationResult' => $rationResult,
-            'votes' => $votes,
-            'ratValue' => $ratValue,
-            'viewed' => $nfu ? $nfu->getViewed() : -1,
-            'voteable' => $voteable
         ));
     }
 
-    /**
-     * @return string
-     */
-    public function listAction()
-    {
-        $request = $this->getRequest();
-        $manual = $request->get('type') == 'manual';
-
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-        $user = $this->getUser();
-
-        $em = $this->getDoctrine()->getManager();
-        $newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
-            'user' => $user,
-            'manual' => $manual
-        ));
-        $items = [];
-        foreach ($newNFUs as $nfu) {
-            $item = [
-                'article' => $nfu->getNews(),
-                'viewed' => $nfu->getViewed()
-            ];
-            if (! in_array($item, $items)) {
-                $items[] = $item;
-            }
-        }
-        if ($user->hasRole('ROLE_ARTICLEADMIN')) {
-            $myArticles = $em->getRepository('ListsArticleBundle:Article')->findBy(array(
-                'user' => $user,
-                'type' => 'blog'
-            ));
-            foreach ($myArticles as $article) {
-                $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
-                        'user' => $user,
-                        'news' => $article,
-                        'manual' => $manual
-                ));
-                $isManual = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
-                        'news' => $article
-                ))->getManual();
-                if ($manual == $isManual) {
-                    $item = [
-                        'article' => $article,
-                        'viewed' => $nfu ? $nfu->getViewed() : -1
-                    ];
-                    if (! in_array($item, $items)) {
-                        $items[] = $item;
-                    }
-                }
-            }
-        }
-        usort($items, array(
-            "Lists\ArticleBundle\Controller\ProdBlogController",
-            "mysort"
-        ));
-
-        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
-            'items' => $items
-        ));
-    }
 
     /**
      * Sorting for listAction()
@@ -332,9 +119,6 @@ class ProdBlogController extends BaseController
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
-        if ($article->getType() == 'notification') {
-            return false;
-        }
         $newsFosUsers = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
             'news' => $article,
             'user' => $user
@@ -377,7 +161,6 @@ class ProdBlogController extends BaseController
             $reports = [
                 'title' => $articles[0]->getTitle(),
                 'text' => $articles[0]->getText(),
-                'type' => $articles[0]->getType(),
                 'id' => $articles[0]->getId()
             ];
 

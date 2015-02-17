@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class NewsFosUserRepository extends EntityRepository
 {
+    /**
+     * getNotifications
+     * 
+     * @param integer $id User.id
+     * 
+     * @return array
+     */
+    public function getNotifications($id)
+    {
+        $sql = $this->createQueryBuilder('nfu');
+
+        $sql->innerJoin('nfu.news', 'n', 'WITH', 'n.type = :type')
+            ->setParameter(':type', 'notification');
+            
+
+        return $sql->orderBy('n.datePublick', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

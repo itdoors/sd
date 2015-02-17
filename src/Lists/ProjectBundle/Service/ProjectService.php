@@ -450,6 +450,14 @@ class ProjectService
         $projectId = $form->get('projectId')->getData();
 
         $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
+        $notification = $project->getNotification();
+        if ($notification) {
+            $newsFosUser = $this->em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
+                'news' => $notification
+            ));
+            $newsFosUser->setViewed(new \DateTime());
+            $this->em->persist($newsFosUser);
+        }
         if ($project) {
             $project->setStatusAccess($statusAccess);
             $this->em->persist($project);

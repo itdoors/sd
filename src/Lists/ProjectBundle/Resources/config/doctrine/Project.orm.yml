@@ -134,3 +134,15 @@ Lists\ProjectBundle\Entity\Project:
                 status_id:
                     referencedColumnName: id
             orphanRemoval: false
+        notification:
+            targetEntity: Lists\ArticleBundle\Entity\Article
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                notification_id:
+                    nullable: true
+                    referencedColumnName: id
+                    options:
+                        comment: Оповещение для менеджера организации
+            orphanRemoval: false

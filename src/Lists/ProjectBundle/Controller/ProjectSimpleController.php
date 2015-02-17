@@ -90,11 +90,54 @@ class ProjectSimpleController extends ProjectBaseController
             if ($isManager) {
                 $object->setStatusAccess(true);
             } else {
-                throw $this->createAccessDeniedException('В разработке... (Уведомление на почту и оповещение в системе)');
+                $em->persist($object);
+                $em->flush();
+
+                $managers = $object->getOrganization()->getOrganizationUsers();
+                $email = $this->container->get('it_doors_email.service');
+                $translator = $this->container->get('translator');
+                $subject = $translator->trans('Add project in organization', array (), 'ListsProjectBundle')
+                    .': '. $object->getOrganization();
+                $url = $this->generateUrl('lists_project_'.$object->getDiscr().'_show', array('id' => $object->getId()), true);
+                $urlText = '<a href="'.$url.'">'.$url.'</a>';
+                $textForSend = $translator->trans('TEXT_FOR_SENT ADD_PROJECT_IN_ORGANIZATION', array (), 'ListsProjectBundle');
+                $textForSend = str_replace('${manager}$', $user, $textForSend);
+                $textForSend = str_replace('${organization}$', $object->getOrganization(), $textForSend);
+                $textForSend = str_replace('${url}$', $urlText, $textForSend);
+                $email->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => array($managers[0]->getUser()->getEmail()),
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $textForSend
+                        )
+                    )
+                );
+                $news = new \Lists\ArticleBundle\Entity\Article();
+                $news->setUser($user);
+                $news->setTitle($subject);
+                $news->setTextShort($textForSend);
+                $news->setText($textForSend);
+                $news->setType('notification');
+                $news->setDatePublick(new \DateTime());
+                $news->setDateCreate(new \DateTime());
+                $em->persist($news);
+                $object->setNotification($news);
+                foreach ($managers as $manager) {
+                    $newsFosUser = new \Lists\ArticleBundle\Entity\NewsFosUser();
+                    $newsFosUser->setNews($news);
+                    $newsFosUser->setUser($manager->getUser());
+                    $newsFosUser->setManual(false);
+                    $em->persist($newsFosUser);
+                }
+                $cron = $this->container->get('it_doors_cron.service');
+                $cron->addSendEmails();
             }
 
             $object->setUserCreated($user);
-             
+
             $em->persist($object);
 
             $managerProject = new ManagerProjectType();

@@ -2,7 +2,7 @@
 <div class="tab-pane" id="tab_1">
     <div class="col-md-12">
         <h3>{% trans %}Messages{% endtrans %}</h3>
-        {% if access.canAddMessage %}
+        {% if access.canAddMessage and access.canEditProjectSimple %}
             {{ include ('ListsProjectBundle:Project/Button:addMessage.html.twig')}}
         {% endif %}
         

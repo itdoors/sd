@@ -3,13 +3,13 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Project
  */
 class Project
 {
-    /**
+
+     /**
      * Constructor
      */
     public function __construct ()
@@ -28,7 +28,6 @@ class Project
     {
         return (string) $this->getId();
     }
-
     /**
      * @var integer
      */
@@ -467,11 +466,11 @@ class Project
     {
         return $this->organization;
     }
-
     /**
      * @var \DateTime
      */
     private $deletedDatetime;
+
 
     /**
      * Set deletedDatetime
@@ -479,26 +478,27 @@ class Project
      * @param \DateTime $deletedDatetime
      * @return Project
      */
-    public function setDeletedDatetime ($deletedDatetime)
+    public function setDeletedDatetime($deletedDatetime)
     {
         $this->deletedDatetime = $deletedDatetime;
-
+    
         return $this;
     }
+
     /**
      * Get deletedDatetime
      *
      * @return \DateTime 
      */
-    public function getDeletedDatetime ()
+    public function getDeletedDatetime()
     {
         return $this->deletedDatetime;
     }
-
     /**
      * @var boolean
      */
     private $statusAccess;
+
 
     /**
      * Set statusAccess
@@ -506,18 +506,19 @@ class Project
      * @param boolean $statusAccess
      * @return Project
      */
-    public function setStatusAccess ($statusAccess)
+    public function setStatusAccess($statusAccess)
     {
         $this->statusAccess = $statusAccess;
-
+    
         return $this;
     }
+
     /**
      * Get statusAccess
      *
      * @return boolean 
      */
-    public function getStatusAccess ()
+    public function getStatusAccess()
     {
         return $this->statusAccess;
     }
@@ -533,11 +534,11 @@ class Project
             false => 'No'
         );
     }
-
     /**
      * @var \Lists\ProjectBundle\Entity\Status
      */
     private $status;
+
 
     /**
      * Set status
@@ -545,27 +546,28 @@ class Project
      * @param \Lists\ProjectBundle\Entity\Status $status
      * @return Project
      */
-    public function setStatus (\Lists\ProjectBundle\Entity\Status $status = null)
+    public function setStatus(\Lists\ProjectBundle\Entity\Status $status = null)
     {
         $this->setStatusChangeDate(new \DateTime());
         $this->status = $status;
-
+    
         return $this;
     }
+
     /**
      * Get status
      *
      * @return \Lists\ProjectBundle\Entity\Status 
      */
-    public function getStatus ()
+    public function getStatus()
     {
         return $this->status;
     }
-
     /**
      * @var string
      */
     private $statusText;
+
 
     /**
      * Set statusText
@@ -573,27 +575,29 @@ class Project
      * @param string $statusText
      * @return Project
      */
-    public function setStatusText ($statusText)
+    public function setStatusText($statusText)
     {
         $this->statusText = $statusText;
-
+    
         return $this;
     }
+
     /**
      * Get statusText
      *
      * @return string 
      */
-    public function getStatusText ()
+    public function getStatusText()
     {
         return $this->statusText;
     }
+
     /**
      * hasCommercialFile
      *
      * @return string 
      */
-    public function hasCommercialFile ()
+    public function hasCommercialFile()
     {
         $files = $this->getFiles();
         foreach ($files as $file) {
@@ -602,33 +606,5 @@ class Project
             }
         }
         return false;
-    }
-
-    /**
-     * @var \Lists\ArticleBundle\Entity\Article
-     */
-    private $notification;
-
-    /**
-     * Set notification
-     *
-     * @param \Lists\ArticleBundle\Entity\Article $notification
-     *
-     * @return Project
-     */
-    public function setNotification (\Lists\ArticleBundle\Entity\Article $notification = null)
-    {
-        $this->notification = $notification;
-
-        return $this;
-    }
-    /**
-     * Get notification
-     *
-     * @return \Lists\ArticleBundle\Entity\Article 
-     */
-    public function getNotification ()
-    {
-        return $this->notification;
     }
 }

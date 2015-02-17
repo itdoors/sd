@@ -2549,7 +2549,7 @@ ALTER TABLE project_gos_tender DROP branch;
 
 ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
 alter table article add column file varchar(255);
-
+ALTER TABLE organization ADD client_type_id  DEFAULT NULL;
 
 ALTER TABLE task_pattern ADD responsible_id INT DEFAULT NULL;
 ALTER TABLE task_pattern ADD CONSTRAINT FK_BC5DD664602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -2558,7 +2558,6 @@ ALTER TABLE task ADD CONSTRAINT FK_527EDB25602AD315 FOREIGN KEY (responsible_id)
 CREATE INDEX IDX_527EDB25602AD315 ON task (responsible_id);
 
 -- prod ????
-ALTER TABLE organization DROP client_type_id;
 ALTER TABLE organization ALTER group_id TYPE INT;
 ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
 ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
@@ -2872,4 +2871,8 @@ INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sorto
 	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
 INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
 	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
+ALTER TABLE project ADD notification_id INT DEFAULT NULL;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEEF1A9D84 FOREIGN KEY (notification_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_2FB3D0EEEF1A9D84 ON project (notification_id)
+
 -- prod ---

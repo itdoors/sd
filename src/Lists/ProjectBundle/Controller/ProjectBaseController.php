@@ -11,7 +11,6 @@ use Lists\ProjectBundle\Services\ProjectService;
 use SD\UserBundle\Entity\User;
 use Lists\ProjectBundle\Entity\ManagerProjectType;
 use ITDoors\CommonBundle\Services\BaseService;
-use Lists\ProjectBundle\Entity\ManagerType;
 
 /**
  * Class ProjectBaseController

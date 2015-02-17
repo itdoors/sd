@@ -135,15 +135,11 @@
                         or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
                         or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_new')
-                        or
                         (
                             app.request.attributes.get('_route_params').id is defined
                             and
                             (
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_show',app.request.attributes.get('_route_params'))
-                                or
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_show',app.request.attributes.get('_route_params'))
                             )
                         )
                         or
@@ -154,8 +150,6 @@
                             and
                             (
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
-                                or
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
                             )
                         )
                     
@@ -166,18 +160,6 @@
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li{% if
-                            app.request.attributes.get('_route_params').type is defined
-                            and
-                            app.request.attributes.get('_route_params').type == 'my'
-                            and
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
-                            %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_index', {type:'my'}) }}" title="{% trans %}My Handlings{% endtrans %}">
-                            <i class="icon-pencil"></i>
-                            {% trans %}My Handlings{% endtrans %}
-                        </a>
-                    </li>
                     <li>
                         <a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">
                             <i class="icon-basket"></i>
@@ -266,12 +248,6 @@
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="{{ path('lists_sales_dispatcher_handling_index') }}" title="{% trans %}Team Handlings{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}Team Handlings{% endtrans %}
-                        </a>
-                    </li>
                     <li >
                         <a href="{{ path('lists_sales_dispatcher_contact_index') }}" title="{% trans %}Team Contacts{% endtrans %}">
                             <i class="fa fa-envelope"></i>
@@ -316,8 +292,6 @@
                         or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
                         or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_new')
-                        or
                         (
                             app.request.attributes.get('_route_params').id is defined
                             and
@@ -331,8 +305,6 @@
                             and
                             (
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
-                                or
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
                             )
                         )
                         %} class="active"{% endif %}>
@@ -348,18 +320,6 @@
                         <a href="{{ path('sd_calendar_shared_index') }}" title="{% trans %}Shared calendar{% endtrans %}">
                             <i class="fa fa-calendar"></i>
                             {% trans %}Shared calendar{% endtrans %}
-                        </a>
-                    </li>
-                    <li{% if
-                            app.request.attributes.get('_route_params').type is defined
-                            and
-                            app.request.attributes.get('_route_params').type is empty
-                            and
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
-                            %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_index', {type:''}) }}" title="{% trans %}Projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}Projects{% endtrans %}
                         </a>
                     </li>
                     <li>

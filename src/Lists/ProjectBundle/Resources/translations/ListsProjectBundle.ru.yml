@@ -50,6 +50,7 @@ Participation: Участие
 Reason: Причина
 Close project: Закрыть проект
 Select service offered: Выберите услуги
+Service: Услуги
 PF: ПФ1
 Enter PF: Введите ПФ1
 State tenders: Государственные тендеры
@@ -127,3 +128,11 @@ Type document: Тип документа
 Download please: Загрузите пожалуйста документ
 Attached files: Прикрепленные файлы
 Add a file: Добавить файл
+Add project in organization: Добавление проекта в организацию
+TEXT_FOR_SENT ADD_PROJECT_IN_ORGANIZATION: |
+
+    Менеджер, ${manager}$, добавил проект в организацию: "${organization}$"
+    
+    Для подтверждения, пройдите пожалуйста по ссылке:
+    
+    ${url}$
