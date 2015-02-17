@@ -452,7 +452,7 @@ final class ImportanceType extends \ITDoors\DBAL\EnumType
     const UNPLANNED = 'unplanned';
     const HOT = 'hot';
     const BROKEN = 'broken';
-    const MONTH = 'MONTH';
+    const MONTH = 'month';
     protected static $name = 'importanceType';
 
     protected static $values = array(

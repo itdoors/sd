@@ -53,7 +53,7 @@ class ClaimPerformerRule
     /**
      * @var \SD\ServiceDeskBundle\Entity\Claim
      *
-     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", fetch="EAGER", cascade="persist")
      * @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      */
     protected $claim;
