@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({
  *  "businessRole" = "BusinessRole",
  *  "staff" = "Staff",
+ *  "griffinStaff" = "GriffinStaff",
  *  "claimPerformer" = "ClaimPerformer",
  *  "client" = "Client",
  *  "companyClient" = "CompanyClient",
