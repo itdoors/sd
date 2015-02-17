@@ -21,4 +21,18 @@ class ProjectSimpleProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectCommercialTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectElectronicTrading ()
+    {
+        return true;
+    }
 }

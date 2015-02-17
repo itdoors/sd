@@ -2830,6 +2830,10 @@ INSERT INTO "public".project_file_type ("name", "group", "alias")
 # app/console sd:group:role-add  PROJECT_SIMPLE_ADMIN PROJECT_SIMPLE_ADMIN
 # app/console sd:group:role-add  PROJECT_SIMPLE_DIRECTOR PROJECT_SIMPLE_DIRECTOR
 
+
+# app/console sd:group:role-add  SALES PROJECT_SIMPLE
+# app/console sd:group:role-add  SALES PROJECT_SIMPLE
+
 # app/console  lists:project:migration 
 
 
