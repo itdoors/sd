@@ -30,6 +30,15 @@ class Contact
     private $individual;
 
     /**
+     * Constructor
+     */
+    public function __construct($type = null, $value = null)
+    {
+        $this->type = $type;
+        $this->value = $value;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

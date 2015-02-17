@@ -1,5 +1,6 @@
 {% extends '::base.html.twig' %}
 {% trans_default_domain 'SDBusinessRoleBundle' %}
+{# {% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}#}
 {% block title %}{% trans %}Add{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
@@ -26,6 +27,7 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 
 {% endblock %}
 
@@ -35,6 +37,9 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
 
 {% endblock %}
 
@@ -56,12 +61,12 @@
                                 </div>
                             </div>
                             <div class="portlet-body form">
-                                <script>
-                                    $(document).ready(function() {
-                                        SD.select2('#' + '{{ form.vars.name }}' + '_individual', {
-                                        });
-                                    });
-                                </script>
+{#                                 <script>#}
+{#                                     $(document).ready(function() {#}
+{#                                         SD.select2('#' + '{{ form.vars.name }}' + '_individual', {#}
+{#                                         });#}
+{#                                     });#}
+{#                                 </script>#}
                                             
                                 {% if form.vars.valid is sameas(false) %}
                                     <div class="form-group col-md-12">
@@ -73,29 +78,29 @@
                                     </div>
                                 {% endif %}
                         
-                                {{ form_start(form, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
-                                <div class="form-body">
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Person{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(form.individual, {'attr' : {'class' : 'form-control input-large', 'data-placeholder': 'Select...' | trans}}) }}
-                                            {% if form.individual.vars.errors|length %}{{ form_errors(form.individual) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-actions fluid">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
-                                                    <a class="btn btn-cl green" href="{{ path('client') }}" title="{% trans %}Cancel{% endtrans %}">
-                                                        {% trans %}Cancel{% endtrans %}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{ form_end(form) }}
+{#                                 {{ form_start(form, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}#}
+{#                                 <div class="form-body">#}
+{#                                     <div class="form-group">#}
+{#                                         <label class="required control-label col-md-3">{% trans %}Person{% endtrans%}</label>#}
+{#                                         <div class="col-md-9">#}
+{#                                             {{ form_widget(form.individual, {'attr' : {'class' : 'form-control input-large', 'data-placeholder': 'Select...' | trans}}) }}#}
+{#                                             {% if form.individual.vars.errors|length %}{{ form_errors(form.individual) }}{% endif %}#}
+{#                                         </div>#}
+{#                                     </div>#}
+{#                                     <div class="form-actions fluid">#}
+{#                                         <div class="row">#}
+{#                                             <div class="col-md-12">#}
+{#                                                 <div class="col-md-offset-3 col-md-9">#}
+{#                                                     <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>#}
+{#                                                     <a class="btn btn-cl green" href="{{ path('client') }}" title="{% trans %}Cancel{% endtrans %}">#}
+{#                                                         {% trans %}Cancel{% endtrans %}#}
+{#                                                     </a>#}
+{#                                                 </div>#}
+{#                                             </div>#}
+{#                                         </div>#}
+{#                                     </div>#}
+{#                                 </div>#}
+{#                                 {{ form_end(form) }}#}
                             </div>
                         </div>
                         <div class="portlet box blue">
@@ -134,60 +139,101 @@
                         
                                 {{ form_start(indForm, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
                                 <div class="form-body">
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}First name{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.firstName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.firstName.vars.errors|length %}{{ form_errors(indForm.individual.firstName) }}{% endif %}
+                                     <div class="row">
+                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}First name{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(indForm.individual.firstName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                                    {% if indForm.individual.firstName.vars.errors|length %}{{ form_errors(indForm.individual.firstName) }}{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Middle name{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(indForm.individual.middleName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                                    {% if indForm.individual.middleName.vars.errors|length %}{{ form_errors(indForm.individual.middleName) }}{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Last name{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(indForm.individual.lastName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                                    {% if indForm.individual.lastName.vars.errors|length %}{{ form_errors(indForm.individual.lastName) }}{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Birthday{% endtrans%}</label>
+                                                <div class="col-md-3">
+                                                    {{ form_widget(indForm.individual.birthday, {'attr' : {'id' : 'datepic','class' : 'form-control form-control-inline input-medium date-picker itdoors-date-picker'}}) }}
+                                                    {% if indForm.individual.birthday.vars.errors|length %}{{ form_errors(indForm.individual.birthday) }}{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}INN{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(indForm.individual.tin, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                                    {% if indForm.individual.tin.vars.errors|length %}{{ form_errors(indForm.individual.tin) }}{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Passport{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(indForm.individual.passport, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                                    {% if indForm.individual.passport.vars.errors|length %}{{ form_errors(indForm.individual.passport) }}{% endif %}
+                                                </div>
+                                            </div>
+    {#                                     <div class="form-group">#}
+    {#                                         <label class="required control-label col-md-3">{% trans %}Contacts{% endtrans%}</label>#}
+    {#                                         <div class="col-md-6">#}
+    {#                                             {{ form_widget(indForm.individual.contacts, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}#}
+    {#                                             {% if indForm.individual.contacts.vars.errors|length %}{{ form_errors(indForm.individual.contacts) }}{% endif %}#}
+    {#                                         </div>#}
+    {#                                     </div>#}
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Middle name{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.middleName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.middleName.vars.errors|length %}{{ form_errors(indForm.individual.middleName) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Last name{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.lastName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.lastName.vars.errors|length %}{{ form_errors(indForm.individual.lastName) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Birthday{% endtrans%}</label>
-                                        <div class="col-md-3">
-                                            {{ form_widget(indForm.individual.birthday, {'attr' : {'id' : 'datepic','class' : 'form-control form-control-inline input-medium date-picker itdoors-date-picker'}}) }}
-                                            {% if indForm.individual.birthday.vars.errors|length %}{{ form_errors(indForm.individual.birthday) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}INN{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.tin, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.tin.vars.errors|length %}{{ form_errors(indForm.individual.tin) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Passport{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.passport, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.passport.vars.errors|length %}{{ form_errors(indForm.individual.passport) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Address{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.address, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.address.vars.errors|length %}{{ form_errors(indForm.individual.address) }}{% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="required control-label col-md-3">{% trans %}Phone{% endtrans%}</label>
-                                        <div class="col-md-9">
-                                            {{ form_widget(indForm.individual.phone, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
-                                            {% if indForm.individual.phone.vars.errors|length %}{{ form_errors(indForm.individual.phone) }}{% endif %}
+                                        <div class="col-md-6">
+                                            <div class="col-md-12">
+                                                <div class="portlet">
+                                            		<div class="portlet-title">
+                                            			<div class="caption">
+                                            				<i class="fa fa-edit"></i>{% trans %}Contacts{% endtrans %}
+                                            			</div>
+                                            		</div>
+                                                    <div class="portlet-body">
+                                                        <div class="table-toolbar">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="btn-group">
+                                                                        <button id="sample_editable_1_new" class="btn green">
+                                                                        {% trans %}Add{% endtrans %} <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <table  class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="15%" role="columnheader" rowspan="1" colspan="1">{% trans %}Type{% endtrans %}</th>
+                                                                    <th width="55%" role="columnheader" rowspan="1" colspan="1">{% trans %}Value{% endtrans %}</th>
+                                                                    <th width="15%" role="columnheader" rowspan="1" colspan="1">{% trans %}Edit{% endtrans %}</th>
+                                                                    <th width="15%" role="columnheader" rowspan="1" colspan="1">{% trans %}Delete{% endtrans %}</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for contact in indForm.individual.contacts %}
+                                                                <tr class="contacts">
+                                                                    <td>{{ form_row(contact.type) }}</td>
+                                                                    <td>{{ form_row(contact.value) }}</td>
+                                                                    <td ><a class="edit" href="javascript:;">{% trans %}Edit{% endtrans %}</a></td>
+                                                                    <td ><a class="delete" href="javascript:;">{% trans %}Delete{% endtrans %}</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-actions fluid">
@@ -213,4 +259,172 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        var actionTopics;
+        var TableEditable = function () {
+        
+            var handleTable = function () {
+        
+                function restoreRow(oTable, nRow) {
+                    var aData = oTable.fnGetData(nRow);
+                    var jqTds = $('>td', nRow);
+        
+                    for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
+                        oTable.fnUpdate(aData[i], nRow, i, false);
+                    }
+        
+                    oTable.fnDraw();
+                }
+        
+                function editRow(oTable, nRow) {
+                    var aData = oTable.fnGetData(nRow);
+                    var jqTds = $('>td', nRow);
+                    jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
+                    jqTds[2].innerHTML = '<a class="edit" href="javascript:;">{% trans %}Save{% endtrans %}</a>';
+                    jqTds[3].innerHTML = '<a class="cancel" href="javascript:;">{% trans %}Cancel{% endtrans %}</a>';
+                }
+        
+                function saveRow(oTable, nRow) {
+                    var jqInputs = $('input', nRow);
+                    oTable.fnUpdate(jqInputs[0].value, nRow, 1, false);
+                    oTable.fnUpdate('<a class="edit" href="javascript:;">{% trans %}Edit{% endtrans %}</a>', nRow, 2, false);
+                    oTable.fnUpdate('<a class="delete" href="javascript:;">{% trans %}Delete{% endtrans %}</a>', nRow, 3, false);
+                    oTable.fnDraw();
+                }
+        
+                function cancelEditRow(oTable, nRow) {
+                    var jqInputs = $('input', nRow);
+                    oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
+                    oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+                    oTable.fnUpdate('<a class="edit" href="javascript:;">{% trans %}Edit{% endtrans %}</a>', nRow, 2, false);
+                    oTable.fnDraw();
+                }
+        
+                var table = $('#sample_editable_1');
+        
+                var oTable = table.dataTable({
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false
+                });
+        
+                var nEditing = null;
+                var nNew = false;
+        
+                $('#sample_editable_1_new').click(function (e) {
+                    e.preventDefault();
+        
+                    if (nNew && nEditing) {
+                        if (confirm("Previose row not saved. Do you want to save it ?")) {
+                            saveRow(oTable, nEditing); // save
+                            $(nEditing).find("td:first").html("Untitled");
+                            nEditing = null;
+                            nNew = false;
+        
+                        } else {
+                            oTable.fnDeleteRow(nEditing); // cancel
+                            nEditing = null;
+                            nNew = false;
+                            
+                            return;
+                        }
+                    }
+        
+                    var aiNew = oTable.fnAddData(['','','','']);
+                    var nRow = oTable.fnGetNodes(aiNew[0]);
+                    editRow(oTable, nRow);
+                    nEditing = nRow;
+                    nNew = true;
+                });
+        
+                table.on('click', '.delete', function (e) {
+                    e.preventDefault();
+        
+                    var nRow = $(this).parents('tr')[0];
+                    var aData = oTable.fnGetData(nRow);
+                    
+                    $.ajax({
+                        url: "{{ url('lists_coach_ajax_action_topic_delete') }}",
+                        data: {
+                            id: aData[0],
+                            title: aData[1]
+                        },
+                        beforeSend: function () {
+                        	SD.blockUI($('#sample_editable_1'));
+                        },
+                        success: function(response) {
+                        	oTable.fnDeleteRow(nRow);
+                        	SD.unblockUI($('#sample_editable_1'));
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#sample_editable_1'));
+                        }
+                    });
+                });
+        
+                table.on('click', '.cancel', function (e) {
+                    e.preventDefault();
+                    if (nNew) {
+                        oTable.fnDeleteRow(nEditing);
+                        nEditing = null;
+                        nNew = false;
+                    } else {
+                        restoreRow(oTable, nEditing);
+                        nEditing = null;
+                    }
+                });
+        
+                table.on('click', '.edit', function (e) {
+                    e.preventDefault();
+        
+                    /* Get the row as a parent of the link that was clicked on */
+                    var nRow = $(this).parents('tr')[0];
+        
+                    if (nEditing !== null && nEditing != nRow) {
+                        /* Currently editing - but not this row - restore the old before continuing to edit mode */
+                        restoreRow(oTable, nEditing);
+                        editRow(oTable, nRow);
+                        nEditing = nRow;
+                    } else if (nEditing == nRow && this.innerHTML == "{% trans %}Save{% endtrans %}") {
+                        /* Editing this row and want to save it */
+                        saveRow(oTable, nEditing);
+//                         var aData = oTable.fnGetData(nRow);
+//                         $.ajax({
+//                            url: "{{ url('lists_coach_ajax_action_topic_edit') }}",
+//                             data: {
+//                                 id: aData[0],
+//                                 title: aData[1]
+//                             },
+//                             beforeSend: function () {
+//                             	SD.blockUI($('#sample_editable_1'));
+//                             },
+//                             success: function(topic) {
+//                             	$(nRow).find("td:first").html(topic.id);
+//                             	SD.unblockUI($('#sample_editable_1'));
+//                             }
+//                         });
+                        nEditing = null;
+                    } else {
+                        /* No edit in progress - let's start one */
+                        editRow(oTable, nRow);
+                        nEditing = nRow;
+                    }
+                });
+            }
+        
+            return {
+        
+                //main function to initiate the module
+                init: function () {
+                    handleTable();
+                }
+        
+            };
+        
+        }();
+        jQuery(document).ready(function() {
+        	TableEditable.init();
+        });
+    </script>
 {% endblock %}

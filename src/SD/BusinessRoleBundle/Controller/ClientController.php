@@ -38,13 +38,13 @@ class ClientController extends Controller
      * @return string
      */
     public function createAction(Request $request)
-    {
+    {var_dump($request->request->get('clientAddForm'));die();
         $entity = new Client();
         $form = $this->createCreateForm($entity);
         $indForm = $this->createCreateFormWithIndividual($entity);
         $form->handleRequest($request);
         $indForm->handleRequest($request);
-
+var_dump($indForm);die();
         if ($form->isValid() || $indForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -104,6 +104,10 @@ class ClientController extends Controller
     public function newAction()
     {
         $entity = new Client();
+        $entity->setIndividual(new \Lists\IndividualBundle\Entity\Individual());
+        $c1 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::TEL, 123);
+        $c2 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::EMAIL, 'asd@asd.asd');
+        $entity->getIndividual()->addContact($c1)->addContact($c2);
         $form = $this->createCreateForm($entity);
         $indForm = $this->createCreateFormWithIndividual($entity);
 

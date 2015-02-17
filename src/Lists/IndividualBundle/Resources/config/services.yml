@@ -1,8 +1,13 @@
 parameters:
     lists_individual.new.form: Lists\IndividualBundle\Form\IndividualType
+    lists_individual_contact.new.form: Lists\IndividualBundle\Form\ContactType
 
 services:
     lists_individual.add.form:
             class: %lists_individual.new.form%
             tags:
                 - { name: form.type, alias: newIndividualForm }
+    lists_individual_contact.add.form:
+            class: %lists_individual_contact.new.form%
+            tags:
+                - { name: form.type, alias: newIndividualContactForm }

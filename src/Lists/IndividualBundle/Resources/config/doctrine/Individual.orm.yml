@@ -65,6 +65,8 @@ Lists\IndividualBundle\Entity\Individual:
         contacts:
             targetEntity: Lists\IndividualBundle\Entity\Contact
             mappedBy: individual
+            orphanRemoval: true
+            cascade: ["persist"]
     oneToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User

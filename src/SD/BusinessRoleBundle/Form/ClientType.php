@@ -29,18 +29,19 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $router = $this->container->get('router');
-        $builder
-            ->add('individual', 'itdoors_select2', array(
-                'attr' => array(
-                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true
-                    ))
-                )
-            ));
+//         $builder
+//             ->add('individual', null, array(
+//                 'entity' => 'ListsIndividualBundle:Individual',
+//                 'attr' => array(
+//                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+//                     'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
+//                     'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
+//                     'data-params' => json_encode(array(
+//                         'minimumInputLength' => 2,
+//                         'allowClear' => true
+//                     ))
+//                 )
+//             ));
     }
 
     /**
