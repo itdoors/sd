@@ -240,4 +240,203 @@ class ProjectSimpleController extends ProjectBaseController
                 'access' => $access
             ));
     }
+    /**
+     * exportExcelAction
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user);
+
+        $userId = $user->getId();
+        if ($access->canExportToExelAll) {
+            $userId = null;
+        }
+         // Get organization filter
+//        $filters = $this->getFilters();
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Project');
+
+        /** @var \Doctrine\ORM\Query $projects */
+        $projects = $repository->getListProjectForTender($user);
+
+        $response = $this->exportToExcel($projects);
+
+        return $response;
+    }
+    /**
+     * exportToExcel
+     *
+     * @param array $projects
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportToExcel ($projects)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("Projects")
+            ->setLastModifiedBy("Giulio De Donato")
+            ->setTitle("Projects")
+            ->setSubject("Projects")
+            ->setDescription("List of project")
+            ->setKeywords("Projects")
+            ->setCategory("Projects");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1', $translator->trans('Managers', array (), 'ListsProjectBundle'))
+            ->setCellValue('B1', $translator->trans('ID', array (), 'ListsProjectBundle'))
+            ->setCellValue('C1', $translator->trans('Name', array (), 'ListsProjectBundle'))
+            ->setCellValue('D1', $translator->trans('Createdatetime', array (), 'ListsProjectBundle'))
+            ->setCellValue('E1', $translator->trans('LastHandlingDate', array (), 'ListsProjectBundle'))
+            ->setCellValue('F1', $translator->trans('City', array (), 'ListsProjectBundle'))
+            ->setCellValue('G1', $translator->trans('Scope', array (), 'ListsProjectBundle'))
+            ->setCellValue('H1', $translator->trans('ServiceOffered', array (), 'ListsProjectBundle'))
+            ->setCellValue('I1', $translator->trans('Chance', array (), 'ListsProjectBundle'))
+            ->setCellValue('J1', $translator->trans('Status', array (), 'ListsProjectBundle'));
+        $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+
+        $linkStyleArray = array (
+            'font' => array (
+                'color' => array ('rgb' => '0000FF'),
+                'underline' => 'single'
+            )
+        );
+
+        $str = 1;
+        $manager = '';
+        $columnA = '';
+        $strStartMerge = 0;
+        foreach ($projects as $project) {
+            ++$str;
+            $col = 0;
+
+            if ($manager != $project->getUser()) {
+                $manager = $columnA = $project->getUser();
+                $strStartMerge = $str;
+            } else {
+                $columnA = '';
+            }
+            $phpExcelObject->getActiveSheet()->mergeCells('A' . $strStartMerge . ':A' . $str);
+
+            $phpExcelObject->getActiveSheet()
+                ->setCellValueByColumnAndRow($col, $str, $columnA)
+                ->setCellValueByColumnAndRow(++$col, $str, $project->getId());
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                ->setUrl($this->generateUrl(
+                    'lists_prject_' . $project->getDiscr() . '_show',
+                    array ('id' => $project->getId()),
+                    true
+                ));
+
+            $phpExcelObject->getActiveSheet()
+                ->setCellValueByColumnAndRow(++$col, $str, $project->getOrganization());
+            if ($project->getOrganization()) {
+                $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl(
+                        $this->generateUrl(
+                            'lists_organization_show',
+                            array ('id' => $project->getOrganization()->getId()),
+                            true
+                        )
+                    );
+            }
+            $phpExcelObject
+                ->getActiveSheet()
+                ->setCellValueByColumnAndRow(
+                    ++$col,
+                    $str,
+                    !$handling['handlingCreatedate'] ? '' : $handling['handlingCreatedate']->format('d.m.y')
+                )
+                ->setCellValueByColumnAndRow(
+                    ++$col,
+                    $str,
+                    !$handling['handlingLastHandlingDate']
+                    ?
+                    ''
+                    :
+                    $handling['handlingLastHandlingDate']->format('d.m.y, H:i')
+                )
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['cityName'])
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['scopeName'])
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingServiceOffered'])
+                ->setCellValueByColumnAndRow(
+                    ++$col,
+                    $str,
+                    $handling['resultPercentageString']
+                    ?
+                    $handling['resultPercentageString']
+                    :
+                    $handling['percentageString']
+                )
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
+        }
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C' . $str)->applyFromArray($linkStyleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A2:J' . $str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+
+        $styleArray = array (
+            'borders' => array (
+                'outline' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                    'color' => array ('argb' => '000000')
+                ),
+                'inside' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array ('argb' => '000000')
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J' . $str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:A' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('B2:J' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J' . $str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false); //off line
+        $phpExcelObject->getActiveSheet()->setTitle('Handling');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=handling.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
+    }
 }

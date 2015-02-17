@@ -8,15 +8,28 @@
         </div>
     </div>
     {% endif %}
-        <div class="table-responsive">
-            <div class="navigation">
-            {{ ajax_paginator_render(
-                    pagination, filterNamespace, {
-                            'projectList': 'ITDoorsAjax.updateList'
-                        }
-                    )
-            }}
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn default yellow-stripe" href="{{ path('lists_project_simple_export_excel')}}">
+                        <i class="fa fa-share"></i>
+                        <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="table-responsive">
+        <div class="navigation">
+        {{ ajax_paginator_render(
+                pagination, filterNamespace, {
+                        'projectList': 'ITDoorsAjax.updateList'
+                    }
+                )
+        }}
+    </div>
     {% if pagination.getTotalItemCount %}
         <div class="table-scrollable">
         <table class="table table-striped table-bordered table-advance table-hover">
