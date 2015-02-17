@@ -1,15 +1,15 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsProjectBundle' %}
-{% block title %}{% trans %}State tender{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Commercial tender{% endtrans %}{% endblock %}
 {% block page_breadcrumbs %}
-	<ul class="page-breadcrumb breadcrumb">
-            <li>
-                    <i class="fa fa-home"></i>
-                    <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            </li>
-            <li><a href="{{ path('lists_project_simple_index') }}" title="{% trans %}Projects{% endtrans %}">{% trans %}Projects{% endtrans %}</a></li>
-            <li><a href=""  title="{% trans %}See project{% endtrans %}">{% trans %}See project{% endtrans %}</a></li>
-	</ul>
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+                <i class="fa fa-home"></i>
+                <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_project_simple_index') }}" title="{% trans %}Projects{% endtrans %}">{% trans %}Projects{% endtrans %}</a></li>
+        <li><a href=""  title="{% trans %}See project{% endtrans %}">{% trans %}See project{% endtrans %}</a></li>
+    </ul>
 {% endblock %}
 {% block page_title %}
 	<h3 class="page-title">

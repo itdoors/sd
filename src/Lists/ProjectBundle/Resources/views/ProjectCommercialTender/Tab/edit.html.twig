@@ -9,6 +9,10 @@
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 pk: {{object.id}}
             });
+             $('#status').editable({
+                url: '{{ path('lists_project_ajax_editable_project') }}',
+                source: '{{ path('lists_project_ajax_search_status_simple') }}'
+            });
            /* $('#statusProjectSimple').editable({
                 url: '{{ path('lists_project_ajax_editable_project') }}',
                 source: '{{ path('lists_project_ajax_search_status_state_tender') }}'

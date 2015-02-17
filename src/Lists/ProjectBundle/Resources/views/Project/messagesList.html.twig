@@ -28,7 +28,7 @@
                     <div class="timeline-body">
                             <h2>{{ item.type }} | {{ item.contact }} | {{ item.user }}{#% if item.isBusinessTrip %} | {% trans %}Business trip{% endtrans %}{% endif %#}</h2>
                             <div class="timeline-content">
-                                    {{ item.description }} <br /><br>
+                                    {{ item.description |raw('html')}} <br /><br>
                                     {#% if usersFromOurSide['message'~item.id] is not empty%}
                                         {% trans %}usersFromOurSidePersons from our side{% endtrans %}: <br>
                                         {% for person in usersFromOurSide['message'~item.id] %}

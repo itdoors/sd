@@ -78,7 +78,6 @@ class MigrationCommand extends ContainerAwareCommand
                     'name' => 'Проработка',
                     'alias' => 'study'
             ));
-            
         }
         return $statusNew;
     }
@@ -165,7 +164,33 @@ class MigrationCommand extends ContainerAwareCommand
                 $project = new \Lists\ProjectBundle\Entity\ProjectSimple();
             }
             $isAddProject = true;
+            $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+            ->findBy(array ('group' => 'simple'));
+            foreach ($fileTypes as $typeFile) {
+                $file = new \Lists\ProjectBundle\Entity\FileProject();
+                $file->setProject($project);
+                $file->setType($typeFile);
+                $this->em->persist($file);
+            }
+        } else {
+            $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
+                ->findBy(array ('group' => 'simple'));
+            foreach ($fileTypes as $typeFile) {
+                $fileProject = $this->em->getRepository('ListsProjectBundle:FileProject')
+                    ->findBy(array (
+                        'project' => $project,
+                        'type' => $typeFile
+                    ));
+                if (!$fileProject) {
+                    $file = new \Lists\ProjectBundle\Entity\FileProject();
+                    $file->setProject($project);
+                    $file->setType($typeFile);
+                    $this->em->persist($file);
+                }
+            }
         }
+       
+        
         $project->setCreateDate($handling->getCreatedate());
         $project->setCreateDatetime($handling->getCreatedatetime());
         $project->setDatetimeClosed($handling->getDatetimeClosed()?$handling->getDatetimeClosed():$handling->getClosedatetime());
@@ -179,7 +204,15 @@ class MigrationCommand extends ContainerAwareCommand
         $project->setStatusAccess(true);
         $project->setStatusChangeDate($handling->getStatusChangeDate());
         $project->setUserClosed($handling->getClosedUser()? $handling->getClosedUser(): $handling->getCloser());
-
+        
+//        $status = $this->saveStatus($handling->getStatus());
+        $status = $this->em->getRepository('ListsProjectBundle:Status')->findOneBy(
+                array(
+                    'name' => 'Проработка',
+                    'alias' => 'study'
+            ));
+        $project->setStatus($status);
+        
         $this->em->persist($project);
         $output->writeln(($isAddProject?'ADD PROJECT':'UPDATE PROJECT ID:').' '. $project->getId());
 
