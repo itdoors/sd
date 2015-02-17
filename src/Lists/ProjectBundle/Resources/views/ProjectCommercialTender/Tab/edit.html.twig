@@ -101,7 +101,7 @@
                 </td>
             </tr>
         <tr>
-            <td>{% trans %}Branch{% endtrans %}</td>
+            <td>{% trans %}Services{% endtrans %}</td>
             <td>
                 {% if access.canEditProjectSimple %}
                 <a href="#" id="services" data-type="select2" data-pk="{{ object.id }}" data-placement="right" data-value="{% for key,service in object.services %}{{ key > 0 ? ',' : ''}}{{ service.id }}{% endfor %}" data-placeholder="{% trans %}Select service offered{% endtrans %}" data-original-title="{% trans %}Select service offered{% endtrans %}">

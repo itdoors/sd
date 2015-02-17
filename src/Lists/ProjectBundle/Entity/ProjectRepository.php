@@ -16,15 +16,21 @@ class ProjectRepository extends EntityRepository
     /**
      * getListProjectSimple
      * 
-     * @param User   $user
+     * @param User    $user
+     * @param mixed[] $filters
      *
      * @return Query
      */
-    public function getListProjectForTender($user)
+    public function getListProjectForTender($user, $filters = array())
     {
         /** @var \Doctrine\ORM\QueryBuilder $sql */
         $sql = $this->createQueryBuilder('p');
-
+        $sql->andWhere('p INSTANCE OF :discr')
+            ->setParameter(':discr', array(
+                'project_simple',
+                'project_commercial_tender',
+                'project_electronic_trading'
+            ));
         if ($user) {
             $sql
                 ->leftJoin('p.managers', 'm', 'WITH', 'm.user = :user')
@@ -33,14 +39,43 @@ class ProjectRepository extends EntityRepository
                 ->andWhere($sql->expr()->orX('m.user = :user', 'mo.user = :user'))
                 ->setParameter(':user', $user);
         }
-        $sql->andWhere('p INSTANCE OF :discr')
-            ->setParameter(':discr', array(
-                'project_simple',
-                'project_commercial_tender',
-                'project_electronic_trading'
-            ));
+        $this->filter($sql, $filters);
+        
 
         return $sql->getQuery();
+    }
+    /**
+     * filter
+     * 
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param mixed[]                    $filters
+     * 
+     * return \Doctrine\ORM\QueryBuilder
+     */
+    private function filter ($sql, $filters)
+    {
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'organization':
+                        $value = explode(',', $value);
+                        $sql
+                            ->andWhere($sql->expr()->in('p.organization', ':organizationIds'));
+                        $sql->setParameter(':organizationIds', $value);
+                        break;
+                    case 'managers':
+                        $value = explode(',', $value);
+                        $sql->leftJoin('p.managers', 'm1');
+                        $sql
+                            ->andWhere($sql->expr()->in('m1.user', ':managersIds'));
+                        $sql->setParameter(':managersIds', $value);
+                        break;
+                }
+            }
+        }
     }
     /**
      * @param integer $id Organization.id

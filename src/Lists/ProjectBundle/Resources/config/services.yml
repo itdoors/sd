@@ -17,6 +17,8 @@ parameters:
     lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipantValidator
     lists_project.manager_max_part.validator.class: Lists\ProjectBundle\Validator\ManagerMaxPartValidator
     lists_project.manager_unique_user.validator.class: Lists\ProjectBundle\Validator\ManagerUniqueUserValidator
+    # FILTER
+    lists_project.project_filter.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
 
 services:
     # SERVICE
@@ -128,3 +130,10 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: validator.constraint_validator, alias: manager_unique_user }
+    # FILTER
+    lists.project.projectFilter:
+        class: %lists_project.project_filter.filter.class%
+        arguments:
+            router: "@router"
+        tags:
+            - { name: form.type, alias: projectFilter }

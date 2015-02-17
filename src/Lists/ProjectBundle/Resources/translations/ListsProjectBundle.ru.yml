@@ -136,3 +136,7 @@ TEXT_FOR_SENT ADD_PROJECT_IN_ORGANIZATION: |
     Для подтверждения, пройдите пожалуйста по ссылке:
     
     ${url}$
+Services: Услуги
+Select services: Выберите услуги
+Enter organiztion: Введите организацию
+Enter manager: Введите менеджера

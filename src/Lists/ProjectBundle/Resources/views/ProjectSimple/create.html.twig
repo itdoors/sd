@@ -35,7 +35,7 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.locale ~'.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.getLocale() ~'.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/localization/messages_'~app.request.getLocale()~'.js')}}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-validation/js/additional-methods.js')}}"></script>
@@ -140,8 +140,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group{% if form.services.vars.errors|length %} has-error{% endif %}">
-                                {{ form_label(form.services, 'Branch', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.services, {'attr' : {'placeholder': "Select branch"} }) }}
+                                {{ form_label(form.services, 'Services', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.services, {'attr' : {'placeholder': "Select services"} }) }}
                                 {{ form_errors(form.services) }}
                             </div>
                         </div>

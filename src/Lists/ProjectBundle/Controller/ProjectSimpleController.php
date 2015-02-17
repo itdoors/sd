@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Lists\ProjectBundle\Services\ProjectService;
 use Lists\ProjectBundle\Entity\ManagerProjectType;
 use Lists\ProjectBundle\Entity\ProjectСommercialTender;
+use Lists\ProjectBundle\Filter\ProjectFilter;
 
 /**
  * Class ProjectSimpleController
@@ -164,6 +165,7 @@ class ProjectSimpleController extends ProjectBaseController
      */
     public function indexAction ()
     {
+        $filterNamespace = $this->filterNamespace.'_'.strtolower($this->nameEntity);
         if (!$this->nameEntity) {
             $this->createNotFoundException();
         }
@@ -178,7 +180,8 @@ class ProjectSimpleController extends ProjectBaseController
         }
 
         return $this->render('ListsProjectBundle:'.$this->nameEntity.':index.html.twig', array (
-                'access' => $access
+                'access' => $access,
+                'filterNameSpace' => $filterNamespace
         ));
     }
     /**
@@ -207,23 +210,22 @@ class ProjectSimpleController extends ProjectBaseController
             $user = null;
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
-//        $filters = $baseFilter->getFilters($filterNamespace);
+        $filters = $baseFilter->getFilters($filterNamespace);
 
-//        if (empty($filters)) {
-//            $filters['isFired'] = 'No fired';
-//            $this->setFilters($filterNamespace, $filters);
-//        }
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $baseFilter->setFilters($filterNamespace, $filters);
+        }
 
         $page = $baseFilter->getPaginator($filterNamespace);
         if (!$page) {
             $page = 1;
         }
-
         $repository = $this->getDoctrine()
             ->getRepository('ListsProjectBundle:Project');
 
         /** @var \Doctrine\ORM\Query $query */
-        $query = $repository->getListProjectForTender($user);
+        $query = $repository->getListProjectForTender($user, $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
