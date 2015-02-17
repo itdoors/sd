@@ -43,9 +43,9 @@
     							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
                                     {% trans %}Add{% endtrans %}
                                 </a>
-                                <a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
-                                    {% trans %}Add{% endtrans %}
-                                </a>
+{#                                 <a class="btn btn-cl green" href="{{ path('companyclient_new') }}" title="{% trans %}Add{% endtrans %}">#}
+{#                                     {% trans %}Add company client{% endtrans %}#}
+{#                                 </a>#}
 {#                                 {% endif %}#}
     					</div>
     				</div>
@@ -57,10 +57,11 @@
                             <th width="15%">{% trans %}Last name{% endtrans %}</th>
                             <th width="15%">{% trans %}Middle name{% endtrans %}</th>
                             <th width="15%">{% trans %}First name{% endtrans %}</th>
-                            <th width="15%">{% trans %}Birthday{% endtrans %}</th>
+                            <th width="10%">{% trans %}Birthday{% endtrans %}</th>
                             <th width="15%">{% trans %}INN{% endtrans %}</th>
+                            <th width="10%">{% trans %}Type{% endtrans %}</th>
 {#                         {% if is_granted('ROLE_ARTICLEADMIN') %}#}
-                            <th width="15%">{% trans %}Actions{% endtrans %}</th>
+                            <th width="10%">{% trans %}Actions{% endtrans %}</th>
 {#                         {% endif %}#}
                         </tr>
                     </thead>
@@ -73,6 +74,13 @@
                             <td>{{ entity.individual.firstName }}</td>
                             <td>{% if entity.individual.birthday %}{{ entity.individual.birthday|date('Y-m-d') }}{% endif %}</td>
                             <td>{{ entity.individual.tin }}</td>
+                            <td>
+                                {% if entity.originOrganizations is defined %}
+									<span class="label label-success">{% trans %}Company{% endtrans %}</span>
+                                {% else %}
+                                    <span class="label label-default">{% trans %}Person{% endtrans %}</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{{ path('client_show', { 'id': entity.id }) }}">show </a>
                                 <a href="{{ path('client_edit', { 'id': entity.id }) }}">edit</a>
@@ -126,6 +134,8 @@
                     	"orderable": true
                     }, {
                     	"orderable": true
+                    }, {
+                        "orderable": true
                     }, {
                     	"orderable": false
                     }],

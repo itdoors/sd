@@ -41,9 +41,11 @@ class ClientController extends Controller
     {
         $entity = new Client();
         $form = $this->createCreateForm($entity);
+        $indForm = $this->createCreateFormWithIndividual($entity);
         $form->handleRequest($request);
+        $indForm->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() || $indForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -54,6 +56,7 @@ class ClientController extends Controller
         return $this->render('SDBusinessRoleBundle:Client:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'indForm' => $indForm->createView()
         ));
     }
 
@@ -66,12 +69,29 @@ class ClientController extends Controller
      */
     private function createCreateForm(Client $entity)
     {
-        $form = $this->createForm(new ClientType(), $entity, array(
+        $form = $this->createForm('clientAddForm', $entity, array(
             'action' => $this->generateUrl('client_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        return $form;
+    }
+
+    /**
+     * Creates a form to create a Client entity with form for new Individual.
+     *
+     * @param Client $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateFormWithIndividual(Client $entity)
+    {
+        $form = $this->createForm('clientAddForm', $entity, array(
+            'action' => $this->generateUrl('client_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('individual', new \Lists\IndividualBundle\Form\IndividualType());
 
         return $form;
     }
@@ -84,11 +104,13 @@ class ClientController extends Controller
     public function newAction()
     {
         $entity = new Client();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
+        $indForm = $this->createCreateFormWithIndividual($entity);
 
         return $this->render('SDBusinessRoleBundle:Client:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'indForm' => $indForm->createView()
         ));
     }
 
@@ -196,6 +218,7 @@ class ClientController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Client entity.
      * 

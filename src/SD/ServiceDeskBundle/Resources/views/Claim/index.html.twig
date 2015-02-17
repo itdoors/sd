@@ -53,10 +53,11 @@
                     <thead>
                         <tr role="row" class="heading">
                             <th width="5%">{% trans %}ID{% endtrans %}</th>
-                            <th width="15%">{% trans %}Customer{% endtrans %}</th>
-                            <th width="15%">{% trans %}Claim Type{% endtrans %}</th>
-                            <th width="15%">{% trans %}Claim Status{% endtrans %}</th>
-                            <th width="15%">{% trans %}Claim Importance{% endtrans %}</th>
+                            <th width="20%">{% trans %}Customer{% endtrans %}</th>
+                            <th width="10%">{% trans %}Customer Type{% endtrans %}</th>
+                            <th width="10%">{% trans %}Claim Type{% endtrans %}</th>
+                            <th width="10%">{% trans %}Claim Status{% endtrans %}</th>
+                            <th width="10%">{% trans %}Claim Importance{% endtrans %}</th>
                             <th width="10%">{% trans %}Created{% endtrans %}</th>
                             <th width="10%">{% trans %}Closed{% endtrans %}</th>
                             <th width="5%">{% trans %}Status{% endtrans %}</th>
@@ -70,6 +71,13 @@
                         <tr>
                             <td><a href="{{ path('claim_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                             <td>{% if entity.customer %}<a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.customer }}{% endif %}</td>
+                            <td>
+                                {% if entity.customer.originOrganizations is defined %}
+									<span class="label label-success">{% trans %}Company{% endtrans %}</span>
+                                {% else %}
+                                    <span class="label label-default">{% trans %}Person{% endtrans %}</span>
+                                {% endif %}
+                            </td>
                             <td>{{ entity.type }}</td>
                             <td>{{ entity.status }}</td>
                             <td>{{ entity.importance }}</td>
@@ -125,6 +133,8 @@
                     "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
                     "columns": [{
                         "orderable": true
+                    }, {
+                    	"orderable": true
                     }, {
                         "orderable": true
                     }, {

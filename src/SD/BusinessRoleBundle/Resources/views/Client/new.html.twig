@@ -1,15 +1,216 @@
 {% extends '::base.html.twig' %}
+{% trans_default_domain 'SDBusinessRoleBundle' %}
+{% block title %}{% trans %}Add{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Clients{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('client') }}" title="{% trans %}Clients{% endtrans %}">{% trans %}Clients{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="" title="{% trans %}Add{% endtrans %}">{% trans %}Add{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+
+{% endblock %}
 
 {% block body -%}
-    <h1>Client creation</h1>
-
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('client') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Person{% endtrans %}</a></li>
+                    <li><a href="#tab_1" data-toggle="tab">{% trans %}Departments{% endtrans %}</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">{% trans %}Coaches{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_0">
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-gift"></i>{% trans %}Select existing{% endtrans %}
+                                </div>
+                            </div>
+                            <div class="portlet-body form">
+                                <script>
+                                    $(document).ready(function() {
+                                        SD.select2('#' + '{{ form.vars.name }}' + '_individual', {
+                                        });
+                                    });
+                                </script>
+                                            
+                                {% if form.vars.valid is sameas(false) %}
+                                    <div class="form-group col-md-12">
+                                        <div class="alert alert-danger">
+                                            <button class="close" data-close="alert"></button>
+                                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                                            {{ form_errors(form) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                        
+                                {{ form_start(form, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Person{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(form.individual, {'attr' : {'class' : 'form-control input-large', 'data-placeholder': 'Select...' | trans}}) }}
+                                            {% if form.individual.vars.errors|length %}{{ form_errors(form.individual) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-actions fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
+                                                    <a class="btn btn-cl green" href="{{ path('client') }}" title="{% trans %}Cancel{% endtrans %}">
+                                                        {% trans %}Cancel{% endtrans %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-gift"></i>{% trans %}Add new{% endtrans %}
+                                </div>
+                            </div>
+                            <div class="portlet-body form">
+                                <script>
+                                    $(document).ready(function() {
+                                        $('.select2').select2({
+                                            allowClear: true
+                                        });
+                                        $('.itdoors-date-picker').datepicker({
+                                            rtl: Metronic.isRTL(),
+                                            autoclose: true,
+                                            format: "dd.mm.yyyy",
+                                            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                                            language: 'ru',
+                                            startView: 'decade',
+                                            weekStart: 1
+                                        });
+                                    });
+                                </script>
+                                            
+                                {% if indForm.vars.valid is sameas(false) %}
+                                    <div class="form-group col-md-12">
+                                        <div class="alert alert-danger">
+                                            <button class="close" data-close="alert"></button>
+                                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                                            {{ form_errors(indForm) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                        
+                                {{ form_start(indForm, {'attr' : {'class' : 'form-horizontal form-row-seperated'}}) }}
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}First name{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.firstName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.firstName.vars.errors|length %}{{ form_errors(indForm.individual.firstName) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Middle name{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.middleName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.middleName.vars.errors|length %}{{ form_errors(indForm.individual.middleName) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Last name{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.lastName, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.lastName.vars.errors|length %}{{ form_errors(indForm.individual.lastName) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Birthday{% endtrans%}</label>
+                                        <div class="col-md-3">
+                                            {{ form_widget(indForm.individual.birthday, {'attr' : {'id' : 'datepic','class' : 'form-control form-control-inline input-medium date-picker itdoors-date-picker'}}) }}
+                                            {% if indForm.individual.birthday.vars.errors|length %}{{ form_errors(indForm.individual.birthday) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}INN{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.tin, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.tin.vars.errors|length %}{{ form_errors(indForm.individual.tin) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Passport{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.passport, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.passport.vars.errors|length %}{{ form_errors(indForm.individual.passport) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Address{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.address, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.address.vars.errors|length %}{{ form_errors(indForm.individual.address) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required control-label col-md-3">{% trans %}Phone{% endtrans%}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(indForm.individual.phone, {'attr' : {'class' : 'form-control', 'placeholder': 'Input...' | trans}}) }}
+                                            {% if indForm.individual.phone.vars.errors|length %}{{ form_errors(indForm.individual.phone) }}{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-actions fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
+                                                    <a class="btn btn-cl green" href="{{ path('client') }}" title="{% trans %}Cancel{% endtrans %}">
+                                                        {% trans %}Cancel{% endtrans %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form_end(indForm) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_1"></div>
+                    <div class="tab-pane" id="tab_2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

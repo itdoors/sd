@@ -1,0 +1,30 @@
+individual:
+    path:     /
+    defaults: { _controller: "ListsIndividualBundle:Individual:index" }
+
+individual_show:
+    path:     /{id}/show
+    defaults: { _controller: "ListsIndividualBundle:Individual:show" }
+
+individual_new:
+    path:     /new
+    defaults: { _controller: "ListsIndividualBundle:Individual:new" }
+
+individual_create:
+    path:     /create
+    defaults: { _controller: "ListsIndividualBundle:Individual:create" }
+    requirements: { _method: post }
+
+individual_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ListsIndividualBundle:Individual:edit" }
+
+individual_update:
+    path:     /{id}/update
+    defaults: { _controller: "ListsIndividualBundle:Individual:update" }
+    requirements: { _method: post|put }
+
+individual_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ListsIndividualBundle:Individual:delete" }
+    requirements: { _method: post|delete }
