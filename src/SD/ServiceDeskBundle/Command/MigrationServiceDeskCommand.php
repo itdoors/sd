@@ -80,7 +80,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             ');
         $stmt->execute();
 
-        $this->createIndividuals();
+        //$this->createIndividuals();
 
         /*
          * claim
@@ -283,24 +283,6 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $sd_individual = $user->getIndividual();
 
 
-                    //contacts here
-                    $contact_1 = new Contact();
-                    $contact_1->setIndividual($sd_individual);
-                    $contact_1->setType(ContactType::TEL);
-                    $contact_1->setValue($clientPhone);
-                    $em->persist($contact_1);
-
-                    $contact_2 = new Contact();
-                    $contact_2->setIndividual($sd_individual);
-                    $contact_2->setType(ContactType::TEL);
-                    $contact_2->setValue($clientMobilephone);
-                    $em->persist($contact_2);
-
-                    $contact_3 = new Contact();
-                    $contact_3->setIndividual($sd_individual);
-                    $contact_3->setType(ContactType::EMAIL);
-                    $contact_3->setValue($userEmail);
-                    $em->persist($contact_3);
 
                     $res = memory_get_usage ().'--'.$userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
                     $output->writeln($res);
@@ -317,22 +299,44 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $needRole = true;
 
                     foreach($roles as $role) {
-                        if ($role instanceof ClaimPerformer) {
+                        if ($role instanceof CompanyClient) {
                             $needRole = false;
-                            $claimPerformer = $role;
+                            $sd_client = $role;
                         }
                     }
                     if ($needRole) {
                         $sd_client = new CompanyClient();
                         $sd_client->setIndividual($sd_individual);
 
-                        //$sd_client->addGrantedOrganization();
+                        //contacts here
+                        $contact_1 = new Contact();
+                        $contact_1->setIndividual($sd_individual);
+                        $contact_1->setType(ContactType::TEL);
+                        $contact_1->setValue($clientPhone);
+                        $em->persist($contact_1);
 
+                        $contact_2 = new Contact();
+                        $contact_2->setIndividual($sd_individual);
+                        $contact_2->setType(ContactType::TEL);
+                        $contact_2->setValue($clientMobilephone);
+                        $em->persist($contact_2);
+
+                        $contact_3 = new Contact();
+                        $contact_3->setIndividual($sd_individual);
+                        $contact_3->setType(ContactType::EMAIL);
+                        $contact_3->setValue($userEmail);
+                        $em->persist($contact_3);
+
+                        //$sd_client->addGrantedOrganization();
+                        $res = memory_get_usage ().'--'.'test1';
+                        $output->writeln($res);
                         $checkClientOrganizations = $sd_client->getOriginOrganizations();
+                        $res = memory_get_usage ().'--'.'test2';
+                        $output->writeln($res);
 
                         if (!in_array($organization, $checkClientOrganizations->toArray())) {
-                            $sd_client->addOriginOrganization($organization);
-                            $res = memory_get_usage ().'--'.'add organization :'.$organization;
+                        $sd_client->addOriginOrganization($organization);
+                        $res = memory_get_usage ().'--'.'add organization ';
                             $output->writeln($res);
                         }
 
@@ -362,7 +366,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                             $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
                             if (!in_array($departmentAddClient->getOrganization(), $checkClientGrantedOrganizations->toArray())) {
-                                $res = memory_get_usage ().'--'.'add granted organization :'.$departmentAddClient->getOrganization();
+                                $res = memory_get_usage ().'--'.'add granted organization :';
                                 $output->writeln($res);
                                 $sd_client->addGrantedOrganization($departmentAddClient->getOrganization());
 
@@ -405,6 +409,9 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
 
                     }
+
+                    $sd_claim->setCustomer($sd_client);
+                    $em->persist($sd_client);
 
                     //$output->writeln($echo);
 
@@ -460,7 +467,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $performerRule->setClaim($sd_claim);
                     $sd_claim->addClaimPerformerRule($performerRule);
                     $em->persist($performerRule);
-                    $em->persist($sd_claim);
+                    //$em->persist($sd_claim);
                     $em->flush();
                     //$em->refresh($performerRule);
                     //$em->persist($sd_claim);
