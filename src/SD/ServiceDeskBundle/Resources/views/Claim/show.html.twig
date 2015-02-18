@@ -29,6 +29,17 @@
     </ul>
 {% endblock %}
 
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+{% endblock %}
+
 {% block body %}
         <a class="margin-bottom-10 btn btn-cl green" href="{{ path('claim_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
             {% trans %}Edit{% endtrans %}
@@ -94,12 +105,45 @@
 				<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
 			</div>
 			<div class="panel-body">
+			     <div class="summernote"></div>
+                 <button id="add_msg" type="button" class="btn btn-default margin-top-10 margin-bottom-15">{% trans %}Add{% endtrans %}</button>
 			     {% for message in messages %}
 			         <div class="note note-success">
-						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:MM:s') }}</h5>
+						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
 						{{ message.text }}
 					</div>
 			     {% endfor %}
 			</div>
 		</div>
+		<script>
+            $(document).ready(function() {
+                $('.summernote').summernote({
+                	lang: 'ru-RU',
+                    'disableDragAndDrop': true,
+                    'disableLinkTarget': true,
+                    'onblur': function() {
+                        /** Костыль для страховки */
+                        $('.textear-edit').text($('.textear-edit').code());
+                    },
+                    'onImageUpload': function(files, editor, welEditable) {
+                        sendFile(files[0],editor,welEditable);
+                    }
+                });
+                function sendFile(file,editor,welEditable) {
+                    data = new FormData();
+                    data.append("file", file);
+                    $.ajax({
+                        data: data,
+                        type: "POST",
+                        url: "{{ path('claim_upload') }}",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(url) {
+                                editor.insertImage(welEditable, url);
+                        }
+                    });
+                }
+            });
+        </script>
 {% endblock %}
