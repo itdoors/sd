@@ -2567,6 +2567,17 @@ ALTER TABLE organization ADD is_self BOOLEAN DEFAULT 'false' NOT NULL;
 COMMENT ON COLUMN organization.is_self IS 'Собственная организаци (true=да, flase=нет)';
 UPDATE "public".organization SET "is_self" = true WHERE organization_sign_id = 60;
 UPDATE "public".lookup SET "group" = 'organization_sign_self' WHERE id = 60;
+
+ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699911C8FB41 ON pay_master (bank_id);
+COMMENT ON COLUMN pay_master.reason IS 'Причина отклонения';
+UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 6 WHERE id = 50;
+UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 7 WHERE id = 51;
+ALTER TABLE companystructure ALTER lft SET NOT NULL;
+ALTER TABLE companystructure ALTER lvl SET NOT NULL;
+ALTER TABLE companystructure ALTER rgt SET NOT NULL;
+ALTER TABLE companystructure ALTER is_hidden SET NOT NULL;
 -- prod +++
 CREATE TABLE project_file_old (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, type_id BIGINT DEFAULT NULL, user_id INT DEFAULT NULL, name VARCHAR(128) DEFAULT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_2D50D1A7166D1F9C ON project_file_old (project_id);
@@ -2689,15 +2700,12 @@ INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Зм
 INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
 INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
 INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
-INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
 INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Cбор документов', 'collecting_documents', 'state_tender');
 INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подача - раскрытие ', 'submission_disclosure', 'state_tender');
 INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подписание договора', 'signing_document', 'state_tender');
 INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Проработка', 'study', 'simple');
 INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Комм. Предложение', 'comm_proposal', 'simple');
 INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
-ALTER TABLE project_file ADD discriminator VARCHAR(255) NOT NULL;
 
 INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
 INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
@@ -2799,26 +2807,37 @@ INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_dat
 INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 6, NULL);
 INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 7, NULL);
 INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 5, NULL);
--- очистить таблицу project_file
+DELETE FROM "public".project_file;
 
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
-INSERT INTO "public".project_file_type ("name", "group", "alias") 
-	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
+ALTER TABLE project_file ADD discriminator VARCHAR(255) NOT NULL;
 
-# Нужно изменить последовательность в project_file_id
+ALTER TABLE project_file ADD discriminator VARCHAR(255) DEFAULT NULL;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD notification_id INT DEFAULT NULL;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEEF1A9D84 FOREIGN KEY (notification_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_2FB3D0EEEF1A9D84 ON project (notification_id);
+INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Звонок/Письмо', 'call', 60, 1, 'Звонок/Письмо', true, 2);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Встреча-презентация', 'presentation', 180, 2, 'Презентация', true, 3);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Аудит', 'audit', 300, 4, 'Аудит', true, 4);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Техническое задание', 'specification', 300, 3, 'Просчет', true, 5);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Ком. Предложение', '', 120, 5, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Переговоры по цене', '', 180, 8, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Переговоры по договору', '', 180, 9, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Подписание контракта', '', 1440, 10, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Мониторинг', '', 0, 12, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
 
--- # app/console  lists:project:migration  
+
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
+--INSERT INTO "public".project_file_type ("name", "group", "alias")	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
+
 
 # app/console sd:group:role-add  PROJECT_STATE_TENDER PROJECT_STATE_TENDER
 # app/console sd:group:role-add  PROJECT_STATE_TENDER_ADMIN PROJECT_STATE_TENDER_ADMIN
@@ -2835,48 +2854,5 @@ INSERT INTO "public".project_file_type ("name", "group", "alias")
 # app/console sd:group:role-add  SALESADMIN PROJECT_SIMPLE_ADMIN
 
 # app/console  lists:project:migration 
-
-
-ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
-ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-CREATE INDEX IDX_A492699911C8FB41 ON pay_master (bank_id);
-COMMENT ON COLUMN pay_master.reason IS 'Причина отклонения';
-UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 6 WHERE id = 50;
-UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 7 WHERE id = 51;
-ALTER TABLE companystructure ALTER lft SET NOT NULL;
-ALTER TABLE companystructure ALTER lvl SET NOT NULL;
-ALTER TABLE companystructure ALTER rgt SET NOT NULL;
-ALTER TABLE companystructure ALTER is_hidden SET NOT NULL;
-
-ALTER TABLE project_file ADD discriminator VARCHAR(255) DEFAULT NULL;
-ALTER TABLE project_file ALTER id TYPE SERIAL;
-ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
-
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Звонок/Письмо', 'call', 60, 1, 'Звонок/Письмо', true, 2);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Встреча-презентация', 'presentation', 180, 2, 'Презентация', true, 3);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Аудит', 'audit', 300, 4, 'Аудит', true, 4);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Техническое задание', 'specification', 300, 3, 'Просчет', true, 5);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Ком. Предложение', '', 120, 5, NULL, NULL, NULL);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Переговоры по цене', '', 180, 8, NULL, NULL, NULL);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Переговоры по договору', '', 180, 9, NULL, NULL, NULL);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Подписание контракта', '', 1440, 10, NULL, NULL, NULL);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Мониторинг', '', 0, 12, NULL, NULL, NULL);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
-INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 
-	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
-ALTER TABLE project ADD notification_id INT DEFAULT NULL;
-ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEEF1A9D84 FOREIGN KEY (notification_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-CREATE INDEX IDX_2FB3D0EEEF1A9D84 ON project (notification_id)
 
 -- prod ---

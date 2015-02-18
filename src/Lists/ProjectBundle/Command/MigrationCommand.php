@@ -256,7 +256,7 @@ class MigrationCommand extends ContainerAwareCommand
                     'user' => $messageOld->getUser(),
                 ));
             $type = $this->saveType($messageOld->getType());
-
+            
             if(!$message) {
                 if ($messageOld->getAdditionalType() == 'fm') {
                     $message = new \Lists\ProjectBundle\Entity\MessagePlanned();
@@ -264,6 +264,7 @@ class MigrationCommand extends ContainerAwareCommand
                     $message = new \Lists\ProjectBundle\Entity\MessageCurrent();
                 }
             }
+            
             $message->setContact($messageOld->getContact());
             $message->setCreateDatetime($messageOld->getCreatedatetime());
             $message->setDescription($messageOld->getDescription());
@@ -273,6 +274,7 @@ class MigrationCommand extends ContainerAwareCommand
             $message->setType($type);
 
             $this->em->persist($message);
+
             $this->copyFileMessage($messageOld, $project, $message, $output);
         }
     }
@@ -294,12 +296,15 @@ class MigrationCommand extends ContainerAwareCommand
         }
         $filesMessage = $handlingMessage->getFiles();
         foreach ($filesMessage as $file) {
+            $addFile = null;
+            if ($message->getId() != '') {
             $addFile = $this->em->getRepository('ListsProjectBundle:FileMessage')->findOneBy(
                 array(
                     'message' => $message,
                     'createDatetime' => $file->getCreatedate(),
                     'name' => $file->getFile(),
                 ));
+            }
             if (!$addFile) {
                 $addFile = new \Lists\ProjectBundle\Entity\FileMessage();
                 $addFile->setCreateDatetime($file->getCreatedate());
@@ -316,6 +321,10 @@ class MigrationCommand extends ContainerAwareCommand
                 }
                 if (!is_dir($dirNew)) {
                     $output->writeln('Directory dont found: '.$dirNew);
+                    return false;
+                }
+                if (!is_file($fileOld)) {
+                    $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$file->getId());
                     return false;
                 }
                 copy($fileOld, $fileNew);
@@ -357,19 +366,23 @@ class MigrationCommand extends ContainerAwareCommand
             $this->handlingToProject($val, $output);
         }
         $this->em->flush();
+        //$this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
+//        $this->em->getUnitOfWork()->clear();
+        $output->writeln('flush project');
          // перенос сообщений
         foreach ($handlings as $val1) {
-            $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
-            array(
-                'createDatetime' => $val1->getCreatedatetime(),
-                'organization' => $val1->getOrganization(),
-                'createDate' => $val1->getCreatedate(),
-                'userCreated' => $val1->getUser()
-            ));
+                $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
+                    array(
+                        'createDatetime' => $val1->getCreatedatetime(),
+                        'organization' => $val1->getOrganization(),
+                        'createDate' => $val1->getCreatedate(),
+                        'userCreated' => $val1->getUser()
+                    ));
             if ($project) {
                 $this->message($val1, $project, $output);
             }
         }
+        $output->writeln('END MESSAGE');
         
          // перенос проектов гос тендеры
         $gosTenders = $this->em->getRepository('ListsHandlingBundle:ProjectGosTender')->findAll();
@@ -461,7 +474,11 @@ class MigrationCommand extends ContainerAwareCommand
         }
         $fileOld = $dirOld.'/'.$handling->getId().'/'.$fileNAme;
         $fileNew = $dirNew.'/'.$fileNAme;
-                
+             
+        if (!is_file($fileOld)) {
+            $output->writeln('File dont found: '.$fileOld . ' FOR ID: '.$project->getId());
+            return false;
+        }
         copy($fileOld, $fileNew);
     }
    
