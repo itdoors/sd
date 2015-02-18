@@ -17,6 +17,7 @@ parameters:
     lists_project.unique_state_tender_participant.validator.class: Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipantValidator
     lists_project.manager_max_part.validator.class: Lists\ProjectBundle\Validator\ManagerMaxPartValidator
     lists_project.manager_unique_user.validator.class: Lists\ProjectBundle\Validator\ManagerUniqueUserValidator
+    lists_project.max_event_datetime.validator.class: Lists\ProjectBundle\Validator\MaxEventDatetimeValidator
     # FILTER
     lists_project.project_filter.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
 
@@ -130,6 +131,12 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: validator.constraint_validator, alias: manager_unique_user }
+    lists.project.maxEvemtDatetimeValidator:
+        class: %lists_project.max_event_datetime.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: maxEventDatetime }
     # FILTER
     lists.project.projectFilter:
         class: %lists_project.project_filter.filter.class%

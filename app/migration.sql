@@ -2829,6 +2829,9 @@ INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sorto
 INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
 INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
 
+ALTER TABLE project_message ADD event_datetime_start TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL;
+COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата события (дублируется при создании из eventDatetime )';
+
 
 --INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
 --INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);

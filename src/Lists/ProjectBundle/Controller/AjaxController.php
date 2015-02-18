@@ -417,6 +417,67 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
     /**
+     * messageUploadAction
+     * 
+     * @param integer $id
+     * @param Request $request
+     * 
+     * @return Response
+     * @throws \Exception
+     */
+    public function messageUploadAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Message')
+            ->find($id);
+        $eventDatetime = $request->request->get('eventDatetime');
+        if ($eventDatetime && !empty($eventDatetime)) {
+            $eventDatetime = new \DateTime($eventDatetime);
+            $object->setEventDatetime($eventDatetime);
+        }
+        
+
+//        $service = $this->get('lists_project.service');
+//        $access= $service->checkAccess($this->getUser(), $object->getProject());
+//        if (!$access->canEditMessage()) {
+//            throw new \Exception('No access', 403);
+//        }
+
+        $validator = $this->get('validator');
+        $return = array('error'=>false);
+        
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors) ) {
+            foreach ($errors as $error){
+                if ($error->getPropertyPath() == 'eventDatetime') {
+                    $em->refresh($object);
+                    $return['error'] = $error->getMessage();
+                    $return['eventDatetime'] = $object->getEventDatetime()->format('Y-m-d H:i:s');
+ 
+                    return new Response(json_encode($return));
+                }
+            }
+        }
+
+        
+        $em->persist($object);
+
+        $return['eventDatetime'] = $object->getEventDatetime()->format('Y-m-d H:i:s');
+        try {
+            $em->flush();
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return['error'] = $e->getMessage();
+        }
+
+        return new Response(json_encode($return));
+    }
+    /**
      * Saves project file ajax
      *
      * @param integer $id

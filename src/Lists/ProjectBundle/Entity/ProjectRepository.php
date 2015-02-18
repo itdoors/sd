@@ -113,6 +113,7 @@ class ProjectRepository extends EntityRepository
         $sql->addSelect('t.name as nameType');
         $sql->addSelect('o.name as nameOrganization');
         $sql->addSelect('mp.eventDatetime');
+        $sql->addSelect('mp.id as messageId');
 
         $sql
             ->where('mp.eventDatetime >= :startTimestamp')

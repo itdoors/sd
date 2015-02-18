@@ -25,6 +25,12 @@ Lists\ProjectBundle\Entity\Message:
             column: create_datetime
             options:
                 comment: Дата создания (создается автоматически)
+        eventDatetimeStart:
+            type: datetime
+            nullable: false
+            column: event_datetime_start
+            options:
+                comment: Первая дата события (дублируется при создании из eventDatetime )
         eventDatetime:
             type: datetime
             nullable: false

@@ -1,7 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
         
-        
         $('#calendar').fullCalendar({
             header: {
                 left:   'title',
@@ -16,14 +15,35 @@
                 if (isLoading)
                 {
                     SD.blockUI($('div.calendar'));
-                }
-                else
-                {
+                } else  {
                     SD.unblockUI($('div.calendar'));
                 }
             },
             editable: false,
+            dragged: false,
             droppable: false,
+            resized: false,
+            lazyFetching: false,
+            eventDrop: function(event, delta, revertFunc) {
+                var eventDatetime = event.start;
+                SD.blockUI($('div.calendar'));
+                $.ajax({
+                    type: 'POST',
+                    url: event.messageUrlUpdate,
+                    data: {
+                        eventDatetime: eventDatetime
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.error) {
+                            event.start = new Date(data.eventDatetime);
+                            $('#calendar').fullCalendar('renderEvent', event, true);
+                            alert(data.error);
+                        }
+                        SD.unblockUI($('div.calendar'));
+                    }
+                });
+            },
             dayClick: function(date, allDay, jsEvent, view) {
 
             },

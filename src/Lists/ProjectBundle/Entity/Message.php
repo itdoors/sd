@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Message
 {
+    public function __construct ()
+    {
+        $this->setCreateDatetime(new \DateTime());
+    }
     /**
      * __toString
      * 
@@ -82,10 +86,6 @@ class Message
      */
     private $contact;
 
-    public function __construct ()
-    {
-        $this->setCreateDatetime(new \DateTime());
-    }
     /**
      * Get id
      *
@@ -148,6 +148,9 @@ class Message
      */
     public function setEventDatetime ($eventDatetime)
     {
+        if ($this->getEventDatetimeStart() == null) {
+            $this->setEventDatetimeStart($eventDatetime);
+        }
         $this->eventDatetime = $eventDatetime;
 
         return $this;
@@ -308,5 +311,33 @@ class Message
     public function getFiles()
     {
         return $this->files;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $eventDatetimeStart;
+
+
+    /**
+     * Set eventDatetimeStart
+     *
+     * @param \DateTime $eventDatetimeStart
+     * @return Message
+     */
+    public function setEventDatetimeStart($eventDatetimeStart)
+    {
+        $this->eventDatetimeStart = $eventDatetimeStart;
+    
+        return $this;
+    }
+
+    /**
+     * Get eventDatetimeStart
+     *
+     * @return \DateTime 
+     */
+    public function getEventDatetimeStart()
+    {
+        return $this->eventDatetimeStart;
     }
 }

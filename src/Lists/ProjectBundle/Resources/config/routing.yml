@@ -158,6 +158,12 @@ lists_project_ajax_upload_file:
     defaults: { _controller: ListsProjectBundle:Ajax:uploadFile }
     requirements:
         id: \d+
+    
+lists_project_message_update:
+    pattern:  /lists/project/message/upload/{id}
+    defaults: { _controller: ListsProjectBundle:Ajax:messageUpload }
+    requirements:
+        id: \d+
 
 # ProjectBaseController
 lists_project_managers:

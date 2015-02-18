@@ -134,7 +134,7 @@ class PrivateController extends SalesController
                         'id' => $project['project']->getId()
                     ));
                 $title = $project['nameType']. ' | '. $project['nameOrganization']. ' (' . $project['eventDatetime']->format('H:i').')';
-                $cssClass = '';
+                $cssClass = 'projectMessage';
                 if ($project['eventDatetime'] < new \DateTime()) {
                     $cssClass .= ' sd-event-prev';
                     if ($project['project']->getIsClosed() && $project['project']->getDatetimeClosed() < $project['eventDatetime']) {
@@ -147,11 +147,14 @@ class PrivateController extends SalesController
                 }
                 $events[] = array(
                     'hover_title' => '',
+                    'editable' => true,
+                    'messageUrlUpdate' => $this->generateUrl('lists_project_message_update', array( 'id' => $project['messageId'])),
                     'title' => $title,
                     'start' => $project['eventDatetime']->format('Y-m-d H:i:s'),
+                    'end' => $project['eventDatetime']->format('Y-m-d H:i:s'),
                     'url' => $url,
                     'className' => $cssClass,
-//                    'allDay' => false,
+                    'allDay' => false,
                 );
             }
         }
@@ -192,6 +195,7 @@ class PrivateController extends SalesController
             $fullName = $user->getFullname();
             $events[] = array(
                 'hover_title' => '',
+                'editable' => false,
                 'title' => $translator->trans('BD', array(), 'SDDashboardBundle').' '. $fullName,
                 'start' => date('Y').'-'.$user->getBirthday()->format('m-d'),
                 'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
