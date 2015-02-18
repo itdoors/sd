@@ -5,12 +5,21 @@ namespace Lists\OrganizationBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class OrganizationCreateForm
  */
 class OrganizationCreateForm extends AbstractType
 {
+    protected $container;
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -27,9 +36,14 @@ class OrganizationCreateForm extends AbstractType
             ->add('edrpou', 'text', array(
                 'required' => true
             ))
+            ->add('contact', new \Lists\ContactBundle\Form\ModelContactOrganizationFormType($this->container), array(
+                'mapped' => false
+            ))
             
             ->add('submit', 'submit')
             ->add('cancel', 'submit');
+        $builder->get('contact')->remove('add');
+        $builder->get('contact')->remove('cancel');
     }
 
     /**
@@ -41,7 +55,8 @@ class OrganizationCreateForm extends AbstractType
             'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
             'validation_groups' => array('create'),
             'translation_domain' => 'ListsOrganizationBundle',
-            'csrf_protection'   => false
+            'csrf_protection'   => false,
+            'cascade_validation' => true
         ));
     }
 

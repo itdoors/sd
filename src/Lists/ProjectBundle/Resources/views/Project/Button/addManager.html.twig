@@ -1,0 +1,24 @@
+<a class="btn green margin-bottom-20" id="project-add-manager-add-btn" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Add manager{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+    'selector' : '#project-add-manager-add-btn',
+    'formType' : 'addManagerForm',
+    'successFunctions' : {
+        'managers_list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'lists_project.service',
+        'method' : 'addManagerFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'lists_project.service',
+        'method' : 'saveAddManagerForm'
+    },
+    'defaults' : {
+        'project' : object.id
+    },
+    'target' : '#form_modal_block',
+    'html' : 'ListsProjectBundle:Form:addManagerForm.html.twig'
+}) }}
+

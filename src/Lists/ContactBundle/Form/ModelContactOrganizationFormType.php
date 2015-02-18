@@ -44,18 +44,30 @@ class ModelContactOrganizationFormType extends AbstractType
             ))
             ->add('modelId', 'hidden')
             ->add('firstName')
-            ->add('lastName')
-            ->add('middleName')
-            ->add('phone1')
-            ->add('phone2')
-            ->add('position')
+            ->add('lastName', 'text', array(
+                'required' => false
+            ))
+            ->add('middleName', 'text', array(
+                'required' => false
+            ))
+            ->add('phone1', 'text', array(
+                'required' => false
+            ))
+            ->add('phone2', 'text', array(
+                'required' => false
+            ))
+            ->add('position', 'text', array(
+                'required' => false
+            ))
             ->add('birthday', 'birthday', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy',
                 'years' => range(1900, date('Y')),
                 'required' => false,
             ))
-            ->add('email')
+            ->add('email', 'text', array(
+                'required' => false
+            ))
             ->add('type', null, array(
                 'required' => true
             ))
@@ -122,7 +134,8 @@ class ModelContactOrganizationFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\ContactBundle\Entity\ModelContact',
-            'translation_domain' => 'ListsContactBundle'
+            'translation_domain' => 'ListsContactBundle',
+            'validation_groups' => array('create'),
         ));
     }
 

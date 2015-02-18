@@ -14,7 +14,7 @@
             <ul class="dropdown-menu-list scroller" style="height: 250px;">
                 {% if items|length > 0 %} {% for i in 0..(items|length-1) %}
                 <li>
-                    <a href="{{path('list_article_blog_show',{'id':items[i].id})}}">
+                    <a href="{{path('list_article_'~ items[i].type~'_show',{'id':items[i].id})}}">
                         <span class="photo">
                             {% if items[i].getUser.photo is not empty %}
                             <img class="img-circle" alt="" src="{{ web_image(items[i].getUser.getWebPath()).resize(29,29) }}" />
@@ -34,7 +34,13 @@
         </li>
         <li class="external">
             <a href="{{path('list_article_blog')}}">
-                {% trans %}See all messages {% endtrans %}
+                {% trans %}See all news {% endtrans %}
+                <i class="m-icon-swapright"></i>
+            </a>
+        </li>
+        <li class="external">
+            <a href="{{path('list_article_notification')}}">
+                {% trans %}See all notification {% endtrans %}
                 <i class="m-icon-swapright"></i>
             </a>
         </li>

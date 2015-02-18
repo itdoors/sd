@@ -73,3 +73,17 @@ list_article_blog_upload:
 list_article_blog_last:
     pattern:  /dashboard/blog/last
     defaults: { _controller: ListsArticleBundle:ProdBlog:getLastNew }
+    
+# Notification
+list_article_notification:
+    pattern:  /dashboard/blog/notification
+    defaults: { _controller: ListsArticleBundle:Notification:index }
+    
+list_article_notification_list:
+    pattern:  /dashboard/notification/list
+    defaults: { _controller: ListsArticleBundle:Notification:list }
+
+list_article_notification_show:
+    pattern:  /dashboard/notification/show/{id}
+    defaults: { _controller: ListsArticleBundle:Notification:show }
+    

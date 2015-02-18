@@ -48,10 +48,9 @@
                         <div class="form-actions">
                             {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
                             {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
-                        </div>
-
-                        <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                        </div>                        
                     </div>
+                    <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
                 </div>
                 {{ form_end(form) }}
             </div>

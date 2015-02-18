@@ -1,3 +1,14 @@
+sd_common_ajax_handling_save:
+    pattern:  /lists/handling/index/
+    defaults: { _controller: ListsHandlingBundle:Handling:index }
+sd_common_ajax_handling_status:
+    pattern:  /lists/handling/index/
+    defaults: { _controller: ListsHandlingBundle:Handling:index }
+sd_common_ajax_handling_result:
+    pattern:  /lists/handling/index/
+    defaults: { _controller: ListsHandlingBundle:Handling:index }
+
+
 lists_handling_index:
     pattern:  /lists/handling/index/{type}
     defaults: { _controller: ListsHandlingBundle:Handling:index, type: '' }

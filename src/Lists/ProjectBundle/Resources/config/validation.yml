@@ -1,0 +1,122 @@
+Lists\ProjectBundle\Entity\Message:
+    properties:
+        eventDatetime:
+            - NotBlank: { groups: [create, edit] }
+            - Lists\ProjectBundle\Validator\MaxEventDatetime: { groups: [edit] }
+
+Lists\ProjectBundle\Entity\Project:
+    properties:
+        organization:
+            - NotBlank: { groups: [create] }
+        square:
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [edit]
+        statusAccess:
+            - NotBlank: { groups: [confirm] }
+#            - Choice:
+#                 callback: getCoiceConfirm
+#                 groups: [confirm]
+#        createdate:
+#            - NotBlank: { groups: [new] }
+#            - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }
+#        budget:
+#            - NotBlank: { groups: [new, createTender] }
+Lists\ProjectBundle\Entity\ProjectStateTender:
+    properties:
+        vdz:
+            - NotBlank: { groups: [create] }
+            - Length: 
+                max: 128
+                groups: [create]
+        advert:
+            - NotBlank: { groups: [create] }
+            - Lists\ProjectBundle\Validator\UniqueProjectStateTender: { groups: [create] }
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [create]
+        typeOfProcedure:
+            - NotBlank: { groups: [create] }
+            - Length: 
+                max: 128
+                groups: [create]
+        place:
+            - NotBlank: { groups: [create] }
+            - Length: 
+                max: 128
+                groups: [create]
+        delivery:
+            - NotBlank: { groups: [create] }
+            - Length: 
+                max: 128
+                groups: [create]
+        datetimeDeadline:
+            - NotBlank: { groups: [create] }
+            - DateTime: { groups: [edit] }
+        datetimeOpening:
+            - NotBlank: { groups: [create] }
+            - DateTime: { groups: [edit, createTender] }
+        software:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [create]
+        isParticipation:
+            - NotBlank: { groups: [edit] }
+            - Choice:
+                 callback: getParticipations
+                 groups: [edit]
+        kveds:
+            - NotBlank: { groups: [create] }
+        pf:
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [edit]
+Lists\ProjectBundle\Entity\File:
+    properties:
+        shortText:
+            - NotBlank: { groups: [edit] }
+            - Length: 
+                max: 128
+                groups: [createFileProject]
+        name:
+            - NotBlank: { groups: [createFileProject] }
+            - File:
+                maxSize: 5M
+                mimeTypes:
+                    - application/pdf
+                    - application/vnd.ms-excel
+                    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                    - application/msword
+                    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
+                groups: [createFileProject]          
+Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
+    properties:
+        participant:
+            - NotBlank: { groups: [create] }
+            - Lists\ProjectBundle\Validator\UniqueProjectStateTenderParticipant: { groups: [create] }
+        projectStateTender:
+            - NotBlank: { groups: [create] }
+        summa:
+            - Range: 
+                min: 0
+                groups: [create, edit]
+            - Length:
+                max: 11
+                groups: [create, edit]
+#        isWinner:
+#            - Choice:
+#                 callback: getChoiceList
+#                 groups: [edit]
+ 
+Lists\ProjectBundle\Entity\Manager:
+    properties:
+        part:
+            - NotBlank: { groups: [create] }
+            - Lists\ProjectBundle\Validator\ManagerMaxPart: { groups: [create] }
+        user:
+            - Lists\ProjectBundle\Validator\ManagerUniqueUser: { groups: [create] }

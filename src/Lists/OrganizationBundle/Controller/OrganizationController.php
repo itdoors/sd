@@ -171,10 +171,9 @@ class OrganizationController extends BaseController
             throw new \Exception('No access');
         }
 
-        $form = $this->createForm(new OrganizationCreateForm());
+        $form = $this->createForm(new OrganizationCreateForm($this->container));
 
         $form->handleRequest($request);
-
 
         return $this->render('ListsOrganizationBundle:Form:organizationCreateForm.html.twig', array (
                 'form' => $form->createView()

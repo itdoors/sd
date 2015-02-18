@@ -2549,7 +2549,7 @@ ALTER TABLE project_gos_tender DROP branch;
 
 ALTER TABLE news_fos_user ADD manual BOOLEAN DEFAULT FALSE;
 alter table article add column file varchar(255);
-
+ALTER TABLE organization ADD client_type_id  DEFAULT NULL;
 
 ALTER TABLE task_pattern ADD responsible_id INT DEFAULT NULL;
 ALTER TABLE task_pattern ADD CONSTRAINT FK_BC5DD664602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -2558,7 +2558,6 @@ ALTER TABLE task ADD CONSTRAINT FK_527EDB25602AD315 FOREIGN KEY (responsible_id)
 CREATE INDEX IDX_527EDB25602AD315 ON task (responsible_id);
 
 -- prod ????
-ALTER TABLE organization DROP client_type_id;
 ALTER TABLE organization ALTER group_id TYPE INT;
 ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
 ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
@@ -2568,4 +2567,295 @@ ALTER TABLE organization ADD is_self BOOLEAN DEFAULT 'false' NOT NULL;
 COMMENT ON COLUMN organization.is_self IS 'Собственная организаци (true=да, flase=нет)';
 UPDATE "public".organization SET "is_self" = true WHERE organization_sign_id = 60;
 UPDATE "public".lookup SET "group" = 'organization_sign_self' WHERE id = 60;
+
+ALTER TABLE pay_master ADD bank_id BIGINT DEFAULT NULL;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699911C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699911C8FB41 ON pay_master (bank_id);
+COMMENT ON COLUMN pay_master.reason IS 'Причина отклонения';
+UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 6 WHERE id = 50;
+UPDATE "public".companystructure SET "lft" = 1, "lvl" = 0, "rgt" = 2, "root" = 7 WHERE id = 51;
+ALTER TABLE companystructure ALTER lft SET NOT NULL;
+ALTER TABLE companystructure ALTER lvl SET NOT NULL;
+ALTER TABLE companystructure ALTER rgt SET NOT NULL;
+ALTER TABLE companystructure ALTER is_hidden SET NOT NULL;
 -- prod +++
+CREATE TABLE project_file_old (id BIGSERIAL NOT NULL, project_id BIGINT DEFAULT NULL, type_id BIGINT DEFAULT NULL, user_id INT DEFAULT NULL, name VARCHAR(128) DEFAULT NULL, shortText VARCHAR(128) DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_2D50D1A7166D1F9C ON project_file_old (project_id);
+CREATE INDEX IDX_2D50D1A7C54C8C93 ON project_file_old (type_id);
+CREATE INDEX IDX_2D50D1A7A76ED395 ON project_file_old (user_id);
+COMMENT ON COLUMN project_file_old.name IS 'Название файла';
+COMMENT ON COLUMN project_file_old.shortText IS 'Краткое описание файла';
+COMMENT ON COLUMN project_file_old.create_datetime IS 'Дата создания файла';
+COMMENT ON COLUMN project_file_old.deleted_datetime IS 'Дата удаления файла';
+CREATE TABLE project_file_type_old (id BIGSERIAL NOT NULL, alias VARCHAR(64) DEFAULT NULL, name VARCHAR(128) NOT NULL, "group" VARCHAR(64) NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN project_file_type_old.alias IS 'Альтернативное название документа';
+COMMENT ON COLUMN project_file_type_old.name IS 'Название типа документа';
+COMMENT ON COLUMN project_file_type_old.group IS 'Группа документов';
+CREATE TABLE project_manager (id SERIAL NOT NULL, project_id INT DEFAULT NULL, user_id INT DEFAULT NULL, part INT DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_6C3A29DC166D1F9C ON project_manager (project_id);
+CREATE INDEX IDX_6C3A29DCA76ED395 ON project_manager (user_id);
+CREATE UNIQUE INDEX unique_project_manager ON project_manager (project_id, user_id);
+COMMENT ON COLUMN project_manager.part IS 'Процент участия';
+CREATE TABLE project_message (id SERIAL NOT NULL, project_id INT DEFAULT NULL, type_id INT DEFAULT NULL, user_id INT DEFAULT NULL, contact_id BIGINT DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, event_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, description TEXT DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_20A33C1A166D1F9C ON project_message (project_id);
+CREATE INDEX IDX_20A33C1AC54C8C93 ON project_message (type_id);
+CREATE INDEX IDX_20A33C1AA76ED395 ON project_message (user_id);
+CREATE INDEX IDX_20A33C1AE7A1254A ON project_message (contact_id);
+COMMENT ON COLUMN project_message.create_datetime IS 'Дата создания (создается автоматически)';
+COMMENT ON COLUMN project_message.event_datetime IS 'Дата события (указывается пользователем)';
+COMMENT ON COLUMN project_message.description IS 'Описание';
+COMMENT ON COLUMN project_message.deleted_datetime IS 'Дата удаления файла';
+CREATE TABLE project_service (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, sortorder INT DEFAULT NULL, report_number INT DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE TABLE project_state_tender_participant (id BIGSERIAL NOT NULL, organization_id BIGINT DEFAULT NULL, project_id INT DEFAULT NULL, summa NUMERIC(10, 2) DEFAULT NULL, is_winner BOOLEAN DEFAULT NULL, reason TEXT DEFAULT NULL, datetime_create TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, datetime_deleted TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_C7903FA32C8A3DE ON project_state_tender_participant (organization_id);
+CREATE INDEX IDX_C7903FA166D1F9C ON project_state_tender_participant (project_id);
+CREATE UNIQUE INDEX unique_state_tender_participan ON project_state_tender_participant (organization_id, project_id);
+COMMENT ON COLUMN project_state_tender_participant.summa IS 'Сумма';
+COMMENT ON COLUMN project_state_tender_participant.is_winner IS 'Победитель';
+COMMENT ON COLUMN project_state_tender_participant.reason IS 'Комментарий';
+COMMENT ON COLUMN project_state_tender_participant.datetime_create IS 'Дата и время добавления участника (автоматически)';
+COMMENT ON COLUMN project_state_tender_participant.datetime_deleted IS 'Дата и время удаления участника';
+CREATE TABLE project_status (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, alias VARCHAR(64) NOT NULL, discriminator VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN project_status.name IS 'Название статуса';
+COMMENT ON COLUMN project_status.alias IS 'Краткое описание статуса';
+CREATE TABLE project_message_type (id SERIAL NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, stay_action_time INT DEFAULT NULL, sortorder INT DEFAULT NULL, report_name VARCHAR(128) DEFAULT NULL, is_report BOOLEAN DEFAULT NULL, report_sortorder INT DEFAULT NULL, PRIMARY KEY(id));
+CREATE TABLE project (id SERIAL NOT NULL, created_user_id INT DEFAULT NULL, closed_user_id INT DEFAULT NULL, organization_id BIGINT DEFAULT NULL, status_id INT DEFAULT NULL, createDatetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, statusAccess BOOLEAN DEFAULT NULL, square DOUBLE PRECISION DEFAULT NULL, description TEXT DEFAULT NULL, is_closed BOOLEAN DEFAULT NULL, datetime_closed TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, reason_closed TEXT DEFAULT NULL, status_change_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, status_text VARCHAR(128) DEFAULT NULL, create_date DATE DEFAULT NULL, deleted_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, discriminator VARCHAR(255) NOT NULL, vdz VARCHAR(128) DEFAULT NULL, advert INT DEFAULT NULL, type_of_procedure VARCHAR(128) DEFAULT NULL, place VARCHAR(128) DEFAULT NULL, delivery VARCHAR(128) DEFAULT NULL, datetime_deadline TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, datetime_opening TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, software VARCHAR(128) DEFAULT NULL, is_participation BOOLEAN DEFAULT NULL, reason TEXT DEFAULT NULL, budget VARCHAR(128) DEFAULT NULL, pf DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_2FB3D0EEE104C1D3 ON project (created_user_id);
+CREATE INDEX IDX_2FB3D0EE80D8506 ON project (closed_user_id);
+CREATE INDEX IDX_2FB3D0EE32C8A3DE ON project (organization_id);
+CREATE INDEX IDX_2FB3D0EE6BF700BD ON project (status_id);
+COMMENT ON COLUMN project.createDatetime IS 'Дата внесения проекта в систему (создается автоматически)';
+COMMENT ON COLUMN project.statusAccess IS 'Статус доступа создания проекта (контролирует менеджер организации)';
+COMMENT ON COLUMN project.square IS 'Площадь';
+COMMENT ON COLUMN project.description IS 'Заметки';
+COMMENT ON COLUMN project.is_closed IS 'Статус проекта (закрыт, открыт)';
+COMMENT ON COLUMN project.datetime_closed IS 'Дата закрытия проекта';
+COMMENT ON COLUMN project.reason_closed IS 'Причина закрытия проекта';
+COMMENT ON COLUMN project.status_change_date IS 'Дата изменения статуса';
+COMMENT ON COLUMN project.status_text IS 'Причина изменения статуса';
+COMMENT ON COLUMN project.create_date IS 'Дата создания проекта';
+COMMENT ON COLUMN project.deleted_datetime IS 'Дата удаления проекта';
+COMMENT ON COLUMN project.vdz IS '№ ВДЗ';
+COMMENT ON COLUMN project.advert IS 'Объявления';
+COMMENT ON COLUMN project.type_of_procedure IS 'Процедура закупки';
+COMMENT ON COLUMN project.place IS 'Место';
+COMMENT ON COLUMN project.delivery IS 'Cрок поставки';
+COMMENT ON COLUMN project.datetime_deadline IS 'Дата и время конечного срока';
+COMMENT ON COLUMN project.datetime_opening IS 'Дата и время раскрытия';
+COMMENT ON COLUMN project.software IS 'Обеспечение';
+COMMENT ON COLUMN project.is_participation IS 'Участвуем или нет в тендере';
+COMMENT ON COLUMN project.reason IS 'Причина учистия или нет в тендере';
+COMMENT ON COLUMN project.budget IS 'Бюджет';
+CREATE TABLE project__kved (project_id INT NOT NULL, kved_id BIGINT NOT NULL, PRIMARY KEY(project_id, kved_id));
+CREATE INDEX IDX_813AF8DA166D1F9C ON project__kved (project_id);
+CREATE INDEX IDX_813AF8DAB530ADF6 ON project__kved (kved_id);
+CREATE TABLE project_state_tender_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_86CA7D29166D1F9C ON project_state_tender_service (project_id);
+CREATE INDEX IDX_86CA7D29ED5CA9E6 ON project_state_tender_service (service_id);
+CREATE TABLE project__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_F51EAD52166D1F9C ON project__project_simple_service (project_id);
+CREATE INDEX IDX_F51EAD52ED5CA9E6 ON project__project_simple_service (service_id);
+CREATE TABLE project_commercial_tender__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_698F8E3B166D1F9C ON project_commercial_tender__project_simple_service (project_id);
+CREATE INDEX IDX_698F8E3BED5CA9E6 ON project_commercial_tender__project_simple_service (service_id);
+CREATE TABLE project_electronic_trading__project_simple_service (project_id INT NOT NULL, service_id INT NOT NULL, PRIMARY KEY(project_id, service_id));
+CREATE INDEX IDX_E67BFE67166D1F9C ON project_electronic_trading__project_simple_service (project_id);
+CREATE INDEX IDX_E67BFE67ED5CA9E6 ON project_electronic_trading__project_simple_service (service_id);
+ALTER TABLE project_file_old ADD CONSTRAINT FK_2D50D1A7166D1F9C FOREIGN KEY (project_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_file_old ADD CONSTRAINT FK_2D50D1A7C54C8C93 FOREIGN KEY (type_id) REFERENCES project_file_type_old (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_file_old ADD CONSTRAINT FK_2D50D1A7A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_manager ADD CONSTRAINT FK_6C3A29DC166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_manager ADD CONSTRAINT FK_6C3A29DCA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1A166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AC54C8C93 FOREIGN KEY (type_id) REFERENCES project_message_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_message ADD CONSTRAINT FK_20A33C1AE7A1254A FOREIGN KEY (contact_id) REFERENCES model_contact (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_state_tender_participant ADD CONSTRAINT FK_C7903FA166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEE104C1D3 FOREIGN KEY (created_user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE80D8506 FOREIGN KEY (closed_user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE6BF700BD FOREIGN KEY (status_id) REFERENCES project_status (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__kved ADD CONSTRAINT FK_813AF8DA166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__kved ADD CONSTRAINT FK_813AF8DAB530ADF6 FOREIGN KEY (kved_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_state_tender_service ADD CONSTRAINT FK_86CA7D29166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_state_tender_service ADD CONSTRAINT FK_86CA7D29ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__project_simple_service ADD CONSTRAINT FK_F51EAD52166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project__project_simple_service ADD CONSTRAINT FK_F51EAD52ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_commercial_tender__project_simple_service ADD CONSTRAINT FK_698F8E3B166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_commercial_tender__project_simple_service ADD CONSTRAINT FK_698F8E3BED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project_electronic_trading__project_simple_service ADD CONSTRAINT FK_E67BFE67ED5CA9E6 FOREIGN KEY (service_id) REFERENCES project_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE UNIQUE INDEX UNIQ_141E7A90E16C6B94 ON project_file_type (alias);
+ALTER TABLE project_file ADD message_id INT DEFAULT NULL;
+ALTER TABLE project_file ADD name_original VARCHAR(128) DEFAULT NULL;
+ALTER TABLE project_file ALTER project_id TYPE INT;
+ALTER TABLE project_file DROP CONSTRAINT FK_B50EFE08166D1F9C;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08537A1329 FOREIGN KEY (message_id) REFERENCES project_message (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_B50EFE08537A1329 ON project_file (message_id);
+COMMENT ON COLUMN project_file.name_original IS 'Оригинальное название файла';
+
+INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Cбор документов', 'collecting_documents', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подача - раскрытие ', 'submission_disclosure', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Подписание договора', 'signing_document', 'state_tender');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Проработка', 'study', 'simple');
+INSERT INTO "public".project_status ("name", "alias", discriminator) VALUES ('Комм. Предложение', 'comm_proposal', 'simple');
+INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
+
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Коммерческое предложение', 'simple', 'commercial_offer');
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Акцепт ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+INSERT INTO "public".project_file_type_old ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1550, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1551, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1554, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1557, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1558, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1559, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1561, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1562, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 5, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1563, NULL, NULL, NULL, NULL, 3, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 1, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 2, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 4, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 6, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 7, NULL);
+INSERT INTO "public".project_file_old (project_id, "name", shorttext, create_datetime, deleted_datetime, type_id, user_id) 	VALUES (1567, NULL, NULL, NULL, NULL, 5, NULL);
+DELETE FROM "public".project_file;
+
+ALTER TABLE project_file ADD discriminator VARCHAR(255) NOT NULL;
+
+ALTER TABLE project_file ADD discriminator VARCHAR(255) DEFAULT NULL;
+ALTER TABLE project_file ADD CONSTRAINT FK_B50EFE08166D1F9C FOREIGN KEY (project_id) REFERENCES project (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE project ADD notification_id INT DEFAULT NULL;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEEF1A9D84 FOREIGN KEY (notification_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_2FB3D0EEEF1A9D84 ON project (notification_id);
+INSERT INTO "public".project_file_type ("alias", "name", "group") VALUES ('commercial_offer', 'Коммерческое предложение', 'simple');
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Звонок/Письмо', 'call', 60, 1, 'Звонок/Письмо', true, 2);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Встреча-презентация', 'presentation', 180, 2, 'Презентация', true, 3);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Аудит', 'audit', 300, 4, 'Аудит', true, 4);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Техническое задание', 'specification', 300, 3, 'Просчет', true, 5);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Ком. Предложение', '', 120, 5, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Переговоры по цене', '', 180, 8, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Переговоры по договору', '', 180, 9, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Подписание контракта', '', 1440, 10, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Мониторинг', '', 0, 12, NULL, NULL, NULL);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Участие в тендере', 'tender', 1440, 7, 'Тендер', true, 1);
+INSERT INTO "public".project_message_type ("name", slug, stay_action_time, sortorder, report_name, is_report, report_sortorder) 	VALUES ('Первая встреча', NULL, NULL, NULL, 'Первая встреча', NULL, NULL);
+
+ALTER TABLE project_message ADD event_datetime_start TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL;
+COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата события (дублируется при создании из eventDatetime )';
+
+
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Документація конкурсних торгів', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Зміни до документації конкурсних торгів', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Інформація про відхилення учасників конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Звіт про результати конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Роз''яснення до документації конкурсних торгів ', 'gos_tender', NULL);
+--INSERT INTO "public".project_file_type ("name", "group", "alias") 	VALUES ('Акцепт ', 'gos_tender', 'acceptance');
+--INSERT INTO "public".project_file_type ("name", "group", "alias")	VALUES ('Протокол розкриття конкурсних торгів', 'gos_tender', 'protocol_open');
+
+
+# app/console sd:group:role-add  PROJECT_STATE_TENDER PROJECT_STATE_TENDER
+# app/console sd:group:role-add  PROJECT_STATE_TENDER_ADMIN PROJECT_STATE_TENDER_ADMIN
+# app/console sd:group:role-add  PROJECT_STATE_TENDER_DIRECTOR PROJECT_STATE_TENDER_DIRECTOR
+
+# app/console sd:user:group-add i.grom PROJECT_STATE_TENDER_ADMIN
+
+# app/console sd:group:role-add  PROJECT_SIMPLE PROJECT_SIMPLE
+# app/console sd:group:role-add  PROJECT_SIMPLE_ADMIN PROJECT_SIMPLE_ADMIN
+# app/console sd:group:role-add  PROJECT_SIMPLE_DIRECTOR PROJECT_SIMPLE_DIRECTOR
+
+
+# app/console sd:group:role-add  SALES PROJECT_SIMPLE
+# app/console sd:group:role-add  SALESADMIN PROJECT_SIMPLE_ADMIN
+
+# app/console  lists:project:migration 
+
+-- prod ---

@@ -4,7 +4,6 @@ namespace Lists\ContactBundle\Controller;
 
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\ContactBundle\Entity\ModelContactRepository;
-use Lists\DepartmentBundle\Entity\Departments;
 
 /**
  * Class ContactController
@@ -13,6 +12,26 @@ class ContactController extends BaseController
 {
     protected $filterNamespace = 'contacts.sales.filters';
 
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function projectAction($id)
+    {
+        $project = $this->getDoctrine()->getManager()->getRepository('ListsProjectBundle:Project')->find($id);
+        $organizationId = $project->getOrganization()->getId();
+        $contacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+            ->getContactsForOrganization($organizationId)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('ListsContactBundle:Contact:organization.html.twig', array(
+            'pagination' => $contacts,
+            'handlingId' => $id,
+            'organizationId' => $organizationId
+        ));
+    }
     /**
      * @param int $handlingId
      *

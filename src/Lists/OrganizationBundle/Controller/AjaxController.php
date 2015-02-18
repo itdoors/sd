@@ -38,7 +38,7 @@ class AjaxController extends BaseController
             throw new \Exception('No access');
         }
 
-        $form = $this->createForm(new OrganizationCreateForm());
+        $form = $this->createForm(new OrganizationCreateForm($this->container));
 
         $form->handleRequest($request);
         
@@ -61,6 +61,16 @@ class AjaxController extends BaseController
             $manager->setRole($lookup);
             $em->persist($manager);
             $em->flush();
+            $em->refresh($organization);
+            
+            $contact = $form->get('contact')->getData();
+            $contact->setModelName('organization');
+            $contact->setModelId($organization->getId());
+            $contact->setUser($user);
+            $contact->setOwner($user);
+            $em->persist($contact);
+            $em->flush();
+
             $result['success'] = true;
             $result['error'] = false;
             $result['organization'] = array(

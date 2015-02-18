@@ -1,0 +1,4 @@
+Lists\ProjectBundle\Entity\ManagerType:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ManagerTypeRepository
+    lifecycleCallbacks: {  }

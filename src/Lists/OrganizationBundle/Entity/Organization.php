@@ -490,7 +490,7 @@ class Organization
      */
     public function __toString ()
     {
-        return $this->getName();
+        return (string) $this->getName();
     }
     /**
      * Add users
@@ -944,6 +944,22 @@ class Organization
     public function removeOrganizationUser (\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
     {
         $this->organizationUsers->removeElement($organizationUsers);
+    }
+    /**
+     * isManager
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     */
+    public function isManager (\SD\UserBundle\Entity\User $user)
+    {
+        $managers = $this->getOrganizationUsers();
+        foreach ($managers as $manager) {
+            if ($manager->getUser() == $user) {
+                return true;
+            }
+        }
+
+        return false;
     }
     /**
      * Get organizationUsers

@@ -1,0 +1,88 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsProjectBundle' %}
+{% block title %}{% trans %}Commercial tender{% endtrans %}{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+                <i class="fa fa-home"></i>
+                <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_project_simple_index') }}" title="{% trans %}Projects{% endtrans %}">{% trans %}Projects{% endtrans %}</a></li>
+        <li><a href=""  title="{% trans %}See project{% endtrans %}">{% trans %}See project{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+	<h3 class="page-title">
+		{% trans %}Project{% endtrans %} <small>{% trans %}see state tender{% endtrans %}</small>
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/admin/pages/css/timeline.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/style.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')}}"/>
+    
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.locale ~'.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}"></script>
+{% endblock %}
+
+{% block modal %}
+    <div id="form_modal_block" class="modal" role="basic"></div>
+{% endblock %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Tender{% endtrans %}</a></li>
+                <li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+                <li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+                <li><a href="#tab_3" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                <li><a href="#tab_4" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_0">
+                    <div id="project_edit" data-url="{{ path('lists_project_commercial_tender_edit', { id: object.id }) }}">
+                        {{ render(controller('ListsProjectBundle:ProjectCommercialTender:edit', { id: object.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab_1">{{  include('ListsProjectBundle:Project:Tab/managers.html.twig') }}</div>
+                <div class="tab-pane" id="tab_2">{{  include('ListsProjectBundle:Project:Tab/contacts.html.twig') }}</div>
+                <div class="tab-pane" id="tab_3">{{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization, showUrl: true}) }}</div>
+                <div class="tab-pane" id="tab_4">
+                    <div id="list_documents" data-url="{{ path('lists_project_commercial_tender_show_documents', { id: object.id }) }}">
+                        {{ render(controller('ListsProjectBundle:ProjectCommercialTender:showDocuments', { id: object.id })) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {{  include('ListsProjectBundle:Project:messages.html.twig') }}
+</div>
+
+{% endblock body %}
