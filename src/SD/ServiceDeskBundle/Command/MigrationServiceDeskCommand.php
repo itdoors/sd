@@ -80,7 +80,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             ');
         $stmt->execute();
 
-        //$this->createIndividuals();
+        $this->createIndividuals();
 
         /*
          * claim
@@ -491,6 +491,11 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
         $conn = $em->getConnection();
 
+        $stmtUser = $conn->prepare('
+          DELETE FROM sd_claim_message WHERE user_id IN (28);
+        ');
+
+        $stmtUser->execute();
         $stmtUser = $conn->prepare('
           DELETE FROM fos_user WHERE id IN (28);
         ');
