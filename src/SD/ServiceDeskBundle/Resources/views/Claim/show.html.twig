@@ -17,7 +17,7 @@
             <a href="{{ path('claim') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
         </li>
         <li>
-            <a href="">
+            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">
                 {{entity.id }} — {{ entity.customer}}
                 {% if entity.disabled %}
                     <span class="badge badge-default">{% trans %}Disabled{% endtrans %}</span>
@@ -33,60 +33,73 @@
         <a class="margin-bottom-10 btn btn-cl green" href="{{ path('claim_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
             {% trans %}Edit{% endtrans %}
         </a>
-        <ul class="list-group">
-			<li class="list-group-item">
-				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
-				{{ entity.type }} </span>
-			</li>
-			<li class="list-group-item">
-				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
-				{{ entity.status }} </span>
-			</li>
-			<li class="list-group-item">
-				{% trans %}Claim Importance{% endtrans %} <span class="badge badge-info">
-				{{ entity.importance }} </span>
-			</li>
-			<li class="list-group-item">
-				{% trans %}Created{% endtrans %} {% if entity.createdAt %}<span class="badge badge-info">
-				{{ entity.createdAt|date('Y-m-d') }} </span>{% endif %}
-			</li>
-			<li class="list-group-item">
-				{% trans %}Closed{% endtrans %} {% if entity.closedAt %}<span class="badge badge-info">
-				{{ entity.closedAt|date('Y-m-d') }} </span>{% endif %}
-			</li>
-			<li class="list-group-item">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-group">
+        			<li class="list-group-item">
+        				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
+        				{{ entity.type }} </span>
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Target{% endtrans %}
+        				{% if entity.targetDepartment is defined %}
+        				    <span class="badge badge-info">{{ entity.targetDepartment }}</span>
+    				    {% elseif entity.targetIndividual is defined %}
+    				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>
+				        {% endif %}
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
+        				{{ entity.status }} </span>
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Claim Importance{% endtrans %} <span class="badge badge-info">
+        				{{ entity.importance }} </span>
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Created{% endtrans %} {% if entity.createdAt %}<span class="badge badge-info">
+        				{{ entity.createdAt|date('Y-m-d') }} </span>{% endif %}
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Closed{% endtrans %} {% if entity.closedAt %}<span class="badge badge-info">
+        				{{ entity.closedAt|date('Y-m-d') }} </span>{% endif %}
+        			</li>
+        		</ul>
+    		</div>
+    		<div class="col-md-4">
                 <div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{% trans %}Cause{% endtrans %}</h3>
-					</div>
-					<div class="panel-body">
+        			<div class="panel-heading">
+        				<h3 class="panel-title">{% trans %}Cause{% endtrans %}</h3>
+        			</div>
+        			<div class="panel-body">
                         {{ entity.text|raw('html') }}
-					</div>
-				</div>
-			</li>
-			<li class="list-group-item">
+        			</div>
+        		</div>
+    		</div>
+    		<div class="col-md-4">
                 <div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
+        			<div class="panel-heading">
+        				<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
+        			</div>
+        			<div class="panel-body">
+        			     {% for rule in entity.claimPerformerRules %}
+        			         <p>{{ rule.claimPerformer }}</p>
+        			     {% endfor %}
+        			</div>
+        		</div>
+    		</div>
+		</div>
+        <div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
+			</div>
+			<div class="panel-body">
+			     {% for message in messages %}
+			         <div class="note note-success">
+						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:MM:s') }}</h5>
+						{{ message.text }}
 					</div>
-					<div class="panel-body">
-					     {% for rule in entity.claimPerformerRules %}
-					         <p>{{ rule.claimPerformer }}</p>
-					     {% endfor %}
-					</div>
-				</div>
-			</li>
-			<li class="list-group-item">
-                <div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
-					</div>
-					<div class="panel-body">
-					     {% for message in entity.messages %}
-					         <p>{{ message }}</p>
-					     {% endfor %}
-					</div>
-				</div>
-			</li>
-		</ul>
+			     {% endfor %}
+			</div>
+		</div>
 {% endblock %}

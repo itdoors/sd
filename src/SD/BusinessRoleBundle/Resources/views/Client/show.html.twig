@@ -26,68 +26,66 @@
         <a class="margin-bottom-10 btn btn-cl green" href="{{ path('client_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
             {% trans %}Edit{% endtrans %}
         </a>
-        <ul class="list-group">
-			<li class="list-group-item">
-				{% trans %}Last name{% endtrans %} <span class="badge badge-info">
-				{{entity.individual.lastName}} </span>
-			</li>
-			<li class="list-group-item">
-				{% trans %}Middle name{% endtrans %} <span class="badge badge-info">
-				{{entity.individual.middleName}} </span>
-			</li>
-			<li class="list-group-item">
-				{% trans %}First name{% endtrans %} <span class="badge badge-info">
-				{{entity.individual.firstName}} </span>
-			</li>
-			<li class="list-group-item">
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+        			<li class="list-group-item">
+        				{% trans %}Last name{% endtrans %} <span class="badge badge-info">
+        				{{entity.individual.lastName}} </span>
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}Middle name{% endtrans %} <span class="badge badge-info">
+        				{{entity.individual.middleName}} </span>
+        			</li>
+        			<li class="list-group-item">
+        				{% trans %}First name{% endtrans %} <span class="badge badge-info">
+        				{{entity.individual.firstName}} </span>
+        			</li>
+        		</ul>
+    		</div>
+    		<div class="col-md-6">
                 <div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{% trans %}Contacts{% endtrans %}</h3>
-					</div>
-					<div class="panel-body">
-					     {% for contact in entity.individual.contacts %}
-					         <p>{{ contact }}</p>
-					     {% endfor %}
-					</div>
+        			<div class="panel-heading">
+        				<h3 class="panel-title">{% trans %}Contacts{% endtrans %}</h3>
+        			</div>
+        			<div class="panel-body">
+        			     {% for contact in entity.individual.contacts %}
+        			         <p>{{ contact }}</p>
+        			     {% endfor %}
+        			</div>
+        		</div>
+    		</div>
+		</div>
+        {% if entity.originOrganizations is defined %}
+            <div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">{% trans %}Origin organizations{% endtrans %}</h3>
 				</div>
-			</li>
-            {% if entity.originOrganizations is defined %}
-				<li class="list-group-item">
-                    <div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">{% trans %}Origin organizations{% endtrans %}</h3>
-						</div>
-						<div class="panel-body">
-						     {% for organization in entity.originOrganizations %}
-						         <p>{{ organization }}</p>
-						     {% endfor %}
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item">
-                    <div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">{% trans %}Granted organizations{% endtrans %}</h3>
-						</div>
-						<div class="panel-body">
-						     {% for organization in entity.grantedOrganizations %}
-						         <p>{{ organization }}</p>
-						     {% endfor %}
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item">
-                    <div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">{% trans %}Departments{% endtrans %}</h3>
-						</div>
-						<div class="panel-body">
-						     {% for department in entity.departments %}
-						         <p>{{ department.city }}, {{ department }} ( {{ department.organization }} )</p>
-						     {% endfor %}
-						</div>
-					</div>
-				</li>
-			{% endif %}
-		</ul>
+				<div class="panel-body">
+				     {% for organization in entity.originOrganizations %}
+				         <p>{{ organization }}</p>
+				     {% endfor %}
+				</div>
+			</div>
+            <div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">{% trans %}Granted organizations{% endtrans %}</h3>
+				</div>
+				<div class="panel-body">
+				     {% for organization in entity.grantedOrganizations %}
+				         <p>{{ organization }}</p>
+				     {% endfor %}
+				</div>
+			</div>
+            <div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">{% trans %}Departments{% endtrans %}</h3>
+				</div>
+				<div class="panel-body">
+				     {% for department in entity.departments %}
+				         <p>{{ department.city }}, {{ department }} ( {{ department.organization }} )</p>
+				     {% endfor %}
+				</div>
+			</div>
+		{% endif %}
 {% endblock %}

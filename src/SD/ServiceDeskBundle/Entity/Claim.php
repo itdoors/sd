@@ -96,15 +96,7 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SD\ServiceDeskBundle\Entity\ClaimPerformerRule")
-     * @ORM\JoinTable(name="claim_claim_performer_rule",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="claim_performer_rule_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\ClaimPerformerRule", mappedBy="claim")
      */
     protected $claimPerformerRules;
 

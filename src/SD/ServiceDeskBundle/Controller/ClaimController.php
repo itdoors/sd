@@ -110,11 +110,16 @@ class ClaimController extends Controller
             throw $this->createNotFoundException('Unable to find Claim entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $messages = $em
+            ->getRepository('SDServiceDeskBundle:ClaimMessage')
+            ->findBy(
+                array('claim' => $entity),
+                array('createdAt' => 'DESC')
+            );
 
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'messages' => $messages
         ));
     }
 
