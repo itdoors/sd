@@ -10,14 +10,21 @@ class ManagerProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
-    public function canSeeStateTender ()
+    public function canSeeProjectStateTender ()
     {
         return true;
     }
     /**
      * @return bool
      */
-    public function canEditStateTender ()
+    public function canEditProjectStateTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectSimple()
     {
         return true;
     }

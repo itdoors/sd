@@ -70,7 +70,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1">{{  include('ListsProjectBundle:Project:Tab/managers.html.twig') }}</div>
                 <div class="tab-pane" id="tab_2">{{  include('ListsProjectBundle:Project:Tab/contacts.html.twig') }}</div>
-                <div class="tab-pane" id="tab_3">{{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }}</div>
+                <div class="tab-pane" id="tab_3">{{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization, showUrl: true}) }}</div>
                 <div class="tab-pane" id="tab_4">
                     <div id="list_documents" data-url="{{ path('lists_project_commercial_tender_show_documents', { id: object.id }) }}">
                         {{ render(controller('ListsProjectBundle:ProjectCommercialTender:showDocuments', { id: object.id })) }}

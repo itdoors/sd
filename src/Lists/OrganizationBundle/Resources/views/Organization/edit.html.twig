@@ -138,6 +138,9 @@
                     {% if access.canEdit %}
                     </a>
                     {% endif %}
+                    {% if showUrl is defined%}
+                        <a href="{{ path('lists_organization_show', { id: organization.id }) }}">({% trans %}Open{% endtrans %})</a>
+                    {% endif %}
                 </td>
                 <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
             </tr>

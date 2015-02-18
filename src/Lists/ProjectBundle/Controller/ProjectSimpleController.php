@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Lists\ProjectBundle\Services\ProjectService;
 use Lists\ProjectBundle\Entity\ManagerProjectType;
-use Lists\ProjectBundle\Entity\ProjectСommercialTender;
 use Lists\ProjectBundle\Filter\ProjectFilter;
+use Lists\ProjectBundle\Entity\ProjectCommercialTender;
 
 /**
  * Class ProjectSimpleController
@@ -60,7 +60,7 @@ class ProjectSimpleController extends ProjectBaseController
                 $object = $form->getData();
             } elseif ($type == 'commercial_tender') {
                 $services = $form->get('services')->getData();
-                $object = new ProjectСommercialTender();
+                $object = new ProjectCommercialTender();
                 $object->setOrganization($form->get('organization')->getData());
                 $object->setDescription($form->get('description')->getData());
                 $object->setCreateDate($form->get('createDate')->getData());
@@ -105,17 +105,19 @@ class ProjectSimpleController extends ProjectBaseController
                 $textForSend = str_replace('${manager}$', $user, $textForSend);
                 $textForSend = str_replace('${organization}$', $object->getOrganization(), $textForSend);
                 $textForSend = str_replace('${url}$', $urlText, $textForSend);
-                $email->send(
-                    null,
-                    'empty-template',
-                    array (
-                        'users' => array($managers[0]->getUser()->getEmail()),
-                        'variables' => array (
-                            '${subject}$' => $subject,
-                            '${text}$' => $textForSend
+                foreach ($managers as $manager) {
+                    $email->send(
+                        null,
+                        'empty-template',
+                        array (
+                            'users' => array($manager->getUser()->getEmail()),
+                            'variables' => array (
+                                '${subject}$' => $subject,
+                                '${text}$' => $textForSend
+                            )
                         )
-                    )
-                );
+                    );
+                }
                 $news = new \Lists\ArticleBundle\Entity\Article();
                 $news->setUser($user);
                 $news->setTitle($subject);

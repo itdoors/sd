@@ -48,6 +48,82 @@
                             {{ form_errors(form.edrpou) }}
                         </div>
                     </div>
+                        
+                    <div class="col-md-6">
+                            <div class="form-group{% if form.contact.lastName.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.lastName, 'Last Name', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"} }) }}
+                            {{ form_errors(form.contact.lastName) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.firstName.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.firstName, 'First name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.contact.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"} }) }}
+                            {{ form_errors(form.contact.firstName) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.firstName.vars.errors|length %} has-error{% endif %}">
+                            {{  form_label(form.contact.middleName, 'Middle Name', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"} }) }}
+                            {{ form_errors(form.contact.middleName) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.birthday.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.birthday, 'Birthday', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.birthday, {'attr': {'class': 'form-control date-picker', 'data-required': '0', 'placeholder': 'Enter Birthday'} }) }}
+                            {{ form_errors(form.contact.birthday) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.level.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.level, 'Contact level', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"} }) }}
+                            {{ form_errors(form.contact.level) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.position.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.position, 'Position', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"} }) }}
+                            {{ form_errors(form.contact.position) }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.type.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.type, 'Contact type', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"} }) }}
+                            {{ form_errors(form.contact.type) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.phone1.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.phone1, 'Phone 1', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"} }) }}
+                            {{ form_errors(form.contact.phone1) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.phone2.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.phone2, 'Phone 2', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"} }) }}
+                            {{ form_errors(form.contact.phone2) }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.contact.email.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.contact.email, 'Email', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.contact.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"} }) }}
+                            {{ form_errors(form.contact.email) }}
+                        </div>
+                    </div>
+                        
                     <div class="col-md-12">
                         <div class="form-actions">
                             {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}

@@ -10,6 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 class ModelContact
 {
     /**
+     * __construct
+     */
+    public function __construct ()
+    {
+        $this->setCreatedatetime(new \DateTime());
+    }
+    /**
+     * __toString()
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getFullName() . ' ' . $this->getPhone1();
+    }
+    /**
      * @var integer
      */
     private $id;
@@ -550,16 +566,6 @@ class ModelContact
     public function getFullName()
     {
         return $this->getLastName() . ' ' . $this->getFirstName();
-    }
-
-    /**
-     * __toString()
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getFullName() . ' ' . $this->getPhone1();
     }
 
     /**
