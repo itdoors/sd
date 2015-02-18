@@ -4,10 +4,12 @@ namespace SD\ServiceDeskBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Form\ClaimType;
+use SD\ServiceDeskBundle\Entity\ClaimMessage;
 
 /**
  * Claim controller.
@@ -33,6 +35,34 @@ class ClaimController extends Controller
             'entities' => $entities,
         ));
     }
+
+    /**
+     * Adds message to the claim (by ajax).
+     * 
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addMsgAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $claim_id = $request->get('claim_id');
+        $text = $request->get('text');
+
+        $claim = $em
+            ->getRepository('SDServiceDeskBundle:Claim')
+            ->find($claim_id);
+
+        $message = new ClaimMessage();
+        $message->setClaim($claim)->setText($text)->setCreatedAt(new \DateTime())->setUser($this->getUser());
+
+        $claim->addMessage($message);
+        $em->persist($message);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
     /**
      * Creates a new Claim entity.
      * 

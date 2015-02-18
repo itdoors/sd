@@ -18,7 +18,7 @@
         </li>
         <li>
             <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">
-                {{entity.id }} — {{ entity.customer}}
+                {{ entity.id }} — {{ entity.customer}}
                 {% if entity.disabled %}
                     <span class="badge badge-default">{% trans %}Disabled{% endtrans %}</span>
                 {% else %}
@@ -36,6 +36,7 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
 {% endblock %}
@@ -100,24 +101,25 @@
         		</div>
     		</div>
 		</div>
-        <div class="panel panel-default">
+        <div id="messages" class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
 			</div>
 			<div class="panel-body">
-			     <div class="summernote"></div>
+			     <div id="summernote"></div>
                  <button id="add_msg" type="button" class="btn btn-default margin-top-10 margin-bottom-15">{% trans %}Add{% endtrans %}</button>
+                 <div id="my_msg"></div>
 			     {% for message in messages %}
 			         <div class="note note-success">
 						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
-						{{ message.text }}
+						{{ message.text | raw('html') }}
 					</div>
 			     {% endfor %}
 			</div>
 		</div>
 		<script>
             $(document).ready(function() {
-                $('.summernote').summernote({
+                $('#summernote').summernote({
                 	lang: 'ru-RU',
                     'disableDragAndDrop': true,
                     'disableLinkTarget': true,
@@ -144,6 +146,36 @@
                         }
                     });
                 }
+                $('#add_msg').click(function (e) {
+                	var currentdate = moment().format('YYYY-MM-DD HH:mm:ss');
+                	var aHTML = $('#summernote').code();
+                	$.ajax({
+                		data: {
+                            claim_id: {{ entity.id }},
+                            text: aHTML
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_add_msg') }}",
+                        beforeSend: function () {
+                        	SD.blockUI($('#messages'));
+                        },
+                        success: function(response) {
+                        	$('#my_msg').prepend('<div class="note note-success"><h5 class="block">{{ app.user }} ' + currentdate + '</h5>' + aHTML + '</div>');
+                        	$('#summernote').code('<p><br></p>');
+                        	SD.unblockUI($('#messages'));
+                        },
+                        error: function(response) {
+                        	$('#summernote').code('<p><br></p>');
+                        	$('#my_msg').prepend(
+                            '<div class="alert alert-warning alert-dismissable">\
+        						<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\
+        						{% trans %}<strong>Warning!</strong> Something went wrong. Please check.{% endtrans %}\
+        					</div>'
+        					);
+                        	SD.unblockUI($('#messages'));
+                        }
+                    });
+                });
             });
         </script>
 {% endblock %}

@@ -33,7 +33,7 @@ class ClaimMessage
      *
      * @ORM\Column(name="is_visible", type="boolean")
      */
-    protected $visible;
+    protected $visible = true;
 
     /**
      * @var \DateTime

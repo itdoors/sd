@@ -33,3 +33,6 @@ claim_delete:
     path:     /{id}/delete
     defaults: { _controller: "SDServiceDeskBundle:Claim:delete" }
     requirements: { _method: post|delete }
+claim_add_msg:
+    path:     /add_msg
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addMsg" }
