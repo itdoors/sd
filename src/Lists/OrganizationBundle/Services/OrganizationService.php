@@ -73,6 +73,9 @@ class OrganizationService
         if ($user->hasRole('ROLE_GOS_TENDER_ADMIN')) {
             $role[] = 'GosTenderAdmin';
         }
+        if ($user->hasRole('ROLE_PAY_MASTER_CONTROLLING')) {
+            $role[] = 'PayMasterControlling';
+        }
 
         return OrganizationAccessFactory::createAccess($role);
     }

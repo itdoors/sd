@@ -77,12 +77,21 @@
                 multiple: true
             }
         });
-         $('#lookup').editable({
+         $('#isPayer').editable({
             url: '{{ path('lists_organization_ajax_save') }}',
-            source: [{% for key, lookup in lookups %}{% if lookup.id == 60 %}
-                {{key > 0 ? '' : '' }}{value:'{{lookup.id}}', text:'{{lookup.name}}'}
-                {% endif%}{% endfor %}
-            ],
+            source: {{  organization.choiceYesNo|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }},
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select is payer{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true,
+                multiple: true
+            }
+        });
+         $('#isSelf').editable({
+            url: '{{ path('lists_organization_ajax_save') }}',
+            source: {{  organization.choiceYesNo|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }},
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
                 placeholder: '{% trans %}Select view{% endtrans %}',
@@ -145,19 +154,28 @@
                 </td>
                 <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
             </tr>
+            {% if access.canEditSelf %}
             <tr>
                 <td>{% trans %}Self organization{% endtrans %}</td>
                 <td>
-                    {% if access.canEditSelf %}
-                    <a href="#" id="lookup" data-type="select2" data-pk="{{ organization.id }}" data-value="{{organization.lookup ? organization.lookup.id : ''}}" data-original-title="{% trans %}Self organization{% endtrans %}">
-                    {% endif %}
-                        {{ organization.lookup }}
-                    {% if access.canEditSelf %}
+                    <a href="#" id="isSelf" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isSelf is not null ? (organization.isSelf ? '1' : '0') : '' }}" data-original-title="{% trans %}Self organization{% endtrans %}">
+                        {{  organization.isSelf is not null ? organization.choiceYesNo[organization.isSelf]|trans : '' }}
                     </a>
-                    {% endif %}
                 </td>
-                <td><span class="text-muted">{% trans %}Select view{% endtrans %}</span></td>
+                <td><span class="text-muted">{% trans %}Enter self organization{% endtrans %}</span></td>
             </tr>
+            {% endif %}
+            {% if access.canEditIsPayer %}
+            <tr>
+                <td>{% trans %}Payer{% endtrans %}</td>
+                <td>
+                    <a href="#" id="isPayer" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isPayer is not null ? (organization.isPayer ? '1' : '0') : '' }}" data-original-title="{% trans %}Payer{% endtrans %}">
+                        {{  organization.isPayer is not null ? organization.choiceYesNo[organization.isPayer]|trans : '' }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter is payer{% endtrans %}</span></td>
+            </tr>
+            {% endif %}
             <tr>
                 <td>{% trans %}View{% endtrans %}</td>
                 <td>

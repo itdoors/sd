@@ -45,13 +45,6 @@ class SalesAdminOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
-    public function canEditSelf ()
-    {
-        return true;
-    }
-    /**
-     * @return bool
-     */
     public function filterFormName ()
     {
         return 'organizationSalesAdminFilterForm';

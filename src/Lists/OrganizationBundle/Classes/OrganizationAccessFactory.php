@@ -30,6 +30,8 @@ class OrganizationAccessFactory
                 $access[] = new DogovorAdminOrganizationAccess();
             } elseif ($role == 'GosTenderAdmin') {
                 $access[] = new GosTenderAdminOrganizationAccess();
+            } elseif ($role == 'PayMasterControlling') {
+                $access[] = new PayMasterControllingOrganizationAccess();
             } else {
                 $access[] = new BasicOrganizationAccess();
             }

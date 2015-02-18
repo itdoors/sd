@@ -204,11 +204,13 @@ class HandlingController extends BaseController
 
         $showMoreInfoIds = array (5, 6);
 
-        $lookups = $this->getDoctrine()
-                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
-
         $serviceOrganization = $this->get('lists_organization.service');
         $accessOrganization = $serviceOrganization->checkAccess($user, $organization);
+
+
+        $lookups = $em->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+
+        
 
         return $this->render('ListsHandlingBundle:Handling:show.html.twig', array (
                 'handling' => $object,
