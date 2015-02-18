@@ -26,7 +26,7 @@ class ClaimDepartment extends Claim
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $targetDepartment
      * 
-     * @return ClaimDep
+     * @return ClaimDepartment
      */
     public function setTargetDepartment(\Lists\DepartmentBundle\Entity\Departments $targetDepartment = null)
     {

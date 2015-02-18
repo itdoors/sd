@@ -45,7 +45,7 @@ class ClaimPerformerRule
     /**
      * @var \SD\BusinessRoleBundle\Entity\ClaimPerformer
      *
-     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\ClaimPerformer", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="SD\BusinessRoleBundle\Entity\ClaimPerformer", fetch="EAGER", cascade="persist")
      * @ORM\JoinColumn(name="performer_id", referencedColumnName="id")
      */
     protected $claimPerformer;

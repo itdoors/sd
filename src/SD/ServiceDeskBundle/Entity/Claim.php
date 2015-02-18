@@ -423,6 +423,7 @@ final class StatusType extends \ITDoors\DBAL\EnumType
     const MATCHED = 'sta_smeta_conform';
     const CANCELED = 'sta_smeta_cancel';
     const ESTIMATING = 'sta_smet';
+    const REJECTED = 'sta_sclose_smclose_cwait';
     protected static $name = 'statusType';
 
     protected static $values = array(
@@ -434,7 +435,8 @@ final class StatusType extends \ITDoors\DBAL\EnumType
         self::CREATING,
         self::MATCHED,
         self::CANCELED,
-        self::ESTIMATING
+        self::ESTIMATING,
+        self::REJECTED
     );
 }
 

@@ -21,6 +21,7 @@ use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
 use SD\ServiceDeskBundle\Entity\ClaimType;
 use SD\ServiceDeskBundle\Entity\ImportanceType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
+use SD\ServiceDeskBundle\Entity\StatusType;
 use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,11 +64,19 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
         $em = $doctrine->getManager();
 
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+
         $conn = $em->getConnection();
+
+        //test
 
         //updating organizations for clients/
         $stmt = $conn->prepare('
         UPDATE client SET organization_id = (SELECT organization_id FROM client_organization WHERE client_id = client.id Limit 1)  WHERE organization_id IS NULL
+            ');
+        $stmt->execute();
+        $stmt = $conn->prepare('
+        UPDATE claim SET status_id =1  WHERE status_id IS NULL
             ');
         $stmt->execute();
 
@@ -82,6 +91,9 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
         $claims = $stmtClaim->fetchAll();
 
         foreach ($claims as $claim) {
+            $res = memory_get_usage ().'--'.'new claim:-->'.$claim['id'];
+            $output->writeln($res);
+
             $claimId = $claim['id'];
             $claimTypeId = $claim['claimtype_id'];
             $claimDepartmentId = $claim['departments_id'];
@@ -116,7 +128,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
 
             //new claim here
-            $res = 'new claim';
+            $res = memory_get_usage ().'--'.'new claim';
             $output->writeln($res);
 
             $sd_claim = new ClaimDepartment();
@@ -176,14 +188,16 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             //$sd_claim->setMessages();
             //$sd_claim->setCustomer();
             //$sd_claim->addClaimPerformerRules();
-            $res = $claimType.' - '.$claimStatus.' - '.$claimCreateDatetime.' - '.$claimCloseDatetime.' - '.$claimDescription.' - '.$claimDepartmentId;
+            $res = memory_get_usage ().'--'.$claimType.' - '.$claimStatus.' - '.$claimCreateDatetime.' - '.$claimCloseDatetime.' - '.$claimDescription.' - '.$claimDepartmentId;
             $output->writeln($res);
-            $res = '______________________________________';
+            $res = memory_get_usage ().'--'.'______________________________________';
             $output->writeln($res);
 
             $em->persist($sd_claim);
+            $em->flush();
+            $em->refresh($sd_claim);
 
-            $this->insertCommentMessage($sd_claim, $claimId, $output);
+            $this->insertCommentMessage($sd_claim, $claimId, $output, $em);
             /*
             * claim user
             */
@@ -194,8 +208,17 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
             $claimUsers = $stmtClaimUser->fetchAll();
 
+            $usersInside = array();
             foreach ($claimUsers as $claimUser) {
+
                 $userId = $claimUser['user_id'];
+                if ($userId == 445) {
+                    $userId = 243;
+                }
+
+                $res = memory_get_usage ().'--'.'next user:-->'.$userId.'-'.$claimUser['userkey'].'-claim:'.$claimId;
+                $output->writeln($res);
+
                 $claimId = $claimUser['claim_id'];
 
                 $userType = $claimUser['userkey'];
@@ -205,7 +228,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                 // but firstly create them
                 //if client
                 if ($userType == 'client') {
-                    $res = 'create client-->';
+                    $res = memory_get_usage ().'--'.'create client-->';
                     $output->writeln($res);
 
                     /*
@@ -250,7 +273,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $userSexID = $user['sex_id'];
                     $userCreatedAt = $user['created_at'];*/
 
-                    $res = 'create individual contacts for user -->'.$claimUser['user_id'];
+                    $res = memory_get_usage ().'--'.'create individual contacts for user -->'.$claimUser['user_id'];
                     $output->writeln($res);
 
                     $user = $doctrine->getRepository('SDUserBundle:User')
@@ -279,7 +302,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $contact_3->setValue($userEmail);
                     $em->persist($contact_3);
 
-                    $res = $userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
+                    $res = memory_get_usage ().'--'.$userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
                     $output->writeln($res);
 
                     // new client here
@@ -287,7 +310,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         ->getRepository('ListsOrganizationBundle:Organization')
                         ->find($clientOrganizationId);
 
-                    $res = 'create Company Client-->';
+                    $res = memory_get_usage ().'--'.'create Company Client-->';
                     $output->writeln($res);
 
                     $roles = $sd_individual->getBusinessRoles();
@@ -309,7 +332,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                         if (!in_array($organization, $checkClientOrganizations->toArray())) {
                             $sd_client->addOriginOrganization($organization);
-                            $res = 'add organization :'.$organization;
+                            $res = memory_get_usage ().'--'.'add organization :'.$organization;
                             $output->writeln($res);
                         }
 
@@ -334,12 +357,12 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                                 ->find($departmentId);
 
                             $sd_client->addDepartment($departmentAddClient);
-                            $res = 'add department :'.$departmentAddClient;
+                            $res = memory_get_usage ().'--'.'add department :'.$departmentAddClient;
                             $output->writeln($res);
 
                             $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
                             if (!in_array($departmentAddClient->getOrganization(), $checkClientGrantedOrganizations->toArray())) {
-                                $res = 'add granted organization :'.$departmentAddClient->getOrganization();
+                                $res = memory_get_usage ().'--'.'add granted organization :'.$departmentAddClient->getOrganization();
                                 $output->writeln($res);
                                 $sd_client->addGrantedOrganization($departmentAddClient->getOrganization());
 
@@ -361,7 +384,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         foreach ($clientOrganizations as $clientOrganization) {
                             $clientId = $clientOrganization['client_id'];
                             $organizationId = $clientOrganization['organization_id'];
-                            $res = 'add client granted organization :'.$organizationId;
+                            $res = memory_get_usage ().'--'.'add client granted organization :'.$organizationId;
                             $output->writeln($res);
 
                             $organization = $doctrine
@@ -371,12 +394,15 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                             $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
                             if (!in_array($organization, $checkClientGrantedOrganizations->toArray())) {
                                 $sd_client->addGrantedOrganization($organization);
-                                $res = 'add client granted organization :'.$organization;
+                                $res = memory_get_usage ().'--'.'add client granted organization :'.$organization;
                                 $output->writeln($res);
 
                             }
                         }
+                        $sd_claim->setCustomer($sd_client);
                         $em->persist($sd_client);
+                        $em->persist($sd_claim);
+
 
                     }
 
@@ -385,6 +411,10 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     //}
                 } else {
+                    if (in_array($claimUser['user_id'], $usersInside)) {
+                        continue;
+                    }
+                    $usersInside[] = $claimUser['user_id'];
                     // performers here
                     $stmtUser = $conn->prepare('
                           SELECT * FROM fos_user WHERE id = ' . $claimUser['user_id'] . '
@@ -396,9 +426,6 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     $user = $doctrine->getRepository('SDUserBundle:User')
                         ->find($claimUser['user_id']);
-
-                    $res = 'create individual contacts-->';
-                    $output->writeln($res);
 
                     // new individual for client here
                     $sd_individual = $user->getIndividual();
@@ -412,27 +439,45 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         }
                     }
                     if ($needRole) {
+                        $res = memory_get_usage ().'--'.'create new CLAIM PERFORMER ROLE--> '.$claimUser['user_id'];
+                        $output->writeln($res);
+
                         $claimPerformer = new ClaimPerformer();
                         $claimPerformer->setIndividual($sd_individual);
                         $em->persist($claimPerformer);
-
+                        $em->flush();
+                        $em->refresh($claimPerformer);
                     }
+                    $res = memory_get_usage ().'--'.'create new CLAIM PERFORMER RULE--> '.$claimUser['user_id'];
+                    $output->writeln($res);
 
                     $performerRule = new ClaimPerformerRule();
                     $performerRule->setClaimPerformer($claimPerformer);
-                    $performerRule->setClaim($sd_claim);
+
                     $performerRule->setCanEditFinanceData(false);
                     $performerRule->setCanPostToClients(false);
                     $performerRule->setClaimUpdated($isRead);
+                    $performerRule->setClaim($sd_claim);
+                    $sd_claim->addClaimPerformerRule($performerRule);
                     $em->persist($performerRule);
+                    $em->persist($sd_claim);
+                    $em->flush();
+                    //$em->refresh($performerRule);
+                    //$em->persist($sd_claim);
 
+                    $res = memory_get_usage ().'--'.'next id:-->'.$claimUser['user_id'];
+                    $output->writeln($res);
                     //em
                 }
 
-
             }
+            $res = memory_get_usage ().'--'.'done:-->';
+            $output->writeln($res);
+
             $em->flush();
+            //$em->getUnitOfWork()->clear();
             $em->clear();
+
         }
 
 
@@ -544,20 +589,24 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             }
 
             //em
+            if ($user['id'] == 445) {
+                $user['id'] = 243;
+            }
 
             $userDb = $doctrine->getRepository('SDUserBundle:User')->find($user['id']);
             $userDb->setIndividual($individual);
 
             $em->flush();
+            //$em->getUnitOfWork()->clear();
             $em->clear();
         }
 
     }
 
-    private function insertCommentMessage($claim, $oldClaimId, $output) {
+    private function insertCommentMessage($claim, $oldClaimId, $output, $em) {
         $doctrine = $this->getContainer()->get('doctrine');
 
-        $em = $doctrine->getManager();
+        //$em = $doctrine->getManager();
 
         $conn = $em->getConnection();
 
@@ -580,20 +629,22 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $message->setText($comment['description']);
             $message->setVisible(true);
             $message->setUser($user);
-            $res = 'new message--> '.$comment['description'];
+            $res = memory_get_usage ().'--'.'new message--> '.$comment['description'];
             $em->persist($message);
             $output->writeln($res);
 
             if ($counter == 2000) {
                 $counter = 0;
                 $em->flush();
-                $em->clear();
             }
 
             //em
         }
+
+        $res = memory_get_usage ().'--'.'<-- messages inserted--> ';
+        $output->writeln($res);
+
         $em->flush();
-        $em->clear();
 
     }
 }

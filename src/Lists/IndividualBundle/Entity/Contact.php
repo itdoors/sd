@@ -119,4 +119,8 @@ class Contact
     {
         return $this->individual;
     }
+
+    public function __toString() {
+        return $this->value;
+    }
 }
