@@ -37,7 +37,7 @@ class ClaimController extends Controller
     }
 
     /**
-     * Adds message to the claim (by ajax).
+     * Adds message to the claim (via ajax).
      * 
      * @param Request $request
      *
@@ -48,13 +48,18 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
         $claim_id = $request->get('claim_id');
         $text = $request->get('text');
+        $createdAt = $request->get('createdAt'); 
 
         $claim = $em
             ->getRepository('SDServiceDeskBundle:Claim')
             ->find($claim_id);
 
         $message = new ClaimMessage();
-        $message->setClaim($claim)->setText($text)->setCreatedAt(new \DateTime())->setUser($this->getUser());
+        $message
+            ->setClaim($claim)
+            ->setText($text)
+            ->setCreatedAt((new \DateTime())->setTimestamp($createdAt))
+            ->setUser($this->getUser());
 
         $claim->addMessage($message);
         $em->persist($message);

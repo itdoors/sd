@@ -147,12 +147,14 @@
                     });
                 }
                 $('#add_msg').click(function (e) {
-                	var currentdate = moment().format('YYYY-MM-DD HH:mm:ss');
+                    var now = moment();
+                	var currentdate = now.format('YYYY-MM-DD HH:mm:ss');
                 	var aHTML = $('#summernote').code();
                 	$.ajax({
                 		data: {
                             claim_id: {{ entity.id }},
-                            text: aHTML
+                            text: aHTML,
+                            createdAt: now.unix()
                         },
                         type: "POST",
                         url: "{{ path('claim_add_msg') }}",
