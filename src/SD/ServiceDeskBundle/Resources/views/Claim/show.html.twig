@@ -1,52 +1,92 @@
 {% extends '::base.html.twig' %}
+{% trans_default_domain 'SDServiceDeskBundle' %}
+{% block title %}{% trans %}Claims{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Claims{% endtrans %}
+    </h3>
+{% endblock %}
 
-{% block body -%}
-    <h1>Claim</h1>
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('claim') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="">
+                {{entity.id }} — {{ entity.customer}}
+                {% if entity.disabled %}
+                    <span class="badge badge-default">{% trans %}Disabled{% endtrans %}</span>
+                {% else %}
+                    <span class="badge badge-danger">{% trans %}Active{% endtrans %}</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+{% endblock %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Types</th>
-                <td>{{ entity.type }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ entity.status }}</td>
-            </tr>
-            <tr>
-                <th>Importance</th>
-                <td>{{ entity.importance }}</td>
-            </tr>
-            <tr>
-                <th>Createdat</th>
-                <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Closedat</th>
-                <td>{{ entity.closedAt|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Disabled</th>
-                <td>{{ entity.disabled }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('claim') }}">
-            Back to the list
+{% block body %}
+        <a class="margin-bottom-10 btn btn-cl green" href="{{ path('claim_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
+            {% trans %}Edit{% endtrans %}
         </a>
-    </li>
-    <li>
-        <a href="{{ path('claim_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+        <ul class="list-group">
+			<li class="list-group-item">
+				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
+				{{ entity.type }} </span>
+			</li>
+			<li class="list-group-item">
+				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
+				{{ entity.status }} </span>
+			</li>
+			<li class="list-group-item">
+				{% trans %}Claim Importance{% endtrans %} <span class="badge badge-info">
+				{{ entity.importance }} </span>
+			</li>
+			<li class="list-group-item">
+				{% trans %}Created{% endtrans %} {% if entity.createdAt %}<span class="badge badge-info">
+				{{ entity.createdAt|date('Y-m-d') }} </span>{% endif %}
+			</li>
+			<li class="list-group-item">
+				{% trans %}Closed{% endtrans %} {% if entity.closedAt %}<span class="badge badge-info">
+				{{ entity.closedAt|date('Y-m-d') }} </span>{% endif %}
+			</li>
+			<li class="list-group-item">
+                <div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{% trans %}Cause{% endtrans %}</h3>
+					</div>
+					<div class="panel-body">
+                        {{ entity.text|raw('html') }}
+					</div>
+				</div>
+			</li>
+			<li class="list-group-item">
+                <div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
+					</div>
+					<div class="panel-body">
+					     {% for rule in entity.claimPerformerRules %}
+					         <p>{{ rule.claimPerformer }}</p>
+					     {% endfor %}
+					</div>
+				</div>
+			</li>
+			<li class="list-group-item">
+                <div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
+					</div>
+					<div class="panel-body">
+					     {% for message in entity.messages %}
+					         <p>{{ message }}</p>
+					     {% endfor %}
+					</div>
+				</div>
+			</li>
+		</ul>
 {% endblock %}

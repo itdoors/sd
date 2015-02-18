@@ -1,28 +1,93 @@
 {% extends '::base.html.twig' %}
+{% trans_default_domain 'SDBusinessRoleBundle' %}
+{% block title %}{% trans %}Clients{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Clients{% endtrans %}
+    </h3>
+{% endblock %}
 
-{% block body -%}
-    <h1>Client</h1>
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('client') }}" title="{% trans %}Clients{% endtrans %}">{% trans %}Clients{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="">{{entity.individual}}</a>
+        </li>
+    </ul>
+{% endblock %}
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('client') }}">
-            Back to the list
+{% block body %}
+        <a class="margin-bottom-10 btn btn-cl green" href="{{ path('client_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
+            {% trans %}Edit{% endtrans %}
         </a>
-    </li>
-    <li>
-        <a href="{{ path('client_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+        <ul class="list-group">
+			<li class="list-group-item">
+				{% trans %}Last name{% endtrans %} <span class="badge badge-info">
+				{{entity.individual.lastName}} </span>
+			</li>
+			<li class="list-group-item">
+				{% trans %}Middle name{% endtrans %} <span class="badge badge-info">
+				{{entity.individual.middleName}} </span>
+			</li>
+			<li class="list-group-item">
+				{% trans %}First name{% endtrans %} <span class="badge badge-info">
+				{{entity.individual.firstName}} </span>
+			</li>
+			<li class="list-group-item">
+                <div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{% trans %}Contacts{% endtrans %}</h3>
+					</div>
+					<div class="panel-body">
+					     {% for contact in entity.individual.contacts %}
+					         <p>{{ contact }}</p>
+					     {% endfor %}
+					</div>
+				</div>
+			</li>
+            {% if entity.originOrganizations is defined %}
+				<li class="list-group-item">
+                    <div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{% trans %}Origin organizations{% endtrans %}</h3>
+						</div>
+						<div class="panel-body">
+						     {% for organization in entity.originOrganizations %}
+						         <p>{{ organization }}</p>
+						     {% endfor %}
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+                    <div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{% trans %}Granted organizations{% endtrans %}</h3>
+						</div>
+						<div class="panel-body">
+						     {% for organization in entity.grantedOrganizations %}
+						         <p>{{ organization }}</p>
+						     {% endfor %}
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+                    <div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{% trans %}Departments{% endtrans %}</h3>
+						</div>
+						<div class="panel-body">
+						     {% for department in entity.departments %}
+						         <p>{{ department.city }}, {{ department }} ( {{ department.organization }} )</p>
+						     {% endfor %}
+						</div>
+					</div>
+				</li>
+			{% endif %}
+		</ul>
 {% endblock %}
