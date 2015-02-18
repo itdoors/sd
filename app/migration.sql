@@ -2857,4 +2857,4 @@ COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата
 
 # app/console  lists:project:migration 
 
--- prod ---
+-- prod ++++

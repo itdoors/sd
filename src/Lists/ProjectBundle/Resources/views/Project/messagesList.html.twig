@@ -48,7 +48,7 @@
                                                 <div class="panel-body">
                                                     {% for file in item.files %}
                                                         <div>
-                                                            <a href="{{ url('it_doors_file_access_get_if_authenticated', {path: file.getWebPath() ,timestamp:'now'|date('U') }) }}">{{ file.nameOriginal }}</a> 
+                                                            <a href="{{ url('it_doors_file_access_get_if_authenticated', {path: file.getWebPath() ,timestamp:'now'|date('U') }) }}">{{ file.nameOriginal ? file.nameOriginal : 'Document'|raw}}</a> 
                                                         </div>
                                                     {% endfor %}
                                                 </div>
