@@ -10,12 +10,16 @@ use Lists\IndividualBundle\Entity\Contact;
 use Lists\IndividualBundle\Entity\ContactType;
 use Lists\IndividualBundle\Entity\Individual;
 use SD\BusinessRoleBundle\Entity\ClaimPerformer;
+use SD\BusinessRoleBundle\Entity\ClaimResponsibility;
 use SD\BusinessRoleBundle\Entity\CompanyClient;
+use SD\BusinessRoleBundle\Entity\GriffinStaff;
+use SD\BusinessRoleBundle\Entity\Responsibility;
 use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Entity\ClaimDepartment;
 use SD\ServiceDeskBundle\Entity\ClaimMessage;
 use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
 use SD\ServiceDeskBundle\Entity\ClaimType;
+use SD\ServiceDeskBundle\Entity\ImportanceType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
 use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -67,7 +71,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             ');
         $stmt->execute();
 
-        $this->createIndividuals();
+        //$this->createIndividuals();
 
         /*
          * claim
@@ -153,9 +157,16 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             }
             $sd_claim->setType($claimType);
             $sd_claim->setStatus($claimStatus);
-            //$sd_claim->setImportance();!!!
-            $sd_claim->setCreatedAt($claimCreateDatetime);
-            $sd_claim->setClosedAt($claimCloseDatetime);
+
+
+            $sd_claim->setImportance(ImportanceType::UNPLANNED);
+
+            $sd_claim->setCreatedAt(new \DateTime($claimCreateDatetime));
+            $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
+
+            if ($claimDescription == null) {
+                $claimDescription = '';
+            }
             $sd_claim->setText($claimDescription);
             $sd_claim->setDisabled(false);
             $department = $doctrine
@@ -169,6 +180,8 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $output->writeln($res);
             $res = '______________________________________';
             $output->writeln($res);
+
+            $em->persist($sd_claim);
 
             $this->insertCommentMessage($sd_claim, $claimId, $output);
             /*
@@ -252,17 +265,19 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $contact_1->setIndividual($sd_individual);
                     $contact_1->setType(ContactType::TEL);
                     $contact_1->setValue($clientPhone);
+                    $em->persist($contact_1);
 
                     $contact_2 = new Contact();
                     $contact_2->setIndividual($sd_individual);
                     $contact_2->setType(ContactType::TEL);
                     $contact_2->setValue($clientMobilephone);
+                    $em->persist($contact_2);
 
                     $contact_3 = new Contact();
                     $contact_3->setIndividual($sd_individual);
                     $contact_3->setType(ContactType::EMAIL);
                     $contact_3->setValue($userEmail);
-
+                    $em->persist($contact_3);
 
                     $res = $userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
                     $output->writeln($res);
@@ -275,80 +290,94 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $res = 'create Company Client-->';
                     $output->writeln($res);
 
-                    $sd_client = new CompanyClient();
-                    $sd_client->setIndividual($sd_individual);
-                    //$sd_client->addGrantedOrganization();
+                    $roles = $sd_individual->getBusinessRoles();
+                    $needRole = true;
 
-                    $checkClientOrganizations = $sd_client->getOriginOrganizations();
-
-                    if (!in_array($organization, $checkClientOrganizations->toArray())) {
-                        $sd_client->addOriginOrganization($organization);
-                        $res = 'add organization :'.$organization;
-                        $output->writeln($res);
+                    foreach($roles as $role) {
+                        if ($role instanceof ClaimPerformer) {
+                            $needRole = false;
+                            $claimPerformer = $role;
+                        }
                     }
+                    if ($needRole) {
+                        $sd_client = new CompanyClient();
+                        $sd_client->setIndividual($sd_individual);
 
-                    /*
-                     * client departments
-                     */
-                    $stmtClientDepartment = $conn->prepare('
-                          SELECT * FROM client_departments
-                            WHERE client_id =' . $clientId . '
+                        //$sd_client->addGrantedOrganization();
 
-                        ');
-                    $stmtClientDepartment->execute();
+                        $checkClientOrganizations = $sd_client->getOriginOrganizations();
 
-                    $clientDepartments = $stmtClientDepartment->fetchAll();
-
-                    foreach ($clientDepartments as $clientDepartment) {
-                        $clientId = $clientDepartment['client_id'];
-                        $departmentId = $clientDepartment['departments_id'];
-
-                        $departmentAddClient = $doctrine
-                            ->getRepository('ListsDepartmentBundle:Departments')
-                            ->find($departmentId);
-
-                        $sd_client->addDepartment($departmentAddClient);
-                        $res = 'add department :'.$departmentAddClient;
-                        $output->writeln($res);
-
-                        $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
-                        if (!in_array($departmentAddClient->getOrganization(), $checkClientGrantedOrganizations->toArray())) {
-                            $res = 'add granted organization :'.$departmentAddClient->getOrganization();
+                        if (!in_array($organization, $checkClientOrganizations->toArray())) {
+                            $sd_client->addOriginOrganization($organization);
+                            $res = 'add organization :'.$organization;
                             $output->writeln($res);
-                            $sd_client->addGrantedOrganization($departmentAddClient->getOrganization());
+                        }
+
+                        /*
+                         * client departments
+                         */
+                        $stmtClientDepartment = $conn->prepare('
+                              SELECT * FROM client_departments
+                                WHERE client_id =' . $clientId . '
+
+                            ');
+                        $stmtClientDepartment->execute();
+
+                        $clientDepartments = $stmtClientDepartment->fetchAll();
+
+                        foreach ($clientDepartments as $clientDepartment) {
+                            $clientId = $clientDepartment['client_id'];
+                            $departmentId = $clientDepartment['departments_id'];
+
+                            $departmentAddClient = $doctrine
+                                ->getRepository('ListsDepartmentBundle:Departments')
+                                ->find($departmentId);
+
+                            $sd_client->addDepartment($departmentAddClient);
+                            $res = 'add department :'.$departmentAddClient;
+                            $output->writeln($res);
+
+                            $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
+                            if (!in_array($departmentAddClient->getOrganization(), $checkClientGrantedOrganizations->toArray())) {
+                                $res = 'add granted organization :'.$departmentAddClient->getOrganization();
+                                $output->writeln($res);
+                                $sd_client->addGrantedOrganization($departmentAddClient->getOrganization());
+
+                            }
 
                         }
 
-                    }
+                        /*
+                         * client organization
+                         */
+                        $stmtClientOrganization = $conn->prepare('
+                              SELECT * FROM client_organization
+                                WHERE client_id =' . $clientId . '
+                            ');
+                        $stmtClientOrganization->execute();
 
-                    /*
-                     * client organization
-                     */
-                    $stmtClientOrganization = $conn->prepare('
-                          SELECT * FROM client_organization
-                            WHERE client_id =' . $clientId . '
-                        ');
-                    $stmtClientOrganization->execute();
+                        $clientOrganizations = $stmtClientOrganization->fetchAll();
 
-                    $clientOrganizations = $stmtClientOrganization->fetchAll();
-
-                    foreach ($clientOrganizations as $clientOrganization) {
-                        $clientId = $clientOrganization['client_id'];
-                        $organizationId = $clientOrganization['organization_id'];
-                        $res = 'add client granted organization :'.$organizationId;
-                        $output->writeln($res);
-
-                        $organization = $doctrine
-                            ->getRepository('ListsOrganizationBundle:Organization')
-                            ->find($clientOrganizationId);
-
-                        $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
-                        if (!in_array($organization, $checkClientGrantedOrganizations->toArray())) {
-                            $sd_client->addGrantedOrganization($organization);
-                            $res = 'add client granted organization :'.$organization;
+                        foreach ($clientOrganizations as $clientOrganization) {
+                            $clientId = $clientOrganization['client_id'];
+                            $organizationId = $clientOrganization['organization_id'];
+                            $res = 'add client granted organization :'.$organizationId;
                             $output->writeln($res);
 
+                            $organization = $doctrine
+                                ->getRepository('ListsOrganizationBundle:Organization')
+                                ->find($clientOrganizationId);
+
+                            $checkClientGrantedOrganizations = $sd_client->getGrantedOrganizations();
+                            if (!in_array($organization, $checkClientGrantedOrganizations->toArray())) {
+                                $sd_client->addGrantedOrganization($organization);
+                                $res = 'add client granted organization :'.$organization;
+                                $output->writeln($res);
+
+                            }
                         }
+                        $em->persist($sd_client);
+
                     }
 
                     //$output->writeln($echo);
@@ -385,6 +414,8 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     if ($needRole) {
                         $claimPerformer = new ClaimPerformer();
                         $claimPerformer->setIndividual($sd_individual);
+                        $em->persist($claimPerformer);
+
                     }
 
                     $performerRule = new ClaimPerformerRule();
@@ -393,13 +424,15 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $performerRule->setCanEditFinanceData(false);
                     $performerRule->setCanPostToClients(false);
                     $performerRule->setClaimUpdated($isRead);
+                    $em->persist($performerRule);
 
                     //em
                 }
 
 
             }
-
+            $em->flush();
+            $em->clear();
         }
 
 
@@ -448,18 +481,75 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
         $users = $stmtUser->fetchAll();
 
         foreach ($users as $user) {
+            $stmtStaff = $conn->prepare('SELECT * FROM stuff WHERE user_id='.$user['id']);
+
+            $stmtStaff->execute();
+
+            $stuff = $stmtStaff->fetchAll();
+
             $individual = new Individual();
             $individual->setFirstName($user['first_name']);
-            $individual->setBirthday($user['birthday']);
+            $individual->setBirthday(new \DateTime($user['birthday']));
             $individual->setLastName($user['last_name']);
             $individual->setMiddleName($user['middle_name']);
+            $em->persist($individual);
+
+
+            if ($stuff) {
+                $stuff = $stuff[0];
+                $contact = new Contact();
+                $contact->setIndividual($individual);
+                $contact->setValue($stuff['mobilephone']);
+                $contact->setType(ContactType::TEL);
+                $em->persist($contact);
+
+                $staff = new GriffinStaff();
+                $staff->setIndividual($individual);
+
+                if ($stuff['companystructure_id']) {
+                    $companyStructure = $doctrine->getRepository('ListsCompanystructureBundle:Companystructure')
+                        ->find($stuff['companystructure_id']);
+
+                    $staff->setCompanystructure($companyStructure);
+                }
+
+                $em->persist($staff);
+
+                $stmtStaffResponsibilities = $conn->prepare('SELECT * FROM stuff_departments
+                    LEFT JOIN claimtype ON stuff_departments.claimtype_id = claimtype.id
+                  WHERE stuff_id='.$stuff['id'].' ORDER BY departments_id');
+
+                $stmtStaffResponsibilities->execute();
+
+                $stuffResponsibilities = $stmtStaffResponsibilities->fetchAll();
+
+                $departmentStuff_id = null;
+                $claimTypes = array();
+                foreach ($stuffResponsibilities as $stuffResponsibility) {
+                    $claimTypes[] = $stuffResponsibility['name'];
+                    if ($stuffResponsibility['departments_id'] != $departmentStuff_id && $departmentStuff_id != null) {
+                        $departmentStuff_id = $stuffResponsibility['departments_id'];
+                        $departmentStuff = $doctrine->getRepository('ListsDepartmentBundle:Departments')->find($departmentStuff_id);
+
+                        $responsibility = new ClaimResponsibility();
+                        $responsibility->setStaff($staff);
+                        $responsibility->setDepartment($departmentStuff);
+                        $responsibility->setClaimTypes($claimTypes);
+                        $em->persist($responsibility);
+
+
+                    }
+                }
+
+            }
 
             //em
 
             $userDb = $doctrine->getRepository('SDUserBundle:User')->find($user['id']);
             $userDb->setIndividual($individual);
 
-            //em
+            $em->flush();
+            $em->clear();
         }
 
     }
@@ -478,38 +568,32 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
         $stmtComment->execute();
 
         $comments = $stmtComment->fetchAll();
-
+        $counter = 0;
         foreach ($comments as $comment) {
+            $counter++;
             $user = $doctrine->getRepository('SDUserBundle:User')
                 ->find($comment['user_id']);
 
             $message = new ClaimMessage();
             $message->setClaim($claim);
-            $message->setCreatedAt($comment['createdatetime']);
+            $message->setCreatedAt(new \DateTime($comment['createdatetime']));
             $message->setText($comment['description']);
             $message->setVisible(true);
             $message->setUser($user);
             $res = 'new message--> '.$comment['description'];
+            $em->persist($message);
             $output->writeln($res);
+
+            if ($counter == 2000) {
+                $counter = 0;
+                $em->flush();
+                $em->clear();
+            }
 
             //em
         }
-    }
-
-    private function addStuff() {
-        $doctrine = $this->getContainer()->get('doctrine');
-
-        $em = $doctrine->getManager();
-
-        $conn = $em->getConnection();
-
-        $stmtStuff = $conn->prepare('
-          SELECT * FROM stuff
-        ');
-
-        $stmtStuff->execute();
-
-        $stuffs = $stmtStuff->fetchAll();
+        $em->flush();
+        $em->clear();
 
     }
 }

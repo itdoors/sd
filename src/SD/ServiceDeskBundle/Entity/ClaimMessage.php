@@ -53,7 +53,7 @@ class ClaimMessage
     /**
      * @var \SD\ServiceDeskBundle\Entity\Claim
      *
-     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", inversedBy="messages", cascade="persist")
      * @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      */
     protected $claim;

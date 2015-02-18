@@ -14,7 +14,7 @@ class ClaimDepartment extends Claim
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments
      *
-     * @ORM\ManyToOne(targetEntity="Lists\DepartmentBundle\Entity\Departments")
+     * @ORM\ManyToOne(targetEntity="Lists\DepartmentBundle\Entity\Departments", cascade="persist")
      * @ORM\JoinColumn(name="targetDepartment_id", referencedColumnName="id")
      */
     private $targetDepartment;
