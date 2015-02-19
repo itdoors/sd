@@ -59,16 +59,6 @@ class MigrationCommand extends ContainerAwareCommand
 //        }
 //        $output->writeln('END SERVICE');
         
-        // перенос услуг
-        $organizationServices = $this->em->getRepository('ListsOrganizationBundle:OrganizationServiceCover')->findAll();
-        foreach ($organizationServices as $val) {
-            $oldService = $val->getService();
-            $newService = $oldService->getService();
-            $val->setProjectService($newService);
-            $this->em->persist($val);
-        }
-        $this->em->flush();
-        $output->writeln('END SERVICE ORGANIZATION');
         
          // перенос проектов
         $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
