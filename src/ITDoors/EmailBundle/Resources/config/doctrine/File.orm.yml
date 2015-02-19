@@ -1,7 +1,7 @@
 # src/ITDoors/EmailBundle/Resources/config/doctrine/File.orm.yml
 ITDoors\EmailBundle\Entity\File:
     type: entity
-    table: file
+    table: email_file
     repositoryClass: ITDoors\EmailBundle\Entity\FileRepository
     id:
         id:
