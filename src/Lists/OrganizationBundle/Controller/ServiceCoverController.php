@@ -4,8 +4,6 @@ namespace Lists\OrganizationBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use ITDoors\CommonBundle\Services\BaseService;
-use Lists\HandlingBundle\Entity\HandlingService;
-use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\OrganizationBundle\Entity\OrganizationServiceCoverRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,11 +36,12 @@ class ServiceCoverController extends BaseFilterController
      */
     public function listAction($organizationId)
     {
+        $em = $this->getDoctrine()->getEntityManager();
         $isEdit = false;
         /** @var OrganizationServiceCoverRepository $oscr */
         $oscr = $this->get('organization.service_cover.repository');
-        /** @var HandlingServiceRepository $handlingServiceRepository */
-        $handlingServiceRepository = $this->get('handling.service.repository');
+
+        $allServices = $em->getRepository('ListsProjectBundle:Service')->findAll();
         /** @var BaseService $baseService */
         $baseService = $this->get('itdoors_common.base.service');
 
@@ -51,9 +50,6 @@ class ServiceCoverController extends BaseFilterController
         $options = array();
         $options['id']['type'] = 'text';
         $options['organizationName']['type'] = 'text';
-
-        /** @var HandlingService[] $allServices */
-        $allServices = $handlingServiceRepository->findAll();
 
         foreach ($allServices as $service) {
             if (!isset($serviceCovers[$service->getId()])) {
@@ -79,7 +75,7 @@ class ServiceCoverController extends BaseFilterController
     }
 
     /**
-     * @param int $organizationId
+     * @param integer $organizationId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

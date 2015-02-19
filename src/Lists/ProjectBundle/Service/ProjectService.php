@@ -452,11 +452,13 @@ class ProjectService
         $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
         $notification = $project->getNotification();
         if ($notification) {
-            $newsFosUser = $this->em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
+            $newsFosUsers = $this->em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
                 'news' => $notification
             ));
-            $newsFosUser->setViewed(new \DateTime());
-            $this->em->persist($newsFosUser);
+            foreach ($newsFosUsers as $newsFosUser) {
+                $newsFosUser->setViewed(new \DateTime());
+                $this->em->persist($newsFosUser);
+            }
         }
         if ($project) {
             $project->setStatusAccess($statusAccess);

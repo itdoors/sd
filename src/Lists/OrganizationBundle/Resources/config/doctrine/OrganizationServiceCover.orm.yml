@@ -48,6 +48,15 @@ Lists\OrganizationBundle\Entity\OrganizationServiceCover:
             nulllable: false
             column: creator_id
     manyToOne:
+        service:
+            targetEntity: Lists\ProjectBundle\Entity\Service
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                project_service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             joinColumn:
