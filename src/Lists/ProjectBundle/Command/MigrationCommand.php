@@ -50,6 +50,7 @@ class MigrationCommand extends ContainerAwareCommand
             $servicesNew->setSlug($service->getSlug());
             $servicesNew->setSortorder($service->getSortorder());
             $this->em->persist($servicesNew);
+            $this->em->flush();
         }
         if (!$servicesNew && $service->getSlug() == 'gos_tender') {
             $servicesNew = new ServiceProjectStateTender();
@@ -58,6 +59,7 @@ class MigrationCommand extends ContainerAwareCommand
             $servicesNew->setSlug($service->getSlug());
             $servicesNew->setSortorder($service->getSortorder());
             $this->em->persist($servicesNew);
+            $this->em->flush();
         }
         return $servicesNew;
     }
@@ -165,12 +167,13 @@ class MigrationCommand extends ContainerAwareCommand
             }
             $isAddProject = true;
             $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
-            ->findBy(array ('group' => 'simple'));
+                ->findBy(array ('group' => 'simple'));
             foreach ($fileTypes as $typeFile) {
                 $file = new \Lists\ProjectBundle\Entity\FileProject();
                 $file->setProject($project);
                 $file->setType($typeFile);
                 $this->em->persist($file);
+                $this->em->flush();
             }
         } else {
             $fileTypes = $this->em->getRepository('ListsProjectBundle:ProjectFileType')
@@ -186,6 +189,7 @@ class MigrationCommand extends ContainerAwareCommand
                     $file->setProject($project);
                     $file->setType($typeFile);
                     $this->em->persist($file);
+                    $this->em->flush();
                 }
             }
         }
@@ -240,6 +244,7 @@ class MigrationCommand extends ContainerAwareCommand
             $type->setSortorder($val->getSortorder());
             $type->setStayActionTime($val->getStayActionTime());
             $this->em->persist($type);
+            $this->em->flush();
         }
         return $type;
     }
@@ -352,6 +357,12 @@ class MigrationCommand extends ContainerAwareCommand
         $output->writeln('START');
         /** @var \Doctrine\ORM\EntityManager $em */
         $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        
+        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
+        foreach ($services as $val) {
+            $this->saveService($val);
+        }
+        $output->writeln('END SERVICE');
         
         // перенос типы обращений
         $types = $this->em->getRepository('ListsHandlingBundle:HandlingMessageType')->findBy(array(), array('id' => 'ASC'));
