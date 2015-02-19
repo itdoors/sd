@@ -4,3 +4,4 @@ This file is not a valid PDF, Excel, DOC or DOCX: Можно загружать 
 Max part :maxPart: Максимальный процент участия :maxPart
 Manager already: Этот менеджер уже добавлен ранее
 Range resolution date from :minDate to :dateMax: Диапазон разрешенной даты от :minDate до :dateMax
+Min date :dateMax: Минимальная дата :dateMax
