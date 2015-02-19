@@ -36,10 +36,12 @@ class MaxEventDatetimeValidator extends ConstraintValidator
         if (!$root instanceof \Lists\ProjectBundle\Entity\Message) {
             throw new \Exception('Error instanceof');
         }
-        $dateMin = $root->getEventDatetimeStart();
-        $dateMax = $root->getEventDatetimeStart()->modify('+15 days');
+        $createDate = $root->getEventDatetimeStart();
+        $dateMin = $createDate;
+        $dateMax = clone $createDate;
+        $dateMax->modify('+15 days');
         $dateEvent = $root->getEventDatetime();
-        if ($dateMin < $dateEvent || $dateMax > $dateEvent) {
+        if ($dateMin > $dateEvent || $dateMax < $dateEvent) {
             $this->context->addViolation(
                 'Range resolution date from :minDate to :dateMax',
                 array(':minDate' => $dateMin->format('d-m-Y H:i:s'), ':dateMax' => $dateMax->format('d-m-Y H:i:s'))
