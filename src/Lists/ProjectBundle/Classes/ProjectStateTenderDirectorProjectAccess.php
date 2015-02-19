@@ -28,4 +28,11 @@ class ProjectStateTenderDirectorProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canCreateProjectStateTender ()
+    {
+        return true;
+    }
 }
