@@ -53,122 +53,122 @@ class MigrationCommand extends ContainerAwareCommand
 //        $output->writeln('END TYPE');
         
         // перенос услуг
-//        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
-//        foreach ($services as $val) {
-//            $this->saveService($val);
-//        }
-//        $output->writeln('END SERVICE');
+        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
+        foreach ($services as $val) {
+            $this->saveService($val);
+        }
+        $output->writeln('END SERVICE');
         
         // перенос услуг
-        $organizationServices = $this->em->getRepository('ListsOrganizationBundle:OrganizationServiceCover')->findAll();
-        foreach ($organizationServices as $val) {
-            $oldServiceId = $val->getServiceId();
-            $output->writeln($oldServiceId.'+');
-            $oldService = $this->em->getRepository('ListsHandlingBundle:HandlingService')->find($oldServiceId);
-            $output->writeln($oldService->getId().'--');
-            $newService = $oldService->getService();
-            $val->setProjectService($newService);
-            $this->em->persist($val);
-        }
-        $this->em->flush();
-        $output->writeln('END SERVICE ORGANIZATION');
-        
+//        $organizationServices = $this->em->getRepository('ListsOrganizationBundle:OrganizationServiceCover')->findAll();
+//        foreach ($organizationServices as $val) {
+//            $oldServiceId = $val->getServiceId();
+//            $output->writeln($oldServiceId.' old');
+//            $oldService = $this->em->getRepository('ListsHandlingBundle:HandlingService')->find($oldServiceId);
+//            $newService = $oldService->getService();
+//            $output->writeln($newService->getId().' new');
+//            $val->setProjectService($newService);
+//            $this->em->persist($val);
+//        }
+//        $this->em->flush();
+//        $output->writeln('END SERVICE ORGANIZATION');
+//        
          // перенос проектов
-        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
-        foreach ($handlings as $val) {
-            $this->handlingToProject($val, $output);
-        }
-        $this->em->flush();
-        $output->writeln('flush project');
-         // перенос сообщений
-        foreach ($handlings as $val1) {
-                $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
-                    array(
-                        'createDatetime' => $val1->getCreatedatetime(),
-                        'organization' => $val1->getOrganization(),
-                        'createDate' => $val1->getCreatedate(),
-                        'userCreated' => $val1->getUser()
-                    ));
-            if ($project) {
-                $this->message($val1, $project, $output);
-            }
-        }
-        $output->writeln('END MESSAGE');
+//        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
+//        foreach ($handlings as $val) {
+//            $this->handlingToProject($val, $output);
+//        }
+//        $this->em->flush();
+//        $output->writeln('flush project');
+//         // перенос сообщений
+//        foreach ($handlings as $val1) {
+//                $project = $this->em->getRepository('ListsProjectBundle:Project')->findOneBy(
+//                    array(
+//                        'createDatetime' => $val1->getCreatedatetime(),
+//                        'organization' => $val1->getOrganization(),
+//                        'createDate' => $val1->getCreatedate(),
+//                        'userCreated' => $val1->getUser()
+//                    ));
+//            if ($project) {
+//                $this->message($val1, $project, $output);
+//            }
+//        }
+//        $output->writeln('END MESSAGE');
         
          // перенос проектов гос тендеры
-        $gosTenders = $this->em->getRepository('ListsHandlingBundle:ProjectGosTender')->findAll();
-        foreach ($gosTenders as $val) {
-            $project = $this->em->getRepository('ListsProjectBundle:ProjectStateTender')->findOneBy(
-                array(
-                    'advert' => $val->getAdvert()
-                ));
-            if (!$project) {
-                $project = new \Lists\ProjectBundle\Entity\ProjectStateTender();
-                $project->setCreateDate($val->getProject()->getCreatedate());
-                $project->setCreateDatetime($val->getProject()->getCreatedatetime());
-                $project->setBudget($val->getProject()->getBudget());
-                $project->setDatetimeClosed($val->getProject()->getDatetimeClosed()?$val->getProject()->getDatetimeClosed():$val->getProject()->getClosedatetime());
-                $project->setDatetimeDeadline($val->getDatetimeDeadline());
-                $project->setDatetimeOpening($val->getDatetimeOpening());
-                $project->setDeletedDatetime($val->getProject()->getDeletedAt());
-                $project->setDelivery($val->getDelivery());
-                $project->setDescription($val->getProject()->getDescription());
-                $project->setIsClosed($val->getProject()->getIsClosed());
-                $project->setIsParticipation($val->getIsParticipation());
-                $project->setOrganization($val->getProject()->getOrganization());
-                $project->setPf($val->getProject()->getPf1());
-                $project->setPlace($val->getPlace());
-                $project->setReason($val->getReason());
-                $project->setReasonClosed($val->getProject()->getReasonClosed());
-                $project->setSoftware($val->getSoftware());
-                $project->setSquare($val->getProject()->getSquare());
-                $project->setStatusAccess(true);
-                $project->setStatusChangeDate($val->getProject()->getStatusChangeDate());
-                $status = $this->saveStatus($val->getProject()->getStatus());
-                if (!$status) {
-                    $output->writeln('status not found' .' for '.$val->getId());
-                }
-                $project->setStatus($status);
-                $services = $val->getProject()->getHandlingServices();
-                foreach ($services as $service) {
-                    $output->writeln($service);
-                    $serviceProject = $this->saveService($service);
-                    $project->addService($serviceProject);
-                }
-                
-                $project->setTypeOfProcedure($val->getTypeOfProcedure());
-                $project->setUserClosed($val->getProject()->getClosedUser()? $val->getProject()->getClosedUser(): $val->getProject()->getCloser());
-                $project->setUserCreated($val->getProject()->getUser());
-                $project->setVdz($val->getVdz());
-                $project->setAdvert($val->getAdvert());
-                
-                $files = $val->getProject()->getFiles();
-                $this->em->persist($project);
-                $this->em->flush();
-                foreach ($files as $file) {
-                    $type = $this->em->getRepository('ListsProjectBundle:ProjectFileType')->find($file->getType()->getId());
-                    $addFile = new \Lists\ProjectBundle\Entity\FileProject();
-                    $addFile->setCreateDatetime($file->getCreateDatetime());
-                    $addFile->setDeletedDatetime($file->getDeletedDatetime());
-                    $addFile->setFile($file->getFile());
-                    $addFile->setName($file->getName());
-                    $addFile->setProject($project);
-                    $addFile->setShortText($file->getShortText());
-                    $addFile->setType($type);
-                    $addFile->setUser($file->getUser());
-                    $this->em->persist($addFile);
-                    
-                    $this->copyFile($file, $project, $file->getFile(), $output);
-                    
-                }
-                
-                
-                $this->saveManager($val->getProject(), $project, $output);
-            }
-        }
-        
-        
-        $output->writeln('END PROJECT GOS TENDER');
+//        $gosTenders = $this->em->getRepository('ListsHandlingBundle:ProjectGosTender')->findAll();
+//        foreach ($gosTenders as $val) {
+//            $project = $this->em->getRepository('ListsProjectBundle:ProjectStateTender')->findOneBy(
+//                array(
+//                    'advert' => $val->getAdvert()
+//                ));
+//            if (!$project) {
+//                $project = new \Lists\ProjectBundle\Entity\ProjectStateTender();
+//                $project->setCreateDate($val->getProject()->getCreatedate());
+//                $project->setCreateDatetime($val->getProject()->getCreatedatetime());
+//                $project->setBudget($val->getProject()->getBudget());
+//                $project->setDatetimeClosed($val->getProject()->getDatetimeClosed()?$val->getProject()->getDatetimeClosed():$val->getProject()->getClosedatetime());
+//                $project->setDatetimeDeadline($val->getDatetimeDeadline());
+//                $project->setDatetimeOpening($val->getDatetimeOpening());
+//                $project->setDeletedDatetime($val->getProject()->getDeletedAt());
+//                $project->setDelivery($val->getDelivery());
+//                $project->setDescription($val->getProject()->getDescription());
+//                $project->setIsClosed($val->getProject()->getIsClosed());
+//                $project->setIsParticipation($val->getIsParticipation());
+//                $project->setOrganization($val->getProject()->getOrganization());
+//                $project->setPf($val->getProject()->getPf1());
+//                $project->setPlace($val->getPlace());
+//                $project->setReason($val->getReason());
+//                $project->setReasonClosed($val->getProject()->getReasonClosed());
+//                $project->setSoftware($val->getSoftware());
+//                $project->setSquare($val->getProject()->getSquare());
+//                $project->setStatusAccess(true);
+//                $project->setStatusChangeDate($val->getProject()->getStatusChangeDate());
+//                $status = $this->saveStatus($val->getProject()->getStatus());
+//                if (!$status) {
+//                    $output->writeln('status not found' .' for '.$val->getId());
+//                }
+//                $project->setStatus($status);
+//                $services = $val->getProject()->getHandlingServices();
+//                foreach ($services as $service) {
+//                    $output->writeln($service);
+//                    $serviceProject = $this->saveService($service);
+//                    $project->addService($serviceProject);
+//                }
+//                
+//                $project->setTypeOfProcedure($val->getTypeOfProcedure());
+//                $project->setUserClosed($val->getProject()->getClosedUser()? $val->getProject()->getClosedUser(): $val->getProject()->getCloser());
+//                $project->setUserCreated($val->getProject()->getUser());
+//                $project->setVdz($val->getVdz());
+//                $project->setAdvert($val->getAdvert());
+//                
+//                $files = $val->getProject()->getFiles();
+//                $this->em->persist($project);
+//                $this->em->flush();
+//                foreach ($files as $file) {
+//                    $type = $this->em->getRepository('ListsProjectBundle:ProjectFileType')->find($file->getType()->getId());
+//                    $addFile = new \Lists\ProjectBundle\Entity\FileProject();
+//                    $addFile->setCreateDatetime($file->getCreateDatetime());
+//                    $addFile->setDeletedDatetime($file->getDeletedDatetime());
+//                    $addFile->setFile($file->getFile());
+//                    $addFile->setName($file->getName());
+//                    $addFile->setProject($project);
+//                    $addFile->setShortText($file->getShortText());
+//                    $addFile->setType($type);
+//                    $addFile->setUser($file->getUser());
+//                    $this->em->persist($addFile);
+//                    
+//                    $this->copyFile($file, $project, $file->getFile(), $output);
+//                    
+//                }
+//                
+//                
+//                $this->saveManager($val->getProject(), $project, $output);
+//            }
+//        }
+//        
+//        
+//        $output->writeln('END PROJECT GOS TENDER');
 
         $this->em->flush();
         $output->writeln('END');
