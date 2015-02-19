@@ -70,9 +70,17 @@ class ArticleBlogFormType extends AbstractType
 //             'required' => false
 //         ))
             ->add('text', 'textarea', array())
-            ->add('file', 'file', array(
+//             ->add('file', 'file', array(
+//                 'required' => false,
+//                 'mapped' => false
+//             ));
+            ->add('files', 'collection', array(
                 'required' => false,
-                'mapped' => false
+                'type'=> new \Lists\ArticleBundle\Form\BlogFileForm(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'delete_empty'=> true
             ));
     }
 

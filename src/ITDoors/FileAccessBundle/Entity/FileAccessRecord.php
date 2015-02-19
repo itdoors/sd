@@ -6,31 +6,47 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FileAccessRecord
+ * 
+ * @ORM\Table(name="file_access_history")
+ * @ORM\Entity
  */
 class FileAccessRecord
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255)
      */
     private $path;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="action", type="string", length=50)
      */
     private $action;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
      * @var \SD\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 

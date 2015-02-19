@@ -395,4 +395,44 @@ class Article
     {
         return $this->ration;
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $files;
+
+    /**
+     * Add file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\BlogFile $file
+     *
+     * @return Article
+     */
+    public function addFile(\ITDoors\FileAccessBundle\Entity\BlogFile $file)
+    {
+        $file->setArticle($this);
+        $this->files[] = $file;
+    
+        return $this;
+    }
+    
+    /**
+     * Remove file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\BlogFile $file
+     */
+    public function removeFile(\ITDoors\FileAccessBundle\Entity\BlogFile $file)
+    {
+        $this->files->removeElement($file);
+    }
+    
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
 }
