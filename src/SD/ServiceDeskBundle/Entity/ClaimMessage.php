@@ -59,6 +59,13 @@ class ClaimMessage
     protected $claim;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimMessageFile", mappedBy="claim")
+     */
+    protected $files;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -186,5 +193,47 @@ class ClaimMessage
     public function getVisible()
     {
         return $this->visible;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\ClaimMessageFile $file
+     * 
+     * @return ClaimMessage
+     */
+    public function addFile(\ITDoors\FileAccessBundle\Entity\ClaimMessageFile $file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Remove file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\ClaimMessageFile $file
+     */
+    public function removeFile(\ITDoors\FileAccessBundle\Entity\ClaimMessageFile $file)
+    {
+        $this->files->removeElement($file);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 }

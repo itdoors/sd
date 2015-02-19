@@ -101,10 +101,18 @@ class Claim
     protected $claimPerformerRules;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimFile", mappedBy="claim")
+     */
+    protected $files;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->claimPerformerRules = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -377,6 +385,40 @@ class Claim
     public function getClaimPerformerRules()
     {
         return $this->claimPerformerRules;
+    }
+
+    /**
+     * Add file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\ClaimFile $file
+     * 
+     * @return Claim
+     */
+    public function addFile(\ITDoors\FileAccessBundle\Entity\ClaimFile $file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Remove file
+     *
+     * @param \ITDoors\FileAccessBundle\Entity\ClaimFile $file
+     */
+    public function removeFile(\ITDoors\FileAccessBundle\Entity\ClaimFile $file)
+    {
+        $this->files->removeElement($file);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 }
 
