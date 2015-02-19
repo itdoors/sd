@@ -2,7 +2,7 @@ Lists\ProjectBundle\Entity\Message:
     properties:
         eventDatetime:
             - NotBlank: { groups: [create, edit] }
-            - Lists\ProjectBundle\Validator\MaxEventDatetime: { groups: [edit] }
+            - Lists\ProjectBundle\Validator\MaxEventDatetime: { groups: [create, edit] }
 
 Lists\ProjectBundle\Entity\Project:
     properties:
