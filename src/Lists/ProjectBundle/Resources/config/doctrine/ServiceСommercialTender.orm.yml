@@ -1,0 +1,3 @@
+Lists\ProjectBundle\Entity\ServiceСommercialTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ServiceСommercialTenderRepository

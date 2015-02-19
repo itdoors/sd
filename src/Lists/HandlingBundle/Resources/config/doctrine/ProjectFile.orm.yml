@@ -1,6 +1,6 @@
 Lists\HandlingBundle\Entity\ProjectFile:
     type: entity
-    table: project_file
+    table: project_file_old
     gedmo:
         soft_deleteable:
           field_name: deletedDatetime

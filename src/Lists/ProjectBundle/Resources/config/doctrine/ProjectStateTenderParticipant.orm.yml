@@ -1,0 +1,74 @@
+Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
+    type: entity
+    table: project_state_tender_participant
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectStateTenderParticipantRepository
+    gedmo:
+        soft_deleteable:
+            field_name: datetimeDeleted
+            time_aware: false
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        summa:
+            type: decimal(10)
+            scale: 2
+            length: 128
+            nullable: true
+            options:
+                comment: Сумма
+        isWinner:
+            type: boolean
+            nullable: true
+            column: is_winner
+            options:
+                comment: Победитель
+        reason:
+            type: text
+            nullable: true
+            options:
+                comment: Комментарий
+        datetimeCreate:
+            type: datetime
+            nullable: false
+            column: datetime_create
+            options:
+                comment: Дата и время добавления участника (автоматически)
+        datetimeDeleted:
+            type: datetime
+            nullable: true
+            column: datetime_deleted
+            options:
+                comment: Дата и время удаления участника            
+    manyToOne:
+        participant:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            nullable: false
+            options:
+                comment: Участник
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        projectStateTender:
+            targetEntity: ProjectStateTender
+            cascade: {  }
+            mappedBy: null
+            inversedBy: participants
+            nullable: false
+            options:
+                comment: Участник
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    uniqueConstraints:
+        unique_state_tender_participan:
+            columns: [organization_id, project_id]
+    lifecycleCallbacks: {  }

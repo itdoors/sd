@@ -1,0 +1,23 @@
+<a class="btn green" id="add-docunebt-add-btn" href="#" data-toggle="modal">
+    {% trans from 'ListsProjectBundle'%}Add document{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+    'selector' : '#add-docunebt-add-btn',
+    'formType' : 'addDocumentForm',
+    'successFunctions' : {
+        'list_documents' : 'ITDoorsAjax.updateList'
+    },
+'serviceDefault' : {
+        'alias' : 'lists_project.service',
+        'method' : 'addDocumentFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'lists_project.service',
+        'method' : 'saveAddDocumentForm'
+    },
+    'defaults' : {
+        'project' : object.id
+    },
+    'target' : '#form_modal_block',
+    'html' : 'ListsProjectBundle:Form:addDocumentForm.html.twig'
+}) }}

@@ -68,6 +68,7 @@ class AppKernel extends Kernel
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
             new SD\ServiceDeskBundle\SDServiceDeskBundle(),
             new SD\BusinessRoleBundle\SDBusinessRoleBundle(),
+            new Lists\ProjectBundle\ListsProjectBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

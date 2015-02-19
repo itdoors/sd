@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Lists\HandlingBundle\Entity\HandlingUser;
+use Lists\ProjectBundle\Entity\Project;
+use Lists\ProjectBundle\Entity\GosTender;
 
 /**
  * Class GosTenderController
@@ -27,6 +29,12 @@ class GosTenderController extends ProjectController
      */
     public function createAction (Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $project = new GosTender();
+        $project->setNumber('111');
+        $em->persist($project);
+         $em->flush();
+         
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
         /** @var HandlingService $service */

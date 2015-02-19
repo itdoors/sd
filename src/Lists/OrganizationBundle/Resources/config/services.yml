@@ -24,6 +24,7 @@ parameters:
     lists_organization.service.class: Lists\OrganizationBundle\Services\OrganizationService
 
     lists_organization.service.cover.service.class: Lists\OrganizationBundle\Services\OrganizationServiceCoverService
+    lists_organization.organization_create_form.form.class: Lists\OrganizationBundle\Form\OrganizationCreateForm
 
 services:
     lists_organization.form.organizationFilterForm:
@@ -31,6 +32,11 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationSalesFilterForm }
+    lists_organization.form.organizationCreateForm:
+        class: %lists_organization.organization_create_form.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationCreateForm }
     lists_organization.form.organizationSalesDispatcherFilterForm:
         class: %lists_organization.sales.dispatcher.filter.form.class%
         arguments: [@service_container]

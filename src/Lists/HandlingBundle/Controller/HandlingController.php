@@ -340,7 +340,7 @@ class HandlingController extends BaseController
                 'access' => $access
         ));
     }
-     /**
+    /**
      * @param int $handlingId
      *
      * @return \Symfony\Component\HttpFoundation\Response

@@ -1,0 +1,13 @@
+Lists\ProjectBundle\Entity\FileMessage:
+    type: entity
+    manyToOne:
+        message:
+            targetEntity: Lists\ProjectBundle\Entity\Message
+            cascade: {  }
+            mappedBy: null
+            inversedBy: files
+            joinColumns:
+                message_id:
+                    referencedColumnName: id
+            orphanRemoval: true
+    lifecycleCallbacks: {  }

@@ -21,9 +21,9 @@
                 <th>{% trans %}Region{% endtrans %} </th>
                 <th>{% trans %}Scope{% endtrans %} </th>
                 <th>{% trans %}Managers{% endtrans %} </th>
-                {% if isShowProject %}
+                {#% if isShowProject %}
                 <th>{% trans %}Actions{% endtrans %} </th>
-                {% endif %}
+                {% endif %#}
             </tr>
         </thead>
         <tbody>
@@ -48,21 +48,21 @@
                     <td>{{ item.regionName|e }}</td>
                     <td>{{ item.scopeName|e }}</td>
                     <td>{{ item.fullNames|e }}</td>
-                    {% if isShowProject %}
-                    {% set role = 'sales' %}
-                    {% if is_granted('ROLE_SALESADMIN') %}
-                        {% set role = 'sales_admin' %}
-                    {% elseif is_granted('ROLE_DOGOVORADMIN') %}
-                        {% set role = 'dogovor_admin' %}
-                    {% endif %}
-                    <td>
-                        <a
-                            class="btn default btn-xs green-stripe"
-                            href="{{ path('lists_handling_add_organization_filter', {'organizationId': item.organizationId}) }}">
-                            {% trans %}Projects{% endtrans %}
-                        </a>
-                    </td>
-                    {% endif %}
+                    {#% if isShowProject %}
+                        {% set role = 'sales' %}
+                        {% if is_granted('ROLE_SALESADMIN') %}
+                            {% set role = 'sales_admin' %}
+                        {% elseif is_granted('ROLE_DOGOVORADMIN') %}
+                            {% set role = 'dogovor_admin' %}
+                        {% endif %}
+                        <td>
+                            <a
+                                class="btn default btn-xs green-stripe"
+                                href="{{ path('lists_handling_add_organization_filter', {'organizationId': item.organizationId}) }}">
+                                {% trans %}Projects{% endtrans %}
+                            </a>
+                        </td>
+                    {% endif %#}
                 </tr>
             {% endfor %}
         </tbody>

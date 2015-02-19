@@ -1,0 +1,5 @@
+Lists\ContactBundle\Entity\ModelContact:
+    properties:
+        firstName:
+            - NotBlank: { groups: [create] }
+            

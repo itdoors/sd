@@ -179,6 +179,8 @@ My manuals: Мои инструкции
 You have: У Вас
 new messages: новых сообщений
 See all messages: Просмотреть все
+See all news: Посмотреть все новости
+See all notification: Посмотреть все оповещения
 Ok: Ознакомлен!
 
 # Истечение сессий
@@ -195,7 +197,10 @@ Appointment: Назначение
 Deputies: Заместители
 Calculator: Калькулятор
 Organization don`t found: Организация не найдена
-Create gos. tender: Создать гос. тендер
-List gos. tenders: Список гос. тендеров
+Create tender: Создать тендер
+List tenders: Список тендеров
 Activies: Активные
 Closed: Закрытые
+List project: Список проектов
+Add a file: Добавить файл
+State tenders: Гос. тендеры

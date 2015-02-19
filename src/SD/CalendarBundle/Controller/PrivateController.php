@@ -120,43 +120,46 @@ class PrivateController extends SalesController
      */
     public function getEventsByUserIds($userIds, $startTimestamp, $endTimestamp)
     {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
         $events = array();
         /** @var Translator $translator */
         $translator = $this->container->get('translator');
         /** get handling */
-        if (
-            $this->getUser()->hasRole('ROLE_SALES')
-            ||
-            $this->getUser()->hasRole('ROLE_SALESADMIN')
-            ||
-            $this->getUser()->hasRole('ROLE_SALEDISPATCHER')) {
-            /** @var HandlingMessageViewRepository $handlingMessagesViewRepository */
-            $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
+        if ($user->hasRole('ROLE_SALES') || $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $projects = $em->getRepository('ListsProjectBundle:Project')->getLastMessages($userIds, $startTimestamp, $endTimestamp);
 
-            $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
-
-            $handlingMessages = $handlingMessagesViewRepository
-                ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
-
-            foreach ($handlingMessages as $handlingMessage) {
-                $url = $this->generateUrl('lists_handling_show', array(
-                        'id' => $handlingMessage['handlingId'],
-                        'type' => 'my'
+            foreach ($projects as $project) {
+                $url = $this->generateUrl('lists_project_'.$project['project']->getDiscr().'_show', array(
+                        'id' => $project['project']->getId()
                     ));
-
+                $title = $project['nameType']. ' | '. $project['nameOrganization']. ' (' . $project['eventDatetime']->format('H:i').')';
+                $cssClass = 'projectMessage';
+                if ($project['eventDatetime'] < new \DateTime()) {
+                    $cssClass .= ' sd-event-prev';
+                    if ($project['project']->getIsClosed() && $project['project']->getDatetimeClosed() < $project['eventDatetime']) {
+                        $cssClass .= ' sd-event-yellow';
+                    } else {
+                        $cssClass .= ' sd-event-red ';
+                    }
+                } else {
+                    $cssClass .= ' sd-event-green';
+                }
                 $events[] = array(
-                    'hover_title' => $this->getEventHoverTitle($handlingMessage),
-                    'title' => $this->getEventTitle($handlingMessage),
-                    'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
+                    'hover_title' => '',
+                    'editable' => true,
+                    'messageUrlUpdate' => $this->generateUrl('lists_project_message_update', array( 'id' => $project['messageId'])),
+                    'title' => $title,
+                    'start' => $project['eventDatetime']->format('Y-m-d H:i:s'),
+                    'end' => $project['eventDatetime']->format('Y-m-d H:i:s'),
                     'url' => $url,
-                    'className' => $this->getEventCssClass($handlingMessage),
-//                    'allDay' => false,s
+                    'className' => $cssClass,
+                    'allDay' => false,
                 );
             }
         }
 
         /** get article */
-        $em = $this->getDoctrine()->getManager();
         $decision = $em->getRepository('ListsArticleBundle:Article')
                 ->getDecisionForCalendar($this->getUser()->getId());
         foreach ($decision as $val) {
@@ -192,6 +195,7 @@ class PrivateController extends SalesController
             $fullName = $user->getFullname();
             $events[] = array(
                 'hover_title' => '',
+                'editable' => false,
                 'title' => $translator->trans('BD', array(), 'SDDashboardBundle').' '. $fullName,
                 'start' => date('Y').'-'.$user->getBirthday()->format('m-d'),
                 'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
@@ -214,16 +218,16 @@ class PrivateController extends SalesController
                 'allDay' => true
                 );
         }
-        /** @var GosTender[] $gosTenders */
-        $gosTenders = $em->getRepository('ListsHandlingBundle:ProjectGosTender')
+        //  ProjectStateTender
+        $gosTenders = $em->getRepository('ListsProjectBundle:ProjectStateTender')
                 ->getListForDate($startTimestamp, $endTimestamp, $this->getUser());
         foreach ($gosTenders as $tender) {
-            $name = $translator->trans('Tender', array(), 'ListsHandlingBundle').' | '. $tender
+            $name = $translator->trans('Tender', array(), 'ListsProjectBundle').' | '. $tender
                 ->getProject()->getOrganization()->getCity();
             $events[] = array(
                 'hover_title' => '',
                 'title' => $name,
-                'url' => $this->generateUrl('lists_project_gostender_show', array(
+                'url' => $this->generateUrl('lists_project_state_tender_show', array(
                         'id' => $tender->getId()
                     )),
                 'start' => $tender->getDatetimeDeadline()->format('Y-m-d H:i'),
@@ -232,7 +236,6 @@ class PrivateController extends SalesController
         }
 
         //tasks
-        $user = $this->getUser();
         $taskUserRoles = $em->getRepository('SDTaskBundle:TaskUserRole')
             ->findBy(array(
                 'user' => $user

@@ -4,6 +4,9 @@ sd_business_role:
 
 sd_service_desk:
     resource: "@SDServiceDeskBundle/Resources/config/routing.yml"
+
+lists_project:
+    resource: "@ListsProjectBundle/Resources/config/routing.yml"
     prefix:   /
 
 it_doors_api:

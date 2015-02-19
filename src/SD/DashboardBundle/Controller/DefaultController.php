@@ -4,6 +4,7 @@ namespace SD\DashboardBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\ControllingBundle\Services\ControllingService;
+use Lists\ProjectBundle\Service\ProjectService;
 
 /**
  * DefaultController
@@ -27,8 +28,8 @@ class DefaultController extends Controller
         $serviceControlling = $this->get('it_doors_controlling.service');
         $accessControlling = $serviceControlling->checkAccess($this->getUser());
         
-        /** @var HandlingService $serviceProject */
-        $serviceProject = $this->get('lists_handling.service');
+        /** @var ProjectService $serviceProject */
+        $serviceProject = $this->get('lists_project.service');
         $accessProject = $serviceProject->checkAccess($this->getUser());
 
         return $this->render('SDDashboardBundle:Default:index.html.twig', array(

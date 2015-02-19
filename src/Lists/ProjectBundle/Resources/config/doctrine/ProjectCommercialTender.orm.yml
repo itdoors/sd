@@ -1,0 +1,28 @@
+Lists\ProjectBundle\Entity\ProjectCommercialTender:
+    type: entity
+    repositoryClass: Lists\ProjectBundle\Entity\ProjectCommercialTenderRepository
+    fields:
+        datetimeDeadline:
+            type: datetime
+            nullable: true
+            column: datetime_deadline
+            options:
+                comment: Дата и время конечного срока
+        datetimeOpening:
+            type: datetime
+            nullable: true
+            column: datetime_opening
+            options:
+                comment: Дата и время раскрытия
+    manyToMany:
+        services:
+            targetEntity: ServiceProjectSimple
+            inversedBy: null
+            joinTable:
+              name: project_commercial_tender__project_simple_service
+              joinColumns:
+                project_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id

@@ -1,3 +1,9 @@
+lists_contact_ajax_project:
+    pattern:  /lists/contact/ajax/project/{id}
+    defaults: { _controller: ListsContactBundle:Contact:project }
+    requirements:
+        id: \d+
+
 lists_contact_ajax_handling:
     pattern:  /lists/contact/ajax/handling/{handlingId}
     defaults: { _controller: ListsContactBundle:Contact:handling }

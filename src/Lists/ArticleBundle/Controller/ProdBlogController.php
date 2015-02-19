@@ -332,6 +332,9 @@ class ProdBlogController extends BaseController
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
+        if ($article->getType() == 'notification') {
+            return false;
+        }
         $newsFosUsers = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
             'news' => $article,
             'user' => $user
@@ -374,6 +377,7 @@ class ProdBlogController extends BaseController
             $reports = [
                 'title' => $articles[0]->getTitle(),
                 'text' => $articles[0]->getText(),
+                'type' => $articles[0]->getType(),
                 'id' => $articles[0]->getId()
             ];
 
