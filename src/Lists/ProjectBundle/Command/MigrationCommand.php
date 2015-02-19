@@ -53,11 +53,11 @@ class MigrationCommand extends ContainerAwareCommand
 //        $output->writeln('END TYPE');
         
         // перенос услуг
-        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
-        foreach ($services as $val) {
-            $this->saveService($val);
-        }
-        $output->writeln('END SERVICE');
+//        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
+//        foreach ($services as $val) {
+//            $this->saveService($val);
+//        }
+//        $output->writeln('END SERVICE');
         
         // перенос услуг
         $organizationServices = $this->em->getRepository('ListsOrganizationBundle:OrganizationServiceCover')->findAll();
