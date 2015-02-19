@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
- *  "claimFile" = "ClaimFile",
- *  "claimMessageFile" = "ClaimMessageFile",
  *  "blogFile" = "BlogFile"})
  * @ORM\Entity
  */
