@@ -9,11 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrganizationServiceCover
 {
-
     /**
      * @var integer
      */
     private $id;
+
+    /**
+     * @var integer
+     */
+    private $serviceId;
 
     /**
      * @var integer
@@ -51,14 +55,45 @@ class OrganizationServiceCover
     private $organization;
 
     /**
+     * @var \Lists\HandlingBundle\Entity\HandlingService
+     */
+    private $service;
+
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * Set serviceId
+     *
+     * @param integer $serviceId
+     *
+     * @return OrganizationServiceCover
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceId
+     *
+     * @return integer 
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
+    }
+
     /**
      * Set organizationId
      *
@@ -66,21 +101,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setOrganizationId ($organizationId)
+    public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
 
         return $this;
     }
+
     /**
      * Get organizationId
      *
      * @return integer 
      */
-    public function getOrganizationId ()
+    public function getOrganizationId()
     {
         return $this->organizationId;
     }
+
     /**
      * Set isInterested
      *
@@ -88,21 +125,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setIsInterested ($isInterested)
+    public function setIsInterested($isInterested)
     {
         $this->isInterested = $isInterested;
 
         return $this;
     }
+
     /**
      * Get isInterested
      *
      * @return boolean 
      */
-    public function getIsInterested ()
+    public function getIsInterested()
     {
         return $this->isInterested;
     }
+
     /**
      * Set isWorking
      *
@@ -110,21 +149,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setIsWorking ($isWorking)
+    public function setIsWorking($isWorking)
     {
         $this->isWorking = $isWorking;
 
         return $this;
     }
+
     /**
      * Get isWorking
      *
      * @return boolean 
      */
-    public function getIsWorking ()
+    public function getIsWorking()
     {
         return $this->isWorking;
     }
+
     /**
      * Set endDate
      *
@@ -132,21 +173,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setEndDate ($endDate)
+    public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
 
         return $this;
     }
+
     /**
      * Get endDate
      *
      * @return \DateTime 
      */
-    public function getEndDate ()
+    public function getEndDate()
     {
         return $this->endDate;
     }
+
     /**
      * Set responsible
      *
@@ -154,21 +197,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setResponsible ($responsible)
+    public function setResponsible($responsible)
     {
         $this->responsible = $responsible;
 
         return $this;
     }
+
     /**
      * Get responsible
      *
      * @return string 
      */
-    public function getResponsible ()
+    public function getResponsible()
     {
         return $this->responsible;
     }
+
     /**
      * Set description
      *
@@ -176,21 +221,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setDescription ($description)
+    public function setDescription($description)
     {
         $this->description = $description;
 
         return $this;
     }
+
     /**
      * Get description
      *
      * @return string 
      */
-    public function getDescription ()
+    public function getDescription()
     {
         return $this->description;
     }
+
     /**
      * Set organization
      *
@@ -198,26 +245,51 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setOrganization (\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
 
         return $this;
     }
+
     /**
      * Get organization
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getOrganization ()
+    public function getOrganization()
     {
         return $this->organization;
     }
 
     /**
+     * Set service
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingService $service
+     *
+     * @return OrganizationServiceCover
+     */
+    public function setService(\Lists\HandlingBundle\Entity\HandlingService $service = null)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Lists\HandlingBundle\Entity\HandlingService 
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+    /**
      * @var integer
      */
     private $evaluation;
+
 
     /**
      * Set evaluation
@@ -226,22 +298,22 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setEvaluation ($evaluation)
+    public function setEvaluation($evaluation)
     {
         $this->evaluation = $evaluation;
 
         return $this;
     }
+
     /**
      * Get evaluation
      *
      * @return integer 
      */
-    public function getEvaluation ()
+    public function getEvaluation()
     {
         return $this->evaluation;
     }
-
     /**
      * @var integer
      */
@@ -252,6 +324,7 @@ class OrganizationServiceCover
      */
     private $competitor;
 
+
     /**
      * Set competitorId
      *
@@ -259,21 +332,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setCompetitorId ($competitorId)
+    public function setCompetitorId($competitorId)
     {
         $this->competitorId = $competitorId;
 
         return $this;
     }
+
     /**
      * Get competitorId
      *
      * @return integer 
      */
-    public function getCompetitorId ()
+    public function getCompetitorId()
     {
         return $this->competitorId;
     }
+
     /**
      * Set competitor
      *
@@ -281,22 +356,22 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setCompetitor (\Lists\OrganizationBundle\Entity\Organization $competitor = null)
+    public function setCompetitor(\Lists\OrganizationBundle\Entity\Organization $competitor = null)
     {
         $this->competitor = $competitor;
 
         return $this;
     }
+
     /**
      * Get competitor
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getCompetitor ()
+    public function getCompetitor()
     {
         return $this->competitor;
     }
-
     /**
      * @var integer
      */
@@ -307,6 +382,7 @@ class OrganizationServiceCover
      */
     private $creator;
 
+
     /**
      * Set creatorId
      *
@@ -314,21 +390,23 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setCreatorId ($creatorId)
+    public function setCreatorId($creatorId)
     {
         $this->creatorId = $creatorId;
 
         return $this;
     }
+
     /**
      * Get creatorId
      *
      * @return integer 
      */
-    public function getCreatorId ()
+    public function getCreatorId()
     {
         return $this->creatorId;
     }
+
     /**
      * Set creator
      *
@@ -336,58 +414,60 @@ class OrganizationServiceCover
      *
      * @return OrganizationServiceCover
      */
-    public function setCreator (\SD\UserBundle\Entity\User $creator = null)
+    public function setCreator(\SD\UserBundle\Entity\User $creator = null)
     {
         $this->creator = $creator;
 
         return $this;
     }
+
     /**
      * Get creator
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getCreator ()
+    public function getCreator()
     {
         return $this->creator;
     }
+
     /**
      * Sets endDate from endDateString
      *
      * @param string $endDateString
      */
-    public function setEndDateString ($endDateString)
+    public function setEndDateString($endDateString)
     {
         if ($endDateString) {
             $this->setEndDate(new \DateTime($endDateString));
         }
     }
-
     /**
      * @var \Lists\ProjectBundle\Entity\Service
      */
-    private $service;
+    private $projectService;
+
 
     /**
-     * Set service
+     * Set projectService
      *
-     * @param \Lists\ProjectBundle\Entity\Service $service
-     *
+     * @param \Lists\ProjectBundle\Entity\Service $projectService
      * @return OrganizationServiceCover
      */
-    public function setService (\Lists\ProjectBundle\Entity\Service $service = null)
+    public function setProjectService(\Lists\ProjectBundle\Entity\Service $projectService = null)
     {
-        $this->service = $service;
-
+        $this->projectService = $projectService;
+    
         return $this;
     }
+
     /**
-     * Get service
+     * Get projectService
      *
      * @return \Lists\ProjectBundle\Entity\Service 
      */
-    public function getService ()
+    public function getProjectService()
     {
-        return $this->service;
+        return $this->projectService;
     }
 }

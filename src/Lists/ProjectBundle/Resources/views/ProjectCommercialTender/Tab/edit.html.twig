@@ -55,6 +55,9 @@
                 {% else %}
                     {% if object.statusAccess is null %}
                         {% trans %}Not approved by the manager{% endtrans %}
+                        {% if access.canConfirmProject %}
+                            {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig')}}
+                        {% endif %}
                     {% endif %}
                     {% if access.canEditProjectSimple %}
                     <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status ? object.status.id : '' }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
