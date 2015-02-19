@@ -32,7 +32,7 @@ Lists\ContactBundle\Entity\ModelContact:
             type: string
             length: 255
             fixed: false
-            nullable: false
+            nullable: true
             column: last_name
         middleName:
             type: string
