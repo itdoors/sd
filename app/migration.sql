@@ -2856,5 +2856,6 @@ COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата
 # app/console sd:group:role-add  SALESADMIN PROJECT_SIMPLE_ADMIN
 
 # app/console  lists:project:migration 
+ALTER TABLE model_contact ALTER last_name DROP NOT NULL;
 
 -- prod ++++
