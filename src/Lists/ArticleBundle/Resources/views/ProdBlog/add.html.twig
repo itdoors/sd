@@ -1,5 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsArticleBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
 {% block title %}{% trans %}Add{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
@@ -101,7 +102,7 @@
                     }
                 });
             </script>
-            {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+{#             {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}#}
             {% if form.vars.valid %}
             {% else %}
                 <div class="alert alert-danger">
@@ -199,25 +200,30 @@
             </div>
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}File{% endtrans%}</label>
-{#                     <div class="col-md-9">#}
-{#                         {{ form_widget(form.file, {'attr' : {'multiple' : 'multiple', 'placeholder': "File"| trans}}) }}#}
-{#                         {% if form.text.vars.errors|length %}{{ form_errors(form.file) }}{% endif %}#}
-{#                     </div>#}
+                    <label class="required control-label col-md-3">{% trans %}Files{% endtrans%}</label>
                     <div class="col-md-9">
-						<div class="fileinput fileinput-new" data-provides="fileinput">
-							<span class="btn default btn-file">
-							     <span class="fileinput-new">{% trans %}Select file{% endtrans %} </span>
-							     <span class="fileinput-exists">{% trans %}Change{% endtrans %} </span>
-                                 {{ form_widget(form.file, {'attr' : {}}) }}
-                                 {% if form.text.vars.errors|length %}{{ form_errors(form.file) }}{% endif %}
-                            </span>
-							<span class="fileinput-filename"></span>
-							&nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput"></a>
-						</div>
-					</div>
+                        {{ form_widget(form.files)|raw }}
+                    </div>
                 </div>
             </div>
+{#             <div class="form-body">#}
+{#                 <div class="form-group">#}
+{#                     <label class="required control-label col-md-3">{% trans %}File{% endtrans%}</label>#}
+{#                     <div class="col-md-9">#}
+{# 						<div class="fileinput fileinput-new" data-provides="fileinput">#}
+{# 							<span class="btn default btn-file">#}
+{# 							     <span class="fileinput-new">{% trans %}Select file{% endtrans %} </span>#}
+{# 							     <span class="fileinput-exists">{% trans %}Change{% endtrans %} </span>#}
+{#                                  {{ form_widget(form.file, {'attr' : {}}) }}#}
+{#                                  {% if form.text.vars.errors|length %}{{ form_errors(form.file) }}{% endif %}#}
+{#                             </span>#}
+{# 							<span class="fileinput-filename"></span>#}
+{# 							&nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput"></a>#}
+{# 						</div>#}
+{# 					</div>#}
+{#                 </div>#}
+{#             </div>#}
+            
             <div class="form-body">
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Text{% endtrans%}</label>

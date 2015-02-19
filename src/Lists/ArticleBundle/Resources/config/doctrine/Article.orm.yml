@@ -61,3 +61,8 @@ Lists\ArticleBundle\Entity\Article:
             targetEntity: Ration
             mappedBy: article
             orphanRemoval: true
+    oneToMany:
+        files:
+            targetEntity: ITDoors\FileAccessBundle\Entity\BlogFile
+            mappedBy: article
+            cascade: ["persist"]
