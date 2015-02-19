@@ -55,7 +55,7 @@
         			<li class="list-group-item">
         				{% trans %}Target{% endtrans %}
         				{% if entity.targetDepartment is defined %}
-        				    <span class="badge badge-info">{{ entity.targetDepartment }}</span>
+        				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>
     				    {% elseif entity.targetIndividual is defined %}
     				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>
 				        {% endif %}
@@ -81,7 +81,7 @@
     		<div class="col-md-4">
                 <div class="panel panel-default">
         			<div class="panel-heading">
-        				<h3 class="panel-title">{% trans %}Cause{% endtrans %}</h3>
+        				<h3 class="panel-title">{% trans %}Text{% endtrans %}</h3>
         			</div>
         			<div class="panel-body">
                         {{ entity.text|raw('html') }}
@@ -162,9 +162,18 @@
                         	SD.blockUI($('#messages'));
                         },
                         success: function(response) {
-                        	$('#my_msg').prepend('<div class="note note-success"><h5 class="block">{{ app.user }} ' + currentdate + '</h5>' + aHTML + '</div>');
+                        	$('#my_msg').prepend(
+                                	'<div id="' + now.unix() + '" class="note note-success">\
+                                        <h5 class="block">{{ app.user }} ' + currentdate + '</h5>' + aHTML + '</div>'
+                            );
                         	$('#summernote').code('<p><br></p>');
                         	SD.unblockUI($('#messages'));
+                        	$('#' + now.unix()).pulsate({
+                                color: "#bf1c56",
+                                reach: 40,
+                                speed: 100,
+                                repeat: 2
+                            });
                         },
                         error: function(response) {
                         	$('#summernote').code('<p><br></p>');
