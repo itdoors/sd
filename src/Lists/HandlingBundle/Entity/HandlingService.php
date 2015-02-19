@@ -204,4 +204,32 @@ class HandlingService
     {
         return $this->reportNumber;
     }
+    /**
+     * @var \Lists\ProjectBundle\Entity\Service
+     */
+    private $service;
+
+
+    /**
+     * Set service
+     *
+     * @param \Lists\ProjectBundle\Entity\Service $service
+     * @return HandlingService
+     */
+    public function setService(\Lists\ProjectBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+    
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Lists\ProjectBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
 }

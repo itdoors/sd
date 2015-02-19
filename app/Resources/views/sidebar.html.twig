@@ -379,14 +379,7 @@
             </li>
             {% endif %}
             {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
-            <li{% if 
-                   
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
-                    or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
-                    or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
-                    or
+            <li{% if
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
@@ -400,7 +393,7 @@
                 </a>
                 <ul class="sub-menu">
                     {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
-                    <li{% if 
+                    {#<li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                         or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
@@ -409,17 +402,17 @@
                             <i class="fa fa-comments"></i>
                             {% trans %}Activity{% endtrans %}
                         </a>
-                    </li>
+                    </li>#}
                     {% endif %}
                     {% if is_granted('ROLE_SALESADMIN') %}
-                    <li{% if 
+                    {#<li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                         %} class="active"{% endif %}>
                         <a href="{{ path('lists_handling_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}All projects{% endtrans %}
                         </a>
-                    </li>
+                    </li>#}
                     <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
                         %} class="active"{% endif %}>

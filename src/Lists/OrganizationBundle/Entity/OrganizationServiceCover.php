@@ -442,4 +442,32 @@ class OrganizationServiceCover
             $this->setEndDate(new \DateTime($endDateString));
         }
     }
+    /**
+     * @var \Lists\ProjectBundle\Entity\Service
+     */
+    private $projectService;
+
+
+    /**
+     * Set projectService
+     *
+     * @param \Lists\ProjectBundle\Entity\Service $projectService
+     * @return OrganizationServiceCover
+     */
+    public function setProjectService(\Lists\ProjectBundle\Entity\Service $projectService = null)
+    {
+        $this->projectService = $projectService;
+    
+        return $this;
+    }
+
+    /**
+     * Get projectService
+     *
+     * @return \Lists\ProjectBundle\Entity\Service 
+     */
+    public function getProjectService()
+    {
+        return $this->projectService;
+    }
 }
