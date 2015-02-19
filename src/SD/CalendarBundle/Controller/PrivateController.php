@@ -23,7 +23,7 @@ class PrivateController extends SalesController
     public function indexAction()
     {
         return $this->render('SDCalendarBundle::base.html.twig', array(
-            'url' => $this->get('router')->generate('sd_calendar_private_handling_message')
+            'url' => $this->get('router')->generate('sd_calendar_private_message')
         ));
     }
 
