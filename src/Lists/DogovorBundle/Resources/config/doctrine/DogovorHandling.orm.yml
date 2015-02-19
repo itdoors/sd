@@ -18,13 +18,13 @@ Lists\DogovorBundle\Entity\DogovorHandling:
                 dogovor_id:
                     referencedColumnName: id
             orphanRemoval: false
-        handling:
-            targetEntity: Lists\HandlingBundle\Entity\Handling
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                handling_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+#        handling:
+#            targetEntity: Lists\HandlingBundle\Entity\Handling
+#            cascade: {  }
+#            mappedBy: null
+#            inversedBy: null
+#            joinColumns:
+#                handling_id:
+#                    referencedColumnName: id
+#            orphanRemoval: false
     lifecycleCallbacks: {  }

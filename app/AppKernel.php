@@ -25,7 +25,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Lists\RegionBundle\ListsRegionBundle(),
             new Lists\LookupBundle\ListsLookupBundle(),
-            //new Lists\HandlingBundle\ListsHandlingBundle(),
+            new Lists\HandlingBundle\ListsHandlingBundle(),
             // new SD\ModelBundle\SDModelBundle(),
             new SD\CommonBundle\SDCommonBundle(),
             new Lists\TeamBundle\ListsTeamBundle(),

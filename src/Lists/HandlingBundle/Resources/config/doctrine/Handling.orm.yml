@@ -145,6 +145,19 @@ Lists\HandlingBundle\Entity\Handling:
         files:
           targetEntity: ProjectFile
           mappedBy: project
+    oneToOne:
+        project:
+            targetEntity: Lists\ProjectBundle\Entity\Project
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: project_id
+                nullable: true
+                options:
+                    comment: Новый проект
+                referencedColumnName: id
+            orphanRemoval: false
     manyToOne:
         closedUser:
             targetEntity: SD\UserBundle\Entity\User

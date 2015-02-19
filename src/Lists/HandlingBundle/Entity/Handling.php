@@ -1272,4 +1272,32 @@ class Handling
     {
         return $this->reasonClosed;
     }
+    /**
+     * @var \Lists\ProjectBundle\Entity\Project
+     */
+    private $project;
+
+
+    /**
+     * Set project
+     *
+     * @param \Lists\ProjectBundle\Entity\Project $project
+     * @return Handling
+     */
+    public function setProject(\Lists\ProjectBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Lists\ProjectBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
 }
