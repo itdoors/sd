@@ -103,7 +103,7 @@ class Claim
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimFile", mappedBy="claim")
+     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimFile", mappedBy="claim", cascade={"persist"})
      */
     protected $files;
 

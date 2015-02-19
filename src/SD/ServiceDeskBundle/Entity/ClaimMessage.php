@@ -53,7 +53,7 @@ class ClaimMessage
     /**
      * @var \SD\ServiceDeskBundle\Entity\Claim
      *
-     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", inversedBy="messages", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\Claim", inversedBy="messages", cascade={"persist"})
      * @ORM\JoinColumn(name="claim_id", referencedColumnName="id")
      */
     protected $claim;
@@ -61,7 +61,7 @@ class ClaimMessage
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimMessageFile", mappedBy="claimMessage")
+     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimMessageFile", mappedBy="claimMessage", cascade={"persist"})
      */
     protected $files;
 

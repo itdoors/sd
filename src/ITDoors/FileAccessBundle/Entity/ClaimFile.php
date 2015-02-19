@@ -19,6 +19,8 @@ class ClaimFile extends File
      */
     protected $claim;
 
+    protected $path = '/uploads/files/claim/';
+
     /**
      * Set claim
      *

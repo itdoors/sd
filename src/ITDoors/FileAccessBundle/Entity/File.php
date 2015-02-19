@@ -3,6 +3,7 @@
 namespace ITDoors\FileAccessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * File
@@ -12,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
  *  "claimFile" = "ClaimFile",
- *  "claimMessageFile" = "ClaimMessageFile"})
+ *  "claimMessageFile" = "ClaimMessageFile",
+ *  "blogFile" = "BlogFile"})
  * @ORM\Entity
  */
 class File
@@ -46,7 +48,7 @@ class File
      *
      * @ORM\Column(name="path", type="string", length=255)
      */
-    protected $path;
+    protected $path = '/uploads/files/';
 
     /**
      * @var string
@@ -190,5 +192,68 @@ class File
     public function getUser()
     {
         return $this->user;
+    }
+
+    protected $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+        $this->upload();
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * upload
+     */
+    protected function upload()
+    {
+        $file = $this->file;
+
+        if (null === $file) {
+            return;
+        }
+
+        $fileExtension = $file->getClientOriginalExtension();
+        $this->setOriginName($file->getClientOriginalName());
+
+        $filename = uniqid() . '.' . $fileExtension;
+
+        $uploadDir = __DIR__ . '/../../../../web/' . $this->path;
+
+        $file->move($uploadDir, $filename);
+
+        $this->setRealName($filename);
+        $this->setCreatedAt(new \DateTime());
+
+        $this->file = null;
+    }
+
+    /**
+     * Returns full link to file like '/uploads/...'
+     * 
+     * @return string
+     */
+    public function getLink()
+    {
+        if ($this->path !== null && $this->realName !== null) {
+            return $this->path . $this->realName;
+        } else {
+            return '';
+        }
     }
 }
