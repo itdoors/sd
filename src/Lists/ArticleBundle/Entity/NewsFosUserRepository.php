@@ -23,7 +23,10 @@ class NewsFosUserRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('nfu');
 
-        $sql->innerJoin('nfu.news', 'n', 'WITH', 'n.type = :type')
+        $sql
+            ->innerJoin('nfu.news', 'n', 'WITH', 'n.type = :type')
+            ->innerJoin('nfu.user', 'u', 'WITH', 'u.id = :id')
+            ->setParameter(':id', $id)
             ->setParameter(':type', 'notification');
             
 
