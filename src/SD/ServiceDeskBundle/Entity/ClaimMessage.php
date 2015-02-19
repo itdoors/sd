@@ -61,7 +61,7 @@ class ClaimMessage
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimMessageFile", mappedBy="claim")
+     * @ORM\OneToMany(targetEntity="ITDoors\FileAccessBundle\Entity\ClaimMessageFile", mappedBy="claimMessage")
      */
     protected $files;
 
