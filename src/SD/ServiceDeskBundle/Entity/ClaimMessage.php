@@ -212,6 +212,7 @@ class ClaimMessage
      */
     public function addFile(\ITDoors\FileAccessBundle\Entity\ClaimMessageFile $file)
     {
+        $file->setClaimMessage($this);
         $this->files[] = $file;
 
         return $this;

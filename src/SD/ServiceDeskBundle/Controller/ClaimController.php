@@ -196,6 +196,7 @@ class ClaimController extends Controller
             'action' => $this->generateUrl('claim_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
+        $form->remove('files');
 
         return $form;
     }
@@ -223,7 +224,7 @@ class ClaimController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('claim', array('id' => $id)));
+            return $this->redirect($this->generateUrl('claim_show', array('id' => $id)));
         }
 
         return $this->render('SDServiceDeskBundle:Claim:edit.html.twig', array(

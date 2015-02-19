@@ -38,7 +38,15 @@ class ClaimType extends AbstractType
 //                 'required' => false,
 //                 'multiple' => true
 //             ))
-            ->add('text');
+            ->add('text')
+            ->add('files', 'collection', array(
+                'required' => false,
+                'type'=> new \SD\ServiceDeskBundle\Form\ClaimFileForm(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'delete_empty'=> true
+            ));
     }
 
     /**

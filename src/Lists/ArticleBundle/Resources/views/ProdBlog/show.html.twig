@@ -61,6 +61,10 @@
                     </div>
                 </div>
                 <div class="news-item-page" style="overflow: auto">{{ item.text | raw('html')}}</div>
+                {% if files is not empty %}<h4>{% trans %}Files{% endtrans %}:</h4>{% endif %}
+                {% for file in files %}
+		            <p><a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ file.getLink() }}">{{ file.originName }}</a></p>
+		        {% endfor %}
                 {% if voteable %} {% if form %}
                 <div>
                     {% if form.vars.valid is sameas(false) %}

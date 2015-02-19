@@ -224,6 +224,7 @@ class ProdBlogController extends BaseController
         }
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':show.html.twig', array(
+            'files' => $articleEntity->getFiles(),
             'item' => $article,
             'vote' => $voteValue,
             'form' => $formView,

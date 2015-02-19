@@ -396,6 +396,7 @@ class Claim
      */
     public function addFile(\ITDoors\FileAccessBundle\Entity\ClaimFile $file)
     {
+        $file->setClaim($this);
         $this->files[] = $file;
 
         return $this;

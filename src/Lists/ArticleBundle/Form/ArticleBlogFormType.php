@@ -79,6 +79,7 @@ class ArticleBlogFormType extends AbstractType
                 'type'=> new \Lists\ArticleBundle\Form\BlogFileForm(),
                 'allow_add' => true,
                 'allow_delete' => true,
+                'by_reference' => false,
                 'delete_empty'=> true
             ));
     }
