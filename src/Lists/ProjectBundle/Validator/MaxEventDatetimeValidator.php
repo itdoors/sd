@@ -33,19 +33,30 @@ class MaxEventDatetimeValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $root = $this->context->getRoot();
-        if (!$root instanceof \Lists\ProjectBundle\Entity\Message) {
-            throw new \Exception('Error instanceof');
-        }
-        $createDate = $root->getEventDatetimeStart();
-        $dateMin = $createDate;
-        $dateMax = clone $createDate;
-        $dateMax->modify('+15 days');
-        $dateEvent = $root->getEventDatetime();
-        if ($dateMin > $dateEvent || $dateMax < $dateEvent) {
-            $this->context->addViolation(
-                'Range resolution date from :minDate to :dateMax',
-                array(':minDate' => $dateMin->format('d-m-Y H:i:s'), ':dateMax' => $dateMax->format('d-m-Y H:i:s'))
-            );
+        if ($root instanceof Form) {
+            $projectId = $root->get('project')->getData();
+            $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
+            $dateCreateProject = $project->getCreateDate();
+            if ($dateCreateProject->format('U') > $value->format('U')) {
+                $this->context->addViolation('Min date :dateMax', array(':dateMax' => $dateCreateProject->format('d-m-Y H:i:s')));
+            }
+            $currentDate = $root->get('current')->getData()->getEventDatetime();
+            $plannedDate = $root->get('planned')->getData()->getEventDatetime();
+            if ($currentDate->format('U') > $plannedDate->format('U') && $plannedDate == $value) {
+                $this->context->addViolation('Min date :dateMax', array(':dateMax' => $currentDate->format('d-m-Y H:i:s')));
+            }
+        } elseif ($root instanceof \Lists\ProjectBundle\Entity\Message) {
+            $createDate = $root->getEventDatetimeStart();
+            $dateMin = $createDate;
+            $dateMax = clone $createDate;
+            $dateMax->modify('+15 days');
+            $dateEvent = $root->getEventDatetime();
+            if ($dateMin > $dateEvent || $dateMax < $dateEvent) {
+                $this->context->addViolation(
+                    'Range resolution date from :minDate to :dateMax',
+                    array(':minDate' => $dateMin->format('d-m-Y H:i:s'), ':dateMax' => $dateMax->format('d-m-Y H:i:s'))
+                );
+            }
         }
     }
 }
