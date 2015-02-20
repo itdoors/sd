@@ -44,13 +44,6 @@ class Claim
     protected $status;
 
     /**
-     * @var ImportanceType
-     *
-     * @ORM\Column(name="importance", type="importanceType")
-     */
-    protected $importance;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
@@ -84,6 +77,14 @@ class Claim
      * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\ClaimMessage", mappedBy="claim")
      */
     protected $messages;
+
+    /**
+     * @var SD\ServiceDeskBundle\Entity\ClaimImportance
+     *
+     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\ClaimImportance")
+     * @ORM\JoinColumn(name="importance_id", referencedColumnName="id")
+     */
+    protected $importance;
 
     /**
      * @var \SD\BusinessRoleBundle\Entity\Client
@@ -173,30 +174,6 @@ class Claim
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set importance
-     *
-     * @param string $importance
-     * 
-     * @return Claim
-     */
-    public function setImportance($importance)
-    {
-        $this->importance = $importance;
-
-        return $this;
-    }
-
-    /**
-     * Get importance
-     *
-     * @return string 
-     */
-    public function getImportance()
-    {
-        return $this->importance;
     }
 
     /**
@@ -421,6 +398,30 @@ class Claim
     {
         return $this->files;
     }
+
+    /**
+     * Set importance
+     *
+     * @param \SD\ServiceDeskBundle\Entity\ClaimImportance $importance
+     * 
+     * @return Claim
+     */
+    public function setImportance(\SD\ServiceDeskBundle\Entity\ClaimImportance $importance = null)
+    {
+        $this->importance = $importance;
+
+        return $this;
+    }
+
+    /**
+     * Get importance
+     *
+     * @return \SD\ServiceDeskBundle\Entity\ClaimImportance
+     */
+    public function getImportance()
+    {
+        return $this->importance;
+    }
 }
 
 // @codingStandardsIgnoreStart
@@ -480,23 +481,5 @@ final class StatusType extends \ITDoors\DBAL\EnumType
         self::CANCELED,
         self::ESTIMATING,
         self::REJECTED
-    );
-}
-
-final class ImportanceType extends \ITDoors\DBAL\EnumType
-{
-    const PLANNED = 'planned';
-    const UNPLANNED = 'unplanned';
-    const HOT = 'hot';
-    const BROKEN = 'broken';
-    const MONTH = 'month';
-    protected static $name = 'importanceType';
-
-    protected static $values = array(
-        self::PLANNED,
-        self::UNPLANNED,
-        self::HOT,
-        self::BROKEN,
-        self::MONTH
     );
 }
