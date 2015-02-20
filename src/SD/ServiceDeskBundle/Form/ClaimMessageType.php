@@ -8,9 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use SD\UserBundle\SDUserBundle;
 
 /**
- * ClaimType
+ * ClaimMessageType
  */
-class ClaimType extends AbstractType
+class ClaimMessageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -19,24 +19,13 @@ class ClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
-            ->add('status', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\StatusType::values()))
-            ->add('importance', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImportanceType::values()))
-            ->add('createdAt', 'date', array(
-                'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy'
-            ))
-            ->add('closedAt', 'date', array(
-                'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy',
-                'required' => false
-            ))
-            ->add('disabled', 'checkbox', array('required' => false))
-            ->add('customer')
             ->add('text')
+            ->add('claim', 'hidden_entity', array(
+                'entity' => 'SDServiceDeskBundle:Claim',
+            ))
             ->add('files', 'collection', array(
                 'required' => false,
-                'type'=> new \SD\ServiceDeskBundle\Form\ClaimFileForm(),
+                'type'=> new ClaimMessageFileForm(),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
@@ -50,7 +39,7 @@ class ClaimType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\ServiceDeskBundle\Entity\Claim'
+            'data_class' => 'SD\ServiceDeskBundle\Entity\ClaimMessage'
         ));
     }
 
@@ -59,6 +48,6 @@ class ClaimType extends AbstractType
      */
     public function getName()
     {
-        return 'sd_servicedeskbundle_claim';
+        return 'claimMessageForm';
     }
 }

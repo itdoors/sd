@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Form\ClaimType;
+use SD\ServiceDeskBundle\Form\ClaimMessageType;
 use SD\ServiceDeskBundle\Entity\ClaimMessage;
 
 /**
@@ -45,27 +46,28 @@ class ClaimController extends Controller
      */
     public function addMsgAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $claim_id = $request->get('claim_id');
-        $text = $request->get('text');
-        $createdAt = $request->get('createdAt'); 
-
-        $claim = $em
-            ->getRepository('SDServiceDeskBundle:Claim')
-            ->find($claim_id);
-
-        $message = new ClaimMessage();
-        $message
-            ->setClaim($claim)
-            ->setText($text)
-            ->setCreatedAt((new \DateTime())->setTimestamp($createdAt))
+        $entity = (new ClaimMessage())
+            ->setCreatedAt(new \DateTime())
             ->setUser($this->getUser());
 
-        $claim->addMessage($message);
-        $em->persist($message);
+        $form = $this->createMessageForm($entity);
+        $form->handleRequest($request);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
         $em->flush();
 
-        return new JsonResponse();
+        $response = [];
+        $response['user'] = $entity->getUser()->__toString();
+        $response['createdAt'] = $entity->getCreatedAt()->getTimestamp();
+        foreach ($entity->getFiles() as $file) {
+            $response['files'][] = [
+                'name' => $file->getOriginName(),
+                'link' => $file->getLink()
+            ];
+        }
+
+        return new JsonResponse($response);
     }
 
     /**
@@ -113,6 +115,23 @@ class ClaimController extends Controller
     }
 
     /**
+     * Creates a form to create a ClaimMessage entity.
+     *
+     * @param ClaimMessage $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createMessageForm(ClaimMessage $entity)
+    {
+        $form = $this->createForm(new ClaimMessageType(), $entity, array(
+            'action' => $this->generateUrl('claim_add_msg'),
+            'method' => 'POST',
+        ));
+
+        return $form;
+    }
+
+    /**
      * Displays a form to create a new Claim entity.
      *
      * @return string
@@ -152,8 +171,11 @@ class ClaimController extends Controller
                 array('createdAt' => 'DESC')
             );
 
+        $form = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
+
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
             'entity' => $entity,
+            'form' => $form->createView(),
             'messages' => $messages
         ));
     }

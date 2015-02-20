@@ -19,6 +19,8 @@ class ClaimMessageFile extends File
      */
     protected $claimMessage;
 
+    protected $path = '/uploads/files/claim_message/';
+
     /**
      * Set claimMessage
      *
