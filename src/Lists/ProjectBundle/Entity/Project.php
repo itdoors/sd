@@ -640,7 +640,7 @@ class Project
     /**
      * @var \Lists\ProjectBundle\Entity\MessagePlanned
      */
-    private $lastMessagePlenned;
+    private $lastMessagePlanned;
 
     /**
      * Set lastMessageCurrent
@@ -665,25 +665,25 @@ class Project
         return $this->lastMessageCurrent;
     }
     /**
-     * Set lastMessagePlenned
+     * Set lastMessagePlanned
      *
-     * @param \Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlenned
+     * @param \Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlanned
      *
      * @return Project
      */
-    public function setLastMessagePlenned (\Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlenned = null)
+    public function setLastMessagePlanned (\Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlanned = null)
     {
-        $this->lastMessagePlenned = $lastMessagePlenned;
+        $this->lastMessagePlanned = $lastMessagePlanned;
 
         return $this;
     }
     /**
-     * Get lastMessagePlenned
+     * Get lastMessagePlanned
      *
      * @return \Lists\ProjectBundle\Entity\MessagePlanned 
      */
-    public function getLastMessagePlenned ()
+    public function getLastMessagePlanned ()
     {
-        return $this->lastMessagePlenned;
+        return $this->lastMessagePlanned;
     }
 }

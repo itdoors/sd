@@ -41,7 +41,7 @@ class ProjectRepository extends EntityRepository
                 ->setParameter(':user', $user);
         }
         $this->filter($sql, $filters);
-        $sql->orderBy('mc.createDatetime', 'DESC');
+        $sql->orderBy('mc.createDatetime');
         
 
         return $sql->getQuery();
