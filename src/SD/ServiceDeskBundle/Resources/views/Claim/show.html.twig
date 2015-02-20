@@ -207,6 +207,12 @@
                            }
                         	$('#my_msg').prepend(messageBody);
                         	$('#{{ form.vars.name }}_text').code('<p><br></p>');
+                        	
+                            var files = document.getElementById('{{ form.vars.name }}_files');
+                            while (files.childNodes.length > 1) {
+                            	files.removeChild(files.firstChild);
+                            }
+                        	
                         	$('.doclink').click(function(){
                             	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
                             	url += '?';
