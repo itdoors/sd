@@ -631,4 +631,59 @@ class Project
     {
         return $this->notification;
     }
+
+    /**
+     * @var \Lists\ProjectBundle\Entity\MessageCurrent
+     */
+    private $lastMessageCurrent;
+
+    /**
+     * @var \Lists\ProjectBundle\Entity\MessagePlanned
+     */
+    private $lastMessagePlenned;
+
+    /**
+     * Set lastMessageCurrent
+     *
+     * @param \Lists\ProjectBundle\Entity\MessageCurrent $lastMessageCurrent
+     *
+     * @return Project
+     */
+    public function setLastMessageCurrent (\Lists\ProjectBundle\Entity\MessageCurrent $lastMessageCurrent = null)
+    {
+        $this->lastMessageCurrent = $lastMessageCurrent;
+
+        return $this;
+    }
+    /**
+     * Get lastMessageCurrent
+     *
+     * @return \Lists\ProjectBundle\Entity\MessageCurrent 
+     */
+    public function getLastMessageCurrent ()
+    {
+        return $this->lastMessageCurrent;
+    }
+    /**
+     * Set lastMessagePlenned
+     *
+     * @param \Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlenned
+     *
+     * @return Project
+     */
+    public function setLastMessagePlenned (\Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlenned = null)
+    {
+        $this->lastMessagePlenned = $lastMessagePlenned;
+
+        return $this;
+    }
+    /**
+     * Get lastMessagePlenned
+     *
+     * @return \Lists\ProjectBundle\Entity\MessagePlanned 
+     */
+    public function getLastMessagePlenned ()
+    {
+        return $this->lastMessagePlenned;
+    }
 }

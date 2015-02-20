@@ -78,6 +78,12 @@ Lists\ProjectBundle\Entity\Project:
             column: create_date
             options:
                 comment: Дата создания проекта
+        createDate:
+            type: date
+            nullable: true
+            column: create_date
+            options:
+                comment: Дата создания проекта
         deletedDatetime:
             type: datetime
             nullable: true
@@ -104,6 +110,24 @@ Lists\ProjectBundle\Entity\Project:
                 created_user_id:
                     referencedColumnName: id
             orphanRemoval: false
+        lastMessageCurrent:
+            targetEntity: MessageCurrent
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_current_id:
+                    referencedColumnName: id
+            orphanRemoval: true
+        lastMessagePlenned:
+            targetEntity: MessagePlanned
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_planned_id:
+                    referencedColumnName: id
+            orphanRemoval: true
         userClosed:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }

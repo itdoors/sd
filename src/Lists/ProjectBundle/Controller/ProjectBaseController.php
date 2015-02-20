@@ -62,10 +62,6 @@ class ProjectBaseController extends Controller
             $em->persist($managerProject);
 
             $em->flush();
-            // костыль для поля boolean set null (нужно будет удалить)
-//            $db = $em->getConnection();
-//            $stmt = $db->prepare('UPDATE "public".project_gos_tender SET "is_participation" = NULL WHERE id = :id');
-//            $stmt->execute(array (':id' => $object->getId()));
 
             return $this->redirect($this->generateUrl('lists_project_'.strtolower($this->nameEntity).'_show', array (
                 'id' => $object->getId()

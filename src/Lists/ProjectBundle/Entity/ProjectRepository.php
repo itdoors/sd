@@ -31,6 +31,7 @@ class ProjectRepository extends EntityRepository
                 'project_commercial_tender',
                 'project_electronic_trading'
             ));
+        $sql->leftJoin('p.lastMessageCurrent', 'mc');
         if ($user) {
             $sql
                 ->leftJoin('p.managers', 'm', 'WITH', 'm.user = :user')
@@ -40,6 +41,7 @@ class ProjectRepository extends EntityRepository
                 ->setParameter(':user', $user);
         }
         $this->filter($sql, $filters);
+        $sql->orderBy('mc.createDatetime', 'DESC');
         
 
         return $sql->getQuery();

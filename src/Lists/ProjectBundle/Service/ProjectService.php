@@ -328,7 +328,8 @@ class ProjectService
     {
         $current = $form->get('current')->getData();
         $planned = $form->get('planned')->getData();
-        $access = $this->checkAccess($this->user, $current->getProject());
+        $project = $current->getProject();
+        $access = $this->checkAccess($this->user, $project);
         if (!$access->canAddMessage()) {
             throw new \Exception('No access', 403);
         }
@@ -347,8 +348,14 @@ class ProjectService
         }
         $current->setUser($this->user);
         $planned->setUser($this->user);
+
         $this->em->persist($current);
         $this->em->persist($planned);
+        $this->em->flush();
+
+        $project->setLastMessageCurrent($current);
+        $project->setLastMessagePlanned($planned);
+        $this->em->persist($project);
         $this->em->flush();
     }
     /**
