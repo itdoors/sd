@@ -77,6 +77,10 @@ lists_project_simple_report_message:
     pattern:  /lists/project/simple/report/message
     defaults: { _controller: ListsProjectBundle:ProjectSimple:reportMessage }
 
+lists_project_simple_report_export:
+    pattern:  /lists/project/simple/report/export
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:reportExport }
+
 # ProjectCommercialTenderController
 lists_project_commercial_tender_show:
     pattern:  /lists/project/commercial/tender/show/{id}

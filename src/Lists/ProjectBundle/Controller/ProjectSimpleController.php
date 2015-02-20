@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Lists\ProjectBundle\Services\ProjectService;
 use Lists\ProjectBundle\Entity\ManagerProjectType;
-use Lists\ProjectBundle\Filter\ProjectFilter;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 use Lists\ProjectBundle\Entity\ProjectCommercialTender;
 
 /**
@@ -452,8 +453,7 @@ class ProjectSimpleController extends ProjectBaseController
      */
     public function reportMessageAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-//        $nameSpaceReport = $this->filterNamespace.'_report_message';
+        $nameSpaceReport = $this->filterNamespace.'_report_message';
         /** @var \Lists\HandlingBundle\Services\HandlingService $service */
         $service = $this->get('lists_project.service');
         $access = $service->checkAccess($this->getUser());
@@ -470,29 +470,10 @@ class ProjectSimpleController extends ProjectBaseController
         
         $result = array();
         if (sizeof($data)) {
-//            $session = $this->get('session');
-//            $session->set($nameSpaceReport, json_encode($data));
+            $session = $this->get('session');
+            $session->set($nameSpaceReport, json_encode($data));
 
-            $filters = array();
-            $filters['fromDate'] = new \DateTime($data['fromDate']);
-            $filters['toDate'] = new \DateTime('23:59:59 '.$data['toDate']);
-            if (isset($data['managers'])) {
-                $filters['managers'] = $data['managers'];
-            }
-
-            $messages = $em->getRepository('ListsProjectBundle:Message')->getList($filters);
-
-            foreach ($messages as $message) {
-                $userId = $message->getUser()->getId();
-                if (!isset ( $result[$userId] )) {
-                    $result[$userId] = array();
-                    $result[$userId]['user'] = $message->getUser();
-                    $result[$userId]['message'] = array();
-                    $result[$userId]['count'] = $em->getRepository('ListsProjectBundle:Message')
-                        ->getAdvancedCountResult($filters, $userId);
-                }
-                $result[$userId]['message'][] = $message;
-            }
+            $result = $this->getResultForReport($data);
         }
 
         return $this->render('ListsProjectBundle:Project:reportMessage.html.twig', array(
@@ -500,44 +481,174 @@ class ProjectSimpleController extends ProjectBaseController
                 'results' => $result,
             ));
     }
-
     /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * getResultForReport
+     * 
+     * @param mixed $data
      */
-    public function reportAdvancedDoneAction(Request $request)
+    private function getResultForReport($data)
     {
-
-        
-        $data = $request->request->get($form->getName());
-
-        if (!sizeof($data)) {
-            return $this->redirect($this->generateUrl('lists_handling_report_advanced_range'));
+        $result = array();
+        $em = $this->getDoctrine()->getManager();
+        $filters = array();
+        $filters['fromDate'] = new \DateTime($data['fromDate']);
+        $filters['toDate'] = new \DateTime('23:59:59 '.$data['toDate']);
+        if (isset($data['managers'])) {
+            $filters['managers'] = $data['managers'];
         }
-        $nameSpaceReport = $this->filterNamespace.'_report';
+
+        $messages = $em->getRepository('ListsProjectBundle:Message')->getList($filters);
+
+        foreach ($messages as $message) {
+            $userId = $message->getUser()->getId();
+            if (!isset ( $result[$userId] )) {
+                $result[$userId] = array();
+                $result[$userId]['user'] = $message->getUser();
+                $result[$userId]['message'] = array();
+                $result[$userId]['count'] = $em->getRepository('ListsProjectBundle:Message')
+                    ->getAdvancedCountResult($filters, $userId);
+            }
+            $result[$userId]['message'][] = $message;
+        }
+
+        return $result;
+    }
+    /**
+     * reportExportAction
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function reportExportAction()
+    {
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        $service = $this->get('lists_project.service');
+        $access = $service->checkAccess($user);
+
+        if (!$access->canSeeReport()) {
+            throw $this->createAccessDeniedException('No access');
+        }
+        $nameSpaceReport = $this->filterNamespace.'_report_message';
         $session = $this->get('session');
-        $session->set($nameSpaceReport, json_encode($data));
+        $data = json_decode($session->get($nameSpaceReport), true);
 
-        $from = new \DateTime($data['from']);
-        $to = new \DateTime('23:59:59 '.$data['to']);
-        $managers = null;
-        if (isset($data['manager'])) {
-            $managers = $data['manager'];
+        $result = $this->getResultForReport($data);
+
+        return $this->exportReportToExcel($result);
+
+    }
+    /**
+     * Renders Excel
+     *
+     * @param array $actions
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportReportToExcel ($actions)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("Actions")
+            ->setLastModifiedBy("SD")
+            ->setTitle("Actions")
+            ->setSubject("Actions")
+            ->setDescription("Actions message list")
+            ->setKeywords("Actions")
+            ->setCategory("Actions");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1', $translator->trans('ID', array (), 'ListsProjectBundle'))
+            ->setCellValue('B1', $translator->trans('Organization', array (), 'ListsProjectBundle'))
+            ->setCellValue('C1', $translator->trans('Date', array (), 'ListsProjectBundle'))
+            ->setCellValue('D1', $translator->trans('Type', array (), 'ListsProjectBundle'));
+        $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+        $linkStyleArray = array (
+            'font' => array (
+                'color' => array ('rgb' => '0000FF'),
+                'underline' => 'single'
+            )
+        );
+        $str = 1;
+        foreach ($actions as $result) {
+            ++$str;
+            $col = 0;
+
+            $phpExcelObject->getActiveSheet()->mergeCells('A' . $str . ':D' . $str);
+            $phpExcelObject->getActiveSheet()->setCellValue('A'.$str, $result['user']->getFirstName() . ' '.$result['user']->getLastName());
+            $actionId = null;
+            foreach ($result['message'] as $message) {
+                $col = 0;
+                if ($actionId != $message->getType()->getId()) {
+                    $actionId = $message->getType()->getId();
+                    foreach ($result['count'] as $actionCount) {
+                        if ($message->getType()->getName() == $actionCount['typeAction']) {
+                            ++$str;
+                            $phpExcelObject->getActiveSheet()->setCellValue('D'.$str, $actionCount['typeAction']. '('.$actionCount['countAction'].')');
+                            $phpExcelObject->getActiveSheet()->mergeCells('A' . ($str) . ':C' . $str);
+                        }
+                    }
+                }
+                $phpExcelObject->getActiveSheet()->setCellValueByColumnAndRow($col, ++$str, $message->getId());
+                $phpExcelObject->getActiveSheet()->setCellValueByColumnAndRow(++$col, $str, $message->getProject()->getOrganization()->getName());
+                $phpExcelObject->getActiveSheet()->setCellValueByColumnAndRow(++$col, $str, $message->getEventDateTime()->format('d.m.Y H:i'));
+                $phpExcelObject->getActiveSheet()->setCellValueByColumnAndRow(++$col, $str, $message->getType()->getName());
+            }
         }
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(6);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(60);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C' . $str)->applyFromArray($linkStyleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A2:D' . $str)->getAlignment()->setWrapText(true);
+   
+        $styleArray = array (
+            'borders' => array (
+                'outline' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                    'color' => array ('argb' => '000000')
+                ),
+                'inside' => array (
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array ('argb' => '000000')
+                )
+            ),
+        );
 
-        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
-        $handlingMessageRepository = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingMessage');
+        $phpExcelObject->getActiveSheet()->getStyle('A1:D' . $str)->applyFromArray($styleArray);
 
-        /** @var HandlingMessageRepository $handlingMessageRepository */
-        $results = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:A' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:D1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:D1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('B2:D' . $str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
 
-        return $this->render('ListsHandlingBundle:Handling:reportAdvancedDone.html.twig', array(
-                'results' => $results,
-                'from' => $from,
-                'to' => $to
-            ));
+        $phpExcelObject->getActiveSheet()->getStyle('A1:D' . $str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false); //off line
+        $phpExcelObject->getActiveSheet()->setTitle('report');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=actions.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
 
+        return $response;
     }
 }

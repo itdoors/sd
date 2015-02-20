@@ -24,7 +24,7 @@ class MessageRepository extends EntityRepository
         return $this->createQueryBuilder('m')
             ->where('m.project = :projectId')
             ->setParameter(':projectId', $id)
-            ->orderBy('m.type, m.eventDatetime', 'DESC')
+            ->orderBy('m.type, m.eventDatetime', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -37,7 +37,8 @@ class MessageRepository extends EntityRepository
     {
         $q = $this->createQueryBuilder('m');
         $this->filter($q, $filtres);
-        $res = $q->getQuery()->getResult();
+        $q->leftJoin('m.type', 't');
+        $res = $q->orderBy('t.name')->getQuery()->getResult();
 
         return $res;
     }
@@ -87,7 +88,6 @@ class MessageRepository extends EntityRepository
         
         $sql
             ->select('count(m.id) as countAction, t.name as typeAction')
-            ->leftJoin('m.project', 'p')
             ->leftJoin('m.type', 't')
             ->andWhere('m.user = :userId')
             ->setParameter(':userId', $userId)
