@@ -29,18 +29,15 @@ class SalesAdminController extends BaseFilterController
      */
     public function reportHandlingStatusAction()
     {
-        /** @var HandlingRepository $handlingRepository */
-        $handlingRepository = $this->get('handling.repository');
-
+        $em = $this->getDoctrine()->getManager();
         $filterForm = $this->createForm($this->filterFormName);
 
-        $filters['progressNOT'] = 100;
         $filters['isClosed'] = 'FALSE';
 
-        /** @var Query $handlingQuery */
-        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
+        /** @var Query $projectQuery */
+        $projectQuery = $em->getRepository('ListsProjectBundle:Project')->getListProjectForTender(null, $filters);
 
-        $results = $handlingQuery->getResult();
+        $results = $projectQuery->getResult();
 
         return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportHandlingStatus.html.twig', array(
             'results' => $results,

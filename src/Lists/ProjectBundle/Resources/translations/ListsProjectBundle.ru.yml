@@ -141,3 +141,10 @@ Select services: Выберите услуги
 Enter organiztion: Введите организацию
 Enter manager: Введите менеджера
 Simple tender: Переговорная процедура
+period of actions: период активностей
+Create report: Создать отчет
+From DateTime *: Дата начало *
+To DateTime *: Дата окончания *
+Enter From DateTime: Введите дату начало
+Enter To DateTime: Введите дату окончания
+List of actions: Список активностей

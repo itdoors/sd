@@ -65,6 +65,19 @@ class ComparatorProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeReport()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canEdit ()
     {
         foreach ($this->accesses as $access) {

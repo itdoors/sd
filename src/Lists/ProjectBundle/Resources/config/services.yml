@@ -19,7 +19,8 @@ parameters:
     lists_project.manager_unique_user.validator.class: Lists\ProjectBundle\Validator\ManagerUniqueUserValidator
     lists_project.max_event_datetime.validator.class: Lists\ProjectBundle\Validator\MaxEventDatetimeValidator
     # FILTER
-    lists_project.project_filter.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
+    lists_project.project.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
+    lists_project.report_message.filter.class: Lists\ProjectBundle\Filter\ReportMessageFilter
 
 services:
     # SERVICE
@@ -139,8 +140,14 @@ services:
             - { name: validator.constraint_validator, alias: maxEventDatetime }
     # FILTER
     lists.project.projectFilter:
-        class: %lists_project.project_filter.filter.class%
+        class: %lists_project.project.filter.class%
         arguments:
             router: "@router"
         tags:
             - { name: form.type, alias: projectFilter }
+    lists.project.reportMessageFilter:
+        class: %lists_project.report_message.filter.class%
+        arguments:
+            router: "@router"
+        tags:
+            - { name: form.type, alias: reportMessageFilter }

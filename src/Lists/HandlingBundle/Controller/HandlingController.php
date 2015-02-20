@@ -488,73 +488,73 @@ class HandlingController extends BaseController
             ));
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function reportAdvancedRangeAction()
-    {
-        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
-        $service = $this->get('lists_handling.service');
-        $access = $service->checkAccess($this->getUser());
-
-        if (!$access->canSeeReport()) {
-            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
-        }
-
-        $form = $this->createForm('handlingReportDateRangeForm');
-
-        return $this->render('ListsHandlingBundle:Handling:reportAdvancedRange.html.twig', array(
-                'form' => $form->createView()
-            ));
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function reportAdvancedDoneAction(Request $request)
-    {
-        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
-        $service = $this->get('lists_handling.service');
-        $access = $service->checkAccess($this->getUser());
-
-        if (!$access->canSeeReport()) {
-            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
-        }
-
-        $form = $this->createForm('handlingReportDateRangeForm');
-
-        $data = $request->request->get($form->getName());
-
-        if (!sizeof($data)) {
-            return $this->redirect($this->generateUrl('lists_handling_report_advanced_range'));
-        }
-        $nameSpaceReport = $this->filterNamespace.'_report';
-        $session = $this->get('session');
-        $session->set($nameSpaceReport, json_encode($data));
-
-        $from = new \DateTime($data['from']);
-        $to = new \DateTime('23:59:59 '.$data['to']);
-        $managers = null;
-        if (isset($data['manager'])) {
-            $managers = $data['manager'];
-        }
-
-        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
-        $handlingMessageRepository = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingMessage');
-
-        /** @var HandlingMessageRepository $handlingMessageRepository */
-        $results = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
-
-        return $this->render('ListsHandlingBundle:Handling:reportAdvancedDone.html.twig', array(
-                'results' => $results,
-                'from' => $from,
-                'to' => $to
-            ));
-
-    }
+//    /**
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function reportAdvancedRangeAction()
+//    {
+//        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
+//        $service = $this->get('lists_handling.service');
+//        $access = $service->checkAccess($this->getUser());
+//
+//        if (!$access->canSeeReport()) {
+//            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+//        }
+//
+//        $form = $this->createForm('handlingReportDateRangeForm');
+//
+//        return $this->render('ListsHandlingBundle:Handling:reportAdvancedRange.html.twig', array(
+//                'form' => $form->createView()
+//            ));
+//    }
+//
+//    /**
+//     * @param Request $request
+//     *
+//     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+//     */
+//    public function reportAdvancedDoneAction(Request $request)
+//    {
+//        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
+//        $service = $this->get('lists_handling.service');
+//        $access = $service->checkAccess($this->getUser());
+//
+//        if (!$access->canSeeReport()) {
+//            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+//        }
+//
+//        $form = $this->createForm('handlingReportDateRangeForm');
+//
+//        $data = $request->request->get($form->getName());
+//
+//        if (!sizeof($data)) {
+//            return $this->redirect($this->generateUrl('lists_handling_report_advanced_range'));
+//        }
+//        $nameSpaceReport = $this->filterNamespace.'_report';
+//        $session = $this->get('session');
+//        $session->set($nameSpaceReport, json_encode($data));
+//
+//        $from = new \DateTime($data['from']);
+//        $to = new \DateTime('23:59:59 '.$data['to']);
+//        $managers = null;
+//        if (isset($data['manager'])) {
+//            $managers = $data['manager'];
+//        }
+//
+//        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
+//        $handlingMessageRepository = $this->getDoctrine()
+//            ->getRepository('ListsHandlingBundle:HandlingMessage');
+//
+//        /** @var HandlingMessageRepository $handlingMessageRepository */
+//        $results = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
+//
+//        return $this->render('ListsHandlingBundle:Handling:reportAdvancedDone.html.twig', array(
+//                'results' => $results,
+//                'from' => $from,
+//                'to' => $to
+//            ));
+//
+//    }
     /**
      * Renders organizationUsers list
      * 

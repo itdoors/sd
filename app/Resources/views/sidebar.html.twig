@@ -380,7 +380,7 @@
             {% endif %}
             {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
             <li{% if
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_report_message')
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                     or
@@ -393,16 +393,14 @@
                 </a>
                 <ul class="sub-menu">
                     {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
-                    {#<li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
-                        or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
+                    <li{% if 
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_report_message')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
+                        <a href="{{ path('lists_project_simple_report_message') }}" title="{% trans %}Activity{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Activity{% endtrans %}
                         </a>
-                    </li>#}
+                    </li>
                     {% endif %}
                     {% if is_granted('ROLE_SALESADMIN') %}
                     {#<li{% if 
@@ -413,30 +411,30 @@
                             {% trans %}All projects{% endtrans %}
                         </a>
                     </li>#}
-                    <li{% if 
+                    {#<li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
                         %} class="active"{% endif %}>
                         <a href="{{ path('lists_report_sales_admin_handling_status') }}" title="{% trans %}All projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}100% projects{% endtrans %}
                         </a>
-                    </li>
-                    <li{% if 
+                    </li>#}
+                    {#<li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                     %} class="active"{% endif %}>
                         <a href="{{ path('lists_report_sales_admin_last_messages') }}" title="{% trans %}All projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Last messages{% endtrans %}
                         </a>
-                    </li>
-                    <li{% if 
+                    </li>#}
+                    {#<li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
                     %} class="active"{% endif %}>
                         <a href="{{ path('lists_report_sales_admin_activity') }}" title="{% trans %}All manager activity{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}All manager activity{% endtrans %}
                         </a>
-                    </li>
+                    </li>#}
                     {% endif %}
                 </ul>
             </li>

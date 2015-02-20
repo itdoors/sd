@@ -71,8 +71,11 @@ lists_project_simple_list:
     
 lists_project_simple_export_excel:
     pattern:  /lists/project/simple/export/excel
-    defaults: { _controller: ListsHandlingBundle:ProjectSimple:exportExcel }
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:exportExcel }
 
+lists_project_simple_report_message:
+    pattern:  /lists/project/simple/report/message
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:reportMessage }
 
 # ProjectCommercialTenderController
 lists_project_commercial_tender_show:

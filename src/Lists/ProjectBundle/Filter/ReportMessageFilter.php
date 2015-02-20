@@ -1,15 +1,16 @@
 <?php
+
 namespace Lists\ProjectBundle\Filter;
 
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Routing\Router;
 
 /**
- * ProjectFilter
+ * Class ReportMessageFilter
  */
-class ProjectFilter extends AbstractType
+class ReportMessageFilter extends AbstractType
 {
     protected $router;
     /**
@@ -21,26 +22,28 @@ class ProjectFilter extends AbstractType
     {
         $this->router = $router;
     }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('organization', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $this->router->generate('sd_common_ajax_organization_for_contacts'),
-                    'data-url-by-id' => $this->router->generate('sd_common_ajax_organization_by_ids'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '100%',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter organiztion',
-                )
+            ->add('fromDate', 'datetime', array(
+                'data' => new \DateTime(),
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
+            ->add('toDate', 'datetime', array(
+                'data' => new \DateTime(),
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
             ))
             ->add('managers', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'requare' => false,
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $this->router->generate('sd_common_ajax_user_fio'),
                     'data-url-by-id' => $this->router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
@@ -52,18 +55,14 @@ class ProjectFilter extends AbstractType
                     'placeholder' => 'Enter manager',
                 )
             ));
-        
+
         $builder
-            ->add('submit', 'submit')
-            ->add('reset', 'reset');
-    
+            ->add('create', 'submit');
     }
 
-    public function getName()
-    {
-        return 'projectFilter';
-    }
-
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -71,5 +70,13 @@ class ProjectFilter extends AbstractType
             'translation_domain' => 'ListsProjectBundle',
             'validation_groups' => array('filtering')
         ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'reportMessageFilter';
     }
 }

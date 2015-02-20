@@ -33,6 +33,13 @@ class BasicProjectAccess implements ProjectAccessInterface
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canEdit ()
     {
         return false;

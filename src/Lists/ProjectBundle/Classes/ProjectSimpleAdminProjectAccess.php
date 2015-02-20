@@ -17,6 +17,13 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canSeeProjectSimple ()
     {
         return true;

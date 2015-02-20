@@ -47,7 +47,8 @@ Lists\HandlingBundle\Entity\HandlingUser:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
-            inversedBy: handlingUsers
+#            inversedBy: handlingUsers
+            inversedBy: null
             joinColumns:
                 user_id:
                     referencedColumnName: id
