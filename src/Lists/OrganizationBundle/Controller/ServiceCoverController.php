@@ -36,7 +36,7 @@ class ServiceCoverController extends BaseFilterController
      */
     public function listAction($organizationId)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $isEdit = false;
         /** @var OrganizationServiceCoverRepository $oscr */
         $oscr = $this->get('organization.service_cover.repository');
