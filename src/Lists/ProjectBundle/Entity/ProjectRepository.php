@@ -43,8 +43,6 @@ class ProjectRepository extends EntityRepository
         $this->filter($sql, $filters);
         $sql->orderBy('p.datetimeClosed', 'DESC');
         $sql->addOrderBy('mc.createDatetime', 'DESC');
-        
-        
 
         return $sql->getQuery();
     }
@@ -76,6 +74,20 @@ class ProjectRepository extends EntityRepository
                         $sql
                             ->andWhere($sql->expr()->in('m1.user', ':managersIds'));
                         $sql->setParameter(':managersIds', $value);
+                        break;
+                    case 'daterange':
+                        $dateStart = $value['start'];
+                        $dateEnd = new \DateTime($value['end']->format('Y-m-d').' 23:59:59');
+                        $sql->leftJoin('p.lastMessageCurrent', 'lmc');
+                        $sql->leftJoin('p.lastMessagePlanned', 'lmp');
+                        $sql->andWhere(
+                            $sql->expr()->orX(
+                                $sql->expr()->between('lmc.eventDatetime', ':start', ':end'),
+                                $sql->expr()->between('lmp.eventDatetime', ':start', ':end')
+                            )
+                        );
+                        $sql->setParameter(':start', $dateStart, Type::DATETIME);
+                        $sql->setParameter(':end', $dateEnd, Type::DATETIME);
                         break;
                 }
             }

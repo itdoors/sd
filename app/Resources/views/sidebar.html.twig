@@ -419,14 +419,14 @@
                             {% trans %}100% projects{% endtrans %}
                         </a>
                     </li>#}
-                    {#<li{% if 
+                    <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                     %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_last_messages') }}" title="{% trans %}All projects{% endtrans %}">
+                        <a href="{{ path('lists_report_sales_admin_last_messages') }}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Last messages{% endtrans %}
                         </a>
-                    </li>#}
+                    </li>
                     {#<li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
                     %} class="active"{% endif %}>
