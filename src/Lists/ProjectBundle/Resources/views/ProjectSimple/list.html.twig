@@ -36,9 +36,9 @@
             <thead>
                 <tr>
                     <th>{% trans %}ID{% endtrans %}</th>
-                    <th>{% trans %}Type{% endtrans %}</th>
                     <th>{% trans %}Customer{% endtrans %}</th>
                     <th>{% trans %}Responsibility{% endtrans %}</th>
+                    <th>{% trans %}Type{% endtrans %}</th>
                     <th>{% trans %}Action{% endtrans %}</th>
                 </tr>
             </thead>
@@ -49,9 +49,10 @@
                             {{ item.id|e }}
                         </a>
                     </td>
-                    <td>{{ item.getProjectType|trans}}</td>
+                    
                     <td>{{ item.organization|e }}</td>
                     <td>{{ item.managers|join('<br>')|raw}}</td>
+                    <td>{{ item.getProjectType|trans}}</td>
                     <td>
                         {% if item.statusAccess  == true and item.isClosed  != true and item.isManager(app.user) %}
                             {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig', {isList: true, object: item})}}
