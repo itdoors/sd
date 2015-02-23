@@ -53,11 +53,11 @@ class MigrationCommand extends ContainerAwareCommand
 //        $output->writeln('END TYPE');
         
         // перенос услуг
-        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
-        foreach ($services as $val) {
-            $this->saveService($val);
-        }
-        $output->writeln('END SERVICE');
+//        $services = $this->em->getRepository('ListsHandlingBundle:HandlingService')->findAll();
+//        foreach ($services as $val) {
+//            $this->saveService($val);
+//        }
+//        $output->writeln('END SERVICE');
         
         // перенос услуг
 //        $organizationServices = $this->em->getRepository('ListsOrganizationBundle:OrganizationServiceCover')->findAll();
@@ -74,10 +74,10 @@ class MigrationCommand extends ContainerAwareCommand
 //        $output->writeln('END SERVICE ORGANIZATION');
 //        
          // перенос проектов
-//        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
-//        foreach ($handlings as $val) {
-//            $this->handlingToProject($val, $output);
-//        }
+        $handlings = $this->em->getRepository('ListsHandlingBundle:Handling')->findAll();
+        foreach ($handlings as $handling) {
+            $this->updateData($handling, $output);
+        }
 //        $this->em->flush();
 //        $output->writeln('flush project');
 //         // перенос сообщений
@@ -173,7 +173,19 @@ class MigrationCommand extends ContainerAwareCommand
         $this->em->flush();
         $output->writeln('END');
     }
+    
+    private function updateData($handling, $output){
+        $project = $handling->getProject();
+        if (!$project) {
+             $output->writeln('project not found for id: '.$handling->getId());
+        } else {
+            $project->setPf($handling->getPf1());
+            $this->em->persist($project);
+        }
+        
+    }
 // Услуги
+    
     private function saveService($service)
     {
         // поиск
