@@ -103,6 +103,7 @@ class ProjectRepository extends EntityRepository
             $sql->setParameter(':start', $dateStart, Type::DATETIME);
             $sql->setParameter(':end', $dateEnd, Type::DATETIME);
         }
+//        $sql->addOrderBy('IDENTITY(p.managers)', 'DESC');
         $sql->addOrderBy('p.datetimeClosed', 'DESC');
 
         return $sql->getQuery();

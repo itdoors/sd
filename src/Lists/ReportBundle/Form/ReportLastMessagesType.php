@@ -46,6 +46,7 @@ class ReportLastMessagesType extends AbstractType
                         'minimumInputLength' => 2,
                         'allowClear' => true,
                         'width' => '200px',
+                        'multiple' => true
                     )),
                     'placeholder' => 'Enter Manager'
                 )
