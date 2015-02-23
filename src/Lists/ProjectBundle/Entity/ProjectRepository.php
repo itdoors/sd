@@ -76,9 +76,11 @@ class ProjectRepository extends EntityRepository
                     'project_commercial_tender',
                     'project_electronic_trading'
                 ));
-            $sql->leftJoin('p.files', 'f', 'WITH', 'f.type = :typeFile')
-                ->setParameter(':typeFile', $typeFile)
-                ->andWhere('f.name is not NULL');
+            if ($type == 'commercial') {
+                $sql->leftJoin('p.files', 'f', 'WITH', 'f.type = :typeFile')
+                    ->setParameter(':typeFile', $typeFile)
+                    ->andWhere('f.name is not NULL');
+            }
         }
 
         if (isset($filters['managers']) && !empty($filters['managers'])) {
@@ -95,9 +97,8 @@ class ProjectRepository extends EntityRepository
                 $sql->andWhere($sql->expr()->between('lmc.eventDatetime', ':start', ':end'));
                 $sql->andWhere($sql->expr()->between('lmc.eventDatetime', ':start', ':end'));
                 $sql->setParameter(':typeMessage', $typeMessage);
-                
             } else {
-                 $sql->andWhere($sql->expr()->between('p.createDate', ':start', ':end'));
+                $sql->andWhere($sql->expr()->between('p.createDate', ':start', ':end'));
             }
             $sql->setParameter(':start', $dateStart, Type::DATETIME);
             $sql->setParameter(':end', $dateEnd, Type::DATETIME);
