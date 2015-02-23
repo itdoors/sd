@@ -24,7 +24,8 @@ class MessageRepository extends EntityRepository
         return $this->createQueryBuilder('m')
             ->where('m.project = :projectId')
             ->setParameter(':projectId', $id)
-            ->orderBy('m.type, m.eventDatetime', 'ASC')
+            ->orderBy('m.eventDatetime', 'DESC')
+            ->addOrderBy('m.type', 'DESC')
             ->getQuery()
             ->getResult();
     }
