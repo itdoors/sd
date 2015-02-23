@@ -97,6 +97,7 @@ Lists\ProjectBundle\Entity\File:
                     - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                     - application/msword
                     - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                    - application/vnd.ms-powerpoint
                 mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
                 groups: [createFileProject]          
 Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
