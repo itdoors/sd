@@ -52,6 +52,13 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
+    public function canSeeProjectElectronicTrading ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canEditProjectStateTender ()
     {
         return true;
