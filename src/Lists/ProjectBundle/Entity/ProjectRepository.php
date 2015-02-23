@@ -62,7 +62,9 @@ class ProjectRepository extends EntityRepository
         $sql = $this->createQueryBuilder('p');
         if ($type == 'firstMeet') {
             $sql->select('p as project');
-            $sql->addSelect('lmc.description as descriptionMessage');
+            $sql->addSelect('m.description as descriptionMessage');
+            $sql->leftJoin('p.messages', 'm', 'WITH', 'm.type = :typeMessage');
+            
         }
         if ($type == 'electronic') {
             $sql->andWhere('p INSTANCE OF :discr')
@@ -93,9 +95,8 @@ class ProjectRepository extends EntityRepository
             $dateStart = $filters['daterange']['start'];
             $dateEnd = new \DateTime($filters['daterange']['end']->format('Y-m-d').' 23:59:59');
             if ($type == 'firstMeet') {
-                $sql->leftJoin('p.lastMessageCurrent', 'lmc', 'WITH', 'lmc.type = :typeMessage');
-                $sql->andWhere($sql->expr()->between('lmc.eventDatetime', ':start', ':end'));
-                $sql->andWhere($sql->expr()->between('lmc.eventDatetime', ':start', ':end'));
+                $sql->andWhere($sql->expr()->between('m.eventDatetime', ':start', ':end'));
+                $sql->andWhere($sql->expr()->between('m.eventDatetime', ':start', ':end'));
                 $sql->setParameter(':typeMessage', $typeMessage);
             } else {
                 $sql->andWhere($sql->expr()->between('p.createDate', ':start', ':end'));
