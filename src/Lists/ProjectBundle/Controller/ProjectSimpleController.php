@@ -65,6 +65,8 @@ class ProjectSimpleController extends ProjectBaseController
                 $object->setOrganization($form->get('organization')->getData());
                 $object->setDescription($form->get('description')->getData());
                 $object->setCreateDate($form->get('createDate')->getData());
+                $object->setSummaWithVAT($form->get('summaWithVAT')->getData());
+                $object->setPf($form->get('pf')->getData());
                 foreach ($services as $service) {
                     $object->addService($service);
                 }
@@ -74,6 +76,8 @@ class ProjectSimpleController extends ProjectBaseController
                 $object->setOrganization($form->get('organization')->getData());
                 $object->setDescription($form->get('description')->getData());
                 $object->setCreateDate($form->get('createDate')->getData());
+                $object->setSummaWithVAT($form->get('summaWithVAT')->getData());
+                $object->setPf($form->get('pf')->getData());
                 foreach ($services as $service) {
                     $object->addService($service);
                 }
@@ -236,7 +240,7 @@ class ProjectSimpleController extends ProjectBaseController
         $pagination = $paginator->paginate(
             $query,
             $page,
-            10
+            25
         );
 
         return $this->render('ListsProjectBundle:'.$this->nameEntity.':list.html.twig', array(

@@ -15,6 +15,16 @@ Lists\ProjectBundle\Entity\Project:
                 groups: [edit]
         statusAccess:
             - NotBlank: { groups: [confirm] }
+        pf:
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [create, edit]
+        summaWithVAT:
+            - Range:
+                min: 0
+                max: 99999999999
+                groups: [create, edit]
 #            - Choice:
 #                 callback: getCoiceConfirm
 #                 groups: [confirm]
@@ -70,11 +80,6 @@ Lists\ProjectBundle\Entity\ProjectStateTender:
                  groups: [edit]
         kveds:
             - NotBlank: { groups: [create] }
-        pf:
-            - Range:
-                min: 0
-                max: 99999999999
-                groups: [edit]
 Lists\ProjectBundle\Entity\File:
     properties:
         shortText:

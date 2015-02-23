@@ -2857,7 +2857,6 @@ COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата
 
 # app/console  lists:project:migration 
 ALTER TABLE model_contact ALTER last_name DROP NOT NULL;
-
 -- prod ++++
 ALTER TABLE organization_service_cover DROP CONSTRAINT FK_390A9CB2ED5CA9E6;
 

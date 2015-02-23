@@ -1,0 +1,43 @@
+{% trans_default_domain 'ListsProjectBundle' %}
+{{ include ('ListsProjectBundle:Project/Button:export.html.twig')}}
+<div class="margin-bottom-20"></div>
+    {% if results is not null %}
+    {% if results|length %}
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}Organization{% endtrans %} </th>
+            <th>{% trans %}Manager{% endtrans %} </th>
+            <th>{% trans %}Summa with VAT{% endtrans %} </th>
+            <th>{% trans %}PF1{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for project in results %}
+            {% set item = project.project %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>
+                    <a class="btn{% if item.statusAccess  != true %} yellow{% elseif  item.isClosed  != true %} blue{% else%} red{% endif %} button_wide" href="{{ path('lists_project_'~item.getDiscr~'_show', { id: item.id } ) }}">
+                        {{ item.id|e }}
+                    </a>
+                </td>
+                <td>{{ item.organization|e }}</td>
+                <td>{{ item.managers|join('<br>')|raw }}</td>
+                <td>{{ item.summaWithVat }}</td>
+                <td>{{ item.pf }}</td>
+                <td>{{ project.descriptionMessage }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="note note-danger">
+            <h4 class="block">{% trans %}At your request, nothing found{% endtrans %}</h4>
+        </div>
+    {%  endif%}
+{% else %}
+    <div class="note note-danger">
+        <h4 class="block">{% trans %}Please enter at least one parameter in the filter{% endtrans %}</h4>
+    </div>
+{%  endif%}

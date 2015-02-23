@@ -686,4 +686,60 @@ class Project
     {
         return $this->lastMessagePlanned;
     }
+
+    /**
+     * @var float
+     */
+    private $pf;
+
+    /**
+     * Set pf
+     *
+     * @param float $pf
+     *
+     * @return Project
+     */
+    public function setPf ($pf)
+    {
+        $this->pf = $pf;
+
+        return $this;
+    }
+    /**
+     * Get pf
+     *
+     * @return float 
+     */
+    public function getPf ()
+    {
+        return $this->pf;
+    }
+
+    /**
+     * @var float
+     */
+    private $summaWithVAT;
+
+    /**
+     * Set summaWithVAT
+     *
+     * @param float $summaWithVAT
+     *
+     * @return Project
+     */
+    public function setSummaWithVAT ($summaWithVAT)
+    {
+        $this->summaWithVAT = $summaWithVAT;
+
+        return $this;
+    }
+    /**
+     * Get summaWithVAT
+     *
+     * @return float 
+     */
+    public function getSummaWithVAT ()
+    {
+        return $this->summaWithVAT;
+    }
 }

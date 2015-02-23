@@ -190,3 +190,19 @@ lists_project_for_organization:
     defaults: { _controller: ListsProjectBundle:ProjectBase:forOrganization }
     requirements:
         id: \d+
+        
+lists_project_report:
+    pattern:  /lists/project/report
+    defaults: { _controller: ListsProjectBundle:ProjectBase:report }
+        
+lists_project_report_list:
+    pattern:  /lists/project/report/list/{type}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:reportList }
+    requirements:
+        id: electronic|commercial|firstMeet
+        
+lists_project_report_list_export:
+    pattern:  /lists/project/report/list/export/{type}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:reportListExport }
+    requirements:
+        id: electronic|commercial|firstMeet

@@ -355,4 +355,76 @@ class ProjectBaseController extends Controller
                 'projects' => $projects
         ));
     }
+    /**
+     * reportAction
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function reportAction ()
+    {
+        $filterNameSpace = $this->filterNamespace .'_report';
+
+        return $this->render('ListsProjectBundle:Project:report.html.twig', array (
+                'filterNameSpace' => $filterNameSpace
+        ));
+    }
+    /**
+     * reportListAction
+     * 
+     * @param string $type electronic|commercial|firstMeet
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function reportListAction ($type)
+    {
+        $filterNameSpace = $this->filterNamespace .'_report';
+        $em = $this->getDoctrine()->getManager();
+        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
+        $filters = $baseFilter->getFilters($filterNameSpace);
+
+        if (empty($filters) || empty($filters['managers']) && empty($filters['daterange']['text']) ) {
+            $results = null;
+        } else {
+            $typeFile = $em->getRepository('ListsProjectBundle:ProjectFileType')
+                ->findOneBy(array('alias' => 'commercial_offer'))
+                ->getId();
+            $typeMessage = $em->getRepository('ListsProjectBundle:MessageType')
+                ->findOneBy(array('slug' => 'first_meet'))
+                ->getId();
+            /** @var Query $projectQuery */
+            $projectQuery = $em->getRepository('ListsProjectBundle:Project')->getListProjectForReport($type, $typeFile, $typeMessage, $filters);
+//            echo $projectQuery->getSql();die;
+            $results = $projectQuery->getResult();
+        }
+
+        return $this->render('ListsProjectBundle:Project:Tab/report'.ucfirst($type).'List.html.twig', array (
+                'filterNameSpace' => $filterNameSpace,
+                'type' => $type,
+                'results' => $results
+        ));
+    }
+    /**
+     * reportListExportAction
+     * 
+     * @param string $type electronic|commercial|firstMeet
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function reportListExportAction ($type)
+    {
+        $filterNameSpace = $this->filterNamespace .'_report';
+
+        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
+        $filters = $baseFilter->getFilters($filterNameSpace);
+
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $baseFilter->setFilters($filterNameSpace, $filters);
+        }
+         
+        return $this->render('ListsProjectBundle:Project:Tab/report'.ucfirst($type).'List.html.twig', array (
+                'filterNameSpace' => $filterNameSpace,
+                'type' => $type
+        ));
+    }
 }

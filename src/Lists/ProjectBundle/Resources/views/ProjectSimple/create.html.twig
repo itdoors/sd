@@ -86,6 +86,7 @@
         $(document).ready(function (){
             $('.inputmask-date').inputmask("d.m.y",{ "placeholder": "{% trans %}dd.mm.yyyy{% endtrans %}", "clearIncomplete": true });
             $('.inputmask-datetime').inputmask("d.m.y h:s",{ "placeholder": "{% trans %}dd.mm.yyyy hh:mm{% endtrans %}", "clearIncomplete": true });
+            $('.inputmask-decimal').inputmask("decimal",{ "placeholder": "0.00", "radixPoint": ".", "rightAlign": false, "digits": 2});
         });
 
     </script>
@@ -143,6 +144,22 @@
                                 {{ form_label(form.services, 'Services', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.services, {'attr' : {'placeholder': "Select services"} }) }}
                                 {{ form_errors(form.services) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.pf.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.pf, 'PF1', {'attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.pf, {'attr' : {'class': 'form-control inputmask-decimal', 'placeholder': "0.00"} }) }}
+                                {{ form_errors(form.pf) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group{% if form.summaWithVAT.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.summaWithVAT, 'Summa with VAT', {'attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.summaWithVAT, {'attr' : {'class': 'form-control inputmask-decimal', 'placeholder': "0.00"} }) }}
+                                {{ form_errors(form.summaWithVAT) }}
                             </div>
                         </div>
                     </div>

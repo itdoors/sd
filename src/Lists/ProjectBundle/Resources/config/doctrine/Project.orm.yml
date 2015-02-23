@@ -72,6 +72,16 @@ Lists\ProjectBundle\Entity\Project:
             column: status_text
             options:
                 comment: Причина изменения статуса
+        pf:
+            type: float
+            nullable: true
+            column: pf
+        summaWithVAT:
+            type: float
+            nullable: true
+            column: summa_with_vat
+            options:
+                comment: Сумма с НДС
         createDate:
             type: date
             nullable: true

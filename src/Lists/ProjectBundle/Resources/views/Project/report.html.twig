@@ -1,0 +1,72 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsProjectBundle' %}
+{% block title %}{% trans %}Report{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Report{% endtrans %} <small>{% trans %}list of projects{% endtrans %}</small>
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            </li>
+            <li><a href="">{% trans %}Report{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.getLocale() ~'.js') }}"></script>
+{% endblock %}
+
+{% block modal %}
+    <div id="form_modal_block" class="modal" role="basic"></div>
+{% endblock %}
+
+{% block body %}
+
+    {{ ajax_filter_render('reportLastMessagesType', filterNameSpace, {
+            'electronicList': 'ITDoorsAjax.updateList',
+            'commercialList': 'ITDoorsAjax.updateList',
+            'firstMeetList': 'ITDoorsAjax.updateList',
+        }) }}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_electronic" data-toggle="tab">{% trans %}Electronic trading{% endtrans %}</a></li>
+                <li><a href="#tab_commercial" data-toggle="tab">{% trans %}Commercial offer{% endtrans %}</a></li>
+                <li><a href="#tab_firstMeet" data-toggle="tab">{% trans %}First meet{% endtrans %}</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_electronic">
+                    <div id="electronicList" data-url="{{ path('lists_project_report_list', { type: 'electronic' }) }}">
+                        {{ render(controller('ListsProjectBundle:ProjectBase:reportList', { type: 'electronic' })) }}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab_commercial">
+                    <div id="commercialList" data-url="{{ path('lists_project_report_list', { type: 'commercial' }) }}">
+                        {{ render(controller('ListsProjectBundle:ProjectBase:reportList', { type: 'commercial' })) }}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab_firstMeet">
+                    <div id="firstMeetList" data-url="{{ path('lists_project_report_list', { type: 'firstMeet' }) }}">
+                        {{ render(controller('ListsProjectBundle:ProjectBase:reportList', { type: 'firstMeet' })) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {#<div id="reportList" data-url="{{ url('lists_project_simple_list') }}">
+        {{ render(controller('ListsProjectBundle:ProjectSimple:list')) }}
+   </div>#}
+{% endblock body %}

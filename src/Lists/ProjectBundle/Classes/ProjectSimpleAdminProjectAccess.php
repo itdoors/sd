@@ -49,4 +49,11 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canEditProjectStateTender ()
+    {
+        return true;
+    }
 }

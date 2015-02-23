@@ -384,7 +384,7 @@
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_report')
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-pencil"></i>
@@ -403,38 +403,22 @@
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_SALESADMIN') %}
-                    {#<li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
+                        <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}All projects{% endtrans %}
-                        </a>
-                    </li>#}
-                    {#<li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
+                            <a href="{{ path('lists_report_sales_admin_last_messages') }}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Last messages{% endtrans %}
+                            </a>
+                        </li>
+                        <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_report')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_handling_status') }}" title="{% trans %}All projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}100% projects{% endtrans %}
-                        </a>
-                    </li>#}
-                    <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
-                    %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_last_messages') }}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}Last messages{% endtrans %}
-                        </a>
-                    </li>
-                    {#<li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
-                    %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_activity') }}" title="{% trans %}All manager activity{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}All manager activity{% endtrans %}
-                        </a>
-                    </li>#}
+                            <a href="{{ path('lists_project_report') }}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Report{% endtrans %}
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </li>
