@@ -54,7 +54,7 @@
                     <td>{{ item.managers|join('<br>')|raw}}</td>
                     <td>{{ item.getProjectType|trans}}</td>
                     <td>
-                        {% if item.statusAccess  == true and item.isClosed  != true and item.isManager(app.user) %}
+                        {% if item.statusAccess  == true and item.isClosed  != true and (item.isManager(app.user) or access.canCloseProject )%}
                             {{ include ('ListsProjectBundle:Project/Button:closeProject.html.twig', {isList: true, object: item})}}
                         {% elseif item.statusAccess  != true and item.organization.isManager(app.user) %}
                             {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig', {isList: true, object: item})}}
