@@ -3,6 +3,7 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lists\ProjectBundle\Entity\ManagerProjectType;
 
 /**
  * Project
@@ -360,6 +361,22 @@ class Project
         $managers = $this->getManagers();
         foreach ($managers as $manager) {
             if ($manager->getUser() == $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * isManager
+     *
+     * @return boolean
+     */
+    public function isManagerProject (\SD\UserBundle\Entity\User $user)
+    {
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            if ($manager->getUser() == $user and $manager instanceof ManagerProjectType) {
                 return true;
             }
         }
@@ -741,5 +758,21 @@ class Project
     public function getSummaWithVAT ()
     {
         return $this->summaWithVAT;
+    }
+    /**
+     * Get Manager Project
+     *
+     * @return float 
+     */
+    public function getManagerProject ()
+    {
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            if ($manager instanceof ManagerProjectType) {
+                return $manager;
+            }
+        }
+        
+        return null;
     }
 }
