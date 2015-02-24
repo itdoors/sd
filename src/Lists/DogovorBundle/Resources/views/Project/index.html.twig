@@ -1,0 +1,9 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+{% if access.canEdit%}
+<div id="dogovor-handling-form" class="margin-bottom-15">
+    {{ include ('ListsDogovorBundle:Project/Button:addProjectForm.html.twig')}}
+</div>
+{% endif %}
+<div id="dogovor-handling-list" data-url="{{ path('lists_dogovor_project_list', { dogovorId: dogovor.id }) }}">
+    {{ render(controller('ListsDogovorBundle:Project:List', { dogovorId: dogovor.id })) }}
+</div>

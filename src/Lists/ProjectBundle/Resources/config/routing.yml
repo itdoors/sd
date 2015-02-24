@@ -138,6 +138,11 @@ lists_project_ajax_services_by_ids:
     pattern:  /lists/project/ajax/services/by_ids
     defaults: { _controller: ListsProjectBundle:Ajax:projectServicesByIds}
 
+        
+lists_project_ajax_by_id:
+    pattern:  /lists/project/ajax/by_id
+    defaults: { _controller: ListsProjectBundle:Ajax:projectById}
+    
 lists_project_ajax_search_status_state_tender:
     pattern:  /lists/project/ajax/search/status/state_tender
     defaults: { _controller: ListsProjectBundle:Ajax:searchStatusProjectStateTender}

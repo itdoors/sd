@@ -402,6 +402,35 @@ class AjaxController extends Controller
 
         return new Response(json_encode($result));
     }
+    /**
+     * projectServicesByIdsAction
+     *
+     * @return string
+     */
+    public function projectByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        /** @var \Lists\ProjectBundle\Entity\ProjectRepository[] $project */
+        $project = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Project')->find($id);
+
+        $result = array();
+
+        if ($project) {
+            $id = $project->getId();
+            $string = $id.' - '.$project->getOrganization()->getName();
+
+            $result = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
      /**
      * editableProjectStateTenderParticipantAction
      * 

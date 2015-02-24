@@ -159,6 +159,15 @@ Lists\ProjectBundle\Entity\Project:
                 organization_id:
                     referencedColumnName: id
             orphanRemoval: false
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: projects
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         status:
             targetEntity: Status
             cascade: {  }

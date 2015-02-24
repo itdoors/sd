@@ -775,4 +775,32 @@ class Project
         
         return null;
     }
+    /**
+     * @var \Lists\DogovorBundle\Entity\Dogovor
+     */
+    private $dogovor;
+
+
+    /**
+     * Set dogovor
+     *
+     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @return Project
+     */
+    public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
+    {
+        $this->dogovor = $dogovor;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovor
+     *
+     * @return \Lists\DogovorBundle\Entity\Dogovor 
+     */
+    public function getDogovor()
+    {
+        return $this->dogovor;
+    }
 }

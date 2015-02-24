@@ -14,6 +14,20 @@ use Doctrine\DBAL\Types\Type;
 class ProjectRepository extends EntityRepository
 {
     /**
+     * Searches handling by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('p');
+        $sql->where('p.id = :q')
+            ->setParameter(':q', $q, Type::INTEGER);
+        return $sql->getQuery()->getResult();
+    }
+    /**
      * getListProjectSimple
      * 
      * @param User    $user

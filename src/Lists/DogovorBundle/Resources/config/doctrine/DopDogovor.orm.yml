@@ -55,7 +55,7 @@ Lists\DogovorBundle\Entity\DopDogovor:
             targetEntity: Dogovor
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: dopDogovors
             joinColumns:
                 dogovor_id:
                     referencedColumnName: id

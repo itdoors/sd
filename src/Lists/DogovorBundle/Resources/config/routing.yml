@@ -3,13 +3,9 @@ lists_dogovor_dogovor_index:
     pattern:  /lists/dogovor/dogovor/index
     defaults: { _controller: ListsDogovorBundle:Dogovor:index }
 
-lists_dogovor_handling_list:
-    pattern:  /lists/dogovor/handling/list/{dogovorId}
-    defaults: { _controller: ListsDogovorBundle:Handling:list }
-
-lists_dogovor_handling_form:
-    pattern:  /lists/dogovor/handling/form
-    defaults: { _controller: ListsDogovorBundle:Handling:form }
+lists_dogovor_project_list:
+    pattern:  /lists/dogovor/project/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:Project:list }
 
 lists_dogovor_dogovor_new:
     pattern:  /lists/dogovor/dogovor/new
@@ -68,6 +64,11 @@ lists_dogovor_ajax_search:
     pattern:  /lists/dogovor/ajax/search
     defaults: { _controller: ListsDogovorBundle:Ajax:dogovorSearch }
     methods:   [GET, POST]
+
+lists_dogovor_ajax_search_project:
+    pattern:  /lists/dogovor/ajax/search/project
+    defaults: { _controller: ListsDogovorBundle:Ajax:searchProjectId }
+    methods:   [GET]
 
 lists_dogovor_ajax_search_dependent:
     pattern:  /lists/dogovor/ajax/search/dependent
