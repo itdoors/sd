@@ -115,6 +115,7 @@ Lists\ProjectBundle\Entity\Project:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
+            fetch: EAGER
             inversedBy: null
             joinColumns:
                 created_user_id:
@@ -155,6 +156,7 @@ Lists\ProjectBundle\Entity\Project:
             cascade: {  }
             mappedBy: null
             inversedBy: null
+            fetch: EAGER
             joinColumns:
                 organization_id:
                     referencedColumnName: id

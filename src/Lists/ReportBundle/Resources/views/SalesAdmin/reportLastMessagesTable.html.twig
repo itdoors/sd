@@ -34,14 +34,14 @@
                         {{ item.organization }}
                     </a>
                 </td>
-                <td>{{ item.lastMessageCurrent.eventDatetime|date('d.m.Y H:i') }}</td>
-                <td>{{ item.lastMessageCurrent.type|e }}</td>
-                <td>{{ item.lastMessageCurrent.contact|e }}</td>
-                <td>{{ item.lastMessageCurrent.description|e }}</td>
-                <td>{{ item.lastMessagePlanned.eventDatetime|date('d.m.Y H:i') }}</td>
-                <td>{{ item.lastMessagePlanned.type|e }}</td>
-                <td>{{ item.lastMessagePlanned.contact|e }}</td>
-                <td>{{ item.lastMessagePlanned.description|e }}</td>
+                <td>{{ item.lastMessageCurrent is null ? '' : item.lastMessageCurrent.eventDatetime|date('d.m.Y H:i') }}</td>
+                <td>{{ item.lastMessageCurrent is null ? '' :item.lastMessageCurrent.type|e }}</td>
+                <td>{{ item.lastMessageCurrent is null ? '' :item.lastMessageCurrent.contact|e }}</td>
+                <td>{{ item.lastMessageCurrent is null ? '' :item.lastMessageCurrent.description|e }}</td>
+                <td>{{ item.lastMessagePlanned is null ? '' : item.lastMessagePlanned.eventDatetime |date('d.m.Y H:i') }}</td>
+                <td>{{ item.lastMessagePlanned is null ? '' : item.lastMessagePlanned.type|e }}</td>
+                <td>{{ item.lastMessagePlanned is null ? '' : item.lastMessagePlanned.contact|e }}</td>
+                <td>{{ item.lastMessagePlanned is null ? '' : item.lastMessagePlanned.description|e }}</td>
             </tr>
         {% endfor %}
         </tbody>

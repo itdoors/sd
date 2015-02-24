@@ -174,7 +174,7 @@
                 {% if actionName != message.type %}
                     {% set actionName = message.type %}
                     {% for actionCount in result.count %}
-                        {% if message.type.name == actionCount.typeAction %}
+                        {% if message.type and message.type.name == actionCount.typeAction %}
                             <tr>
                                 <td><a style="" href="#" class="toggle-show" data-class="{{ result.user.id }}-{{ message.type.id }}">+</a></td>
                                 <td colspan="2"></td>
@@ -183,7 +183,7 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <tr class="{{ result.user.id }}-{{ message.type.id }}" style="display:none">                    
+                <tr class="{{ result.user.id }}-{{ message.type is null ? '' : message.type.id }}" style="display:none">                    
                     <td>{{ message.id }}</td>
                     <td><a href="{{ path('lists_project_'~message.project.getDiscr()~'_show', { id : message.project.id }) }}" title="{% trans %}Show Handling{% endtrans %}">{{ message.project.organization }}</a></td>
                     <td>{{ message.eventDatetime | date('d.m.Y H:i') }}</td>
