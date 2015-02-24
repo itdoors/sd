@@ -653,7 +653,32 @@ class AjaxController extends Controller
             $projectFile->upload();
             $projectFile->setUser($this->getUser());
             $em->persist($projectFile);
-            $em->flush();
+            try {
+                $em->flush();
+                $em->refresh($projectFile);
+                $project = $projectFile->getProject();
+                if (!$project->getIsClosed()) {
+                    if (!$project instanceof \Lists\ProjectBundle\Entity\ProjectStateTender) {
+                        $status = $project->getStatus();
+                        if (
+                            !$status
+                            ||
+                            ($status && $status->getAlias() != 'comm_proposal')
+                            ||
+                            ($status && $status->getAlias() == 'comm_proposal' && $project->hasCommercialFile())
+                        ) {
+                            $robot = $em->getRepository('SDUserBundle:User')->find(0);
+                            $project->setUserClosed($robot);
+                            $project->setReasonClosed('Договор подписан');
+                            $em->persist($project);
+                            $em->flush();
+                        }
+                    }
+                }
+                
+            } catch (\ErrorException $e) {
+                $result['error'] = $e->getMessage();
+            }
             
             $result['id'] = $projectFile->getId();
             $result['file'] = $this->generateUrl('it_doors_file_access_get_if_authenticated', array(
