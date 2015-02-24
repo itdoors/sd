@@ -44,7 +44,7 @@ class ManagerMaxPartValidator extends ConstraintValidator
                 $partMax = $project->getManagerProject()->getPart();
             }
             $group = $this->context->getGroup();
-            if ($group == 'edit') {
+            if ($group == 'edit' && !$root instanceof Form) {
                 $this->em->refresh($root);
                 $man = $this->em->getRepository('ListsProjectBundle:Manager')->find($root->getId());
                 $partMax += ($man->getPart()*2);
