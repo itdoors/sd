@@ -39,7 +39,10 @@ class ManagerMaxPartValidator extends ConstraintValidator
             $project = $root->getProject();
         }
         if (isset($project)) {
-            $partMax = $project->getManagerProject()->getPart();
+            $partMax = 0;
+            if ($project->getManagerProject()) {
+                $partMax = $project->getManagerProject()->getPart();
+            }
             $group = $this->context->getGroup();
             if ($group == 'edit') {
                 $this->em->refresh($root);
