@@ -172,6 +172,10 @@ lists_project_message_update:
     requirements:
         id: \d+
 
+lists_project_ajax_editable_manager:
+    pattern:  /lists/project/ajax/editable/manager
+    defaults: { _controller: ListsProjectBundle:Ajax:editableManager}
+    
 # ProjectBaseController
 lists_project_managers:
     pattern:  /lists/project/lists/managers/{id}

@@ -7,15 +7,115 @@ use Symfony\Component\HttpFoundation\Response;
 use Lists\ProjectBundle\Entity\FileProject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\File;
-use Lists\ProjectBundle\Entity\ProjectStateTender;
 use Lists\ProjectBundle\Entity\ServiceProjectStateTender;
+use Lists\ProjectBundle\Entity\Manager;
 
 /**
  * Class AjaxController
  */
 class AjaxController extends Controller
 {
-    
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function editableManagerAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = (int) $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+        $methodGet = 'get' . ucfirst($name);
+
+        /** @var Manager $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Manager')
+            ->find($pk);
+
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+        $managerProject = $object->getProject()->getManagerProject();
+ 
+        $part = $managerProject->getPart()+$object->getPart()-$value;
+        $managerProject->setPart($part);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+       if (sizeof($errors) ) {
+            foreach ($errors as $error){
+                if ($error->getPropertyPath() == $name) {
+                    return new Response($error->getMessage(), 406);
+                }
+            }
+        }
+
+        $em->persist($object);
+        $em->persist($managerProject);
+
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+//            $email = $this->get('it_doors_email.service');
+//            $url = $this->generateUrl(
+//                'lists_handling_show',
+//                array('id' => $object->getHandlingId(), 'type' => 'my'),
+//                true
+//            );
+//            $email->send(
+//                null,
+//                'manager-change-part-in-project',
+//                array(
+//                    'users' => array(
+//                        $object->getUser()->getEmail()
+//                    ),
+//                    'variables' => array(
+//                        '${lastName}$' => $mainManager->getUser()->getLastName(),
+//                        '${firstName}$' => $mainManager->getUser()->getFirstName(),
+//                        '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+//                        '${part}$' => $value,
+//                        '${id}$' => $object->getHandlingId(),
+//                        '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+//                    )
+//                )
+//            );
+//            $cron = $this->container->get('it_doors_cron.service');
+//            $cron->addSendEmails();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array(
+            'success' => 1,
+            'manager' => array(
+                'id' => $object->getId(),
+                'managerId' => $managerProject->getId(),
+                'managerPart' => $part,
+                'value' => $value
+            )
+        );
+
+        return new Response(json_encode($return));
+    }
     /**
      * removeManagerAction
      * 

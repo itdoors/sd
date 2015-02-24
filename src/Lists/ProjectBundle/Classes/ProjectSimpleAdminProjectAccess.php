@@ -70,4 +70,11 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canChangeManagerProject ()
+    {
+        return true;
+    }
 }

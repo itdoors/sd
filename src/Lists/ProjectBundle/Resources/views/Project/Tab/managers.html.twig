@@ -4,6 +4,9 @@
     {% if access.canChangeManager %}
         {{ include ('ListsProjectBundle:Project/Button:addManager.html.twig')}}
     {% endif %}
+    {% if access.canChangeManagerProject %}
+        {{ include ('ListsProjectBundle:Project/Button:addManagerProject.html.twig')}}
+    {% endif %}
     <div id="managers_list" data-url="{{ path('lists_project_managers', { id: object.id }) }}">
         {{ render(controller('ListsProjectBundle:ProjectBase:managers', { id: object.id })) }}
     </div>

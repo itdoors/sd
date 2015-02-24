@@ -248,6 +248,7 @@ class ProjectBaseController extends Controller
             ->getRepository('ListsProjectBundle:Project')->find($id);
 
         $managers = $project->getManagers();
+        $managerProject = $project->getManagerProject();
 //        foreach ($managers as $manager) {
 //            if ($manager instanceof ManagerProjectType) {
 //                echo 'менеджерsdfsf';die;
@@ -258,7 +259,7 @@ class ProjectBaseController extends Controller
         $access = $service->checkAccess($this->getUser(), $project);
 
         return $this->render('ListsProjectBundle:Project:listManagers.html.twig', array (
-                'managerProject' => $managers[0],
+                'managerProject' => $managerProject,
                 'managers' => $managers,
                 'project' => $project,
                 'access' => $access

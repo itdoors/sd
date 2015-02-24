@@ -122,7 +122,7 @@ Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
 Lists\ProjectBundle\Entity\Manager:
     properties:
         part:
-            - NotBlank: { groups: [create] }
-            - Lists\ProjectBundle\Validator\ManagerMaxPart: { groups: [create] }
+            - NotBlank: { groups: [create, edit] }
+            - Lists\ProjectBundle\Validator\ManagerMaxPart: { groups: [create, edit] }
         user:
             - Lists\ProjectBundle\Validator\ManagerUniqueUser: { groups: [create] }
