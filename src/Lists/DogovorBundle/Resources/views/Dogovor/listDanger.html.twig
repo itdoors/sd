@@ -20,10 +20,10 @@
     <div class="portlet-title">
         <div class="caption"><i class="fa fa-globe"></i> {% trans %}Dogovor list{% endtrans %}</div>
         <div class="tools">
-            <a class="collapse" href="" title="{% trans %}Dogovor list{% endtrans %}"></a>
+            <a class="expand" href="" title="{% trans %}Dogovor list{% endtrans %}"></a>
         </div>
     </div>
-    <div class="portlet-body">
+    <div class="portlet-body" style="display: none">
         <div class="navigation">
             {{ ajax_paginator_render(
                     pagination, namespace, {
