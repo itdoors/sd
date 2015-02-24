@@ -34,7 +34,7 @@ class OrganizationCreateForm extends AbstractType
                 'required' => true
             ))
             ->add('edrpou', 'text', array(
-                'required' => true
+                'required' => false
             ))
             ->add('contact', new \Lists\ContactBundle\Form\ModelContactOrganizationFormType($this->container), array(
                 'mapped' => false

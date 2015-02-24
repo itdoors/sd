@@ -9,6 +9,4 @@ Lists\OrganizationBundle\Entity\Organization:
                 groups: [create]
             
         edrpou:
-            - NotBlank: { groups: [create] }
-            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit, create]}
-            
+            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit, create] }
