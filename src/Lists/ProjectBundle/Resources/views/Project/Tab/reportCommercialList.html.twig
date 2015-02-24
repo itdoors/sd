@@ -26,7 +26,7 @@
                 <td>{{ item.organization }}</td>
                 <td>{{ item.summaWithVat }}</td>
                 <td>{{ item.pf }}</td>
-                <td></td>
+                <td>{{ item.getСontractЕime is null ? '' :  item.getСontractЕime |date('d.m.Y')  }}</td>
                 <td>{{ item.services|join('<br>')|raw }}</td>
             </tr>
         {% endfor %}

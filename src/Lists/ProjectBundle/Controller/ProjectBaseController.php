@@ -636,7 +636,7 @@ class ProjectBaseController extends Controller
                 ->setCellValueByColumnAndRow(++$col, $str, $project->getOrganization()->getName())
                 ->setCellValueByColumnAndRow(++$col, $str, $project->getSummaWithVat())
                 ->setCellValueByColumnAndRow(++$col, $str, $project->getPf())
-                ->setCellValueByColumnAndRow(++$col, $str, '')
+                ->setCellValueByColumnAndRow(++$col, $str, $project->getСontractЕime() ? $project->getСontractЕime()->format('d.m.Y'):'')
                 ->setCellValueByColumnAndRow(++$col, $str, $service);
         }
         $phpExcelObject->getActiveSheet()->getStyle('B2:C' . $str)->applyFromArray($linkStyleArray);

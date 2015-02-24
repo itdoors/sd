@@ -803,4 +803,19 @@ class Project
     {
         return $this->dogovor;
     }
+
+    /**
+     * getСontractЕime
+     *
+     * @return \DateTime
+     */
+    public function getСontractЕime()
+    {
+        $dogovor = $this->getDogovor();
+        if (!$dogovor) {
+            return null;
+        }
+
+        return $dogovor->getStopdatetime();
+    }
 }
