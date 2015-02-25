@@ -48,7 +48,8 @@ class PayMasterBankForm extends AbstractType
                     'class' => 'form-control can-be-reseted',
                     'data-url' => $this->router->generate('lists_organization_ajax_bank_searh_dependent_field'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 0
+                        'minimumInputLength' => 2,
+                        'width' => '100%'
                     )),
                     'placeholder' => 'Select bank',
                 )

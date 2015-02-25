@@ -479,10 +479,9 @@ class OrganizationRepository extends EntityRepository
      */
     public function getSearchSingQuery($q)
     {
-        $sql = $this->createQueryBuilder('o')
-            ->innerJoin('o.lookup', 'sign')
-            ->where('lower(o.name) LIKE :q')
-            ->andWhere('sign.lukey = :lukey')
+        $sql = $this->createQueryBuilder('o');
+        $sql->innerJoin('o.organizationsigns', 'sign', 'WITH', 'sign.lukey = :lukey')
+            ->where($sql->expr()->like($sql->expr()->lower('o.name'), ':q'))
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->setParameter(':lukey', 'organization_sign_own')
             ->orderBy('o.name');

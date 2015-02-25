@@ -7,8 +7,7 @@
 
     <li class="sidebar-toggler-wrapper">
         <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-        <div class="sidebar-toggler">
-        </div>
+        <div class="sidebar-toggler"></div>
         <!-- END SIDEBAR TOGGLER BUTTON -->
     </li>
         {% include 'sidebar_search.html.twig' %}
@@ -678,10 +677,30 @@
                 <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
                     %} class="active"{% endif %}>
-                    <a href="{{ path('it_doors_pay_master_index') }}">
+                    
+                    <a href="javascript:;">
                         <i class="icon-pencil"></i>
                         <span class="title">{% trans %}Pay Master{% endtrans %}</span>
+                        <span class="arrow "></span>
                     </a>
+                    <ul  class="sub-menu">
+                        <li{% if 
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_pay_master_index') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}Pay Master{% endtrans %}</span>
+                            </a>
+                        </li>
+                        <li{% if 
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_pay_master_index') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}Payers{% endtrans %}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             {% endif %}
         {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}
