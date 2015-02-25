@@ -63,6 +63,39 @@ class ProjectRepository extends EntityRepository
     /**
      * getListProjectSimple
      * 
+     * @param User    $user
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
+    public function getListProjectForExport($user, $filters = array())
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+        $sql->andWhere('p INSTANCE OF :discr')
+            ->setParameter(':discr', array(
+                'project_simple',
+                'project_commercial_tender',
+                'project_electronic_trading'
+            ));
+        $sql->leftJoin('p.lastMessageCurrent', 'mc');
+        if ($user) {
+            $sql
+                ->leftJoin('p.managers', 'm', 'WITH', 'm.user = :user')
+                ->leftJoin('p.organization', 'o')
+                ->leftJoin('o.organizationUsers', 'mo', 'WITH', 'mo.user = :user')
+                ->andWhere($sql->expr()->orX('m.user = :user', 'mo.user = :user'))
+                ->setParameter(':user', $user);
+        }
+        $this->filter($sql, $filters);
+        $sql->orderBy('p.datetimeClosed', 'DESC');
+        $sql->addOrderBy('mc.createDatetime', 'DESC');
+
+        return $sql->getQuery();
+    }
+    /**
+     * getListProjectSimple
+     * 
      * @param string  $type
      * @param integer $typeFile
      * @param integer $typeMessage
