@@ -15,7 +15,7 @@ class ProjectBaseControllerTest extends WebTestCase
         $pageLogin = $client->followRedirect();
         $this->assertTrue($pageLogin->filter('button#_submit')->count() > 0);
         $form = $pageLogin->filter('#_submit')->form();
-        $form['_username'] = 'e.drozdova';
+        $form['_username'] = 'admin';
         $form['_password'] = '23er2fq2WEdallas23er2fq2WE';
         $client->submit($form);
         $this->assertTrue($client->getResponse()->isRedirect());
