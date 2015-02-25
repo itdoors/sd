@@ -35,3 +35,29 @@ Person: Физ.лицо
 Customer Type: Тип клиента
 
 <strong>Warning!</strong> Something went wrong. Please check.: <strong>Ошибка!</strong> Не получилось передать сообщение. Попробуйте позже.
+
+#status
+sta_sclose_smclose_cclose: Выполнена
+sta_open: Открыта
+sta_sappointed_smwait: Передана
+sta_sclose_smwait: В работе
+sta_sclose_smwait_cwait: Утверждение
+sta_sclose_smclose_cwait: Отклонена
+sta_smeta_composу: Составление
+sta_smeta_approve: Утверждение
+sta_smeta_conform: Согласована
+sta_smeta_cancel: Отклонена
+sta_smet: На смете
+
+#type
+cleaning: Клининг
+tech: Техническое Обслуживание, ...  
+green_comfort_it: Озеленение, комфорт, IT   
+catering: Кейтеринг
+complaint: Жалоба
+opinion: Мнение
+other: Без рубрики  
+transportation: Перевозки, грузчики 
+property: Проперти
+pest: Контроль вредителей   
+act_collection: Сбор актов  

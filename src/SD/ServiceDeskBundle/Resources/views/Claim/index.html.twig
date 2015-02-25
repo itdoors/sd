@@ -84,8 +84,8 @@
                             <td>{{ entity['claim'].targetDepartment.address | default('') }}</td>
                             <td>{{ entity['claim'].targetDepartment.organization | default('') }}</td>
                             <td>{{ entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
-                            <td>{{ entity['claim'].type }}</td>
-                            <td>{{ entity['claim'].status }}</td>
+                            <td>{{ entity['claim'].type  | trans }}</td>
+                            <td>{{ entity['claim'].status | trans }}</td>
                             <td>{{ entity['claim'].importance.name | default('') }}</td>
                             <td>{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('Y-m-d') }}{% endif %}</td>
                         </tr>
