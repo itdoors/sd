@@ -1,0 +1,49 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}List of Organizations{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_organization_payer_index') }}" title="{% trans %}Organizations{% endtrans %}">{% trans %}Organizations{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>list of organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.getLocale() ~'.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    {% if access.canAddOrganization %}
+        <div class="table-toolbar">
+            <div class="btn-group">
+                <a class="btn green" id="add_organization" href="{{ path('lists_organization_payer_new') }}">
+                    {% trans %}Add New organization{% endtrans %} <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('lists_organization_payer_list') }}">
+                {{ render(controller('ListsOrganizationBundle:Payer:list')) }}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -676,6 +676,14 @@
             {% if is_granted('ROLE_PAY_MASTER') or is_granted('ROLE_PAY_MASTER_CONTROLLING') %}
                 <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                        or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_index')
+                        or
+                        (
+                            app.request.attributes.get('_route_params').id is defined
+                            and
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_show', app.request.attributes.get('_route_params'))
+                        )
                     %} class="active"{% endif %}>
                     
                     <a href="javascript:;">
@@ -693,9 +701,9 @@
                             </a>
                         </li>
                         <li{% if 
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_index')
                             %} class="active"{% endif %}>
-                            <a href="{{ path('it_doors_pay_master_index') }}">
+                            <a href="{{ path('lists_organization_payer_index') }}">
                                 <i class="icon-pencil"></i>
                                 <span class="title">{% trans %}Payers{% endtrans %}</span>
                             </a>

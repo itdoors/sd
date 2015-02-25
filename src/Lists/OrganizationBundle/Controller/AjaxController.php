@@ -367,7 +367,7 @@ class AjaxController extends BaseController
         $repository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $objects = $repository->getSearchSingQuery($searchText);
+        $objects = $repository->getSearchPayerQuery($searchText);
 
         $result = array();
 

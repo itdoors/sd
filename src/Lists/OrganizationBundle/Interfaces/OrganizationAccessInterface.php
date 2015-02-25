@@ -63,4 +63,12 @@ interface OrganizationAccessInterface
      * @return bool
      */
     public function canEditIsPayer();
+    /**
+     * @return bool
+     */
+    public function canSeePayer();
+    /**
+     * @return bool
+     */
+    public function canAddPayer();
 }
