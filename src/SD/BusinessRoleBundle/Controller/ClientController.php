@@ -38,19 +38,26 @@ class ClientController extends Controller
      * @return string
      */
     public function createAction(Request $request)
-    {var_dump($request->request->get('clientAddForm'));die();
+    {
         $entity = new Client();
+        $em = $this->getDoctrine()->getManager();
+
         $form = $this->createCreateForm($entity);
         $indForm = $this->createCreateFormWithIndividual($entity);
+
         $form->handleRequest($request);
         $indForm->handleRequest($request);
-var_dump($indForm);die();
-        if ($form->isValid() || $indForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
+        if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('client_show', array('id' => $entity->getId())));
+        } else if ($indForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('client_show', array('id' => $entity->getId())));            
         }
 
         return $this->render('SDBusinessRoleBundle:Client:new.html.twig', array(
@@ -104,10 +111,12 @@ var_dump($indForm);die();
     public function newAction()
     {
         $entity = new Client();
-        $entity->setIndividual(new \Lists\IndividualBundle\Entity\Individual());
-        $c1 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::TEL, 123);
-        $c2 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::EMAIL, 'asd@asd.asd');
-        $entity->getIndividual()->addContact($c1)->addContact($c2);
+
+//         $entity->setIndividual(new \Lists\IndividualBundle\Entity\Individual());
+//         $c1 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::TEL, 123);
+//         $c2 = new \Lists\IndividualBundle\Entity\Contact(\Lists\IndividualBundle\Entity\ContactType::EMAIL, 'asd@asd.asd');
+//         $entity->getIndividual()->addContact($c1)->addContact($c2);
+
         $form = $this->createCreateForm($entity);
         $indForm = $this->createCreateFormWithIndividual($entity);
 

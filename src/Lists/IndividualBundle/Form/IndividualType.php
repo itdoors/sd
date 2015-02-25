@@ -25,8 +25,6 @@ class IndividualType extends AbstractType
             ))
             ->add('tin', null, array('required' => false))
             ->add('passport', null, array('required' => false))
-//             ->add('address', null, array('required' => false))
-//             ->add('phone', null, array('required' => false))
             ->add('contacts', 'collection', array(
                 'type' => new \Lists\IndividualBundle\Form\ContactType(),
                 'allow_add' => true,

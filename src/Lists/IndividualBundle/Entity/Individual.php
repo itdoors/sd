@@ -393,6 +393,7 @@ class Individual
      */
     public function addContact(\Lists\IndividualBundle\Entity\Contact $contact)
     {
+        $contact->setIndividual($this);
         $this->contacts[] = $contact;
 
         return $this;
