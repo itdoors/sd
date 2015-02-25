@@ -24,7 +24,7 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SDBusinessRoleBundle:Client')->findAll();
+        $entities = $em->getRepository('SDBusinessRoleBundle:Client')->findAllClients();
 
         return $this->render('SDBusinessRoleBundle:Client:index.html.twig', array(
             'entities' => $entities,

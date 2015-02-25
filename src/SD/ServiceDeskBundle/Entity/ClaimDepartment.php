@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimDepartment
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClaimDepartmentRepository")
  */
 class ClaimDepartment extends Claim
 {

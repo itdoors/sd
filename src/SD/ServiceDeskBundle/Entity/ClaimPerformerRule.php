@@ -33,14 +33,14 @@ class ClaimPerformerRule
      *
      * @ORM\Column(name="can_post_to_clients", type="boolean")
      */
-    protected $canPostToClients;
+    protected $canPostToClients = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="claim_updated", type="boolean")
      */
-    protected $claimUpdated;
+    protected $claimUpdated = false;
 
     /**
      * @var \SD\BusinessRoleBundle\Entity\ClaimPerformer

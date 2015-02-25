@@ -33,11 +33,14 @@
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
 {% endblock %}
@@ -53,14 +56,14 @@
         				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
         				{{ entity.type }} </span>
         			</li>
-        			<li class="list-group-item">
-        				{% trans %}Target{% endtrans %}
-        				{% if entity.targetDepartment is defined %}
-        				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>
-    				    {% elseif entity.targetIndividual is defined %}
-    				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>
-				        {% endif %}
-        			</li>
+{#         			<li class="list-group-item">#}
+{#         				{% trans %}Target{% endtrans %}#}
+{#         				{% if entity.targetDepartment is defined %}#}
+{#         				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>#}
+{#     				    {% elseif entity.targetIndividual is defined %}#}
+{#     				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>#}
+{# 				        {% endif %}#}
+{#         			</li>#}
         			<li class="list-group-item">
         				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
         				{{ entity.status }} </span>
@@ -100,14 +103,24 @@
         		</div>
     		</div>
     		<div class="col-md-4">
-                <div class="panel panel-default">
+                <div id="performers" class="panel panel-default">
         			<div class="panel-heading">
         				<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
         			</div>
-        			<div class="panel-body">
+        			<div id="performers_body" class="panel-body" style="overflow: auto">
         			     {% for rule in entity.claimPerformerRules %}
-        			         <p>{{ rule.claimPerformer }}</p>
+        			         <p>{{ rule.claimPerformer }}
+        			             <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
+        			         </p>
         			     {% endfor %}
+        			     {{ form_start(performerRuleForm) }}
+            			     <div class="input-group">
+    				               {{ form_widget(performerRuleForm.claimPerformer, {'attr' : {'class' : 'form-control select2me', 'placeholder': 'Select...' | trans}}) }}
+        							<span class="input-group-btn">
+        							     <button class="btn btn-cl green" type="submit">{% trans %}Add{% endtrans %}</button>
+        							</span>
+    						</div>
+						{{ form_end(performerRuleForm) }}
         			</div>
         		</div>
     		</div>
@@ -120,8 +133,12 @@
 			     {{ form_start(form) }}
 			     {{ form_widget(form.text) }}
 			     <div class="row">
-			         <div class="col-md-1">
+			         <div class="col-md-2">
                         <button id="add_msg" type="submit" class="btn btn-default margin-top-10 margin-bottom-15">{% trans %}Send{% endtrans %}</button>
+                     </div>
+                     <div class="col-md-2 margin-top-20">
+                        {{ form_widget(form.visible, {'attr' : {'class' : 'form-control'}}) }}
+                        <label class="required control-label">{% trans %}Visible for clients{% endtrans%}</label>
                      </div>
                      <div class="col-md-4 margin-top-10">
                         {{ form_widget(form.files)|raw }}
@@ -130,7 +147,7 @@
                  {{ form_end(form) }}
                  <div id="my_msg"></div>
 			     {% for message in messages %}
-			         <div class="note note-success">
+			         <div class="note note-{% if message.visible %}success{% else %}info{% endif %}">
 						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
 						{{ message.text | raw('html') }}
 						{% if message.files is not empty %}
@@ -145,6 +162,29 @@
 		</div>
 		<script>
             $(document).ready(function() {
+            	$(document).on('click', '.remove-performer', function() {
+                    var p = $(this).closest('p');
+            		$.ajax({
+                        data: {
+                            rule_id: $(this).val()
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_rm_rule') }}",
+                        beforeSend: function () {
+                        	SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                        	p.remove();
+                        	SD.unblockUI($('#performers'));
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#performers'));
+                        }
+                    });
+                });
+            	$('.select2').select2({
+                    allowClear: true
+                });
             	$('.doclink').click(function(){
                 	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
                 	url += '?';
@@ -179,6 +219,31 @@
                         }
                     });
                 }
+                $("form[name='{{ performerRuleForm.vars.name }}']").submit(function (e) {
+                	var formData = new FormData($(this)[0]);
+                	$.ajax({
+                    	url: "{{ path('claim_add_rule') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                        	SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                        	$('#performers_body').prepend(
+                                	'<p>' + response.performer
+                                	 + '<button type="button" class="close remove-performer" value="'
+                                	 + response.id + '" aria-label="Remove"></button></p>');
+                        	SD.unblockUI($('#performers'));
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#performers'));
+                        }
+                	});
+                	return false;
+                });
                 $("form[name='{{ form.vars.name }}']").submit(function (e) {
                 	var formData = new FormData($(this)[0]);
                     $.ajax({
@@ -189,13 +254,14 @@
                         contentType: false,
                         processData: false,
                         beforeSend: function () {
-                        	SD.blockUI($('#messages'));
+                        	SD.blockUI($("form[name='{{ form.vars.name }}']"));
                         },
                         success: function(response) {
                         	var time = moment.unix(response.createdAt);
                         	var createdAt = time.format('YYYY-MM-DD HH:mm:ss');
                         	var aHTML = $('#{{ form.vars.name }}_text').code();
-                        	var messageBody = '<div id="' + response.createdAt + '" class="note note-success">\
+                        	var visible = response.visible ? 'success' : 'info';
+                        	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + visible + '">\
                                                    <h5 class="block">' + response.user + ' ' + createdAt + '</h5>'
                                                        + aHTML;
                            if (response.files != undefined) {
@@ -220,7 +286,7 @@
                             	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
                             	window.location = url;
                             });
-                        	SD.unblockUI($('#messages'));
+                        	SD.unblockUI($("form[name='{{ form.vars.name }}']"));
                         	$('#' + response.createdAt).pulsate({
                                 color: "#bf1c56",
                                 reach: 40,
@@ -236,7 +302,7 @@
         						{% trans %}<strong>Warning!</strong> Something went wrong. Please check.{% endtrans %}\
         					</div>'
         					);
-                        	SD.unblockUI($('#messages'));
+                        	SD.unblockUI($("form[name='{{ form.vars.name }}']"));
                         }
                     });
                     return false;

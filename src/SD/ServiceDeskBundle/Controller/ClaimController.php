@@ -11,6 +11,9 @@ use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Form\ClaimType;
 use SD\ServiceDeskBundle\Form\ClaimMessageType;
 use SD\ServiceDeskBundle\Entity\ClaimMessage;
+use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
+use SD\ServiceDeskBundle\Form\PerformerRuleForm;
+use SD\ServiceDeskBundle\Entity\StatusType;
 
 /**
  * Claim controller.
@@ -28,12 +31,16 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em
-            ->getRepository('SDServiceDeskBundle:Claim')
-            ->findAll();
+        $entities1 = $em
+            ->getRepository('SDServiceDeskBundle:ClaimOnce')
+            ->findNotDone();
+
+        $entities2 = $em
+            ->getRepository('SDServiceDeskBundle:ClaimDepartment')
+            ->findNotDone();
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => array_merge($entities1, $entities2)
         ));
     }
 
@@ -58,6 +65,7 @@ class ClaimController extends Controller
         $em->flush();
 
         $response = [];
+        $response['visible'] = $entity->getVisible();
         $response['user'] = $entity->getUser()->__toString();
         $response['createdAt'] = $entity->getCreatedAt()->getTimestamp();
         foreach ($entity->getFiles() as $file) {
@@ -68,6 +76,57 @@ class ClaimController extends Controller
         }
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Adds performerRule to the claim (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addRuleAction(Request $request)
+    {
+        $entity = new ClaimPerformerRule();
+    
+        $form = $this->createPerformerRuleForm($entity);
+        $form->handleRequest($request);
+    
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
+    
+        $response = [];
+        $response['id'] = $entity->getId();
+        $response['performer'] = $entity->getClaimPerformer()->__toString();
+    
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Adds performerRule to the claim (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function removeRuleAction(Request $request)
+    {
+        $id = $request->get('rule_id');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em
+            ->getRepository('SDServiceDeskBundle:ClaimPerformerRule')
+            ->find($id);
+
+        if ($entity) {
+            $em->remove($entity);
+            $em->flush();
+
+            return new JsonResponse();
+        }
+
+        return new JsonResponse(null, 500);
     }
 
     /**
@@ -132,6 +191,23 @@ class ClaimController extends Controller
     }
 
     /**
+     * Creates a form to create a ClaimPerformerRule entity.
+     *
+     * @param ClaimPerformerRule $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createPerformerRuleForm(ClaimPerformerRule $entity)
+    {
+        $form = $this->createForm(new PerformerRuleForm(), $entity, array(
+            'action' => $this->generateUrl('claim_add_rule'),
+            'method' => 'POST',
+        ));
+
+        return $form;
+    }
+
+    /**
      * Displays a form to create a new Claim entity.
      *
      * @return string
@@ -158,7 +234,7 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->findClaim($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Claim entity.');
@@ -166,16 +242,15 @@ class ClaimController extends Controller
 
         $messages = $em
             ->getRepository('SDServiceDeskBundle:ClaimMessage')
-            ->findBy(
-                array('claim' => $entity),
-                array('createdAt' => 'DESC')
-            );
+            ->findByClaim($entity);
 
-        $form = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
+        $messageForm = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
+        $performerRuleForm = $this->createPerformerRuleForm((new ClaimPerformerRule())->setClaim($entity));
 
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
             'entity' => $entity,
-            'form' => $form->createView(),
+            'form' => $messageForm->createView(),
+            'performerRuleForm' => $performerRuleForm->createView(),
             'messages' => $messages
         ));
     }

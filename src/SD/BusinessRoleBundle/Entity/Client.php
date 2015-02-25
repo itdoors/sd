@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Client
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClientRepository")
  */
 class Client extends BusinessRole
 {

@@ -5,12 +5,13 @@ namespace SD\ServiceDeskBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use SD\UserBundle\SDUserBundle;
+
+use Doctrine\ORM\EntityRepository;
 
 /**
- * ClaimMessageType
+ * Class PerformerRuleForm
  */
-class ClaimMessageType extends AbstractType
+class PerformerRuleForm extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -19,20 +20,19 @@ class ClaimMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text')
-            ->add('visible', null, array(
-                'required' => false
-            ))
+            ->add('claimPerformer', 'entity', array(
+                'class' => 'SDBusinessRoleBundle:ClaimPerformer',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                        ->addSelect('i')
+                        ->addSelect('u')
+                        ->addSelect('s')
+                        ->join('p.individual', 'i')
+                        ->join('i.user', 'u')
+                        ->join('u.stuff', 's');
+            }))
             ->add('claim', 'hidden_entity', array(
                 'entity' => 'SDServiceDeskBundle:Claim',
-            ))
-            ->add('files', 'collection', array(
-                'required' => false,
-                'type'=> new ClaimMessageFileForm(),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'delete_empty'=> true
             ));
     }
 
@@ -42,7 +42,7 @@ class ClaimMessageType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\ServiceDeskBundle\Entity\ClaimMessage'
+            'data_class' => 'SD\ServiceDeskBundle\Entity\ClaimPerformerRule'
         ));
     }
 
@@ -51,6 +51,6 @@ class ClaimMessageType extends AbstractType
      */
     public function getName()
     {
-        return 'claimMessageForm';
+        return 'performerRuleForm';
     }
 }

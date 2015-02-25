@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClaimOnce
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClaimOnceRepository")
  */
 class ClaimOnce extends Claim
 {

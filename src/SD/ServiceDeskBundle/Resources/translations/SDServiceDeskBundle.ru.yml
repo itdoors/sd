@@ -4,12 +4,12 @@ add: добавить
 Edit: Изменить
 edit: изменить
 Claims: Заявки
-Claim Type: Тип заявки
+Claim Type: Тип
 Text: Текст
 Files: Файлы
-Claim Status: Статус заявки
-Claim Importance: Важность заявки
-Created: Дата создания
+Claim Status: Статус
+Claim Importance: Важность
+Created: Создана
 Closed: Дата закрытия
 Customer: Клиент
 Performers: Исполнители
@@ -19,9 +19,14 @@ Send: Отправить
 Select...:  Выберите...
 Actions: Действия
 Messages: Сообщения
+Visible for clients: Видно клиентам
 Cause: Суть
 Target: Объект
 
+Address: Адрес
+City: Город
+Organization: Организация
+Companystructure: Отделение
 Status: Статус
 Active: активна
 Disabled: неактивна

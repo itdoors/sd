@@ -40,11 +40,11 @@
     				<div class="row">
     					<div class="col-md-6">
     						<div class="btn-group">
-                                {% if is_granted('ROLE_ARTICLEADMIN') %}
+{#                                 {% if is_granted('ROLE_ARTICLEADMIN') %}#}
         							<a class="btn btn-cl green" href="{{ path('claim_new') }}" title="{% trans %}Add{% endtrans %}">
                                         {% trans %}Add{% endtrans %}
                                     </a>
-                                {% endif %}
+{#                                 {% endif %}#}
     						</div>
     					</div>
     				</div>
@@ -52,48 +52,42 @@
                 <table class="table table-striped table-bordered table-hover" id="claims_table">
                     <thead>
                         <tr role="row" class="heading">
-                            <th width="5%">{% trans %}ID{% endtrans %}</th>
-                            <th width="20%">{% trans %}Customer{% endtrans %}</th>
-                            <th width="10%">{% trans %}Customer Type{% endtrans %}</th>
-                            <th width="10%">{% trans %}Claim Type{% endtrans %}</th>
-                            <th width="10%">{% trans %}Claim Status{% endtrans %}</th>
-                            <th width="10%">{% trans %}Claim Importance{% endtrans %}</th>
-                            <th width="10%">{% trans %}Created{% endtrans %}</th>
-                            <th width="10%">{% trans %}Closed{% endtrans %}</th>
-                            <th width="5%">{% trans %}Status{% endtrans %}</th>
-{#                         {% if is_granted('ROLE_ARTICLEADMIN') %}#}
-                            <th width="10%">{% trans %}Actions{% endtrans %}</th>
-{#                         {% endif %}#}
+                            <th>{% trans %}ID{% endtrans %}</th>
+                            <th>{% trans %}Customer{% endtrans %}</th>
+                            <th>{% trans %}City{% endtrans %}</th>
+                            <th>{% trans %}Address{% endtrans %}</th>
+                            <th>{% trans %}Organization{% endtrans %}</th>
+                            <th>{% trans %}Companystructure{% endtrans %}</th>
+                            <th>{% trans %}Claim Type{% endtrans %}</th>
+                            <th>{% trans %}Claim Status{% endtrans %}</th>
+                            <th>{% trans %}Claim Importance{% endtrans %}</th>
+                            <th>{% trans %}Created{% endtrans %}</th>
                         </tr>
                     </thead>
                     <tbody role="alert" aria-live="polite" aria-relevant="all">
                         {% for entity in entities %}
                         <tr>
-                            <td><a href="{{ path('claim_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                            <td>{% if entity.customer %}<a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.customer }}{% endif %}</td>
+                            <td><a href="{{ path('claim_show', { 'id': entity['claim'].id }) }}">{{ entity['claim'].id }}</a></td>
                             <td>
-                                {% if entity.customer.originOrganizations is defined %}
-									<span class="label label-success">{% trans %}Company{% endtrans %}</span>
-                                {% else %}
-                                    <span class="label label-default">{% trans %}Person{% endtrans %}</span>
+                                {% if entity['claim'].customer %}
+                                    {% if entity['claim'].customer.originOrganizations is defined %}
+    									<i class="fa fa-building"></i>
+                                    {% else %}
+                                        <i class="fa fa-user"></i>
+                                    {% endif %}
+                                    <a href="{{ path('client_show', { 'id': entity['claim'].customer.id }) }}">
+                                        {{ entity['lastName'] }} {{ entity['firstName'] }}
+                                    </a>
                                 {% endif %}
                             </td>
-                            <td>{{ entity.type }}</td>
-                            <td>{{ entity.status }}</td>
-                            <td>{{ entity.importance }}</td>
-                            <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d') }}{% endif %}</td>
-                            <td>{% if entity.closedAt %}{{ entity.closedAt|date('Y-m-d') }}{% endif %}</td>
-                            <td>
-                                {% if entity.disabled %}
-									<span class="label label-default">{% trans %}Disabled{% endtrans %}</span>
-                                {% else %}
-                                    <span class="label label-success">{% trans %}Active{% endtrans %}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ path('claim_show', { 'id': entity.id }) }}">show </a>
-                                <a href="{{ path('claim_edit', { 'id': entity.id }) }}">edit</a>
-                            </td>
+                            <td>{{ entity['claim'].targetDepartment.city | default('') }}</td>
+                            <td>{{ entity['claim'].targetDepartment.address | default('') }}</td>
+                            <td>{{ entity['claim'].targetDepartment.organization | default('') }}</td>
+                            <td>{{ entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
+                            <td>{{ entity['claim'].type }}</td>
+                            <td>{{ entity['claim'].status }}</td>
+                            <td>{{ entity['claim'].importance.name | default('') }}</td>
+                            <td>{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('Y-m-d') }}{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -148,9 +142,9 @@
                     }, {
                     	"orderable": true
                     }, {
-                        "orderable": true
+                    	"orderable": true
                     }, {
-                        "orderable": false
+                    	"orderable": true
                     }],
                     "lengthMenu": [
                         [5, 15, 20, -1],

@@ -21,7 +21,7 @@ class ClaimType extends AbstractType
         $builder
             ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
             ->add('status', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\StatusType::values()))
-//             ->add('importance', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImportanceType::values()))
+            ->add('importance')
             ->add('createdAt', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy'

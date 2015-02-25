@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ClaimMessage
  *
  * @ORM\Table(name="sd_claim_message", options={"comment" = "ServiceDeskBundle:ClaimMessage"})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ClaimMessageRepository")
  */
 class ClaimMessage
 {
@@ -33,7 +33,7 @@ class ClaimMessage
      *
      * @ORM\Column(name="is_visible", type="boolean")
      */
-    protected $visible = true;
+    protected $visible;
 
     /**
      * @var \DateTime
