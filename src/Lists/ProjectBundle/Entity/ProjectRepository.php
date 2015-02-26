@@ -14,6 +14,36 @@ use Doctrine\DBAL\Types\Type;
 class ProjectRepository extends EntityRepository
 {
     /**
+     * get All messages
+     *
+     * @param integer $userId
+     *
+     * @return mixed
+     */
+    public function getOneByPlanedMessage($userId)
+    {
+        $date = new \DateTime();
+        /** @var QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+        $sql->innerJoin('p.lastMessagePlanned', 'm');
+        $sql->where('m.user = :user');
+        $sql->andWhere(
+            $sql->expr()->orX(
+                $sql->expr()->isNull('m.showed'),
+               'm.showed <= :date'
+            )
+            );
+        $sql->andWhere($sql->expr()->isNull('p.isClosed'));
+        $sql->setParameter(':user', $userId);
+        $sql->setParameter(':date', $date->modify('-30 minutes'));
+        $sql->orderBy('m.eventDatetime', 'ASC');
+        $sql->setMaxResults(1);
+
+        return $sql
+            ->getQuery()
+            ->getResult();
+    }
+    /**
      * Searches handling by $q
      *
      * @param string $q

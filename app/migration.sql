@@ -2862,5 +2862,6 @@ ALTER TABLE organization_service_cover DROP CONSTRAINT FK_390A9CB2ED5CA9E6;
 ALTER TABLE project ADD dogovor_id BIGINT DEFAULT NULL;
 ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE81A36DD2 FOREIGN KEY (dogovor_id) REFERENCES dogovor (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_2FB3D0EE81A36DD2 ON project (dogovor_id);
-
+ALTER TABLE project_message ADD showed_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+COMMENT ON COLUMN project_message.showed_datetime IS 'Дата отображения оповещения';
 -- prod ++++

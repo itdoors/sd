@@ -126,6 +126,10 @@ lists_project_ajax_editable_project:
     pattern:  /lists/project/ajax/editable/project
     defaults: { _controller: ListsProjectBundle:Ajax:editableProject }
     
+lists_project_ajax_editable_message:
+    pattern:  /lists/project/ajax/editable/message
+    defaults: { _controller: ListsProjectBundle:Ajax:editableMessage }
+    
 lists_project_ajax_services_state_tender_search:
     pattern:  /lists/project/ajax/services/state/tender/search
     defaults: { _controller: ListsProjectBundle:Ajax:servicesProjectStateTenderSearch}

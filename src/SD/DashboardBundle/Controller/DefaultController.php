@@ -54,6 +54,51 @@ class DefaultController extends Controller
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('save'=>'ok')));
     }
     /**
+     * getListNotific8Action
+     *
+     * @return string
+     */
+    public function getListNotific8Action ()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $result = array();
+        
+        $projects = $em->getRepository("ListsProjectBundle:Project")->getOneByPlanedMessage($this->getUser()->getId());
+        
+        if ($projects) {
+            $project = $projects[0];
+            $message = $project->getLastMessagePlanned();
+            $message->setShowed(new \DateTime());
+            
+            $em->persist($message);
+            try {
+                $em->flush();
+            } catch (\ErrorException $e) {
+                $result['error'] = $e->getMessage();
+            }
+            $result = array(
+                'updateDate' => array(
+                    'pk' => $message->getId(),
+                    'name' => 'showed',
+                    'value' => new \DateTime()
+                ),
+                'url' => $this->generateUrl('lists_project_ajax_editable_message'),
+                'text' => '<a href="'.$this->generateUrl('lists_project_'.$project->getDiscr().'_show', array('id'=>$project->getId())).'">'.$project->getOrganization()->getName().'</a>',
+                'settings' => array(
+                    'theme' => 'lemon',
+                    'sticky' => true, // всегда отображать
+                    'life' => 10000,
+                    'horizontalEdge' => 'bottom',
+                    'verticalEdge' => 'right',
+                    'heading' => $message->getType()->getName() .' '.$message->getEventDatetime()->format('d.m.Y H:i').''
+                )
+            );
+        }
+        
+        
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($result));
+    }
+    /**
      * generateTasksCalendarAction
      *
      * @return string
