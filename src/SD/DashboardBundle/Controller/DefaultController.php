@@ -40,12 +40,36 @@ class DefaultController extends Controller
         ));
     }
     /**
+     * saveSelectedManagerAction
+     *
+     * @return string
+     */
+    public function saveSelectedManagerAction (\Symfony\Component\HttpFoundation\Request $reuest)
+    {
+        $managerId = $reuest->request->get('value');
+        
+        $session = $this->get('session');
+        $session->set('managerForCalendar', $managerId);
+        
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('save'=>'ok')));
+    }
+    /**
      * generateTasksCalendarAction
      *
      * @return string
      */
     public function generateTasksCalendarAction ()
     {
-        return $this->render('SDDashboardBundle:Default:tasksCalendar.html.twig');
+        $session = $this->get('session');
+        $managerForCalendar = $session->get('managerForCalendar', null);
+        
+        $em = $this->getDoctrine()->getManager();
+        if ($managerForCalendar) {
+            $managerForCalendar = $em->getRepository('SDUserBundle:User')->find($managerForCalendar);
+        } else {
+            $managerForCalendar = $this->getUser();
+        }
+        
+        return $this->render('SDDashboardBundle:Default:tasksCalendar.html.twig', array('managerForCalendar' => $managerForCalendar));
     }
 }

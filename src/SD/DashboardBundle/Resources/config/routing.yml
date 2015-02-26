@@ -5,3 +5,7 @@ sd_dashboard_homepage:
 sd_dashboard_calendar_task:
     pattern:  /sd/dashboard/calendar/task
     defaults: { _controller: SDDashboardBundle:Default:generateTasksCalendar }
+
+sd_dashboard_save_manager:
+    pattern:  /sd/dashboard/save/manager
+    defaults: { _controller: SDDashboardBundle:Default:saveSelectedManager }

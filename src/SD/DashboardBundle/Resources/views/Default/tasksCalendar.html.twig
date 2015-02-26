@@ -40,18 +40,91 @@
         </div>
     </div>
 
-    <div class="col-md-12 col-sm-12">
-        <div class="sd-event-green sd-event-text-div">
-            {% trans from 'SDCalendarBundle' %}Future event{% endtrans %}
+    {% if is_granted('ROLE_SALESADMIN') %}
+    <div class="col-md-12">
+        <div class="col-md-1 sd-event-text-div" style="color:#000">
+            {% trans from 'SDCalendarBundle' %}Manager{% endtrans %}:
         </div>
-        <div class="sd-event-yellow sd-event-text-div">
+        <div class="col-md-5 sd-event-text-div" style="color:#000">
+            <a
+                class="form-controll"
+                href="#" 
+                data-type="select2"
+                data-pk="{{ managerForCalendar.id }}"
+                name="manager"
+                id="managerCalendar"
+                data-value="{{ managerForCalendar.id }}"
+            >{{ managerForCalendar }}</a>
+            <script>
+                $(document).ready(function(){
+                    $('#managerCalendar').editable({
+                        url: '{{ path('sd_dashboard_save_manager') }}',
+                        source: '{{ path('sd_common_ajax_get_stuff_sales') }}',
+                        title: '{% trans %}Select manager{% endtrans %}',
+                        width: '100%',
+                        select2: {
+                            multiple: false,
+                            width: '100%',
+                            initSelection: function(element, callback) {
+                                return $.ajax({
+                                    type: "GET",
+                                    url: '{{ path('sd_common_ajax_user_by_id') }}',
+                                    dataType: 'json',
+                                    data: { id: element.val()},
+                                    success: function(data){
+                                            callback(data);
+                                    }
+                                });
+                            }
+                        },
+                        success: function(response, newValue) {
+                            ITDoorsAjax.updateList('calendarBlock');
+                        }
+                    });
+                   /* ITDoorsAjax.select2($('#managerCalendar'));
+                    $('#managerCalendar')
+                    .on("change", function(e) {
+                      // mostly used event, fired to the original element when the value changes
+                      console.log("change val=" + e.val);
+                    });*/
+                   /* $('#managerCalendar').select2({
+                         ajax: {
+                            url: '{{path('sd_user_stuff')}}',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                              return {
+                                q: params.term, // search term
+                                page: params.page
+                              };
+                            },
+                            processResults: function (data, page) {
+                              // parse the results into the format expected by Select2.
+                              // since we are using custom formatting functions we do not need to
+                              // alter the remote JSON data
+                              return {
+                                results: data.items
+                              };
+                            },
+                            cache: true
+                          },
+                          escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                          minimumInputLength: 1,
+                         // templateResult: formatRepo, // omitted for brevity, see the source of this page
+                          //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+                    });*/
+                });
+            </script>
+        </div>
+        {#<div class="sd-event-yellow sd-event-text-div">
             {% trans from 'SDCalendarBundle' %}Event ok{% endtrans %}
         </div>
         <div class="sd-event-red sd-event-text-div">
             {% trans from 'SDCalendarBundle' %}Event overdue{% endtrans %}
-        </div>
+        </div>#}
     </div>
     <div class="clear"></div>
+    {% endif %}
 
     {{ render(controller('SDCalendarBundle:Private:Index')) }}
     {#{ include('SDCalendarBundle::base.html.twig', {

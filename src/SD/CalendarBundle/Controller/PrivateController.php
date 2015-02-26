@@ -127,6 +127,12 @@ class PrivateController extends SalesController
         $translator = $this->container->get('translator');
         /** get handling */
         if ($user->hasRole('ROLE_SALES') || $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $session = $this->get('session');
+            $managerForCalendar = $session->get('managerForCalendar', null);
+            if ($managerForCalendar) {
+                $userIds = array($managerForCalendar);
+            }
+        
             $projects = $em->getRepository('ListsProjectBundle:Project')->getLastMessages($userIds, $startTimestamp, $endTimestamp);
 
             foreach ($projects as $project) {
@@ -145,9 +151,13 @@ class PrivateController extends SalesController
                 } else {
                     $cssClass .= ' sd-event-green';
                 }
+                $editable = true;
+                if ($managerForCalendar) {
+                    $editable = false;
+                }
                 $events[] = array(
                     'hover_title' => '',
-                    'editable' => true,
+                    'editable' => $editable,
                     'messageUrlUpdate' => $this->generateUrl('lists_project_message_update', array( 'id' => $project['messageId'])),
                     'title' => $title,
                     'start' => $project['eventDatetime']->format('Y-m-d H:i:s'),
