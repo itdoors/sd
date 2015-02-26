@@ -20,7 +20,7 @@ class ClaimMessageType extends AbstractType
     {
         $builder
             ->add('text')
-            ->add('visible', null, array(
+            ->add('staffOnly', null, array(
                 'required' => false
             ))
             ->add('claim', 'hidden_entity', array(

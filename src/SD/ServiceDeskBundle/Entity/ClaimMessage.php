@@ -31,9 +31,9 @@ class ClaimMessage
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_visible", type="boolean")
+     * @ORM\Column(name="staffOnly", type="boolean")
      */
-    protected $visible;
+    protected $staffOnly = true;
 
     /**
      * @var \DateTime
@@ -172,30 +172,6 @@ class ClaimMessage
     }
 
     /**
-     * Set visibility
-     *
-     * @param boolean $visible
-     *
-     * @return ClaimMessage
-     */
-    public function setVisible($visible)
-    {
-        $this->visible = $visible;
-
-        return $this;
-    }
-
-    /**
-     * Get visibility
-     *
-     * @return boolean
-     */
-    public function getVisible()
-    {
-        return $this->visible;
-    }
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -236,5 +212,29 @@ class ClaimMessage
     public function getFiles()
     {
         return $this->files;
+    }
+
+    /**
+     * Set staffOnly
+     *
+     * @param boolean $staffOnly
+     * 
+     * @return ClaimMessage
+     */
+    public function setStaffOnly($staffOnly)
+    {
+        $this->staffOnly = $staffOnly;
+
+        return $this;
+    }
+
+    /**
+     * Get staffOnly
+     *
+     * @return boolean 
+     */
+    public function getStaffOnly()
+    {
+        return $this->staffOnly;
     }
 }

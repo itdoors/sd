@@ -43,4 +43,13 @@ abstract class EnumType extends Type
         }
         return $values;
     }
+
+    public static function jsonValues()
+    {
+        $values = [];
+        foreach (static::$values as $value) {
+            $values[] = "{ value: '".$value."', text: '".$value."'}";
+        }
+        return $values;
+    }
 }

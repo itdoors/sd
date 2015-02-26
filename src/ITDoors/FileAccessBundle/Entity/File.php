@@ -65,6 +65,13 @@ class File
     protected $realName;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    protected $description;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -255,5 +262,29 @@ class File
         } else {
             return '';
         }
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * 
+     * @return File
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

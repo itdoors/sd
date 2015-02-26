@@ -45,3 +45,11 @@ claim_add_rule:
 claim_rm_rule:
     path:     /rm_rule
     defaults: { _controller: "SDServiceDeskBundle:Claim:removeRule" }
+
+claim_ch_status:
+    path:     /ch_status
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeStatus" }
+    
+claim_ch_type:
+    path:     /ch_type
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeType" }

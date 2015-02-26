@@ -80,14 +80,14 @@
                                     </a>
                                 {% endif %}
                             </td>
-                            <td>{{ entity['claim'].targetDepartment.city | default('') }}</td>
-                            <td>{{ entity['claim'].targetDepartment.address | default('') }}</td>
-                            <td>{{ entity['claim'].targetDepartment.organization | default('') }}</td>
-                            <td>{{ entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.city | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.address | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.organization | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
                             <td>{{ entity['claim'].type  | trans }}</td>
                             <td>{{ entity['claim'].status | trans }}</td>
                             <td>{{ entity['claim'].importance.name | default('') }}</td>
-                            <td>{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('Y-m-d') }}{% endif %}</td>
+                            <td>{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('d-m-Y') }}{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

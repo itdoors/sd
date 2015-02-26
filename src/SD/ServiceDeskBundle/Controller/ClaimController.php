@@ -45,6 +45,50 @@ class ClaimController extends Controller
     }
 
     /**
+     * Changes claim's status (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeStatusAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $status = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setStatus($status);
+        
+        $em->persist($entity);
+        $em->flush();
+    
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's type (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeTypeAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $status = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setType($status);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
      * Adds message to the claim (via ajax).
      * 
      * @param Request $request
@@ -65,12 +109,18 @@ class ClaimController extends Controller
         $em->flush();
 
         $response = [];
-        $response['visible'] = $entity->getVisible();
+        $response['userLink'] = $this
+            ->get('router')
+            ->generate('sd_user_show', array(
+                'id' => $entity->getUser()->getId()
+            ));
+        $response['staffOnly'] = $entity->getStaffOnly();
         $response['user'] = $entity->getUser()->__toString();
         $response['createdAt'] = $entity->getCreatedAt()->getTimestamp();
         foreach ($entity->getFiles() as $file) {
             $response['files'][] = [
                 'name' => $file->getOriginName(),
+                'description' => $file->getDescription() ? $file->getDescription() : '',
                 'link' => $file->getLink()
             ];
         }
@@ -87,19 +137,20 @@ class ClaimController extends Controller
      */
     public function addRuleAction(Request $request)
     {
-        $entity = new ClaimPerformerRule();
-    
+        $entity = (new ClaimPerformerRule())->setClaim(new Claim());
+
         $form = $this->createPerformerRuleForm($entity);
         $form->handleRequest($request);
-    
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
         $em->flush();
-    
+
         $response = [];
         $response['id'] = $entity->getId();
+        $response['performer_id'] = $entity->getClaimPerformer()->getId();
         $response['performer'] = $entity->getClaimPerformer()->__toString();
-    
+
         return new JsonResponse($response);
     }
 
@@ -199,7 +250,7 @@ class ClaimController extends Controller
      */
     private function createPerformerRuleForm(ClaimPerformerRule $entity)
     {
-        $form = $this->createForm(new PerformerRuleForm(), $entity, array(
+        $form = $this->createForm(new PerformerRuleForm($entity->getClaim()), $entity, array(
             'action' => $this->generateUrl('claim_add_rule'),
             'method' => 'POST',
         ));
@@ -246,11 +297,29 @@ class ClaimController extends Controller
 
         $messageForm = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
         $performerRuleForm = $this->createPerformerRuleForm((new ClaimPerformerRule())->setClaim($entity));
+        
+        $statuses = [];
+        foreach (\SD\ServiceDeskBundle\Entity\StatusType::values() as $value) {
+            $statuses[] = [
+                'value' => $value,
+                'text' => $this->get('translator')->trans($value)
+            ];
+        }
+
+        $types = [];
+        foreach (\SD\ServiceDeskBundle\Entity\ClaimType::values() as $value) {
+            $types[] = [
+                'value' => $value,
+                'text' => $this->get('translator')->trans($value)
+            ];
+        }
 
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
             'entity' => $entity,
             'form' => $messageForm->createView(),
             'performerRuleForm' => $performerRuleForm->createView(),
+            'statuses' => json_encode($statuses),
+            'types' => json_encode($types),
             'messages' => $messages
         ));
     }

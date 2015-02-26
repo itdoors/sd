@@ -1087,9 +1087,9 @@
                     and
                     app.request.attributes.get('_route_params').id | number_format(0)
                     and
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('clienclient_editt_show',app.request.attributes.get('_route_params'))
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client_new',app.request.attributes.get('_route_params'))
                 )
-                %} class="active"{% endif %}>
+                %} class="active open"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-grid"></i>
                     <span class="title">{% trans %}Service Desk{% endtrans %}</span>

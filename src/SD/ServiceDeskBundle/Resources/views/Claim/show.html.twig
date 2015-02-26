@@ -18,20 +18,14 @@
             <a href="{{ path('claim') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
         </li>
         <li>
-            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">
-                {{ entity.id }} — {{ entity.customer}}
-                {% if entity.disabled %}
-                    <span class="badge badge-default">{% trans %}Disabled{% endtrans %}</span>
-                {% else %}
-                    <span class="badge badge-danger">{% trans %}Active{% endtrans %}</span>
-                {% endif %}
-            </a>
+            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.id }}</a>
         </li>
     </ul>
 {% endblock %}
 
 {% block css_page_level_plugin %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
 {% endblock %}
@@ -43,6 +37,7 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -54,7 +49,7 @@
                 <ul class="list-group">
         			<li class="list-group-item">
         				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
-        				{{ entity.type }} </span>
+        				<a href="#" id="claim_type">{{ entity.type | trans}}</a></span>
         			</li>
 {#         			<li class="list-group-item">#}
 {#         				{% trans %}Target{% endtrans %}#}
@@ -66,7 +61,7 @@
 {#         			</li>#}
         			<li class="list-group-item">
         				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
-        				{{ entity.status }} </span>
+        				<a href="#" id="claim_status">{{ entity.status | trans}}</a></span>
         			</li>
         			<li class="list-group-item">
         				{% trans %}Claim Importance{% endtrans %} <span class="badge badge-info">
@@ -107,12 +102,14 @@
         			<div class="panel-heading">
         				<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
         			</div>
-        			<div id="performers_body" class="panel-body" style="overflow: auto">
-        			     {% for rule in entity.claimPerformerRules %}
-        			         <p>{{ rule.claimPerformer }}
-        			             <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
-        			         </p>
-        			     {% endfor %}
+        			<div class="panel-body" style="overflow: auto">
+        			     <div id="performers_body">
+            			     {% for rule in entity.claimPerformerRules %}
+            			         <p>{{ rule.claimPerformer }}
+            			             <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
+            			         </p>
+            			     {% endfor %}
+        			     </div>
         			     {{ form_start(performerRuleForm) }}
             			     <div class="input-group">
     				               {{ form_widget(performerRuleForm.claimPerformer, {'attr' : {'class' : 'form-control select2me', 'placeholder': 'Select...' | trans}}) }}
@@ -130,38 +127,59 @@
 				<h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
 			</div>
 			<div class="panel-body">
-			     {{ form_start(form) }}
-			     {{ form_widget(form.text) }}
-			     <div class="row">
-			         <div class="col-md-2">
-                        <button id="add_msg" type="submit" class="btn btn-default margin-top-10 margin-bottom-15">{% trans %}Send{% endtrans %}</button>
-                     </div>
-                     <div class="col-md-2 margin-top-20">
-                        {{ form_widget(form.visible, {'attr' : {'class' : 'form-control'}}) }}
-                        <label class="required control-label">{% trans %}Visible for clients{% endtrans%}</label>
-                     </div>
-                     <div class="col-md-4 margin-top-10">
-                        {{ form_widget(form.files)|raw }}
-                     </div>
-                 </div>
-                 {{ form_end(form) }}
-                 <div id="my_msg"></div>
-			     {% for message in messages %}
-			         <div class="note note-{% if message.visible %}success{% else %}info{% endif %}">
-						<h5 class="block">{{ message.user }} {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
+		         {% for message in messages %}
+			         <div class="note note-{% if message.staffOnly %}info{% else %}success{% endif %}">
+						<h5 class="block"><a href="{{ path('sd_user_show', { id : message.user.id }) }}">{{ message.user }}</a> {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
 						{{ message.text | raw('html') }}
 						{% if message.files is not empty %}
 						  <h5><br>{% trans %}Files{% endtrans %}:</h5>
 						  {% for file in message.files %}
-						      <p><a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ file.getLink() }}">{{ file.originName }}</a></p>
+						      <p>
+						          <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ file.getLink() }}">{{ file.originName }} </a>
+						          {{ file.description is empty ? '' : '('~file.description~')'}}
+					          </p>
 						  {% endfor %}
 						{% endif %}
 					</div>
 			     {% endfor %}
+			     <div id="my_msg"></div>
+			     {{ form_start(form) }}
+			     {{ form_widget(form.text) }}
+			     <div class="row">
+			         <div class="col-md-2">
+                        <button id="add_msg" type="submit" class="btn btn-default margin-top-10">{% trans %}Send{% endtrans %}</button>
+                     </div>
+                     <div class="col-md-2 margin-top-20">
+                        {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
+                        <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
+                     </div>
+                     <div class="col-md-8 margin-top-10">
+                        {{ form_widget(form.files)|raw }}
+                     </div>
+                 </div>
+                 {{ form_end(form) }}
 			</div>
 		</div>
 		<script>
             $(document).ready(function() {
+            	$('#claim_status').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Status{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.status }}',
+                    source: {{ statuses | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_status') }}'
+                });
+            	$('#claim_type').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Type{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.type }}',
+                    source: {{ types | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_type') }}'
+                });
             	$(document).on('click', '.remove-performer', function() {
                     var p = $(this).closest('p');
             		$.ajax({
@@ -232,11 +250,14 @@
                         	SD.blockUI($('#performers'));
                         },
                         success: function(response) {
-                        	$('#performers_body').prepend(
+                        	$('#performers_body').append(
                                 	'<p>' + response.performer
                                 	 + '<button type="button" class="close remove-performer" value="'
                                 	 + response.id + '" aria-label="Remove"></button></p>');
                         	SD.unblockUI($('#performers'));
+                        	$("#performerRuleForm_claimPerformer option[value="+ response.performer_id +"]").remove();
+                        	$("#performerRuleForm_claimPerformer").select2('destroy');
+                        	$("#performerRuleForm_claimPerformer").select2();
                         },
                         error: function(response) {
                         	SD.unblockUI($('#performers'));
@@ -260,18 +281,18 @@
                         	var time = moment.unix(response.createdAt);
                         	var createdAt = time.format('YYYY-MM-DD HH:mm:ss');
                         	var aHTML = $('#{{ form.vars.name }}_text').code();
-                        	var visible = response.visible ? 'success' : 'info';
-                        	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + visible + '">\
-                                                   <h5 class="block">' + response.user + ' ' + createdAt + '</h5>'
+                        	var staffOnly = response.staffOnly ? 'info' : 'success';
+                        	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + staffOnly + '">\
+                                                   <h5 class="block"><a href="'+ response.userLink+ '">' + response.user + '</a> ' + createdAt + '</h5>'
                                                        + aHTML;
                            if (response.files != undefined) {
                         	   messageBody += '<h5><br>{% trans %}Files{% endtrans %}:</h5>';
                         	   response.files.forEach(function(file) {
-                        		   messageBody += '<p><a href="javascript:;" class="doclink" timestamp="'+response.createdAt+'" value="'+file.link+'">'+file.name+'</a></p>';
+                        		   messageBody += '<p><a href="javascript:;" class="doclink" timestamp="'+response.createdAt+'" value="'+file.link+'">'+file.name+'</a> ('+file.description+')</p>';
                         	   });
                         	   messageBody += '</div>';
                            }
-                        	$('#my_msg').prepend(messageBody);
+                        	$('#my_msg').append(messageBody);
                         	$('#{{ form.vars.name }}_text').code('<p><br></p>');
                         	
                             var files = document.getElementById('{{ form.vars.name }}_files');

@@ -27,7 +27,7 @@ class ClaimMessageRepository extends EntityRepository
             ->join('m.user', 'user')
             ->leftJoin('m.files', 'files')
             ->where('m.claim = :claim')
-            ->orderBy('m.createdAt', 'DESC')
+            ->orderBy('m.createdAt', 'ASC')
             ->setParameter('claim', $claim->getId())
             ->getQuery()
             ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);

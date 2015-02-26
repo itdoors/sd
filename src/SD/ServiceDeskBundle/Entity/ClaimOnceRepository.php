@@ -28,10 +28,10 @@ class ClaimOnceRepository extends EntityRepository
             ->leftJoin('c.importance', 'im')
             ->join('c.customer', 'cust')
             ->join('cust.individual', 'i')
-            ->where('c.status != :done')
-            ->andWhere('c.status != :rejected')
-            ->setParameter('done', StatusType::DONE)
-            ->setParameter('rejected', StatusType::REJECTED)
+            ->where('c.closedAt is NULL')
+//             ->andWhere('c.status != :rejected')
+//             ->setParameter('done', StatusType::DONE)
+//             ->setParameter('rejected', StatusType::REJECTED)
             ->getQuery()
             ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
 
