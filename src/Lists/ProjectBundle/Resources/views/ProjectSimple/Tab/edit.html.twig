@@ -33,6 +33,20 @@
                 }
             });
              $('.inputmask-decimal').inputmask("decimal",{ "placeholder": "0.00", "radixPoint": ".", "rightAlign": false, "digits": 2});
+              $('#type').editable({
+                        url: '{{ path('lists_project_ajax_editable_project') }}',
+                        source: {{ object.getListDiscr|json_encode|replace({'Commercial tender': 'Commercial tender'|trans, 'Electronic trading': 'Electronic trading'|trans})|raw }},
+                        title: '{% trans %}Select type{% endtrans %}',
+                        success: function(response, newValue) {
+                            response = JSON.parse(response);
+                            if (response.url) {
+                                window.location.href = response.url;
+                            } else {
+                                alert('Error');
+                            }
+                        }
+                    });
+                    
         {% endif %}
     });
 </script>
@@ -41,7 +55,16 @@
         <tbody>
         <tr> {# 1 #}
             <td style="width:15%">{% trans %}ID{% endtrans %} ({% trans %}Type{% endtrans %})</td>
-            <td style="width:35%">{{ object.id }} ({{ object.getProjectType|trans}})</td>
+            <td style="width:35%">{{ object.id }} ( <a
+                class="form-controll"
+                href="#" 
+                data-type="select"
+                data-pk="{{ object.id }}"
+                name="manager"
+                data-placement="bottom"
+                id="type"
+                data-value="{{ object.getDiscr }}"
+            >{{ object.getProjectType|trans}}</a>)</td>
             <td style="width:15%">{% trans %}Project status{% endtrans %}</td>
             <td style="width:35%">
                 {%  if object.isClosed  == true %}

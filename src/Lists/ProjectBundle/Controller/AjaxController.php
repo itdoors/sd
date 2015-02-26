@@ -166,11 +166,31 @@ class AjaxController extends Controller
         $name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');
 
+        $em = $this->container->get('doctrine')->getManager();
+        
         $methodSet = 'set' . ucfirst($name);
 
-        $object = $this->getDoctrine()
+        $object = $em
             ->getRepository('ListsProjectBundle:Project')
             ->find($pk);
+        if ($name == 'type') {
+            if ($object instanceof \Lists\ProjectBundle\Entity\ProjectSimple && in_array($value, array('project_commercial_tender', 'project_electronic_trading'))) {
+                $db = $em->getConnection();
+                $query = "UPDATE project SET discriminator = :discriminator WHERE id = :id";
+                $stmt = $db->prepare($query);
+                $params = array (
+                    ':id' => $pk,
+                    ':discriminator' => $value
+                );
+                $stmt->execute($params);
+                $em->persist($object);
+                $em->flush();
+        
+                return new Response(json_encode(array('url' => $this->generateUrl('lists_'.$value.'_show',array('id' => $pk)))));
+            } else {
+                throw new $this->createAccessDeniedException();
+            }
+        }
         $temp = explode('\\', get_class($object));
         $className = end($temp);
         $service = $this->get('lists_project.service');
@@ -237,8 +257,6 @@ class AjaxController extends Controller
                 }
             }
         }
-
-        $em = $this->getDoctrine()->getManager();
         $em->persist($object);
 
         $return = array('error'=>false);
