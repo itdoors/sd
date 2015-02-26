@@ -7,10 +7,7 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 
 /**
  * Class MessageCurrentForm
