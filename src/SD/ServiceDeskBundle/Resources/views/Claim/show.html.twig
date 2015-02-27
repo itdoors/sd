@@ -48,14 +48,14 @@
         				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
         				<a href="#" id="claim_type">{{ entity.type | trans}}</a></span>
         			</li>
-        			<li class="list-group-item">
-        				{% trans %}Target{% endtrans %}
-        				{% if entity.targetDepartment is defined %}
-        				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>
-    				    {% elseif entity.targetIndividual is defined %}
-    				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>
-				        {% endif %}
-        			</li>
+{#         			<li class="list-group-item">#}
+{#         				{% trans %}Target{% endtrans %}#}
+{#         				{% if entity.targetDepartment is defined %}#}
+{#         				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>#}
+{#     				    {% elseif entity.targetIndividual is defined %}#}
+{#     				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>#}
+{# 				        {% endif %}#}
+{#         			</li>#}
         			<li class="list-group-item">
         				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
         				<a href="#" id="claim_status">{{ entity.status | trans}}</a></span>
@@ -73,8 +73,8 @@
         				{{ entity.closedAt|date('d-m-Y H:i:s') }} </span>{% endif %}
         			</li>
         		</ul>
-        		<div>
-        		    {{ include ('ITDoorsHistoryBundle:History:connection.html.twig', {modelName: 'sd_claim', modelId : entity.id}) }}
+        		<div class="margin-bottom-10">
+        		    {{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}
     		    </div>
     		</div>
     		<div class="col-md-4">

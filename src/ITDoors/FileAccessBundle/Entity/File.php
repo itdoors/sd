@@ -266,7 +266,6 @@ class File
             return '';
         }
     }
-<<<<<<< HEAD
 
     /**
      * Set description
@@ -291,6 +290,4 @@ class File
     {
         return $this->description;
     }
-=======
->>>>>>> master
 }
