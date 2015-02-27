@@ -42,6 +42,7 @@ class PayMasterNewForm extends AbstractType
     {
         $builder
             ->add('scan', 'file')
+            ->add('number', 'text')
             ->add('invoiceDate', 'itdoors_date_decade', array(
                     'widget' => 'single_text',
                     'format' => 'dd.M.yyyy'

@@ -698,4 +698,32 @@ class PayMaster
     {
         return $this->bank;
     }
+    /**
+     * @var string
+     */
+    private $number;
+
+
+    /**
+     * Set number
+     *
+     * @param string $number
+     * @return PayMaster
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    
+        return $this;
+    }
+
+    /**
+     * Get number
+     *
+     * @return string 
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
 }

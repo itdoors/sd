@@ -45,7 +45,7 @@ Date of receipt: Дата получения
 Date of invoice: Дата счета
 Customer: Клиент
 Provider: Поставщик
-Representation: Представительство
+Representation: Отделение
 Sum: Сумма
 Notes: Примечания
 Acceptance: Акцепт
@@ -75,3 +75,4 @@ The field can not be empty: Поле не должно быть пустым
 Enter is acceptance: Укажите акцепт
 Enter reason: Укажите причину
 Enter to pay: Отправка на оплату
+Number invoice: Номер счета

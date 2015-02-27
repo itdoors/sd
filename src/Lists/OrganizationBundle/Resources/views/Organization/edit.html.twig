@@ -101,6 +101,18 @@
                 multiple: false
             }
         });
+         $('#isWithoutDogovor').editable({
+            url: '{{ path('lists_organization_ajax_save') }}',
+            source: {{  organization.choiceYesNo|json_encode|replace({'Yes': 'Yes'|trans, 'No': 'No'|trans})|raw }},
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select list{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true,
+                multiple: false
+            }
+        });
     });
 
 </script>
@@ -166,6 +178,17 @@
                     </a>
                 </td>
                 <td><span class="text-muted">{% trans %}Enter self organization{% endtrans %}</span></td>
+            </tr>
+            {% endif %}
+            {% if access.canEditIsWithoutDogovor %}
+            <tr>
+                <td>{% trans %}Working without a contract{% endtrans %}</td>
+                <td>
+                    <a href="#" id="isWithoutDogovor" data-type="select" data-pk="{{ organization.id }}" data-value="{{  organization.isWithoutDogovor is not null ? (organization.isWithoutDogovor ? '1' : '0') : '' }}" data-original-title="{% trans %}Working without a contract{% endtrans %}">
+                        {{  organization.isWithoutDogovor is not null ? organization.choiceYesNo[organization.isWithoutDogovor]|trans : '' }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter organization Working without a contract{% endtrans %}</span></td>
             </tr>
             {% endif %}
             {% if access.canEditIsPayer %}

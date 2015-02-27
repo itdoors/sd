@@ -53,6 +53,13 @@ Lists\OrganizationBundle\Entity\Organization:
             options:
                 comment: Собственная организаци (true=да, flase=нет)
                 default: 0
+        isWithoutDogovor:
+            type: boolean
+            nullable: false
+            column: is_without_dogovor
+            options:
+                comment: С организацией работаем без договора (true=да, flase=нет)
+                default: 0
         mailingAddress:
             type: string
             length: 255

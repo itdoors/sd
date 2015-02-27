@@ -21,6 +21,10 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
         payer:
             - NotBlank:
                 groups: [createPayMaster]
+        number:
+            - NotBlank:
+                groups: [createPayMaster]
+            - MaxLength: 250
         customers:
             - NotBlank: 
                 groups: [createPayMaster]

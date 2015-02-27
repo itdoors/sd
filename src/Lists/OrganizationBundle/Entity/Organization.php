@@ -1262,4 +1262,32 @@ class Organization
     {
         return $this->isSelf;
     }
+    /**
+     * @var boolean
+     */
+    private $isWithoutDogovor;
+
+
+    /**
+     * Set isWithoutDogovor
+     *
+     * @param boolean $isWithoutDogovor
+     * @return Organization
+     */
+    public function setIsWithoutDogovor($isWithoutDogovor)
+    {
+        $this->isWithoutDogovor = $isWithoutDogovor;
+    
+        return $this;
+    }
+
+    /**
+     * Get isWithoutDogovor
+     *
+     * @return boolean 
+     */
+    public function getIsWithoutDogovor()
+    {
+        return $this->isWithoutDogovor;
+    }
 }

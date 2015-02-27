@@ -10,6 +10,11 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
             generator:
                 strategy: IDENTITY
     fields:
+        number:
+            type: string
+            length: 255
+            options:
+                comment: Номер счета
         createDatetime:
             type: datetime
             column: create_datetime

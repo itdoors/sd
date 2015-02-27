@@ -71,4 +71,8 @@ interface OrganizationAccessInterface
      * @return bool
      */
     public function canAddPayer();
+    /**
+     * @return bool
+     */
+    public function canEditIsWithoutDogovor();
 }
