@@ -42,7 +42,7 @@ class ProjectRepository extends EntityRepository
         );
         $sql->setParameter(':user', $userId);
         $sql->setParameter(':dateNow', $date, Type::DATETIME);
-        $sql->setParameter(':date', $date->modify('-30 minutes'), Type::DATETIME);
+        $sql->setParameter(':date', $date->modify('-1 day'), Type::DATETIME);
         $sql->orderBy('m.eventDatetime', 'ASC');
         $sql->setMaxResults(1);
 
