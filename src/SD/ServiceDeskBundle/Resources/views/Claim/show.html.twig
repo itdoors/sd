@@ -41,9 +41,6 @@
 {% endblock %}
 
 {% block body %}
-        <a class="margin-bottom-10 btn btn-cl green" href="{{ path('claim_edit', { 'id': entity.id }) }}" title="{% trans %}Edit{% endtrans %}">
-            {% trans %}Edit{% endtrans %}
-        </a>
         <div class="row">
             <div class="col-md-4">
                 <ul class="list-group">
@@ -51,31 +48,34 @@
         				{% trans %}Claim Type{% endtrans %} <span class="badge badge-info">
         				<a href="#" id="claim_type">{{ entity.type | trans}}</a></span>
         			</li>
-{#         			<li class="list-group-item">#}
-{#         				{% trans %}Target{% endtrans %}#}
-{#         				{% if entity.targetDepartment is defined %}#}
-{#         				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>#}
-{#     				    {% elseif entity.targetIndividual is defined %}#}
-{#     				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>#}
-{# 				        {% endif %}#}
-{#         			</li>#}
+        			<li class="list-group-item">
+        				{% trans %}Target{% endtrans %}
+        				{% if entity.targetDepartment is defined %}
+        				    <span class="badge badge-info">{{ entity.targetDepartment.city }}, {{ entity.targetDepartment }}</span>
+    				    {% elseif entity.targetIndividual is defined %}
+    				        <span class="badge badge-info">{{ entity.targetIndividual }}</span>
+				        {% endif %}
+        			</li>
         			<li class="list-group-item">
         				{% trans %}Claim Status{% endtrans %} <span class="badge badge-info">
         				<a href="#" id="claim_status">{{ entity.status | trans}}</a></span>
         			</li>
         			<li class="list-group-item">
         				{% trans %}Claim Importance{% endtrans %} <span class="badge badge-info">
-        				{{ entity.importance }} </span>
+        				<a href="#" id="claim_importance">{{ entity.importance }}</a> </span>
         			</li>
         			<li class="list-group-item">
         				{% trans %}Created{% endtrans %} {% if entity.createdAt %}<span class="badge badge-info">
-        				{{ entity.createdAt|date('Y-m-d') }} </span>{% endif %}
+        				{{ entity.createdAt|date('d-m-Y H:i:s') }} </span>{% endif %}
         			</li>
         			<li class="list-group-item">
         				{% trans %}Closed{% endtrans %} {% if entity.closedAt %}<span class="badge badge-info">
-        				{{ entity.closedAt|date('Y-m-d') }} </span>{% endif %}
+        				{{ entity.closedAt|date('d-m-Y H:i:s') }} </span>{% endif %}
         			</li>
         		</ul>
+        		<div>
+        		    {{ include ('ITDoorsHistoryBundle:History:connection.html.twig', {modelName: 'sd_claim', modelId : entity.id}) }}
+    		    </div>
     		</div>
     		<div class="col-md-4">
                 <div class="panel panel-default">
@@ -129,7 +129,7 @@
 			<div class="panel-body">
 		         {% for message in messages %}
 			         <div class="note note-{% if message.staffOnly %}info{% else %}success{% endif %}">
-						<h5 class="block"><a href="{{ path('sd_user_show', { id : message.user.id }) }}">{{ message.user }}</a> {{ message.createdAt|date('Y-m-d H:i:s') }}</h5>
+						<h5 class="block"><a href="{{ path('sd_user_show', { id : message.user.id }) }}">{{ message.user }}</a> {{ message.createdAt|date('d-m-Y H:i:s') }}</h5>
 						{{ message.text | raw('html') }}
 						{% if message.files is not empty %}
 						  <h5><br>{% trans %}Files{% endtrans %}:</h5>
@@ -179,6 +179,15 @@
                     source: {{ types | join(',') | raw }}
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_type') }}'
+                });
+            	$('#claim_importance').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Importance{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.importance.id }}',
+                    source: {{ importances | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_importance') }}'
                 });
             	$(document).on('click', '.remove-performer', function() {
                     var p = $(this).closest('p');
@@ -279,7 +288,7 @@
                         },
                         success: function(response) {
                         	var time = moment.unix(response.createdAt);
-                        	var createdAt = time.format('YYYY-MM-DD HH:mm:ss');
+                        	var createdAt = time.format('DD-MM-YYYY HH:mm:ss');
                         	var aHTML = $('#{{ form.vars.name }}_text').code();
                         	var staffOnly = response.staffOnly ? 'info' : 'success';
                         	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + staffOnly + '">\

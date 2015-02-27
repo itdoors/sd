@@ -76,15 +76,37 @@ class ClaimController extends Controller
     public function changeTypeAction(Request $request)
     {
         $id = $request->get('pk');
-        $status = $request->get('value');
+        $type = $request->get('value');
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
-        $entity->setType($status);
+        $entity->setType($type);
 
         $em->persist($entity);
         $em->flush();
 
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's importance (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeImportanceAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $importance_id = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setImportance($em->getRepository('SDServiceDeskBundle:ClaimImportance')->find($importance_id));
+
+        $em->persist($entity);
+        $em->flush();
+    
         return new JsonResponse();
     }
 
@@ -314,10 +336,19 @@ class ClaimController extends Controller
             ];
         }
 
+        $importances = [];
+        foreach ($em->getRepository('SDServiceDeskBundle:ClaimImportance')->findAll() as $value) {
+            $importances[] = [
+                'value' => $value->getId(),
+                'text' => $value->getName()
+            ];
+        }
+
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
             'entity' => $entity,
             'form' => $messageForm->createView(),
             'performerRuleForm' => $performerRuleForm->createView(),
+            'importances' => json_encode($importances),
             'statuses' => json_encode($statuses),
             'types' => json_encode($types),
             'messages' => $messages

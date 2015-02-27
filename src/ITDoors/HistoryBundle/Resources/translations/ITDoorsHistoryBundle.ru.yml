@@ -11,3 +11,36 @@ History: История
 update: изменил
 insert: добавил
 delete: удалил
+
+Show history: Просмотреть историю
+status: статус
+sta_sclose_smclose_cclose: Выполнена
+sta_open: Открыта
+sta_sappointed_smwait: Передана
+sta_sclose_smwait: В работе
+sta_sclose_smwait_cwait: Утверждение
+sta_sclose_smclose_cwait: Отклонена
+sta_smeta_composу: Составление
+sta_smeta_approve: Утверждение
+sta_smeta_conform: Согласована
+sta_smeta_cancel: Отклонена
+sta_smet: На смете
+
+customer: клиент
+text: текст
+createdAt: дата создания
+closedAt: дата закрытия
+disabled: скрыта
+claimPerformerRules: йцу
+type: тип
+cleaning: Клининг
+tech: Техническое Обслуживание, ...  
+green_comfort_it: Озеленение, комфорт, IT   
+catering: Кейтеринг
+complaint: Жалоба
+opinion: Мнение
+other: Без рубрики  
+transportation: Перевозки, грузчики 
+property: Проперти
+pest: Контроль вредителей   
+act_collection: Сбор актов  
