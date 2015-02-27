@@ -736,7 +736,7 @@ class AjaxController extends Controller
                 $em->flush();
                 $em->refresh($projectFile);
                 $project = $projectFile->getProject();
-                if (!$project->getIsClosed()) {
+                if (!$project->getIsClosed() && $project->getDogovor() != '') {
                     if (!$project instanceof \Lists\ProjectBundle\Entity\ProjectStateTender) {
                         $status = $project->getStatus();
                         if (
