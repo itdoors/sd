@@ -31,9 +31,6 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
         contractor:
             - NotBlank:
                 groups: [createPayMaster]
-        dogovor:
-            - NotBlank:
-                groups: [createPayMaster]
         currentAccount:
             - NotBlank:
                 groups: [createPayMaster]

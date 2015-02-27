@@ -178,7 +178,7 @@ class DogovorService
         $em = $this->container->get('doctrine')->getManager();
         $dogovor = $em->getRepository('ListsDogovorBundle:Dogovor')->find($dogovorId);
         $project->setDogovor($dogovor);
-        if (!$project->getIsClosed()) {
+        if (!$project->getIsClosed() && $dogovor) {
             if (!$project instanceof \Lists\ProjectBundle\Entity\ProjectStateTender) {
                 $status = $project->getStatus();
                 if (

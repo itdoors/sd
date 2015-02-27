@@ -223,6 +223,11 @@ class PayMasterNewForm extends AbstractType
                         new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle'))
                     );
                 }
+                if ($form->get('dogovor')->getData() == '' && !$form->get('contractor')->getData()->getIsWithoutDogovor()) {
+                    $form->get('dogovor')->addError(
+                        new FormError($translator->trans('Enter dogovor', array(), 'ITDoorsPayMasterBundle'))
+                    );
+                }
             }
         );
     }

@@ -35,4 +35,11 @@ class ProjectSimpleDirectorProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canAddFiles ()
+    {
+        return true;
+    }
 }

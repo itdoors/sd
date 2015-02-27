@@ -205,4 +205,11 @@ class BasicProjectAccess implements ProjectAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canAddFiles ()
+    {
+        return false;
+    }
 }
