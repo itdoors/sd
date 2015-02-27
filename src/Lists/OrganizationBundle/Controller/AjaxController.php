@@ -131,6 +131,7 @@ class AjaxController extends BaseController
             $objects = array();
             $objects[] = $currentAccount->getBank();
         } else {
+            
             if (!in_array($field, array('mfo', 'name'))) {
                 $field = 'name';
             }
