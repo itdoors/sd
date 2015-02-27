@@ -40,8 +40,11 @@
     				<div class="row">
     					<div class="col-md-6">
 {#                                 {% if is_granted('ROLE_ARTICLEADMIN') %}#}
-    							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add{% endtrans %}">
-                                    {% trans %}Add{% endtrans %}
+    							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add person client{% endtrans %}">
+                                    <i class="fa fa-plus"></i> {% trans %}Физ.лицо{% endtrans %}
+                                </a>
+                                <a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add company client{% endtrans %}">
+                                    <i class="fa fa-plus"></i> {% trans %}Company{% endtrans %}
                                 </a>
 {#                                 <a class="btn btn-cl green" href="{{ path('companyclient_new') }}" title="{% trans %}Add{% endtrans %}">#}
 {#                                     {% trans %}Add company client{% endtrans %}#}

@@ -24,6 +24,13 @@ class ClaimFileForm extends AbstractType
                 'attr' => array(
                     'style' => 'display: inline;'
                     )
+            ))
+            ->add('description', null, array(
+                'required' => false,
+                'attr' => array(
+                    'class' => 'form-control input-inline input-large',
+                    'placeholder' => 'Описание ...'
+                )
             ));
     }
 
