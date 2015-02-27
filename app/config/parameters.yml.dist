@@ -20,7 +20,7 @@ parameters:
     listener.history.tables:
         - organization
         - email
-        - handling
+        - project
         - dogovor
         - companystructure
         - call
@@ -28,7 +28,6 @@ parameters:
         - pay_master
         - fos_user
         - stuff
-        - project_gos_tender
     sd.host: http://itdoors.jelastic.neohost.net
     # AMI CONFIG
     ami.host: 193.242.166.54

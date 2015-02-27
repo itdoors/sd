@@ -2865,3 +2865,6 @@ CREATE INDEX IDX_2FB3D0EE81A36DD2 ON project (dogovor_id);
 ALTER TABLE project_message ADD showed_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 COMMENT ON COLUMN project_message.showed_datetime IS 'Дата отображения оповещения';
 -- prod ++++
+
+# project  - добавить в параметр
+-- prod ---

@@ -26,7 +26,7 @@ class ProjectRepository extends EntityRepository
         /** @var QueryBuilder $sql */
         $sql = $this->createQueryBuilder('p');
         $sql->innerJoin('p.lastMessagePlanned', 'm');
-        $sql->innerJoin('p.dogovor', 'd');
+        $sql->leftJoin('p.dogovor', 'd');
         $sql->where('m.user = :user');
         $sql->andWhere(
             $sql->expr()->orX(
@@ -37,11 +37,12 @@ class ProjectRepository extends EntityRepository
         $sql->andWhere(
             $sql->expr()->orX(
                 $sql->expr()->isNull('p.isClosed'),
-                'd.stopdatetime > :date'
+                'd.stopdatetime > :dateNow'
             )
         );
         $sql->setParameter(':user', $userId);
-        $sql->setParameter(':date', $date->modify('-30 minutes'));
+        $sql->setParameter(':dateNow', $date, Type::DATETIME);
+        $sql->setParameter(':date', $date->modify('-30 minutes'), Type::DATETIME);
         $sql->orderBy('m.eventDatetime', 'ASC');
         $sql->setMaxResults(1);
 
