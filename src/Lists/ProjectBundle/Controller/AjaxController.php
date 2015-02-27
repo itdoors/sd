@@ -528,7 +528,7 @@ class AjaxController extends Controller
             ->find($pk);
         $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object->getProject());
-        if (!$access->canEditProjectStateTender()) {
+        if (!$access->canAddFiles()) {
             throw new \Exception('No access', 403);
         }
         $object->$methodSet($value);
