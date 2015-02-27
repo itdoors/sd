@@ -178,7 +178,9 @@ class AjaxController extends Controller
         $className = end($temp);
         $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object);
+        
         $method = 'canEdit'.$className;
+        var_dump($method);die;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
