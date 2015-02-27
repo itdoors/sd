@@ -236,8 +236,9 @@
             jQuery(document).ready(function() {
                 Metronic.init(); // init metronic core components
                 Layout.init(); // init current layout
+                {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_SALES') %}
                 UINotific8.init('{{path('sd_dashboard_get_list_notific8')}}');
-
+                {% endif %}
                 SD.init({
                     ajaxFormUrl: '{{ path('sd_common_ajax_form') }}',
                     ajaxDeleteUrl: '{{ path('sd_common_ajax_delete') }}',

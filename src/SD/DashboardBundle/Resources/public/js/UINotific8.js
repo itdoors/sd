@@ -14,7 +14,7 @@
             var _this = this;
             $.notific8('zindex', 11500);
             _this.show();
-            setInterval(function(){ _this.show(url);}, 5000);
+            setInterval(function(){ _this.show(url);}, 60000);
 
         },
         show: function(url) {
