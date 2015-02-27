@@ -713,7 +713,9 @@ class AjaxController extends Controller
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/msword',
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.ms-powerpoint'
+                'application/vnd.ms-powerpoint',
+                'application/x-tar',
+                'application/x-zip-compressed'
             );
             $validator = $this->get('validator');
 

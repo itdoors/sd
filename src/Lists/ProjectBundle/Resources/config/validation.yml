@@ -98,7 +98,9 @@ Lists\ProjectBundle\Entity\File:
                     - application/msword
                     - application/vnd.openxmlformats-officedocument.wordprocessingml.document
                     - application/vnd.ms-powerpoint
-                mimeTypesMessage: "This file is not a valid PDF, Excel, DOC or DOCX"
+                    - application/x-tar
+                    - application/x-zip-compressed
+                mimeTypesMessage: "This file is not a valid PDF, Excel, ZIP, RAR, DOC or DOCX"
                 groups: [createFileProject]          
 Lists\ProjectBundle\Entity\ProjectStateTenderParticipant:
     properties:

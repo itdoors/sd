@@ -191,18 +191,6 @@ class DogovorService
                     $robot = $em->getRepository('SDUserBundle:User')->find(0);
                     $project->setUserClosed($robot);
                     $project->setReasonClosed('Договор подписан');
-                    
-//                    $type = $em->getRepository('ListsProjectBundle:MessageType')->findOneBy(array('slug'=>'call'));
-                        
-//                    $planetMessage = new \Lists\ProjectBundle\Entity\MessagePlanned();
-//                    $planetMessage->getEventDatetime(new \DateTime())->modify('+1 month');
-//                    $planetMessage->setUser($project->getManagerProject());
-//                    $planetMessage->setType($type);
-//                    $planetMessage->setContact($project->getLastMessageCurrent()->getContact());
-//                    $planetMessage->setProject($project);
-//                    $em->persist($planetMessage);
-//                    
-//                    $project->setLastMessagePlanned($planetMessage);
                 }
             }
         }
