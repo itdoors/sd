@@ -203,6 +203,7 @@ class Organization
         $this->setIsSmeta(false);
         $this->setIsPayer(false);
         $this->setIsSelf(false);
+        $this->setIsWithoutDogovor(false);
     }
     /**
      * Get users
