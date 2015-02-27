@@ -31,6 +31,22 @@ lists_contractor_index:
     pattern:  /lists/contractor/index
     defaults: { _controller: ListsOrganizationBundle:Contractor:index }
 
+# PayerController
+lists_organization_payer_index:
+    pattern:  /lists/organization/payer/index
+    defaults: { _controller: ListsOrganizationBundle:Payer:index }
+
+lists_organization_payer_list:
+    pattern:  /lists/organization/payer/list
+    defaults: { _controller: ListsOrganizationBundle:Payer:list }
+    
+lists_organization_payer_new:
+    pattern:  /lists/organization/payer/new
+    defaults: { _controller: ListsOrganizationBundle:Payer:new }
+
+lists_organization_payer_show:
+    pattern:  /lists/organization/payer/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Payer:show }
 # organization
 lists_organization_index:
     pattern:  /lists/organization/index/{type}

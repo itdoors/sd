@@ -282,4 +282,11 @@ Lists\DogovorBundle\Entity\Dogovor:
                 delay_type_id:
                     referencedColumnName: id
             orphanRemoval: false
+    oneToMany:
+        projects:
+            targetEntity: Lists\ProjectBundle\Entity\Project
+            mappedBy: dogovor
+        dopDogovors:
+            targetEntity: DopDogovor
+            mappedBy: dogovor
     lifecycleCallbacks: {  }

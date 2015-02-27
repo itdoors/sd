@@ -94,6 +94,20 @@ class PayMasterControllingOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canSeePayer ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canAddPayer ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         return 'organizationSalesAdminFilterForm';

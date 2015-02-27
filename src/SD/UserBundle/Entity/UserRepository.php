@@ -44,6 +44,23 @@ class UserRepository extends EntityRepository
     /**
      * Get Only stuff
      *
+     * @return Query
+     */
+    public function getAllStuffSales ()
+    {
+        $sql= $this->createQueryBuilder('u');
+        $sql->select('u', 'stuff')
+                ->join('u.stuff', 'stuff')
+                ->join('u.groups', 'g', 'WITH', $sql->expr()->in('g.name', ':nameGroup'))
+                ->where('stuff.dateFire is null')
+                ->setParameter(':nameGroup', array('SALES', 'SALESADMIN'))
+                ->orderBy('u.lastName', 'ASC');
+         
+         return $sql;
+    }
+    /**
+     * Get Only stuff
+     *
      * @param integer $id
      * 
      * @return Query

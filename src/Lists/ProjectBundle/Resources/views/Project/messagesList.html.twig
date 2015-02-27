@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <ul class="timeline">
             {% for item in messages %}
-                <li id="handling_message_{{ item.id }}" class="timeline-{% if (item.eventDatetime | date('U')) <= ("now"|date("U"))  and item.isPlannedMessage %}blue{% elseif (item.eventDatetime | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
+                <li id="message_{{ item.id }}" class="timeline-{% if (item.eventDatetime | date('U')) <= ("now"|date("U"))  and item.isPlannedMessage %}blue{% elseif (item.eventDatetime | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
                     <div class="timeline-time">
                             <span class="date">{{ item.eventDatetime|date('d.m.Y') }}</span>
                             <span class="time">{{ item.eventDatetime|date('H:i') }}</span>

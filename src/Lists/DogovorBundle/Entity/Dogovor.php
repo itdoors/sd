@@ -1269,4 +1269,87 @@ class Dogovor
     {
         return $this->delayType;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $projects;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add projects
+     *
+     * @param \Lists\ProjectBundle\Entity\Project $projects
+     * @return Dogovor
+     */
+    public function addProject(\Lists\ProjectBundle\Entity\Project $projects)
+    {
+        $this->projects[] = $projects;
+    
+        return $this;
+    }
+
+    /**
+     * Remove projects
+     *
+     * @param \Lists\ProjectBundle\Entity\Project $projects
+     */
+    public function removeProject(\Lists\ProjectBundle\Entity\Project $projects)
+    {
+        $this->projects->removeElement($projects);
+    }
+
+    /**
+     * Get projects
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProjects()
+    {
+        return $this->projects;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $dopDogovors;
+
+
+    /**
+     * Add dopDogovors
+     *
+     * @param \Lists\DogovorBundle\Entity\DopDogovor $dopDogovors
+     * @return Dogovor
+     */
+    public function addDopDogovor(\Lists\DogovorBundle\Entity\DopDogovor $dopDogovors)
+    {
+        $this->dopDogovors[] = $dopDogovors;
+    
+        return $this;
+    }
+
+    /**
+     * Remove dopDogovors
+     *
+     * @param \Lists\DogovorBundle\Entity\DopDogovor $dopDogovors
+     */
+    public function removeDopDogovor(\Lists\DogovorBundle\Entity\DopDogovor $dopDogovors)
+    {
+        $this->dopDogovors->removeElement($dopDogovors);
+    }
+
+    /**
+     * Get dopDogovors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDopDogovors()
+    {
+        return $this->dopDogovors;
+    }
 }

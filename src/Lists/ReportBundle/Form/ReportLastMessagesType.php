@@ -37,33 +37,24 @@ class ReportLastMessagesType extends AbstractType
         $router = $this->container->get('router');
 
         $builder
-            ->add('userId', 'hidden', array(
+            ->add('managers', 'hidden', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_user'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
                         'width' => '200px',
+                        'multiple' => true
                     )),
                     'placeholder' => 'Enter Manager'
                 )
             ));
 
         $builder
-            ->add('withDaterange', 'checkbox', array(
-                'label' => 'Interval',
-                'attr' => array(
-                    'class_outer' => 'col-md-2',
-                    'class' => 'can-be-reseted'
-                )
-            ));
-
-        $builder
             ->add('daterange', 'daterange', array(
                 'attr' => array(
-                    'class' => 'hidden'
                 )
             ));
 

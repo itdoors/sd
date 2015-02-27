@@ -7,8 +7,7 @@
 
     <li class="sidebar-toggler-wrapper">
         <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-        <div class="sidebar-toggler">
-        </div>
+        <div class="sidebar-toggler"></div>
         <!-- END SIDEBAR TOGGLER BUTTON -->
     </li>
         {% include 'sidebar_search.html.twig' %}
@@ -379,19 +378,12 @@
             </li>
             {% endif %}
             {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
-            <li{% if 
-                   
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
-                    or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
-                    or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
-                    or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
+            <li{% if
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_report_message')
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_report')
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-pencil"></i>
@@ -401,49 +393,31 @@
                 <ul class="sub-menu">
                     {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
                     <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
-                        or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_simple_report_message')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
+                        <a href="{{ path('lists_project_simple_report_message') }}" title="{% trans %}Activity{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Activity{% endtrans %}
                         </a>
                     </li>
                     {% endif %}
                     {% if is_granted('ROLE_SALESADMIN') %}
-                    <li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
+                        <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_handling_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}All projects{% endtrans %}
-                        </a>
-                    </li>
-                    <li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
+                            <a href="{{ path('lists_report_sales_admin_last_messages') }}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Last messages{% endtrans %}
+                            </a>
+                        </li>
+                        <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_project_report')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_handling_status') }}" title="{% trans %}All projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}100% projects{% endtrans %}
-                        </a>
-                    </li>
-                    <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_last_messages')
-                    %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_last_messages') }}" title="{% trans %}All projects{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}Last messages{% endtrans %}
-                        </a>
-                    </li>
-                    <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_activity')
-                    %} class="active"{% endif %}>
-                        <a href="{{ path('lists_report_sales_admin_activity') }}" title="{% trans %}All manager activity{% endtrans %}">
-                            <i class="fa fa-comments"></i>
-                            {% trans %}All manager activity{% endtrans %}
-                        </a>
-                    </li>
+                            <a href="{{ path('lists_project_report') }}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Report{% endtrans %}
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </li>
@@ -702,11 +676,39 @@
             {% if is_granted('ROLE_PAY_MASTER') or is_granted('ROLE_PAY_MASTER_CONTROLLING') %}
                 <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                        or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_index')
+                        or
+                        (
+                            app.request.attributes.get('_route_params').id is defined
+                            and
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_show', app.request.attributes.get('_route_params'))
+                        )
                     %} class="active"{% endif %}>
-                    <a href="{{ path('it_doors_pay_master_index') }}">
+                    
+                    <a href="javascript:;">
                         <i class="icon-pencil"></i>
                         <span class="title">{% trans %}Pay Master{% endtrans %}</span>
+                        <span class="arrow "></span>
                     </a>
+                    <ul  class="sub-menu">
+                        <li{% if 
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_pay_master_index')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_pay_master_index') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}Pay Master{% endtrans %}</span>
+                            </a>
+                        </li>
+                        <li{% if 
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_payer_index')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('lists_organization_payer_index') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}Payers{% endtrans %}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             {% endif %}
         {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}

@@ -1,3 +1,10 @@
 Lists\ProjectBundle\Entity\MessagePlanned:
     type: entity
     repositoryClass: Lists\ProjectBundle\Entity\MessagePlannedRepository
+    fields:
+        showed:
+            type: datetime
+            nullable: true
+            column: showed_datetime
+            options:
+                comment: Дата отображения оповещения

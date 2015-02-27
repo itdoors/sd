@@ -103,6 +103,20 @@ class BasicOrganizationAccess implements OrganizationAccessInterface
     /**
      * @return bool
      */
+    public function canSeePayer ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canAddPayer ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         return 'organizationSalesFilterForm';

@@ -1,13 +1,13 @@
 {% trans_default_domain 'ITDoorsHistoryBundle' %}
 {% if showFilter == 'true' %}
-<script>
-    $(document).ready(function(){
-        ITDoorsAjax.init();
-    });
-</script>
-{{ ajax_filter_render(filter, namespace, {
-    'datatable_ajax_history': 'ITDoorsAjax.updateList'
-}) }}
+    <script>
+        $(document).ready(function(){
+            ITDoorsAjax.init();
+        });
+    </script>
+    {{ ajax_filter_render(filter, namespace, {
+        'datatable_ajax_history': 'ITDoorsAjax.updateList'
+    }) }}
 {% endif %}
 
 <div class="tab-content" id="datatable_ajax_history" data-url="{{ url('it_doors_history_list') }}">

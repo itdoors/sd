@@ -1,0 +1,22 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<a class="btn green" id="handling-dogovor-add-btn" href="#">
+    <i class="fa fa-plus"></i>
+    {% trans %}Add project{% endtrans %}
+</a>
+<div id="handling-dogovor-add-holder" style="display: none"></div>
+{{ ajax_form_render_btn({
+    'selector' : '#handling-dogovor-add-btn',
+    'formType' : 'add_project_form',
+        'successFunctions' : {
+        'dogovor-handling-list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceSave' : {
+        'alias' : 'lists_dogovor.service',
+        'method' : 'saveAddProjectForm'
+    },
+    'defaults' : {
+        'dogovorId' : dogovor.id
+    },
+    'target' : '#form_modal_block',
+    'html' : 'ListsDogovorBundle:Form:addProjectForm.html.twig'
+}) }}

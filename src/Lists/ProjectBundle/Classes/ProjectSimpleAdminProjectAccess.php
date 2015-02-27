@@ -17,6 +17,13 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canSeeProjectSimple ()
     {
         return true;
@@ -39,6 +46,34 @@ class ProjectSimpleAdminProjectAccess extends BasicProjectAccess
      * @return bool
      */
     public function canSeeProjectCommercialTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeProjectElectronicTrading ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditProjectStateTender ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canCloseProject ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeManagerProject ()
     {
         return true;
     }

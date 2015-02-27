@@ -9,6 +9,8 @@ use Lists\DogovorBundle\Entity\Dogovor;
 use Lists\DogovorBundle\Classes\DogovorAccessFactory;
 use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Invoice Service class
@@ -161,5 +163,38 @@ class DogovorService
             'm_local' => $this->translator->trans("Local", array(), 'ListsDogovorBundle'),
             'm_global' => $this->translator->trans("Global", array(), 'ListsDogovorBundle')
         );
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveAddProjectForm (Form $form, Request $request, $params)
+    {
+        $project = $form->get('project')->getData();
+        $dogovorId = $form->get('dogovorId')->getData();
+        $em = $this->container->get('doctrine')->getManager();
+        $dogovor = $em->getRepository('ListsDogovorBundle:Dogovor')->find($dogovorId);
+        $project->setDogovor($dogovor);
+        if (!$project->getIsClosed()) {
+            if (!$project instanceof \Lists\ProjectBundle\Entity\ProjectStateTender) {
+                $status = $project->getStatus();
+                if (
+                    !$status
+                    ||
+                    ($status && $status->getAlias() != 'comm_proposal')
+                    ||
+                    ($status && $status->getAlias() == 'comm_proposal' && $project->hasCommercialFile())
+                ) {
+                    $robot = $em->getRepository('SDUserBundle:User')->find(0);
+                    $project->setUserClosed($robot);
+                    $project->setReasonClosed('Договор подписан');
+                }
+            }
+        }
+        $em->persist($project);
+        $em->flush();
     }
 }

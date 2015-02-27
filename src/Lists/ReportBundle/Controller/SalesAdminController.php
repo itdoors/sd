@@ -29,18 +29,15 @@ class SalesAdminController extends BaseFilterController
      */
     public function reportHandlingStatusAction()
     {
-        /** @var HandlingRepository $handlingRepository */
-        $handlingRepository = $this->get('handling.repository');
-
+        $em = $this->getDoctrine()->getManager();
         $filterForm = $this->createForm($this->filterFormName);
 
-        $filters['progressNOT'] = 100;
         $filters['isClosed'] = 'FALSE';
 
-        /** @var Query $handlingQuery */
-        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
+        /** @var Query $projectQuery */
+        $projectQuery = $em->getRepository('ListsProjectBundle:Project')->getListProjectForTender(null, $filters);
 
-        $results = $handlingQuery->getResult();
+        $results = $projectQuery->getResult();
 
         return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportHandlingStatus.html.twig', array(
             'results' => $results,
@@ -70,14 +67,19 @@ class SalesAdminController extends BaseFilterController
      */
     public function reportLastMessagesTableAction()
     {
+        $em = $this->getDoctrine()->getManager();
         /** @var HandlingRepository $handlingRepository */
-        $handlingRepository = $this->get('handling.repository');
+//        $handlingRepository = $this->get('handling.repository');
 
         $filterNamespace = $this->container->getParameter('ajax.filter.namespace.report.last.messages');
 
         $filters = $this->getFilters($filterNamespace);
 
-        $results = $handlingRepository->getReportLastMessages($filters);
+        $results = null;
+        if(!empty($filters)) {
+            $results = $em->getRepository('ListsProjectBundle:Project')->getListProjectForTender(null, $filters)->getResult();
+        }
+//        $results = $handlingRepository->getReportLastMessages($filters);
 
         return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportLastMessagesTable.html.twig', array(
             'results' => $results,

@@ -64,6 +64,12 @@ class ProjectSimpleForm extends ProjectBaseForm
                     ))
                 )
             ))
+            ->add('pf', 'text', array(
+                'required' => false
+            ))
+            ->add('summaWithVAT', 'text', array(
+                'required' => false
+            ))
             ->add('type', 'choice', array(
                 'mapped' => false,
                 'required' => true,

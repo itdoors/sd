@@ -23,9 +23,29 @@
             </tr>
         </thead>
         <tbody>
-            {% for key,file in object.files %}
+             {% set list = 1 %}
+            {% if object.dogovor %}
                 <tr>
-                    <td>{{ key+1 }}</td>
+                    <td>{{ list  }}</td>
+                    <td>{% trans%}Dogovor{% endtrans%} {{ object.dogovor.number }}</td>
+                    <td>
+                         {% if object.dogovor.filepath %}
+                            {% if is_granted('ROLE_LAWYER') %}
+                                <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~object.dogovor.filepath ,timestamp:'now'|date('U') }) }}"  target="_blank" >{% trans %}See document{% endtrans %}</a>
+                            {% else %}
+                                {% trans %}Недоступно{% endtrans %}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td></td>
+                    <td>{{ object.dogovor.user}}</td>
+                    <td></td>
+                <tr>
+            {% endif %}
+            {% for file in object.files %}
+                {% set list = list+1 %}
+                <tr>
+                    <td>{{ list }}</td>
                     <td>{{ file.type ? file.type.name : '' }}</td>
                     <td>
                         {% if file.name %}
@@ -34,7 +54,7 @@
                             <script>
                                 $(document).ready(function(){
                                     $(function () {
-                                        $('#fileupload{{ key+1 }}').fileupload({
+                                        $('#fileupload{{ list }}').fileupload({
 
                                             dataType: 'json',
                                             fail: function (e, data) {
@@ -54,7 +74,7 @@
                             <span class="btn btn-success fileinput-button">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span>{% trans %}Upload new document{% endtrans %}</span>
-                                <input id="fileupload{{ key+1 }}" type="file" name="file" data-url="{{ path('lists_project_ajax_upload_file', {'id': file.id}) }}">
+                                <input id="fileupload{{ list }}" type="file" name="file" data-url="{{ path('lists_project_ajax_upload_file', {'id': file.id}) }}">
                             </span>  
                         {% endif %}
                     </td>

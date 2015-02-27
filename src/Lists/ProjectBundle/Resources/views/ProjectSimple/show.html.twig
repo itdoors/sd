@@ -51,7 +51,16 @@
     <div id="form_modal_block" class="modal" role="basic"></div>
 {% endblock %}
 {% block body %}
-
+{% if object.organization.edrpou is empty %}
+<div class="row">
+    <div class="form-group col-md-12">
+        <div class="alert alert-danger">
+            <button class="close" data-close="alert"></button>
+            <h3 class="bold">{% trans%}Attention! The organization is not specified EDRPOU.{% endtrans %}</h3>
+        </div>
+    </div>
+</div>
+{% endif %}
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable tabbable-custom boxless">

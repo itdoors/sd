@@ -72,6 +72,22 @@ Lists\ProjectBundle\Entity\Project:
             column: status_text
             options:
                 comment: Причина изменения статуса
+        pf:
+            type: float
+            nullable: true
+            column: pf
+        summaWithVAT:
+            type: float
+            nullable: true
+            column: summa_with_vat
+            options:
+                comment: Сумма с НДС
+        createDate:
+            type: date
+            nullable: true
+            column: create_date
+            options:
+                comment: Дата создания проекта
         createDate:
             type: date
             nullable: true
@@ -99,11 +115,30 @@ Lists\ProjectBundle\Entity\Project:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
+            fetch: EAGER
             inversedBy: null
             joinColumns:
                 created_user_id:
                     referencedColumnName: id
             orphanRemoval: false
+        lastMessageCurrent:
+            targetEntity: MessageCurrent
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_current_id:
+                    referencedColumnName: id
+            orphanRemoval: true
+        lastMessagePlanned:
+            targetEntity: MessagePlanned
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_planned_id:
+                    referencedColumnName: id
+            orphanRemoval: true
         userClosed:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
@@ -121,8 +156,18 @@ Lists\ProjectBundle\Entity\Project:
             cascade: {  }
             mappedBy: null
             inversedBy: null
+            fetch: EAGER
             joinColumns:
                 organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: projects
+            joinColumns:
+                dogovor_id:
                     referencedColumnName: id
             orphanRemoval: false
         status:

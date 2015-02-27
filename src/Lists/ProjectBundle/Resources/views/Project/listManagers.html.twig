@@ -3,18 +3,17 @@
 <script>
     $(document).ready(function(){
         $('.part-editable').editable({
-            url: '{{ path('sd_common_ajax_handling_user_part_change') }}',
+            url: '{{ path('lists_project_ajax_editable_manager') }}',
             success: function(response, newValue) {
-                var response = JSON.parse(response);
-                if(response.handlingUser.error){
+                if(response.error){
                     return false;
                 }
             }
         });
         $('.part-editable').on('save', function(e, params) {
                 var response = JSON.parse(params.response);
-                if(response.handlingUser.managerPart){
-                    $('#managerProjectPart').text(response.handlingUser.managerPart);
+                if(response.manager.managerPart){
+                    $('#managerProjectPart'+response.manager.managerId).text(response.manager.managerPart);
                 }
             });
         $('.ajax-delete-and-update').on('click', function(e) {
@@ -65,9 +64,9 @@
             <td>{{ item.user.firstName }} {{ item.user.lastName }}</td>
             <td>{{ item.user.stuff.mobilephone }}</td>
             <td>{{ item.user.email }}</td>
-            <td>{{ managerProject.getRole|trans }}</td>
+            <td>{{ item.getRole|trans }}</td>
             <td>
-                {% if managerProject.getRole == 'manager' and item.user != app.user and access.canChangeManager  %}
+                {% if managerProject and managerProject.getUser() == app.user and item.user != app.user and access.canChangeManager  %}
                     <a href="#"
                        class="part-editable"
                        data-name="part"
@@ -79,7 +78,7 @@
                         {{ item.part }}
                     </a>
                 {% else %}
-                    {{ item.part }}
+                    <div id="managerProjectPart{{item.id}}">{{ item.part }}
                 {% endif %}
             </td>
             {% if access.canChangeManager%}

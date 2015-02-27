@@ -12,6 +12,42 @@ use Symfony\Component\HttpFoundation\Request;
 class AjaxController extends Controller
 {
     /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
+    public function searchProjectIdAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? trim($searchTextQ) : trim($searchTextQuery);
+
+        if (!is_numeric($searchText)) {
+            return new Response(json_encode(array()));
+        }
+        /** @var ProjectRepository $projectRepository */
+        $projectRepository = $this->getDoctrine()
+            ->getRepository('ListsProjectBundle:Project');
+
+        $projects = $projectRepository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($projects as $project) {
+            $id = $project->getId();
+            $text = $id .' - ' .$project->getOrganization();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            ); 
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
      * Returns json ownership list depending search query
      * 
      * @param Request $request

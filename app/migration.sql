@@ -2557,7 +2557,7 @@ ALTER TABLE task ADD responsible_id INT DEFAULT NULL;
 ALTER TABLE task ADD CONSTRAINT FK_527EDB25602AD315 FOREIGN KEY (responsible_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_527EDB25602AD315 ON task (responsible_id);
 
--- prod ????
+-- prod +++
 ALTER TABLE organization ALTER group_id TYPE INT;
 ALTER TABLE organization ALTER is_smeta  SET DEFAULT '0';
 ALTER TABLE organization ADD is_payer BOOLEAN DEFAULT FALSE;
@@ -2857,5 +2857,14 @@ COMMENT ON COLUMN project_message.event_datetime_start IS 'Первая дата
 
 # app/console  lists:project:migration 
 ALTER TABLE model_contact ALTER last_name DROP NOT NULL;
-
 -- prod ++++
+ALTER TABLE organization_service_cover DROP CONSTRAINT FK_390A9CB2ED5CA9E6;
+ALTER TABLE project ADD dogovor_id BIGINT DEFAULT NULL;
+ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EE81A36DD2 FOREIGN KEY (dogovor_id) REFERENCES dogovor (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_2FB3D0EE81A36DD2 ON project (dogovor_id);
+ALTER TABLE project_message ADD showed_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+COMMENT ON COLUMN project_message.showed_datetime IS 'Дата отображения оповещения';
+-- prod ++++
+
+# project  - добавить в параметр
+-- prod ---

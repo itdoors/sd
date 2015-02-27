@@ -71,8 +71,15 @@ lists_project_simple_list:
     
 lists_project_simple_export_excel:
     pattern:  /lists/project/simple/export/excel
-    defaults: { _controller: ListsHandlingBundle:ProjectSimple:exportExcel }
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:exportExcel }
 
+lists_project_simple_report_message:
+    pattern:  /lists/project/simple/report/message
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:reportMessage }
+
+lists_project_simple_report_export:
+    pattern:  /lists/project/simple/report/export
+    defaults: { _controller: ListsProjectBundle:ProjectSimple:reportExport }
 
 # ProjectCommercialTenderController
 lists_project_commercial_tender_show:
@@ -119,6 +126,10 @@ lists_project_ajax_editable_project:
     pattern:  /lists/project/ajax/editable/project
     defaults: { _controller: ListsProjectBundle:Ajax:editableProject }
     
+lists_project_ajax_editable_message:
+    pattern:  /lists/project/ajax/editable/message
+    defaults: { _controller: ListsProjectBundle:Ajax:editableMessage }
+    
 lists_project_ajax_services_state_tender_search:
     pattern:  /lists/project/ajax/services/state/tender/search
     defaults: { _controller: ListsProjectBundle:Ajax:servicesProjectStateTenderSearch}
@@ -131,6 +142,11 @@ lists_project_ajax_services_by_ids:
     pattern:  /lists/project/ajax/services/by_ids
     defaults: { _controller: ListsProjectBundle:Ajax:projectServicesByIds}
 
+        
+lists_project_ajax_by_id:
+    pattern:  /lists/project/ajax/by_id
+    defaults: { _controller: ListsProjectBundle:Ajax:projectById}
+    
 lists_project_ajax_search_status_state_tender:
     pattern:  /lists/project/ajax/search/status/state_tender
     defaults: { _controller: ListsProjectBundle:Ajax:searchStatusProjectStateTender}
@@ -165,6 +181,10 @@ lists_project_message_update:
     requirements:
         id: \d+
 
+lists_project_ajax_editable_manager:
+    pattern:  /lists/project/ajax/editable/manager
+    defaults: { _controller: ListsProjectBundle:Ajax:editableManager}
+    
 # ProjectBaseController
 lists_project_managers:
     pattern:  /lists/project/lists/managers/{id}
@@ -183,3 +203,19 @@ lists_project_for_organization:
     defaults: { _controller: ListsProjectBundle:ProjectBase:forOrganization }
     requirements:
         id: \d+
+        
+lists_project_report:
+    pattern:  /lists/project/report
+    defaults: { _controller: ListsProjectBundle:ProjectBase:report }
+        
+lists_project_report_list:
+    pattern:  /lists/project/report/list/{type}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:reportList }
+    requirements:
+        id: electronic|commercial|firstMeet
+        
+lists_project_report_list_export:
+    pattern:  /lists/project/report/list/export/{type}
+    defaults: { _controller: ListsProjectBundle:ProjectBase:reportListExport }
+    requirements:
+        id: electronic|commercial|firstMeet

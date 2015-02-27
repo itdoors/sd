@@ -14,6 +14,57 @@ use Doctrine\DBAL\Types\Type;
 class ProjectRepository extends EntityRepository
 {
     /**
+     * get All messages
+     *
+     * @param integer $userId
+     *
+     * @return mixed
+     */
+    public function getOneByPlanedMessage($userId)
+    {
+        $date = new \DateTime();
+        /** @var QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+        $sql->innerJoin('p.lastMessagePlanned', 'm');
+        $sql->leftJoin('p.dogovor', 'd');
+        $sql->where('m.user = :user');
+        $sql->andWhere(
+            $sql->expr()->orX(
+                $sql->expr()->isNull('m.showed'),
+               'm.showed <= :date'
+            )
+            );
+        $sql->andWhere(
+            $sql->expr()->orX(
+                $sql->expr()->isNull('p.isClosed'),
+                'd.stopdatetime > :dateNow'
+            )
+        );
+        $sql->setParameter(':user', $userId);
+        $sql->setParameter(':dateNow', $date, Type::DATETIME);
+        $sql->setParameter(':date', $date->modify('-30 minutes'), Type::DATETIME);
+        $sql->orderBy('m.eventDatetime', 'ASC');
+        $sql->setMaxResults(1);
+
+        return $sql
+            ->getQuery()
+            ->getResult();
+    }
+    /**
+     * Searches handling by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('p');
+        $sql->where('p.id = :q')
+            ->setParameter(':q', $q, Type::INTEGER);
+        return $sql->getQuery()->getResult();
+    }
+    /**
      * getListProjectSimple
      * 
      * @param User    $user
@@ -31,6 +82,7 @@ class ProjectRepository extends EntityRepository
                 'project_commercial_tender',
                 'project_electronic_trading'
             ));
+        $sql->leftJoin('p.lastMessageCurrent', 'mc');
         if ($user) {
             $sql
                 ->leftJoin('p.managers', 'm', 'WITH', 'm.user = :user')
@@ -40,7 +92,105 @@ class ProjectRepository extends EntityRepository
                 ->setParameter(':user', $user);
         }
         $this->filter($sql, $filters);
-        
+        $sql->orderBy('p.datetimeClosed', 'DESC');
+        $sql->addOrderBy('mc.createDatetime', 'DESC');
+
+        return $sql->getQuery();
+    }
+    /**
+     * getListProjectSimple
+     * 
+     * @param User    $user
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
+    public function getListProjectForExport($user, $filters = array())
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+        $sql->andWhere('p INSTANCE OF :discr')
+            ->setParameter(':discr', array(
+                'project_simple',
+                'project_commercial_tender',
+                'project_electronic_trading'
+            ));
+        $sql->leftJoin('p.lastMessageCurrent', 'mc');
+        if ($user) {
+            $sql
+                ->leftJoin('p.managers', 'm', 'WITH', 'm.user = :user')
+                ->leftJoin('p.organization', 'o')
+                ->leftJoin('o.organizationUsers', 'mo', 'WITH', 'mo.user = :user')
+                ->andWhere($sql->expr()->orX('m.user = :user', 'mo.user = :user'))
+                ->setParameter(':user', $user);
+        }
+        $this->filter($sql, $filters);
+        $sql->orderBy('p.datetimeClosed', 'DESC');
+        $sql->addOrderBy('mc.createDatetime', 'DESC');
+
+        return $sql->getQuery();
+    }
+    /**
+     * getListProjectSimple
+     * 
+     * @param string  $type
+     * @param integer $typeFile
+     * @param integer $typeMessage
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
+    public function getListProjectForReport($type, $typeFile, $typeMessage, $filters = array())
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('p');
+        if ($type == 'firstMeet') {
+            $sql->select('p as project');
+            $sql->addSelect('mes.description as descriptionMessage');
+            $sql->leftJoin('p.messages', 'mes', 'WITH', 'mes.type = :typeMessage');
+            $sql->setParameter(':typeMessage', $typeMessage);
+            
+        }
+        if ($type == 'electronic') {
+            $sql->andWhere('p INSTANCE OF :discr')
+                ->setParameter(':discr', array(
+                    'project_electronic_trading'
+                ));
+        } else {
+            $sql->andWhere('p INSTANCE OF :discr')
+                ->setParameter(':discr', array(
+                    'project_simple',
+                    'project_commercial_tender',
+                    'project_electronic_trading'
+                ));
+            if ($type == 'commercial') {
+                $sql->leftJoin('p.files', 'f', 'WITH', 'f.type = :typeFile')
+                    ->setParameter(':typeFile', $typeFile)
+                    ->andWhere('f.name is not NULL');
+            }
+        }
+
+        if (isset($filters['managers']) && !empty($filters['managers'])) {
+            $managersIds = explode(',', $filters['managers']);
+            $sql->leftJoin('p.managers', 'm');
+            $sql->andWhere($sql->expr()->in('m.user', ':managersIds'));
+            $sql->setParameter(':managersIds', $managersIds);
+        }
+        if (isset($filters['daterange']['start']) && !empty($filters['daterange']['start'])) {
+            $dateStart = $filters['daterange']['start'];
+            $dateEnd = new \DateTime($filters['daterange']['end']->format('Y-m-d').' 23:59:59');
+            if ($type == 'firstMeet') {
+                $sql->andWhere($sql->expr()->between('mes.eventDatetime', ':start', ':end'));
+                $sql->andWhere($sql->expr()->between('mes.eventDatetime', ':start', ':end'));
+                
+            } else {
+                $sql->andWhere($sql->expr()->between('p.createDate', ':start', ':end'));
+            }
+            $sql->setParameter(':start', $dateStart, Type::DATETIME);
+            $sql->setParameter(':end', $dateEnd, Type::DATETIME);
+        }
+//        $sql->addOrderBy('IDENTITY(p.managers)', 'DESC');
+        $sql->addOrderBy('p.datetimeClosed', 'DESC');
 
         return $sql->getQuery();
     }
@@ -72,6 +222,23 @@ class ProjectRepository extends EntityRepository
                         $sql
                             ->andWhere($sql->expr()->in('m1.user', ':managersIds'));
                         $sql->setParameter(':managersIds', $value);
+                        break;
+                    case 'daterange':
+                        if (empty($value['start'])) {
+                            continue;
+                        }
+                        $dateStart = $value['start'];
+                        $dateEnd = new \DateTime($value['end']->format('Y-m-d').' 23:59:59');
+                        $sql->leftJoin('p.lastMessageCurrent', 'lmc');
+                        $sql->leftJoin('p.lastMessagePlanned', 'lmp');
+                        $sql->andWhere(
+                            $sql->expr()->orX(
+                                $sql->expr()->between('lmc.eventDatetime', ':start', ':end'),
+                                $sql->expr()->between('lmp.eventDatetime', ':start', ':end')
+                            )
+                        );
+                        $sql->setParameter(':start', $dateStart, Type::DATETIME);
+                        $sql->setParameter(':end', $dateEnd, Type::DATETIME);
                         break;
                 }
             }

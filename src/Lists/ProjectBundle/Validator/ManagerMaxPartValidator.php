@@ -39,15 +39,19 @@ class ManagerMaxPartValidator extends ConstraintValidator
             $project = $root->getProject();
         }
         if (isset($project)) {
-            $managers = $project->getManagers();
-            $part = 0;
-            foreach ($managers as $manager) {
-                if ($manager->isManagerProject()) {
-                    $part = $manager->getPart();
-                }
+            $partMax = 0;
+            if ($project->getManagerProject()) {
+                $partMax = $project->getManagerProject()->getPart();
             }
-            if ($part < $value) {
-                $this->context->addViolation('Max part :maxPart', array(':maxPart' => $part));
+            $group = $this->context->getGroup();
+            if ($group == 'edit' && !$root instanceof Form) {
+                $this->em->refresh($root);
+                $man = $this->em->getRepository('ListsProjectBundle:Manager')->find($root->getId());
+                $partMax += ($man->getPart()*2);
+                $root->setPart($value);
+            }
+            if ($partMax < $value) {
+                $this->context->addViolation('Max part :maxPart', array(':maxPart' => $partMax));
             }
         } else {
             $this->context->addViolation('Project not found', array());

@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Router;
  */
 class ProjectFilter extends AbstractType
 {
+    protected $router;
     /**
      * __construct
      * 
@@ -50,23 +51,7 @@ class ProjectFilter extends AbstractType
                     )),
                     'placeholder' => 'Enter manager',
                 )
-            ))
-            ;
-//        $builder->add('id', 'filter_entity', array(
-//            'class' => 'Main\ErrorBundle\Entity\ItdJsError',
-//            'property' => 'url',
-//            'multiple' => false,
-//            'attr' => array(
-//                'data-params' => json_encode(array(
-//                    'minimumInputLength' => 2,
-//                    'allowClear' => true
-//                )),
-//                'style' => 'width:100%',
-//                'class' => 'form-control'
-//            )
-//        ));
-//        $builder->add('createDatetime', 'filter_date');
-//        $builder->add('message', 'filter_text');
+            ));
         
         $builder
             ->add('submit', 'submit')
@@ -84,7 +69,7 @@ class ProjectFilter extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
             'translation_domain' => 'ListsProjectBundle',
-            'validation_groups' => array('filtering') // avoid NotBlank() constraint-related message
+            'validation_groups' => array('filtering')
         ));
     }
 }

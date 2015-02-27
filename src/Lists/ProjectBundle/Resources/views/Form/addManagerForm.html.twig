@@ -37,6 +37,7 @@
                             <span class="help-block">После добавления пользователя, он получет доступ к проекту, контактам.</span>
                         </div>
                     </div>
+                    {% if form.part is defined %}
                     <div class="col-md-12">
                         <div class="form-group{% if form.part.vars.errors|length %} has-error{% endif %}">
                             {{ form_label(form.part, 'Percentage of participation', {'attr': {'class': 'control-label'}}) }}
@@ -44,6 +45,7 @@
                             {{ form_errors(form.part) }}
                         </div>
                     </div>
+                    {% endif %}
                 
                 <div class="col-md-12">
                     <div class="form-actions">

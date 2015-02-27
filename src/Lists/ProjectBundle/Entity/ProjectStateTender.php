@@ -66,11 +66,6 @@ class ProjectStateTender extends Project
     private $budget;
 
     /**
-     * @var float
-     */
-    private $pf;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $kveds;
@@ -326,27 +321,6 @@ class ProjectStateTender extends Project
     public function getBudget ()
     {
         return $this->budget;
-    }
-    /**
-     * Set pf
-     *
-     * @param float $pf
-     * @return ProjectStateTender
-     */
-    public function setPf ($pf)
-    {
-        $this->pf = $pf;
-
-        return $this;
-    }
-    /**
-     * Get pf
-     *
-     * @return float 
-     */
-    public function getPf ()
-    {
-        return $this->pf;
     }
     /**
      * Add kveds

@@ -26,6 +26,10 @@ interface ProjectAccessInterface
     /**
      * @return bool
      */
+    public function canSeeReport();
+    /**
+     * @return bool
+     */
     public function canChangeManager();
     /**
      * @return bool

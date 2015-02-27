@@ -69,10 +69,6 @@ Lists\ProjectBundle\Entity\ProjectStateTender:
             nullable: true
             options:
                 comment: Бюджет
-        pf:
-            type: float
-            nullable: true
-            column: pf
     manyToMany:
         kveds:
             targetEntity: Lists\OrganizationBundle\Entity\Kved

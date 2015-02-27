@@ -26,8 +26,19 @@ Lists\HandlingBundle\Entity\HandlingService:
             type: integer
             nullable: true
             column: report_number
+    oneToOne:
+        service:
+            targetEntity: Lists\ProjectBundle\Entity\Service
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                name: service_id
+                nullable: true
+                referencedColumnName: id
+            orphanRemoval: false
     manyToMany:
-      handlings:
-        targetEntity: Lists\HandlingBundle\Entity\Handling
-        mappedBy: handlingServices
+        handlings:
+            targetEntity: Lists\HandlingBundle\Entity\Handling
+            mappedBy: handlingServices
     lifecycleCallbacks: {  }

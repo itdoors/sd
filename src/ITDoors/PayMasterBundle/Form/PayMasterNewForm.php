@@ -198,7 +198,9 @@ class PayMasterNewForm extends AbstractType
                     '0' => 'VAT not included'
                     )
                 ))
-            ->add('description', 'textarea');
+            ->add('description', 'textarea', array(
+                'required' => false
+            ));
         $builder
             ->add('create', 'submit');
 
@@ -231,7 +233,7 @@ class PayMasterNewForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'ITDoors\PayMasterBundle\Entity\PayMaster',
-            'validation_groups' => array('create'),
+            'validation_groups' => array('createPayMaster'),
             'translation_domain' => 'ITDoorsPayMasterBundle'
         ));
     }

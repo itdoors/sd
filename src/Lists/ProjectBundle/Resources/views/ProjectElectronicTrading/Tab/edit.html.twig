@@ -36,6 +36,7 @@
                     }
                 }
             });
+             $('.inputmask-decimal').inputmask("decimal",{ "placeholder": "0.00", "radixPoint": ".", "rightAlign": false, "digits": 2});
         {% endif %}
     });
 </script>
@@ -55,6 +56,9 @@
                 {% else %}
                     {% if object.statusAccess is null %}
                         {% trans %}Not approved by the manager{% endtrans %}
+                        {% if access.canConfirmProject %}
+                            {{ include ('ListsProjectBundle:Project/Button:confirmProject.html.twig')}}
+                        {% endif %}
                     {% endif %}
                     {% if access.canEditProjectSimple %}
                     <a href="#" id="status" data-type="select" data-pk="{{ object.id }}" data-value="{{ object.status ? object.status.id : '' }}" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
@@ -103,12 +107,20 @@
             </td>
         </tr>
         <tr>
+            <td>{% trans %}PF1{% endtrans %}</td>
+            <td> 
+                {% if access.canEditProjectSimple %}<a class="editable-project inputmask-decimal" href="#" id="pf" data-type="text" data-pk="{{ object.id }}" data-value="{{ object.pf }}" data-original-title="{% trans %}Enter PF1{% endtrans %}">{% endif %}{{ object.pf }}{% if access.canEditProjectSimple %}</a>{% endif %}
+            </td>  
+            <td>{% trans %}Summa with VAT{% endtrans %}</td>
+            <td> 
+                {% if access.canEditProjectSimple %}<a class="editable-project" href="#" id="summaWithVAT" data-type="text" data-pk="{{ object.id }}" data-value="{{ object.summaWithVAT }}" data-original-title="{% trans %}Enter summa with VAT{% endtrans %}">{% endif %}{{ object.summaWithVAT }}{% if access.canEditProjectSimple %}</a>{% endif %}
+            </td> 
+        </tr> 
+        <tr>
             <td>{% trans %}Description{% endtrans %}</td>
-            <td>
+            <td colspan = 3>
                 {% if access.canEditProjectSimple %}<a class="editable-project" href="#" id="description" data-type="textarea" data-pk="{{ object.id }}" data-value="{{ object.description }}" data-original-title="{% trans %}Enter description{% endtrans %}">{% endif %}{{ object.description }}{% if access.canEditProjectSimple %}</a>{% endif %}
             </td>
-            <td></td>
-            <td></td>
         </tr> 
         </tbody>
     </table>

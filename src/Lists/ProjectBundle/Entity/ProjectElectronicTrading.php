@@ -69,4 +69,32 @@ class ProjectElectronicTrading extends Project
     {
         return 'Electronic trading';
     }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $xz;
+
+
+    /**
+     * Set xz
+     *
+     * @param \SD\UserBundle\Entity\User $xz
+     * @return ProjectElectronicTrading
+     */
+    public function setXz(\SD\UserBundle\Entity\User $xz = null)
+    {
+        $this->xz = $xz;
+    
+        return $this;
+    }
+
+    /**
+     * Get xz
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getXz()
+    {
+        return $this->xz;
+    }
 }

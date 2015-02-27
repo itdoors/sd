@@ -1,5 +1,5 @@
 # private calendar
-sd_calendar_private_handling_message:
+sd_calendar_private_message:
     pattern:  /calendar/ajax/private/handlind_message
     defaults: { _controller: SDCalendarBundle:Private:HandlingMessage }
 sd_calendar_private_index:

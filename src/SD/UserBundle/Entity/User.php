@@ -9,7 +9,6 @@
 namespace SD\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
-use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Lists\TeamBundle\Entity\Team;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -511,45 +510,6 @@ class User extends BaseUser
     public function getUsercontactinfo()
     {
         return $this->usercontactinfo;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $handlingUsers;
-
-
-    /**
-     * Add handlingUsers
-     *
-     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
-     * 
-     * @return User
-     */
-    public function addHandlingUser(HandlingUser $handlingUsers)
-    {
-        $this->handlingUsers[] = $handlingUsers;
-
-        return $this;
-    }
-
-    /**
-     * Remove handlingUsers
-     *
-     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
-     */
-    public function removeHandlingUser(HandlingUser $handlingUsers)
-    {
-        $this->handlingUsers->removeElement($handlingUsers);
-    }
-
-    /**
-     * Get handlingUsers
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getHandlingUsers()
-    {
-        return $this->handlingUsers;
     }
 
     private $organizationUsers;

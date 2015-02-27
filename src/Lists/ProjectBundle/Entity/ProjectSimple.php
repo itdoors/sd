@@ -69,4 +69,16 @@ class ProjectSimple extends Project
     {
         return 'Negotiation procedure';
     }
+      /**
+     * getCoiceConfirm
+     * 
+     * @return mixed[]
+     */
+    public static function getListDiscr ()
+    {
+        return array (
+            'project_commercial_tender' => 'Commercial tender',
+            'project_electronic_trading' => 'Electronic trading'
+        );
+    }
 }

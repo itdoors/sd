@@ -17,11 +17,6 @@ class OrganizationServiceCover
     /**
      * @var integer
      */
-    private $serviceId;
-
-    /**
-     * @var integer
-     */
     private $organizationId;
 
     /**
@@ -55,12 +50,6 @@ class OrganizationServiceCover
     private $organization;
 
     /**
-     * @var \Lists\HandlingBundle\Entity\HandlingService
-     */
-    private $service;
-
-
-    /**
      * Get id
      *
      * @return integer 
@@ -69,31 +58,6 @@ class OrganizationServiceCover
     {
         return $this->id;
     }
-
-    /**
-     * Set serviceId
-     *
-     * @param integer $serviceId
-     *
-     * @return OrganizationServiceCover
-     */
-    public function setServiceId($serviceId)
-    {
-        $this->serviceId = $serviceId;
-
-        return $this;
-    }
-
-    /**
-     * Get serviceId
-     *
-     * @return integer 
-     */
-    public function getServiceId()
-    {
-        return $this->serviceId;
-    }
-
     /**
      * Set organizationId
      *
@@ -263,29 +227,6 @@ class OrganizationServiceCover
     }
 
     /**
-     * Set service
-     *
-     * @param \Lists\HandlingBundle\Entity\HandlingService $service
-     *
-     * @return OrganizationServiceCover
-     */
-    public function setService(\Lists\HandlingBundle\Entity\HandlingService $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Lists\HandlingBundle\Entity\HandlingService 
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-    /**
      * @var integer
      */
     private $evaluation;
@@ -441,5 +382,33 @@ class OrganizationServiceCover
         if ($endDateString) {
             $this->setEndDate(new \DateTime($endDateString));
         }
+    }
+    /**
+     * @var \Lists\ProjectBundle\Entity\Service
+     */
+    private $service;
+
+    /**
+     * Set service
+     *
+     * @param \Lists\ProjectBundle\Entity\Service $service
+     *
+     * @return OrganizationServiceCover
+     */
+    public function setService(\Lists\ProjectBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+    
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Lists\ProjectBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }

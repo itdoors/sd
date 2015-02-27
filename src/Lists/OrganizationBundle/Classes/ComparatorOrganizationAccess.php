@@ -189,6 +189,32 @@ class ComparatorOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canAddPayer ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddPayer()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeePayer ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeePayer()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         foreach ($this->accesses as $access) {

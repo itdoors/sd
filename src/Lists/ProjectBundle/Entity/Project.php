@@ -3,6 +3,7 @@
 namespace Lists\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lists\ProjectBundle\Entity\ManagerProjectType;
 
 /**
  * Project
@@ -367,6 +368,22 @@ class Project
         return false;
     }
     /**
+     * isManager
+     *
+     * @return boolean
+     */
+    public function isManagerProject (\SD\UserBundle\Entity\User $user)
+    {
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            if ($manager->getUser() == $user and $manager instanceof ManagerProjectType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
      * Add files
      *
      * @param \Lists\ProjectBundle\Entity\File $files
@@ -630,5 +647,175 @@ class Project
     public function getNotification ()
     {
         return $this->notification;
+    }
+
+    /**
+     * @var \Lists\ProjectBundle\Entity\MessageCurrent
+     */
+    private $lastMessageCurrent;
+
+    /**
+     * @var \Lists\ProjectBundle\Entity\MessagePlanned
+     */
+    private $lastMessagePlanned;
+
+    /**
+     * Set lastMessageCurrent
+     *
+     * @param \Lists\ProjectBundle\Entity\MessageCurrent $lastMessageCurrent
+     *
+     * @return Project
+     */
+    public function setLastMessageCurrent (\Lists\ProjectBundle\Entity\MessageCurrent $lastMessageCurrent = null)
+    {
+        $this->lastMessageCurrent = $lastMessageCurrent;
+
+        return $this;
+    }
+    /**
+     * Get lastMessageCurrent
+     *
+     * @return \Lists\ProjectBundle\Entity\MessageCurrent 
+     */
+    public function getLastMessageCurrent ()
+    {
+        return $this->lastMessageCurrent;
+    }
+    /**
+     * Set lastMessagePlanned
+     *
+     * @param \Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlanned
+     *
+     * @return Project
+     */
+    public function setLastMessagePlanned (\Lists\ProjectBundle\Entity\MessagePlanned $lastMessagePlanned = null)
+    {
+        $this->lastMessagePlanned = $lastMessagePlanned;
+
+        return $this;
+    }
+    /**
+     * Get lastMessagePlanned
+     *
+     * @return \Lists\ProjectBundle\Entity\MessagePlanned 
+     */
+    public function getLastMessagePlanned ()
+    {
+        return $this->lastMessagePlanned;
+    }
+
+    /**
+     * @var float
+     */
+    private $pf;
+
+    /**
+     * Set pf
+     *
+     * @param float $pf
+     *
+     * @return Project
+     */
+    public function setPf ($pf)
+    {
+        $this->pf = $pf;
+
+        return $this;
+    }
+    /**
+     * Get pf
+     *
+     * @return float 
+     */
+    public function getPf ()
+    {
+        return $this->pf;
+    }
+
+    /**
+     * @var float
+     */
+    private $summaWithVAT;
+
+    /**
+     * Set summaWithVAT
+     *
+     * @param float $summaWithVAT
+     *
+     * @return Project
+     */
+    public function setSummaWithVAT ($summaWithVAT)
+    {
+        $this->summaWithVAT = $summaWithVAT;
+
+        return $this;
+    }
+    /**
+     * Get summaWithVAT
+     *
+     * @return float 
+     */
+    public function getSummaWithVAT ()
+    {
+        return $this->summaWithVAT;
+    }
+    /**
+     * Get Manager Project
+     *
+     * @return float 
+     */
+    public function getManagerProject ()
+    {
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            if ($manager instanceof ManagerProjectType) {
+                return $manager;
+            }
+        }
+        
+        return null;
+    }
+    /**
+     * @var \Lists\DogovorBundle\Entity\Dogovor
+     */
+    private $dogovor;
+
+
+    /**
+     * Set dogovor
+     *
+     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @return Project
+     */
+    public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
+    {
+        $this->dogovor = $dogovor;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovor
+     *
+     * @return \Lists\DogovorBundle\Entity\Dogovor 
+     */
+    public function getDogovor()
+    {
+        return $this->dogovor;
+    }
+
+    /**
+     * getСontractЕime
+     *
+     * @return \DateTime
+     */
+    public function getСontractЕime()
+    {
+        $dogovor = $this->getDogovor();
+        if (!$dogovor) {
+            return null;
+        }
+
+        return $dogovor->getStopdatetime();
     }
 }

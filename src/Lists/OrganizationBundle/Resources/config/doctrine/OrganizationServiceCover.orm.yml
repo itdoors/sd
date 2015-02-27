@@ -9,10 +9,6 @@ Lists\OrganizationBundle\Entity\OrganizationServiceCover:
             nullable: false
             generator:
                 strategy: IDENTITY
-        serviceId:
-            type: integer
-            nullable: true
-            column: service_id
         organizationId:
             type: integer
             nullable: true
@@ -48,6 +44,15 @@ Lists\OrganizationBundle\Entity\OrganizationServiceCover:
             nulllable: false
             column: creator_id
     manyToOne:
+        service:
+            targetEntity: Lists\ProjectBundle\Entity\Service
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             joinColumn:
@@ -57,11 +62,6 @@ Lists\OrganizationBundle\Entity\OrganizationServiceCover:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             joinColumn:
                 name: competitor_id
-                referencedColumnName: id
-        service:
-            targetEntity: Lists\HandlingBundle\Entity\HandlingService
-            joinColumn:
-                name: service_id
                 referencedColumnName: id
         creator:
             targetEntity: SD\UserBundle\Entity\User

@@ -30,6 +30,7 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('metronic/assets/admin/pages/scripts/tasks.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2_locale_'~ app.request.getLocale() ~'.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}"></script>

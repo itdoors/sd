@@ -1,0 +1,140 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}Show Organization{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+		</li>
+		<li><a href="{{ path('lists_organization_payer_index') }}" title="{% trans %}Organizations{% endtrans %}">{% trans %}Organizations{% endtrans %}</a></li>
+		<li><a href="" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+{% block page_title %}
+	<h3 class="page-title">
+		{% trans %}Organization <small>show organization</small>{% endtrans %}
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/style.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')}}"/>
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                        <li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+                        <li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+                        <li><a href="#tab_4" data-toggle="tab">{% trans %}Dogovors{% endtrans %}</a></li>
+                        <li><a href="#tab_5" data-toggle="tab">{% trans %}Projects{% endtrans %}</a></li>
+                        <li><a href="#tab_6" data-toggle="tab">{% trans %}Service cover{% endtrans %}</a></li>
+                        <li><a href="#tab_7" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
+                        <li><a href="#tab_8" data-toggle="tab">{% trans %}COEA{% endtrans %}</a></li>
+                        <li><a href="#tab_9" data-toggle="tab">{% trans %}Departmens{% endtrans %}</a></li>
+                        <li><a href="#tab_10" data-toggle="tab">{% trans %}Banks{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content">
+                    {# tab_0 #}
+                    <div class="tab-pane active" id="tab_0">{{ include('ListsOrganizationBundle:Organization:edit.html.twig') }}</div>
+                    {# tab_1 #}
+                    <div class="tab-pane" id="tab_1">{{ include('ListsOrganizationBundle:Organization:managers.html.twig') }}</div>
+                    {# tab_2 #}
+                    <div class="tab-pane" id="tab_2">{{  include('ListsOrganizationBundle:Organization:contacts.html.twig') }}</div>
+                    {# tab_4 #}
+                    <div class="tab-pane" id="tab_4">{{ render(controller('ListsDogovorBundle:Dogovor:forOrganization', { id:organization.id })) }}</div>
+                    {# tab_5 #}
+                    <div class="tab-pane" id="tab_5">{{ render(controller('ListsProjectBundle:ProjectBase:forOrganization', { id:organization.id })) }}</div>
+                    {# tab_6 #}
+                    <div class="tab-pane" id="tab_6">{{ render(controller('ListsOrganizationBundle:ServiceCover:Index', { organizationId: organization.id })) }}</div>
+                    {# tab_7 #}
+                    <div class="tab-pane" id="tab_7">
+                        {% if access.canAddDocument %}
+                        <script>
+                            $(document).ready(function(){
+                                $(function () {
+                                    $('#fileupload').fileupload({
+
+                                    dataType: 'json',
+                                    fail: function (e, data) {
+                                        alert('Error upload');
+                                    },
+                                    done: function (e, data) {
+                                        ITDoorsAjax.updateList('updateListDogovors');
+                                    }
+                                    }).prop('disabled', !$.support.fileInput)
+                                        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                });
+                            });
+                        </script>
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>{% trans %}Add document{% endtrans %}</span>
+                            <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_contractor_upload_file', {'id': organization.id}) }}">
+                        </span>
+                        {% endif %}
+                        <div data-url="{{ path('lists_organization_show_list_document', { id:organization.id } )}}" id="updateListDogovors">
+                            {{ render(controller('ListsOrganizationBundle:Organization:listDocument', { id:organization.id })) }}
+                        </div>
+                    </div>
+                    {# tab_8 #}
+                    <div class="tab-pane" id="tab_8">
+                        {% if access.canAddKVED %}
+                        <div class="table-toolbar">
+                            <div class="btn-group">
+                                <button id="managers_list_new" class="btn green ajax-form"
+                                        data-target_holder="kvedFormTpl"
+                                        data-form_name="kvedForm"
+                                        data-default='{"organizationId":"{{ organization.id }}"}'
+                                        data-post_function="updateList"
+                                        data-post_target_id="updateListKved"
+                                        >
+                                        {% trans %}Add kved{% endtrans %} <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                            <br>
+                            <div style="display: none" id="kvedFormTpl"></div>
+                        </div>
+                        {% endif %}
+                        <div data-url="{{ path('lists_organization_show_list_kved', { id:organization.id } )}}" id="updateListKved">
+                            {{ render(controller('ListsOrganizationBundle:Organization:listKved', { id:organization.id })) }}
+                        </div>
+                    </div>
+                    {# tab_9 #}
+                    <div class="tab-pane" id="tab_9">
+                        {{ render(controller('ListsOrganizationBundle:Organization:departments', { id:organization.id })) }}
+                    </div>
+                    {# tab_10 #}
+                    <div class="tab-pane" id="tab_10">{{  include('ListsOrganizationBundle:Organization:Tab/bank.html.twig') }}</div>
+                    <!--tabpane-->
+                </div>
+                <!--tab-content-->
+            </div>
+            <!--tabbale-->
+        </div>
+    </div>
+{% endblock body %}

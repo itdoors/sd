@@ -5,3 +5,12 @@ sd_dashboard_homepage:
 sd_dashboard_calendar_task:
     pattern:  /sd/dashboard/calendar/task
     defaults: { _controller: SDDashboardBundle:Default:generateTasksCalendar }
+
+sd_dashboard_save_manager:
+    pattern:  /sd/dashboard/save/manager
+    defaults: { _controller: SDDashboardBundle:Default:saveSelectedManager }
+    
+
+sd_dashboard_get_list_notific8:
+    pattern:  /sd/dashboard/get/list/notific8
+    defaults: { _controller: SDDashboardBundle:Default:getListNotific8 }

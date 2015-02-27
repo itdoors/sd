@@ -74,10 +74,10 @@ lists_handling_create_step4:
 lists_handling_add_organization_filter:
     pattern:  /lists/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:Handling:addOrganizationFilter }
-
-lists_handling_report_advanced_range:
-    pattern:  /lists/handling/report/advanced/range
-    defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedRange }
+#
+#lists_handling_report_advanced_range:
+#    pattern:  /lists/handling/report/advanced/range
+#    defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedRange }
 
 lists_handling_report_simple:
     pattern:  /lists/handling/report/simple

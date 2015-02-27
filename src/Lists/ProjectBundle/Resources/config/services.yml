@@ -7,6 +7,7 @@ parameters:
     lists_project.state_tender_participation.form.class: Lists\ProjectBundle\Form\ProjectStateTenderParticipationForm
     lists_project.state_tender_participant.form.class: Lists\ProjectBundle\Form\ProjectStateTenderParticipantForm
     lists_project.project_add_manager.form.class: Lists\ProjectBundle\Form\AddManagerForm
+    lists_project.project_add_manager_project.form.class: Lists\ProjectBundle\Form\AddManagerProjectForm
     lists_project.project_add_document.form.class: Lists\ProjectBundle\Form\AddDocumentForm
     lists_project.close_project.form.class: Lists\ProjectBundle\Form\CloseProjectForm
     lists_project.project_simple.form.class: Lists\ProjectBundle\Form\ProjectSimpleForm
@@ -19,7 +20,8 @@ parameters:
     lists_project.manager_unique_user.validator.class: Lists\ProjectBundle\Validator\ManagerUniqueUserValidator
     lists_project.max_event_datetime.validator.class: Lists\ProjectBundle\Validator\MaxEventDatetimeValidator
     # FILTER
-    lists_project.project_filter.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
+    lists_project.project.filter.class: Lists\ProjectBundle\Filter\ProjectFilter
+    lists_project.report_message.filter.class: Lists\ProjectBundle\Filter\ReportMessageFilter
 
 services:
     # SERVICE
@@ -61,6 +63,14 @@ services:
             translator: "@translator"
         tags:
             - { name: form.type, alias: projectStateTenderParticipantForm }
+    lists_project.addManagerProjectForm:
+        class: %lists_project.project_add_manager_project.form.class%
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            router: "@router"
+            translator: "@translator"
+        tags:
+            - { name: form.type, alias: addManagerProjectForm }
     lists_project.addManagerForm:
         class: %lists_project.project_add_manager.form.class%
         arguments:
@@ -139,8 +149,14 @@ services:
             - { name: validator.constraint_validator, alias: maxEventDatetime }
     # FILTER
     lists.project.projectFilter:
-        class: %lists_project.project_filter.filter.class%
+        class: %lists_project.project.filter.class%
         arguments:
             router: "@router"
         tags:
             - { name: form.type, alias: projectFilter }
+    lists.project.reportMessageFilter:
+        class: %lists_project.report_message.filter.class%
+        arguments:
+            router: "@router"
+        tags:
+            - { name: form.type, alias: reportMessageFilter }

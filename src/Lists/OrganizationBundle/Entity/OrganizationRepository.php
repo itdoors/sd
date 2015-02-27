@@ -66,6 +66,46 @@ class OrganizationRepository extends EntityRepository
         return $query;
     }
     /**
+     * Get organization by own
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getPayerQuery()
+    {
+        $query = $this->createQueryBuilder('o');
+        $query->addSelect('o.id');
+        $query->addSelect('o.name');
+        $query->addSelect('o.shortname');
+        $query->addSelect('o.edrpou');
+        $query->addSelect('c.name as cityName');
+        $query->addSelect('r.name as regionName');
+        $query->addSelect('scope.name as scopeName');
+        $query->addSelect('ownership.name as ownershipName');
+        $query->addSelect('ownership.shortname as ownershipShortname');
+        $query->addSelect(
+                "array_to_string(
+                    ARRAY(
+                        SELECT
+                            CONCAT(CONCAT(u.lastName, ' '), u.firstName)
+                        FROM
+                            SDUserBundle:User u
+                        LEFT JOIN u.organizationUsers ou
+                        WHERE ou.organizationId = o.id
+                    ), ','
+                ) as fullNames"
+            );
+        $query->leftJoin('o.city', 'c');
+        $query->leftJoin('c.region', 'r');
+        $query->leftJoin('o.ownership', 'ownership');
+        $query->leftJoin('o.scope', 'scope');
+        $query->where('o.isPayer = :isPayer');
+        $query->setParameter(':isPayer', true, \Doctrine\DBAL\Types\Type::BOOLEAN);
+        
+        $query->orderBy('o.name');
+
+        return $query;
+    }
+    /**
      * @param int[]   $userIds
      * @param mixed[] $filters
      *
@@ -479,12 +519,31 @@ class OrganizationRepository extends EntityRepository
      */
     public function getSearchSingQuery($q)
     {
-        $sql = $this->createQueryBuilder('o')
-            ->innerJoin('o.lookup', 'sign')
-            ->where('lower(o.name) LIKE :q')
-            ->andWhere('sign.lukey = :lukey')
+        $sql = $this->createQueryBuilder('o');
+        $sql
+            ->where($sql->expr()->like($sql->expr()->lower('o.name'), ':q'))
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
-            ->setParameter(':lukey', 'organization_sign_own')
+            ->andWhere('o.isSelf = :isSelf')
+            ->setParameter(':isSelf', true, \Doctrine\DBAL\Types\Type::BOOLEAN)
+            ->orderBy('o.name');
+
+        return $sql->getQuery()->getResult();
+    }
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchPayerQuery($q)
+    {
+        $sql = $this->createQueryBuilder('o');
+        $sql
+            ->where($sql->expr()->like($sql->expr()->lower('o.name'), ':q'))
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
+            ->andWhere('o.isPayer = :isPayer')
+            ->setParameter(':isPayer', true, \Doctrine\DBAL\Types\Type::BOOLEAN)
             ->orderBy('o.name');
 
         return $sql->getQuery()->getResult();

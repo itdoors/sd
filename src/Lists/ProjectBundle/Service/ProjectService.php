@@ -301,20 +301,60 @@ class ProjectService
      * @param Request $request
      * @param mixed[] $params
      */
+    public function saveAddManagerProjectForm (Form $form, Request $request, $params)
+    {
+        $data = $form->getData();
+        $access = $this->checkAccess($this->user, $data->getProject());
+        $part = 0;
+        if ($access->canChangeManagerProject()) {
+            $findManager = $this->em->getRepository('ListsProjectBundle:Manager')->findOneBy(array(
+                'user' => $data->getUser(),
+                'project' => $data->getProject()
+            ));
+            if ($findManager) {
+                $part += $findManager->getPart();
+                $this->em->remove($findManager);
+                $this->em->flush();
+            }
+            $managers = $data->getProject()->getManagers();
+            foreach ($managers as $manager) {
+                if ($manager->isManagerProject()) {
+                    $part += $manager->getPart();
+                    $this->em->remove($manager);
+                    $this->em->flush();
+                }
+            }
+            $data->setPart($part);
+            $this->em->persist($data);
+            $this->em->flush();
+        }
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
     public function saveAddManagerForm (Form $form, Request $request, $params)
     {
         $data = $form->getData();
         $access = $this->checkAccess($this->user, $data->getProject());
+        $canSave = null;
         if ($access->canChangeManager()) {
             $managers = $data->getProject()->getManagers();
             foreach ($managers as $manager) {
-                if ($manager->isManagerProject()) {
+                if ($manager->isManagerProject() && $manager->getUser() == $this->user) {
                     $manager->setPart($manager->getPart()-$data->getPart());
                     $this->em->persist($manager);
+                    $canSave = true;
+                    continue;
                 }
             }
-            $this->em->persist($data);
-            $this->em->flush();
+            if ($canSave) {
+                $this->em->persist($data);
+                $this->em->flush();
+            }
         }
     }
     /**
@@ -328,7 +368,8 @@ class ProjectService
     {
         $current = $form->get('current')->getData();
         $planned = $form->get('planned')->getData();
-        $access = $this->checkAccess($this->user, $current->getProject());
+        $project = $current->getProject();
+        $access = $this->checkAccess($this->user, $project);
         if (!$access->canAddMessage()) {
             throw new \Exception('No access', 403);
         }
@@ -347,8 +388,14 @@ class ProjectService
         }
         $current->setUser($this->user);
         $planned->setUser($this->user);
+
         $this->em->persist($current);
         $this->em->persist($planned);
+        $this->em->flush();
+
+        $project->setLastMessageCurrent($current);
+        $project->setLastMessagePlanned($planned);
+        $this->em->persist($project);
         $this->em->flush();
     }
     /**
@@ -452,11 +499,13 @@ class ProjectService
         $project = $this->em->getRepository('ListsProjectBundle:Project')->find($projectId);
         $notification = $project->getNotification();
         if ($notification) {
-            $newsFosUser = $this->em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
+            $newsFosUsers = $this->em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
                 'news' => $notification
             ));
-            $newsFosUser->setViewed(new \DateTime());
-            $this->em->persist($newsFosUser);
+            foreach ($newsFosUsers as $newsFosUser) {
+                $newsFosUser->setViewed(new \DateTime());
+                $this->em->persist($newsFosUser);
+            }
         }
         if ($project) {
             $project->setStatusAccess($statusAccess);
