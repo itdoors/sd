@@ -1,5 +1,5 @@
-{% trans_default_domain 'ITDoorsHistoryBundle' %}
  <a class="btn green" id="history-show-btn" href="#history" data-toggle="modal">
+    <i class="fa fa-plus"></i>
     {% trans %}Show history{% endtrans %}
 </a>
     
@@ -10,11 +10,11 @@
         'method' : 'getHistory'
     },
     'params' : {
-        'modelName' : modelName,
-        'modelId' : modelId,
-        'showPagination' : showPagination is defined ? showPagination : 'true',
-        'countPagination' : countPagination is defined ? countPagination : '10',
-        'showFilter' : showFilter is defined ? showFilter : 'false'
+        'modelName' : 'organization',
+        'modelId' : organization.id,
+        'showPagination' : 'true',
+        'countPagination' : '10',
+        'showFilter' : 'true'
     },
     'target' : '#historyBlock',
     'html' : 'ITDoorsHistoryBundle:History:index.html.twig'
@@ -25,7 +25,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">{% trans %}History{% endtrans %}</h4>
+                <h4 class="modal-title">{% trans from 'ListsHistoryBundle' %}History{% endtrans %}</h4>
             </div>
             <div class="modal-body">
                 <div id="historyBlock" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
