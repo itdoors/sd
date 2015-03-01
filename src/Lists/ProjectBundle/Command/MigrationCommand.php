@@ -59,29 +59,7 @@ class MigrationCommand extends ContainerAwareCommand
         if (!$project) {
              $output->writeln('project not found for id: '.$handling->getId());
         } else {
-            $lastMessagePlanned = $this->em->getRepository('ListsProjectBundle:MessagePlanned')->findOneBy(
-                array(
-                    'project' => $project
-                ),
-                array(
-                    'eventDatetime' => 'DESC'
-                )
-                );
-            if ($lastMessagePlanned) {
-                $project->setLastMessagePlanned($lastMessagePlanned);
-            }
-            $lastMessageCurrent = $this->em->getRepository('ListsProjectBundle:MessageCurrent')->findOneBy(
-                array(
-                    'project' => $project
-                ),
-                array(
-                    'eventDatetime' => 'DESC'
-                )
-                );
-            if ($lastMessageCurrent) {
-                $project->setLastMessageCurrent($lastMessageCurrent);
-            }
-            $this->em->persist($project);
+            $output->writeln('need to write the implementation )))');
         }
         
     }
