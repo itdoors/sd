@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsProjectBundle' %}
-{% if access.canEditProjectStateTender %}
+{% if access.canAddFiles %}
     {{ include ('ListsProjectBundle:ProjectStateTender/Button:addDocument.html.twig')}}
     <script type="text/javascript">
         $(document).ready(function(){

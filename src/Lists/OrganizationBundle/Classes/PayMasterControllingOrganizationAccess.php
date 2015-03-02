@@ -108,6 +108,13 @@ class PayMasterControllingOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canEditIsWithoutDogovor ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         return 'organizationSalesAdminFilterForm';

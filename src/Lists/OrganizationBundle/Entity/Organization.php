@@ -203,6 +203,7 @@ class Organization
         $this->setIsSmeta(false);
         $this->setIsPayer(false);
         $this->setIsSelf(false);
+        $this->setIsWithoutDogovor(false);
     }
     /**
      * Get users
@@ -1261,5 +1262,33 @@ class Organization
     public function getIsSelf()
     {
         return $this->isSelf;
+    }
+    /**
+     * @var boolean
+     */
+    private $isWithoutDogovor;
+
+
+    /**
+     * Set isWithoutDogovor
+     *
+     * @param boolean $isWithoutDogovor
+     * @return Organization
+     */
+    public function setIsWithoutDogovor($isWithoutDogovor)
+    {
+        $this->isWithoutDogovor = $isWithoutDogovor;
+    
+        return $this;
+    }
+
+    /**
+     * Get isWithoutDogovor
+     *
+     * @return boolean 
+     */
+    public function getIsWithoutDogovor()
+    {
+        return $this->isWithoutDogovor;
     }
 }

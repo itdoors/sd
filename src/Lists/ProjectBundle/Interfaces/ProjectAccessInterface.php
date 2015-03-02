@@ -119,4 +119,8 @@ interface ProjectAccessInterface
      * @return bool
      */
     public function canCloseProject();
+    /**
+     * @return bool
+     */
+    public function canAddFiles();
 }

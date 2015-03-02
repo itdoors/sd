@@ -84,4 +84,11 @@ class ManagerProjectProjectAccess extends BasicProjectAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canAddFiles ()
+    {
+        return true;
+    }
 }

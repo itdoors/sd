@@ -181,8 +181,8 @@ class ProjectRepository extends EntityRepository
             $dateEnd = new \DateTime($filters['daterange']['end']->format('Y-m-d').' 23:59:59');
             if ($type == 'firstMeet') {
                 $sql->andWhere($sql->expr()->between('mes.eventDatetime', ':start', ':end'));
-                $sql->andWhere($sql->expr()->between('mes.eventDatetime', ':start', ':end'));
-                
+            } elseif ($type == 'commercial') {
+                $sql->andWhere($sql->expr()->between('f.createDatetime', ':start', ':end'));
             } else {
                 $sql->andWhere($sql->expr()->between('p.createDate', ':start', ':end'));
             }

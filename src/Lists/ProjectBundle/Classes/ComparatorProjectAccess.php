@@ -407,4 +407,17 @@ class ComparatorProjectAccess extends BasicProjectAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canAddFiles ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddFiles()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

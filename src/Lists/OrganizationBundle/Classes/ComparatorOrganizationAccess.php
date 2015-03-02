@@ -215,6 +215,19 @@ class ComparatorOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canEditIsWithoutDogovor ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canEditIsWithoutDogovor()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         foreach ($this->accesses as $access) {

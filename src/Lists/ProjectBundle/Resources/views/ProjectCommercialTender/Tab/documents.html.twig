@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsProjectBundle' %}
-{% if access.canEditProjectStateTender %}
+{% if access.canAddFiles %}
     {{ include ('ListsProjectBundle:ProjectStateTender/Button:addDocument.html.twig')}}
     <script type="text/javascript">
         $(document).ready(function(){
@@ -29,7 +29,7 @@
                     <td>{{ list  }}</td>
                     <td>{% trans%}Dogovor{% endtrans%} {{ object.dogovor.number }}</td>
                     <td>
-                         {% if object.dogovor.filepath %}
+                        {% if object.dogovor.filepath %}
                             {% if is_granted('ROLE_LAWYER') %}
                                 <a href="{{ url('it_doors_file_access_get_if_authenticated', {path:'/uploads/dogovor/'~object.dogovor.filepath ,timestamp:'now'|date('U') }) }}"  target="_blank" >{% trans %}See document{% endtrans %}</a>
                             {% else %}

@@ -16,7 +16,7 @@ Lists\ProjectBundle\Entity\File:
     id:
         id:
             id: true
-            type: integer
+            type: bigint
             generator: { strategy: IDENTITY }
     fields:
         name:

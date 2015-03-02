@@ -42,6 +42,7 @@ class PayMasterNewForm extends AbstractType
     {
         $builder
             ->add('scan', 'file')
+            ->add('number', 'text')
             ->add('invoiceDate', 'itdoors_date_decade', array(
                     'widget' => 'single_text',
                     'format' => 'dd.M.yyyy'
@@ -220,6 +221,11 @@ class PayMasterNewForm extends AbstractType
                 if ($form->get('contractorEdrpou')->getData() != $payMaster->getContractor()->getEdrpou()) {
                     $form->get('contractorEdrpou')->addError(
                         new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle'))
+                    );
+                }
+                if ($form->get('dogovor')->getData() == '' && !$form->get('contractor')->getData()->getIsWithoutDogovor()) {
+                    $form->get('dogovor')->addError(
+                        new FormError($translator->trans('Enter dogovor', array(), 'ITDoorsPayMasterBundle'))
                     );
                 }
             }

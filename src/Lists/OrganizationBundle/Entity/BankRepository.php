@@ -24,9 +24,8 @@ class BankRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('b');
 
-        $sql->where($sql->expr()->like('lower(:field)', ':q'))
-            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
-            ->setParameter(':field', $field);
+        $sql->where($sql->expr()->like('b.'.$field, ':q'))
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
 
         return $sql->getQuery()->getResult();
     }

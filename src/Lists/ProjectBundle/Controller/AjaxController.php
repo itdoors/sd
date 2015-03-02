@@ -173,6 +173,17 @@ class AjaxController extends Controller
         $object = $em
             ->getRepository('ListsProjectBundle:Project')
             ->find($pk);
+        
+        $temp = explode('\\', get_class($object));
+        $className = end($temp);
+        $service = $this->get('lists_project.service');
+        $access= $service->checkAccess($this->getUser(), $object);
+        
+        $method = 'canEdit'.$className;
+        var_dump($method);die;
+        if (!$access->$method()) {
+            throw $this->createAccessDeniedException();
+        }
         if ($name == 'type') {
             if ($object instanceof \Lists\ProjectBundle\Entity\ProjectSimple && in_array($value, array('project_commercial_tender', 'project_electronic_trading'))) {
                 $db = $em->getConnection();
@@ -190,14 +201,6 @@ class AjaxController extends Controller
             } else {
                 throw new $this->createAccessDeniedException();
             }
-        }
-        $temp = explode('\\', get_class($object));
-        $className = end($temp);
-        $service = $this->get('lists_project.service');
-        $access= $service->checkAccess($this->getUser(), $object);
-        $method = 'canEdit'.$className;
-        if (!$access->$method()) {
-            throw $this->createAccessDeniedException();
         }
         if (in_array($name, array('datetimeDeadline', 'datetimeOpening'))) {
             if (!empty($value)) {
@@ -528,7 +531,7 @@ class AjaxController extends Controller
             ->find($pk);
         $service = $this->get('lists_project.service');
         $access= $service->checkAccess($this->getUser(), $object->getProject());
-        if (!$access->canEditProjectStateTender()) {
+        if (!$access->canAddFiles()) {
             throw new \Exception('No access', 403);
         }
         $object->$methodSet($value);
@@ -736,7 +739,8 @@ class AjaxController extends Controller
                 $em->flush();
                 $em->refresh($projectFile);
                 $project = $projectFile->getProject();
-                if (!$project->getIsClosed()) {
+                $dogovor = $project->getDogovor();
+                if (!$project->getIsClosed() && !empty($dogovor)) {
                     if (!$project instanceof \Lists\ProjectBundle\Entity\ProjectStateTender) {
                         $status = $project->getStatus();
                         if (
