@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Class MpkForm
@@ -62,7 +63,13 @@ class MpkForm extends AbstractType
                 'class'=>'Lists\OrganizationBundle\Entity\Organization',
                 'property'=>'name',
                 'empty_value' => '',
-                'query_builder' => $org->getOrganizationSignOwnQuery()
+                'query_builder' => //$org->getOrganizationSignOwnQuery()
+                            function(EntityRepository $er) {
+                                return $er->createQueryBuilder('o')
+                                    ->where('o.isSelf = :self')
+                                    ->setParameter(':self', 'true')
+                                    ->orderBy('o.name');
+                            }
             ))
             ->add('department', 'entity', array(
                 'class'=>'Lists\DepartmentBundle\Entity\Departments',
