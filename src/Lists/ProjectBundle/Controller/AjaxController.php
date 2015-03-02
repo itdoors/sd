@@ -180,7 +180,6 @@ class AjaxController extends Controller
         $access= $service->checkAccess($this->getUser(), $object);
         
         $method = 'canEdit'.$className;
-        var_dump($method);die;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
