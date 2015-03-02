@@ -62,7 +62,7 @@ class ClaimDepartmentController extends Controller
      */
     private function createCreateForm(ClaimDepartment $entity)
     {
-        $form = $this->createForm(new ClaimDepartmentType(), $entity, array(
+        $form = $this->createForm(new ClaimDepartmentType($this->container), $entity, array(
             'action' => $this->generateUrl('claimdepartment_create'),
             'method' => 'POST',
         ));

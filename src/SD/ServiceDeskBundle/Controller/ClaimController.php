@@ -14,6 +14,9 @@ use SD\ServiceDeskBundle\Entity\ClaimMessage;
 use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
 use SD\ServiceDeskBundle\Form\PerformerRuleForm;
 use SD\ServiceDeskBundle\Entity\StatusType;
+use SD\BusinessRoleBundle\Entity\Client;
+use Lists\IndividualBundle\Entity\Individual;
+use SD\ServiceDeskBundle\Entity\ClaimOnce;
 
 /**
  * Claim controller.
@@ -21,9 +24,35 @@ use SD\ServiceDeskBundle\Entity\StatusType;
  */
 class ClaimController extends Controller
 {
+    /**
+     * Lists archive Claim entities.
+     *
+     * @return string
+     */
+    public function archiveIndexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+    
+        $entities = $em
+            ->getRepository('SDServiceDeskBundle:Claim')
+            ->findAll();
+        
+        $result = [];
+        foreach ($entities as $entity) {
+            $result[] = [
+                'claim' => $entity,
+                'firstName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getFirstName() : '',
+                'lastName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getLastName() : ''
+            ];
+        }
+
+        return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
+            'entities' => $result
+        ));
+    }
 
     /**
-     * Lists all Claim entities.
+     * Lists all not finished Claim entities.
      *
      * @return string
      */
@@ -211,9 +240,12 @@ class ClaimController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Claim();
+        $entity = new ClaimOnce();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        
+        $entity->setStatus(StatusType::OPEN);
+        $entity->setCreatedAt(new \DateTime());
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -289,10 +321,18 @@ class ClaimController extends Controller
     {
         $entity = new Claim();
         $form   = $this->createCreateForm($entity);
+        $newClient = (new Client())->setIndividual(new Individual());
+        $newClientForm = $this->createForm('clientAddForm', $newClient, array(
+            'action' => $this->generateUrl('client_create'),
+            'method' => 'POST',
+        ));
+
+        $newClientForm->add('individual', new \Lists\IndividualBundle\Form\IndividualType());
 
         return $this->render('SDServiceDeskBundle:Claim:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'indForm' => $newClientForm->createView()
         ));
     }
 

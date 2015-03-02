@@ -17,6 +17,7 @@ Curators: Кураторы
 Cancel: Отмена
 Send: Отправить
 Select...:  Выберите...
+Input...: Введите...
 Actions: Действия
 Messages: Сообщения
 Staff Only: Только персоналу
@@ -32,7 +33,9 @@ Active: активна
 Disabled: неактивна
 Company: Компания
 Person: Физ.лицо
+Add person client: Новый клиент-физ.лицо
 Customer Type: Тип клиента
+Claim Target: Объект заявки
 
 <strong>Warning!</strong> Something went wrong. Please check.: <strong>Ошибка!</strong> Не получилось передать сообщение. Попробуйте позже.
 

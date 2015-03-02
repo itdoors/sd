@@ -1,6 +1,10 @@
 claim:
     path:     /
     defaults: { _controller: "SDServiceDeskBundle:Claim:index" }
+    
+claim_archive:
+    path:     /archive
+    defaults: { _controller: "SDServiceDeskBundle:Claim:archiveIndex" }
 
 claim_show:
     path:     /{id}/show
@@ -56,4 +60,4 @@ claim_ch_type:
     
 claim_ch_importance:
     path:     /ch_importance
-    defaults: { _controller: "SDServiceDeskBundle:Claim:changeImpotrance" }    
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeImportance" }    

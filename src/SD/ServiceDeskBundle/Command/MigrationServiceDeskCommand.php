@@ -170,8 +170,9 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $sd_claim->setType($claimType);
             $sd_claim->setStatus($claimStatus);
 
-
-            $sd_claim->setImportance(ImportanceType::UNPLANNED);
+            $sd_claim->setImportance($doctrine
+                    ->getRepository('SDServiceDeskBundle:ClaimImportance')
+                    ->find(1));
 
             $sd_claim->setCreatedAt(new \DateTime($claimCreateDatetime));
             $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
@@ -639,7 +640,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $message->setClaim($claim);
             $message->setCreatedAt(new \DateTime($comment['createdatetime']));
             $message->setText($comment['description']);
-            $message->setVisible(true);
+            $message->setStaffOnly(false);
             $message->setUser($user);
             $res = memory_get_usage ().'--'.'new message--> '.$comment['description'];
             $em->persist($message);

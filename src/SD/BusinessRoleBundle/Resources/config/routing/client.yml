@@ -14,6 +14,11 @@ client_create:
     path:     /create
     defaults: { _controller: "SDBusinessRoleBundle:Client:create" }
     requirements: { _method: post }
+    
+client_create_person:
+    path:     /create_person
+    defaults: { _controller: "SDBusinessRoleBundle:Client:createPersonClient" }
+    requirements: { _method: post }
 
 client_edit:
     path:     /{id}/edit

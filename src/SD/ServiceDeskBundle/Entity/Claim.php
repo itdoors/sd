@@ -69,7 +69,7 @@ class Claim
      *
      * @ORM\Column(name="disabled", type="boolean")
      */
-    protected $disabled;
+    protected $disabled = false;
 
     /**
      * @var \Doctrine\Common\Collections\Collection

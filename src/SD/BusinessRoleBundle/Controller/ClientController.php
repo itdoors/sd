@@ -3,9 +3,11 @@
 namespace SD\BusinessRoleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\BusinessRoleBundle\Entity\Client;
+use SD\BusinessRoleBundle\Entity\PersonClient;
 use SD\BusinessRoleBundle\Form\ClientType;
 
 /**
@@ -30,6 +32,7 @@ class ClientController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Client entity.
      *
@@ -65,6 +68,35 @@ class ClientController extends Controller
             'form'   => $form->createView(),
             'indForm' => $indForm->createView()
         ));
+    }
+
+    /**
+     * Creates a new PersonClient entity (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function createPersonClientAction(Request $request)
+    {
+        $entity = new PersonClient();
+        $em = $this->getDoctrine()->getManager();
+    
+        $indForm = $this->createCreateFormWithIndividual($entity);
+        $indForm->handleRequest($request);
+    
+        if ($indForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+
+            $result = [];
+            $result['name'] = $entity->__toString();
+            $result['id'] = $entity->getId();
+
+            return new JsonResponse($result);
+        }
+
+        return new JsonResponse(null, 500);
     }
 
     /**
