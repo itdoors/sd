@@ -39,6 +39,8 @@ class ClaimDepartmentController extends Controller
         $form = $request->request->get('sd_servicedeskbundle_claimdepartment');
         $em = $this->getDoctrine()->getManager();
         $entity = new ClaimDepartment();
+        $f = $this->createCreateForm($entity);
+        $f->handleRequest($request);
 
         $entity->setCreatedAt(new \DateTime());
         $entity->setStatus(StatusType::OPEN);

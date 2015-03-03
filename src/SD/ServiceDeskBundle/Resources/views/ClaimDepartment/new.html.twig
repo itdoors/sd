@@ -57,6 +57,7 @@
                     SD.select2('#' + '{{ form.vars.name }}' + '_organization', {});
                     SD.select2('#' + '{{ form.vars.name }}' + '_targetDepartment', {});
                     SD.select2('#' + '{{ form.vars.name }}' + '_customer', {});
+                    SD.select2('#' + '{{ form.vars.name }}' + '_importance', {});
 
                     $('#' + '{{ form.vars.name }}' + '_targetDepartment').prop( "disabled", true );
                     $('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", true );
@@ -113,7 +114,7 @@
 
                     $('#' + '{{ form.vars.name }}' + '_targetDepartment').on("change", function(event){
                         depId = $(this).val();
-                        if (!depId) {
+                        if (!depId || !$('#' + '{{ form.vars.name }}' + '_organization').val()) {
                         	$('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", true );
                      	} else {
                      		$('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", false );
