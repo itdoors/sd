@@ -361,10 +361,12 @@ class DepartmentsRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('d')
             ->innerJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
             ->where('lower(d.name) LIKE :q')
             ->orWhere('lower(d.address) LIKE :q')
             ->andWhere('o.id = :orgId')
-            ->orderBy('d.city', 'ASC')
+            ->orderBy('c.name', 'ASC')
+            ->addOrderBy('d.address', 'ASC')
             ->setParameter(':orgId', $orgId)
             ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
 
