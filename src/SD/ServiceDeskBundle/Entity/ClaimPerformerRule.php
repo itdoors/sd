@@ -187,4 +187,11 @@ class ClaimPerformerRule
     {
         return $this->claim;
     }
+
+    /**
+     * __toString
+     */
+    public function __toString() {
+        return $this->claimPerformer->__toString();
+    }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\ServiceDeskBundle\Entity\Claim;
+use SD\ServiceDeskBundle\Entity\ClaimDepartment;
 use SD\ServiceDeskBundle\Form\ClaimType;
 use SD\ServiceDeskBundle\Form\ClaimMessageType;
 use SD\ServiceDeskBundle\Entity\ClaimMessage;
@@ -206,6 +207,35 @@ class ClaimController extends Controller
     }
 
     /**
+     * Changes performerRule of the claim (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeRuleAction(Request $request)
+    {
+        $id = $request->get('rule_id');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em
+            ->getRepository('SDServiceDeskBundle:ClaimPerformerRule')
+            ->find($id);
+
+        if ($request->get('canEditFinanceData')) {
+            $entity->setCanEditFinanceData($request->get('canEditFinanceData') == 'true');
+        }
+        if ($request->get('canPostToClients')) {
+            $entity->setCanPostToClients($request->get('canPostToClients') == 'true');
+        }
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
      * Adds performerRule to the claim (via ajax).
      *
      * @param Request $request
@@ -347,7 +377,12 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->findClaim($id);
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        if ($entity instanceof ClaimDepartment) {
+            $entity = $em->getRepository('SDServiceDeskBundle:ClaimDepartment')->findClaim($id);
+        } else {
+            $entity = $em->getRepository('SDServiceDeskBundle:Claim')->findClaim($id);
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Claim entity.');
