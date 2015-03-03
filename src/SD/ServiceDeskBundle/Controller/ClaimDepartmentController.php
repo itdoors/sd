@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use SD\ServiceDeskBundle\Entity\ClaimDepartment;
 use SD\ServiceDeskBundle\Form\ClaimDepartmentType;
+use SD\ServiceDeskBundle\Entity\StatusType;
 
 /**
  * ClaimDepartment controller.
@@ -35,22 +36,22 @@ class ClaimDepartmentController extends Controller
      */
     public function createAction(Request $request)
     {
+        $form = $request->request->get('sd_servicedeskbundle_claimdepartment');
+        $em = $this->getDoctrine()->getManager();
         $entity = new ClaimDepartment();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+        $entity->setCreatedAt(new \DateTime());
+        $entity->setStatus(StatusType::OPEN);
+        $entity->setCustomer($em->getRepository('SDBusinessRoleBundle:CompanyClient')->find($form['customer']));
+        $entity->setTargetDepartment($em->getRepository('ListsDepartmentBundle:Departments')->find($form['targetDepartment']));
+        $entity->setType($form['type']);
+        $entity->setImportance($em->getRepository('SDServiceDeskBundle:ClaimImportance')->find($form['importance']));
+        $entity->setText($form['text']);
 
-            return $this->redirect($this->generateUrl('claimdepartment_show', array('id' => $entity->getId())));
-        }
+        $em->persist($entity);
+        $em->flush();
 
-        return $this->render('SDServiceDeskBundle:ClaimDepartment:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        return $this->redirect($this->generateUrl('claim_show', array('id' => $entity->getId())));
     }
 
     /**

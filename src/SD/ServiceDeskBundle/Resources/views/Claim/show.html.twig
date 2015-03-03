@@ -43,7 +43,7 @@
 {% block body %}
         <div class="row">
             <div class="col-md-8">
-                 <div class="tabbable tabbable-custom tabbable-custom-profile">
+{#                  <div class="tabbable tabbable-custom tabbable-custom-profile">#}
                     <div class="tab-content">
                         <div class="tab-pane active">
                             <div class="portlet-body">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+{#                 </div>#}
         		<div class="margin-bottom-10">
         		    {{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}
     		    </div>
@@ -290,8 +290,9 @@
                         	var createdAt = time.format('DD-MM-YYYY HH:mm:ss');
                         	var aHTML = $('#{{ form.vars.name }}_text').code();
                         	var staffOnly = response.staffOnly ? 'info' : 'success';
+                        	var badge = response.staffOnly ? '<span class="badge badge-info">{% trans %}Staff Only{% endtrans%}</span>' : '';
                         	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + staffOnly + '">\
-                                                   <h5 class="block"><a href="'+ response.userLink+ '">' + response.user + '</a> ' + createdAt + '</h5>'
+                                                   <h5 class="block"><a href="'+ response.userLink+ '">' + response.user + '</a> ' + createdAt + ' ' + badge + '</h5>'
                                                        + aHTML;
                            if (response.files != undefined) {
                         	   messageBody += '<h5><br>{% trans %}Files{% endtrans %}:</h5>';

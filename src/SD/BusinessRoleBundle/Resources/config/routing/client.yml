@@ -33,3 +33,11 @@ client_delete:
     path:     /{id}/delete
     defaults: { _controller: "SDBusinessRoleBundle:Client:delete" }
     requirements: { _method: post|delete }
+    
+clients_by_department_id:
+    pattern:  /ajax/clients_by_department_id
+    defaults: { _controller: "SDBusinessRoleBundle:Ajax:getClientsByDepartmentIdAjax" }
+    
+importances_by_organizanization_id:
+    pattern:  /ajax/importances_by_organizanization_id
+    defaults: { _controller: "SDBusinessRoleBundle:Ajax:getImportancesByOrganizationIdAjax" }

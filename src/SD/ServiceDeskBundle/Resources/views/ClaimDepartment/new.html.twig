@@ -54,9 +54,91 @@
         <div class="portlet-body form">
             <script>
                 $(document).ready(function() {
-//                     $('.select2').select2({
-//                         allowClear: true
-//                     });
+                    SD.select2('#' + '{{ form.vars.name }}' + '_organization', {});
+                    SD.select2('#' + '{{ form.vars.name }}' + '_targetDepartment', {});
+                    SD.select2('#' + '{{ form.vars.name }}' + '_customer', {});
+
+                    $('#' + '{{ form.vars.name }}' + '_targetDepartment').prop( "disabled", true );
+                    $('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", true );
+                    $('#' + '{{ form.vars.name }}' + '_importance').prop( "disabled", true );
+
+                    $('#' + '{{ form.vars.name }}' + '_organization').on("change", function(event){
+                        orgId = $(this).val();
+                        if (!orgId) {
+                        	$('#' + '{{ form.vars.name }}' + '_targetDepartment').prop( "disabled", true );
+                        	$('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", true );
+                        	$('#' + '{{ form.vars.name }}' + '_importance').prop( "disabled", true );
+                     	} else {
+                     		$('#' + '{{ form.vars.name }}' + '_targetDepartment').prop( "disabled", false );
+                     		$('#' + '{{ form.vars.name }}' + '_importance').prop( "disabled", false );
+                         };
+                         
+                    	$('#' + '{{ form.vars.name }}' + '_targetDepartment').select2({
+                        	ajax: {
+                        		url: "{{ path('sd_common_ajax_departments_by_organizanization_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	orgId: orgId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    	$('#' + '{{ form.vars.name }}' + '_importance').select2({
+                        	ajax: {
+                        		url: "{{ path('importances_by_organizanization_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	orgId: orgId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    });
+
+                    $('#' + '{{ form.vars.name }}' + '_targetDepartment').on("change", function(event){
+                        depId = $(this).val();
+                        if (!depId) {
+                        	$('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", true );
+                     	} else {
+                     		$('#' + '{{ form.vars.name }}' + '_customer').prop( "disabled", false );
+                         };
+                         
+                    	$('#' + '{{ form.vars.name }}' + '_customer').select2({
+                        	ajax: {
+                        		url: "{{ path('clients_by_department_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	depId: depId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    });
+
                     $('.itdoors-date-picker').datepicker({
                         rtl: Metronic.isRTL(),
                         autoclose: true,
@@ -112,22 +194,22 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Organization{% endtrans%}</label>
                     <div class="col-md-9">
-{#                         {{ form_widget(form.organization, {'attr' : {'class' : 'form-control input-large select2me', 'placeholder': 'Select...' | trans}}) }}#}
-{#                         {% if form.organization.vars.errors|length %}{{ form_errors(form.organization) }}{% endif %}#}
+                        {{ form_widget(form.organization, {'attr' : {'class' : 'form-control input-large', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.organization.vars.errors|length %}{{ form_errors(form.organization) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Companystructure{% endtrans%}</label>
                     <div class="col-md-9">
-{#                         {{ form_widget(form.targetDepartment, {'attr' : {'class' : 'form-control input-large select2me', 'placeholder': 'Select...' | trans}}) }}#}
-{#                         {% if form.targetDepartment.vars.errors|length %}{{ form_errors(form.targetDepartment) }}{% endif %}#}
+                        {{ form_widget(form.targetDepartment, {'attr' : {'class' : 'form-control input-large', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.targetDepartment.vars.errors|length %}{{ form_errors(form.targetDepartment) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Customer{% endtrans%}</label>
                     <div class="col-md-9">
-{#                         {{ form_widget(form.customer, {'attr' : {'class' : 'form-control input-large select2me', 'placeholder': 'Select...' | trans}}) }}#}
-{#                         {% if form.customer.vars.errors|length %}{{ form_errors(form.customer) }}{% endif %}#}
+                        {{ form_widget(form.customer, {'attr' : {'class' : 'form-control input-large', 'placeholder': 'Select...' | trans}}) }}
+                        {% if form.customer.vars.errors|length %}{{ form_errors(form.customer) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">
@@ -140,7 +222,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Claim Importance{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.importance, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
+                        {{ form_widget(form.importance, {'attr' : {'class' : 'form-control input-large', 'data-placeholder': 'Select...' | trans}}) }}
                         {% if form.importance.vars.errors|length %}{{ form_errors(form.importance) }}{% endif %}
                     </div>
                 </div>
