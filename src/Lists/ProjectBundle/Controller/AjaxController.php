@@ -208,7 +208,7 @@ class AjaxController extends Controller
                 $value = null;
             }
         }
-        if (in_array($name, array('square', 'pf'))) {
+        if (in_array($name, array('square', 'pf', 'summaWithVAT'))) {
             if (!empty($value)) {
                 $value = str_replace(',', '.', str_replace(' ', '', $value));
             } else {
