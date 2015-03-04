@@ -46,6 +46,13 @@ class Claim
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="statusLastModified", type="datetime", nullable=true)
+     */
+    protected $statusLastModified;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="createdAt", type="datetime")
      */
     protected $createdAt;
@@ -184,6 +191,7 @@ class Claim
     public function setStatus($status)
     {
         $this->status = $status;
+        $this->setStatusLastModified(new \DateTime());
 
         return $this;
     }
@@ -515,6 +523,30 @@ class Claim
     public function getScale()
     {
         return $this->scale;
+    }
+
+    /**
+     * Set statusLastModified
+     *
+     * @param \DateTime $statusLastModified
+     *
+     * @return Claim
+     */
+    public function setStatusLastModified($statusLastModified)
+    {
+        $this->statusLastModified = $statusLastModified;
+
+        return $this;
+    }
+
+    /**
+     * Get statusLastModified
+     *
+     * @return \DateTime
+     */
+    public function getStatusLastModified()
+    {
+        return $this->statusLastModified;
     }
 }
 

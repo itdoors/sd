@@ -69,11 +69,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="hidden-xs">{% trans %}Created{% endtrans %}</td>
-                                                    <td>{% if entity.createdAt %}{{ entity.createdAt|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                    <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="hidden-xs">{% trans %}Closed{% endtrans %}</td>
-                                                    <td>{% if entity.closedAt %}{{ entity.closedAt|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                    <td>{% if entity.closedAt %}{{ entity.closedAt|date('d.m.y H:i') }}{% endif %}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="hidden-xs">{% trans %}Organization{% endtrans %}</td>
@@ -116,7 +116,10 @@
                                             </tr>
                                             <tr>
                                                 <td class="hidden-xs">{% trans %}Claim Status{% endtrans %}</td>
-                                                <td><a href="#" id="claim_status">{{ entity.status | trans}}</a></td>
+                                                <td>
+                                                    <a href="#" id="claim_status">{{ entity.status | trans}}</a>
+                                                    {% if entity.statusLastModified %}{{ '('~entity.statusLastModified|date('d.m.y H:i')~')' }}{% endif %}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="hidden-xs">{% trans %}Profit + NDS{% endtrans %}</td>
