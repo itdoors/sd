@@ -57,6 +57,10 @@ claim_ch_rule:
 claim_ch_status:
     path:     /ch_status
     defaults: { _controller: "SDServiceDeskBundle:Claim:changeStatus" }
+
+claim_ch_mpk:
+    path:     /claim_ch_mpk
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeMPK" }
     
 claim_ch_type:
     path:     /ch_type

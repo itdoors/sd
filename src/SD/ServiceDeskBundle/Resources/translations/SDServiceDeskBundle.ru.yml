@@ -28,6 +28,7 @@ Address: Адрес
 City: Город
 Organization: Организация
 Companystructure: Отделение
+Self Organization: Организация-исполнитель
 Status: Статус
 Active: активна
 Disabled: неактивна
@@ -74,7 +75,11 @@ Main: Основное
 Finance: Финансы
 Number: Номер
 Scale: Масштаб
+empty: не задан
 MPK: МПК
 Profit + NDS: Доход с НДС
 Costs: Затраты
 Smeta Status: Статус сметы
+
+Can post to clients: Может писать клиентам
+Can edit finance data: Может редактировать фин. данные

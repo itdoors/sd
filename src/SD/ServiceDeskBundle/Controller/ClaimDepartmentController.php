@@ -30,9 +30,13 @@ class ClaimDepartmentController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new ClaimDepartment entity.
      *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
@@ -42,12 +46,21 @@ class ClaimDepartmentController extends Controller
         $f = $this->createCreateForm($entity);
         $f->handleRequest($request);
 
+        $targetDepartment = $em->getRepository('ListsDepartmentBundle:Departments')->find($form['targetDepartment']);
+        $mpks = $targetDepartment->getMpks();
+        foreach ($mpks as $mpk) {
+            if ($mpk->getActive()) {
+                $entity->setMpk($mpk->getName());
+                break;
+            }
+        }
+
+        $entity->setTargetDepartment($targetDepartment);
         $entity->setCreatedAt(new \DateTime());
         $entity->setStatus(StatusType::OPEN);
         $entity->setCustomer($em->getRepository('SDBusinessRoleBundle:CompanyClient')->find($form['customer']));
-        $entity->setTargetDepartment($em->getRepository('ListsDepartmentBundle:Departments')->find($form['targetDepartment']));
-        $entity->setType($form['type']);
         $entity->setImportance($em->getRepository('SDServiceDeskBundle:ClaimImportance')->find($form['importance']));
+        $entity->setType($form['type']);
         $entity->setText($form['text']);
 
         $em->persist($entity);

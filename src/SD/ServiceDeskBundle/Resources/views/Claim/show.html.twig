@@ -89,22 +89,26 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="hidden-xs">{% trans %}Scale{% endtrans %}</td>
-                                                    <td></td>
+                                                    <td>{{ entity.scale ? entity.scale : 'empty' | trans }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="margin-bottom-10">
-                                        {{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}
-                                    </div>
+                                    {#<div class="margin-bottom-10">#}
+                                        {#{{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}#}
+                                    {#</div>#}
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <tbody>
                                             <tr>
+                                                <td class="hidden-xs">{% trans %}Self Organization{% endtrans %}</td>
+                                                <td>{{ entity.selfOrganization ? entity.selfOrganization : '' }}</td>
+                                            </tr>
+                                            <tr>
                                                 <td class="hidden-xs">{% trans %}MPK{% endtrans %}</td>
-                                                <td>{{ entity.targetDepartment.organization.mpk }}</td>
+                                                <td><a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a></td>
                                             </tr>
                                             <tr>
                                                 <td class="hidden-xs">{% trans %}Claim Importance{% endtrans %}</td>
@@ -139,8 +143,8 @@
                             			     <div id="performers_body">
                                 			     {% for rule in entity.claimPerformerRules %}
                                 			         <p>{{ rule.claimPerformer }}
-                                                         <a href="#" value="{{ rule.id }}" class="btn btn-xs canEditFinanceData {{ rule.canEditFinanceData ? 'green' : 'default' }}"><i class="fa fa-usd"></i></a>
-                                                         <a href="#" value="{{ rule.id }}" class="btn btn-xs canPostToClients {{ rule.canPostToClients ? 'green' : 'default' }}"><i class="fa fa-pencil"></i></a>
+                                                         <a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canEditFinanceData {{ rule.canEditFinanceData ? 'green' : 'default' }}"><i class="fa fa-usd"></i></a>
+                                                         <a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canPostToClients {{ rule.canPostToClients ? 'green' : 'default' }}"><i class="fa fa-pencil"></i></a>
                                                          <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
                                 			         </p>
                                 			     {% endfor %}
@@ -287,6 +291,12 @@
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_status') }}'
                 });
+                $('#claim_mpk').editable({
+                    type: 'text',
+                    title: '{% trans %}MPK{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_mpk') }}'
+                });
             	$('#claim_type').editable({
                     type: 'select',
                     title: '{% trans %}Claim Type{% endtrans %}',
@@ -376,9 +386,9 @@
                         },
                         success: function(response) {
                         	$('#performers_body').append(
-                                	'<p>' + response.performer
-                                     + '<a href="#" value="' + response.id + '" class="btn btn-xs canEditFinanceData default"><i class="fa fa-usd"></i></a>'
-                                     + '<a href="#" value="' + response.id + '" class="btn btn-xs canPostToClients default"><i class="fa fa-pencil"></i></a>'
+                                	'<p>' + response.performer + ' '
+                                     + '<a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="' + response.id + '" class="btn btn-xs canEditFinanceData default"><i class="fa fa-usd"></i></a>' + ' '
+                                     + '<a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="' + response.id + '" class="btn btn-xs canPostToClients default"><i class="fa fa-pencil"></i></a>'
                                 	 + '<button type="button" class="close remove-performer" value="'
                                 	 + response.id + '" aria-label="Remove"></button></p>');
                         	SD.unblockUI($('#performers'));

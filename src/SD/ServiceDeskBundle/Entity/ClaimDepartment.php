@@ -44,4 +44,8 @@ class ClaimDepartment extends Claim
     {
         return $this->targetDepartment;
     }
+
+    public function __toString () {
+        return (string) $this->getId();
+    }
 }

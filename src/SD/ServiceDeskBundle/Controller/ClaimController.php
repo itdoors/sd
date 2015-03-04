@@ -119,6 +119,28 @@ class ClaimController extends Controller
     }
 
     /**
+     * Changes claim's type (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeMPKAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $mpk = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setMpk($mpk);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
      * Changes claim's importance (via ajax).
      *
      * @param Request $request

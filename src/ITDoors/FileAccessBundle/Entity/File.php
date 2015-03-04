@@ -65,7 +65,6 @@ class File
     protected $realName;
 
     /**
-<<<<<<< HEAD
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
@@ -73,8 +72,6 @@ class File
     protected $description;
 
     /**
-=======
->>>>>>> master
      * Get id
      *
      * @return integer 

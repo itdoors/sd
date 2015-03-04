@@ -43,6 +43,14 @@ class ClaimDepartmentType extends AbstractType
             ))
             ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
             ->add('text')
+            ->add('selfOrganization', 'entity', array(
+                'class' => 'ListsOrganizationBundle:Organization',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('o')
+                        ->where('o.isSelf = true')
+                        ->orderBy('o.id', 'ASC');
+                }
+            ))
             ->add('targetDepartment', 'text', array(
                 'mapped' => false,
                 'attr' => array(

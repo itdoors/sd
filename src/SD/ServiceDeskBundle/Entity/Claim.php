@@ -65,6 +65,20 @@ class Claim
     protected $text;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="mpk", type="string", length=255, nullable=true)
+     */
+    protected $mpk;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="scale", type="string", length=255, nullable=true)
+     */
+    protected $scale;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="disabled", type="boolean")
@@ -85,6 +99,14 @@ class Claim
      * @ORM\JoinColumn(name="importance_id", referencedColumnName="id")
      */
     protected $importance;
+
+    /**
+     * @var Lists\OrganizationBundle\Entity\Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Lists\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="self_org_id", referencedColumnName="id")
+     */
+    protected $selfOrganization;
 
     /**
      * @var \SD\BusinessRoleBundle\Entity\Client
@@ -421,6 +443,78 @@ class Claim
     public function getImportance()
     {
         return $this->importance;
+    }
+
+    /**
+     * Set mpk
+     *
+     * @param string $mpk
+     *
+     * @return Claim
+     */
+    public function setMpk($mpk)
+    {
+        $this->mpk = $mpk;
+
+        return $this;
+    }
+
+    /**
+     * Get mpk
+     *
+     * @return string
+     */
+    public function getMpk()
+    {
+        return $this->mpk;
+    }
+
+    /**
+     * Set selfOrganization
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $selfOrganization
+     *
+     * @return Claim
+     */
+    public function setSelfOrganization(\Lists\OrganizationBundle\Entity\Organization $selfOrganization = null)
+    {
+        $this->selfOrganization = $selfOrganization;
+
+        return $this;
+    }
+
+    /**
+     * Get selfOrganization
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization
+     */
+    public function getSelfOrganization()
+    {
+        return $this->selfOrganization;
+    }
+
+    /**
+     * Set scale
+     *
+     * @param string $scale
+     *
+     * @return Claim
+     */
+    public function setScale($scale)
+    {
+        $this->scale = $scale;
+
+        return $this;
+    }
+
+    /**
+     * Get scale
+     *
+     * @return string
+     */
+    public function getScale()
+    {
+        return $this->scale;
     }
 }
 
