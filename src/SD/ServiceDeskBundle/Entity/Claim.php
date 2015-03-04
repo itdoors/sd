@@ -100,6 +100,13 @@ class Claim
     protected $messages;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\ClaimFinanceRecord", mappedBy="claim")
+     */
+    protected $financeRecords;
+
+    /**
      * @var SD\ServiceDeskBundle\Entity\ClaimImportance
      *
      * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\ClaimImportance")
@@ -145,6 +152,7 @@ class Claim
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->claimPerformerRules = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->financeRecords = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -547,6 +555,40 @@ class Claim
     public function getStatusLastModified()
     {
         return $this->statusLastModified;
+    }
+
+    /**
+     * Add financeRecords
+     *
+     * @param \SD\ServiceDeskBundle\Entity\ClaimFinanceRecord $financeRecords
+     *
+     * @return Claim
+     */
+    public function addFinanceRecord(\SD\ServiceDeskBundle\Entity\ClaimFinanceRecord $financeRecords)
+    {
+        $this->financeRecords[] = $financeRecords;
+
+        return $this;
+    }
+
+    /**
+     * Remove financeRecords
+     *
+     * @param \SD\ServiceDeskBundle\Entity\ClaimFinanceRecord $financeRecords
+     */
+    public function removeFinanceRecord(\SD\ServiceDeskBundle\Entity\ClaimFinanceRecord $financeRecords)
+    {
+        $this->financeRecords->removeElement($financeRecords);
+    }
+
+    /**
+     * Get financeRecords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFinanceRecords()
+    {
+        return $this->financeRecords;
     }
 }
 
