@@ -80,6 +80,20 @@ MPK: МПК
 Profit + NDS: Доход с НДС
 Costs: Затраты
 Smeta Status: Статус сметы
+Docs: Документы
+Act Number: Номер акта
+Smeta Number: Номер сметы
+Finance Status: Финансовый статус
+Costs + NDS: Затраты (общие с НДС)
+Profitability: Рентабельность
+Act Date: Дата акта
+Preliminary Smeta Cost: Предварительная сметная стоимость
+Bill Date: Дата счёта
+Works: Работы
+Work: Работа
+Costs (cash): Затраты (нал)
+Costs (no-cash) - NDS: Затраты безнал без НДС
+
 
 Can post to clients: Может писать клиентам
 Can edit finance data: Может редактировать фин. данные

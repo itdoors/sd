@@ -83,14 +83,14 @@ class ClaimFinanceRecord
      *
      * @ORM\Column(name="nds", type="float")
      */
-    protected $nds = 0;
+    protected $nds = 0.2;
 
     /**
      * @var double
      *
      * @ORM\Column(name="obnal", type="float")
      */
-    protected $obnal = 0;
+    protected $obnal = 0.12;
 
     /**
      * @var boolean

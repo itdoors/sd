@@ -57,42 +57,44 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div>
-                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Number{% endtrans %}</td>
-                                                    <td>#{{ entity.id }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Claim Type{% endtrans %}</td>
-                                                    <td><a href="#" id="claim_type">{{ entity.type | trans}}</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Created{% endtrans %}</td>
-                                                    <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Closed{% endtrans %}</td>
-                                                    <td>{% if entity.closedAt %}{{ entity.closedAt|date('d.m.y H:i') }}{% endif %}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Organization{% endtrans %}</td>
-                                                    <td>{{ entity.targetDepartment ? entity.targetDepartment.organization : '' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Address{% endtrans %}</td>
-                                                    <td>
-                                                        {% if entity.targetDepartment %}
-                                                            {{ entity.targetDepartment.city }}, {{ entity.targetDepartment.address }}
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="hidden-xs">{% trans %}Scale{% endtrans %}</td>
-                                                    <td>{{ entity.scale ? entity.scale : 'empty' | trans }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Number{% endtrans %}</td>
+                                                        <td>#{{ entity.id }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Claim Type{% endtrans %}</td>
+                                                        <td><a href="#" id="claim_type">{{ entity.type | trans}}</a></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Created{% endtrans %}</td>
+                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Closed{% endtrans %}</td>
+                                                        <td>{% if entity.closedAt %}{{ entity.closedAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Organization{% endtrans %}</td>
+                                                        <td>{{ entity.targetDepartment ? entity.targetDepartment.organization : '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Address{% endtrans %}</td>
+                                                        <td>
+                                                            {% if entity.targetDepartment %}
+                                                                {{ entity.targetDepartment.city }}, {{ entity.targetDepartment.address }}
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Scale{% endtrans %}</td>
+                                                        <td>{{ entity.scale ? entity.scale : 'empty' | trans }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     {#<div class="margin-bottom-10">#}
                                         {#{{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}#}
@@ -100,41 +102,43 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div>
-                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                            <tbody>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Self Organization{% endtrans %}</td>
-                                                <td>{{ entity.selfOrganization ? entity.selfOrganization : '' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}MPK{% endtrans %}</td>
-                                                <td><a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Claim Importance{% endtrans %}</td>
-                                                <td><a href="#" id="claim_importance">{{ entity.importance | trans}}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Claim Status{% endtrans %}</td>
-                                                <td>
-                                                    <a href="#" id="claim_status">{{ entity.status | trans}}</a>
-                                                    {% if entity.statusLastModified %}{{ '('~entity.statusLastModified|date('d.m.y H:i')~')' }}{% endif %}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Profit + NDS{% endtrans %}</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Costs{% endtrans %}</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="hidden-xs">{% trans %}Smeta Status{% endtrans %}</td>
-                                                <td></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                <tr>
+                                                    <td>{% trans %}Self Organization{% endtrans %}</td>
+                                                    <td>{{ entity.selfOrganization ? entity.selfOrganization : '' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
+                                                    <td><a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Claim Importance{% endtrans %}</td>
+                                                    <td><a href="#" id="claim_importance">{{ entity.importance | trans}}</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Claim Status{% endtrans %}</td>
+                                                    <td>
+                                                        <a href="#" id="claim_status">{{ entity.status | trans}}</a>
+                                                        {% if entity.statusLastModified %}{{ '('~entity.statusLastModified|date('d.m.y H:i')~')' }}{% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Costs{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Smeta Status{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                         		</div>
                         		<div class="col-md-4">
@@ -166,7 +170,150 @@
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab_1_2">
-                            <p>qwe qwe qweq we qwe</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Docs{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Act Number{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Smeta Number{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Finance Status{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Costs + NDS{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Profitability{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Act Date{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Preliminary Smeta Cost{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Bill Date{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="works" class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{% trans %}Works{% endtrans %}</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table id="fintable" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <td>#</td>
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
+                                                    <td>{% trans %}Work{% endtrans %}</td>
+                                                    <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Costs (cash){% endtrans %}</td>
+                                                    <td>{% trans %}Costs (no-cash) - NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Costs + NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Profitability{% endtrans %}</td>
+                                                    <td>{% trans %}Status{% endtrans %}</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="fins">
+                                                {% for key,record in entity.financeRecords %}
+                                                    <tr>
+                                                        <td>{{ key + 1 }}</td>
+                                                        <td>{{ record.mpk ? record.mpk : '' }}</td>
+                                                        <td>{{ record.work ? record.work : '' }}</td>
+                                                        <td>{{ record.incomeNDS ? record.incomeNDS : '' }}</td>
+                                                        <td>{{ record.costsN ? record.costsN : '' }}</td>
+                                                        <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
+                                                        <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
+                                                        <td>{{ record.profitability ? record.profitability : '' }}</td>
+                                                        <td>{% trans %}Status{% endtrans %}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        {{ form_start(financeForm, {'attr' : {'class' : 'form-horizontal'}}) }}
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label class="required control-label col-md-3">{% trans %}MPK{% endtrans%}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(financeForm.mpk, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="required control-label col-md-3">{% trans %}Work{% endtrans%}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(financeForm.work, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="required control-label col-md-3">{% trans %}Profit + NDS{% endtrans%}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(financeForm.incomeNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="required control-label col-md-3">{% trans %}Costs (no-cash) - NDS{% endtrans%}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(financeForm.costsNonNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="required control-label col-md-3">{% trans %}Costs + NDS{% endtrans%}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(financeForm.costsNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-offset-6">
+                                                                <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{ form_end(financeForm) }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -404,6 +551,44 @@
                         }
                 	});
                 	return false;
+                });
+                $("form[name='{{ financeForm.vars.name }}']").submit(function (e) {
+                    var formData = new FormData($(this)[0]);
+                    $.ajax({
+                        url: "{{ path('claim_add_fin') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            SD.blockUI($('#fintable'));
+                        },
+                        success: function(response) {
+                            $('#fins').append(
+                                    '<tr>'
+                                    + '<td>' + (Number($('#fins tr').last().children().first().text()) + 1) + '</td>'
+                                    + '<td>' + response.mpk + '</td>'
+                                    + '<td>' + response.work + '</td>'
+                                    + '<td>' + response.incomeNDS + '</td>'
+                                    + '<td>' + response.costsN + '</td>'
+                                    + '<td>' + response.costsNonNDS + '</td>'
+                                    + '<td>' + response.costsNDS + '</td>'
+                                    + '<td>' + response.profitability + '</td>'
+                                    + '<td>' + '</td>'
+                                    + '</tr>');
+                            $('#{{ financeForm.vars.name }}_mpk').val('');
+                            $('#{{ financeForm.vars.name }}_work').val('');
+                            $('#{{ financeForm.vars.name }}_incomeNDS').val('0');
+                            $('#{{ financeForm.vars.name }}_costsNonNDS').val('0');
+                            $('#{{ financeForm.vars.name }}_costsNDS').val('0');
+                            SD.unblockUI($('#fintable'));
+                        },
+                        error: function(response) {
+                            SD.unblockUI($('#fintable'));
+                        }
+                    });
+                    return false;
                 });
                 $("form[name='{{ form.vars.name }}']").submit(function (e) {
                 	var formData = new FormData($(this)[0]);

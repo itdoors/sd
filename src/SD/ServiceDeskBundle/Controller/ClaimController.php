@@ -2,6 +2,8 @@
 
 namespace SD\ServiceDeskBundle\Controller;
 
+use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
+use SD\ServiceDeskBundle\Form\ClaimFinanceRecordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -229,6 +231,36 @@ class ClaimController extends Controller
     }
 
     /**
+     * Adds FinanceRecord to the claim (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addFinanceRecordAction(Request $request)
+    {
+        $entity = (new ClaimFinanceRecord())->setClaim(new Claim());
+
+        $form = $this->createFinanceForm($entity);
+        $form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
+
+        $response = [];
+        $response['mpk'] = $entity->getMpk();
+        $response['work'] = $entity->getWork();
+        $response['incomeNDS'] = $entity->getIncomeNDS();
+        $response['costsN'] = $entity->getCostsN();
+        $response['costsNonNDS'] = $entity->getCostsNonNDS();
+        $response['costsNDS'] = $entity->getCostsNDS();
+        $response['profitability'] = $entity->getProfitability();
+
+        return new JsonResponse($response);
+    }
+
+    /**
      * Changes performerRule of the claim (via ajax).
      *
      * @param Request $request
@@ -348,6 +380,23 @@ class ClaimController extends Controller
     }
 
     /**
+     * Creates a form to create a ClaimFinanceRecord entity.
+     *
+     * @param ClaimFinanceRecord $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createFinanceForm(ClaimFinanceRecord $entity)
+    {
+        $form = $this->createForm(new ClaimFinanceRecordType(), $entity, array(
+            'action' => $this->generateUrl('claim_add_fin'),
+            'method' => 'POST',
+        ));
+
+        return $form;
+    }
+
+    /**
      * Creates a form to create a ClaimPerformerRule entity.
      *
      * @param ClaimPerformerRule $entity The entity
@@ -415,6 +464,7 @@ class ClaimController extends Controller
             ->findByClaim($entity);
 
         $messageForm = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
+        $financeForm = $this->createFinanceForm((new ClaimFinanceRecord())->setClaim($entity));
         $performerRuleForm = $this->createPerformerRuleForm((new ClaimPerformerRule())->setClaim($entity));
         
         $statuses = [];
@@ -445,6 +495,7 @@ class ClaimController extends Controller
             'entity' => $entity,
             'form' => $messageForm->createView(),
             'performerRuleForm' => $performerRuleForm->createView(),
+            'financeForm' => $financeForm->createView(),
             'importances' => json_encode($importances),
             'statuses' => json_encode($statuses),
             'types' => json_encode($types),

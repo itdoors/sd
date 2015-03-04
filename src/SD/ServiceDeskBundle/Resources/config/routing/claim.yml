@@ -41,6 +41,10 @@ claim_delete:
 claim_add_msg:
     path:     /add_msg
     defaults: { _controller: "SDServiceDeskBundle:Claim:addMsg" }
+
+claim_add_fin:
+    path:     /claim_add_fin
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addFinanceRecord" }
     
 claim_add_rule:
     path:     /add_rule
