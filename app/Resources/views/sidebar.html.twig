@@ -120,6 +120,15 @@
                 </ul>
             </li>
         {% endif %}
+        {% if is_granted('ROLE_CONTRACTOR') %}
+            <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
+            %} class="active"{% endif %}>
+                <a href="{{ path('lists_contractor_index') }}">
+                    <i class="fa fa-money"></i>
+                    <span class="title">{% trans %}Contractors{% endtrans %}</span>
+                </a>
+            </li>
+        {% endif %}
         {% if is_granted('ROLE_SALES') %}
             <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
@@ -228,13 +237,6 @@
                             </a>
                         </li>
                     {% endif %}
-                     {#<li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
-                    %} class="active"{% endif %}>
-                        <a href="{{ path('lists_contractor_index') }}">
-                            <i class="fa fa-money"></i>
-                            <span class="title">{% trans %}Contractors{% endtrans %}</span>
-                        </a>
-                    </li>#}
                 </ul>
             </li>
         {% endif %}

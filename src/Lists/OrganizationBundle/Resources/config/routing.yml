@@ -30,6 +30,12 @@ lists_competitors_organization_filter:
 lists_contractor_index:
     pattern:  /lists/contractor/index
     defaults: { _controller: ListsOrganizationBundle:Contractor:index }
+lists_contractor_index_list:
+    pattern:  /lists/contractor/list
+    defaults: { _controller: ListsOrganizationBundle:Contractor:list }
+lists_contractor_export_excel:
+    pattern:  /lists/contractor/export
+    defaults: { _controller: ListsOrganizationBundle:Contractor:exportExcel }
 
 # PayerController
 lists_organization_payer_index:
