@@ -372,6 +372,21 @@ class Project
      *
      * @return boolean
      */
+    public function getMaxPart ()
+    {
+        $part = 0;
+        $managers = $this->getManagers();
+        foreach ($managers as $manager) {
+            $part =+ $manager->getPart();
+        }
+
+        return $part <= 100 ? 100-$part : 0;
+    }
+    /**
+     * isManager
+     *
+     * @return boolean
+     */
     public function isManagerProject (\SD\UserBundle\Entity\User $user)
     {
         $managers = $this->getManagers();
