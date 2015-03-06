@@ -182,15 +182,15 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Number{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_akt">{{ entity.akt ? entity.akt : '' }}</a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Smeta Number{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_smeta">{{ entity.smeta ? entity.smeta : '' }}</a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Finance Status{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_fin_status">{{ entity.finStatus ? entity.finStatus : '' }}</a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -318,7 +318,7 @@
                                                         <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
                                                         <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
                                                         <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
-                                                        <td>{% trans %}Status{% endtrans %}</td>
+                                                        <td>{{ record.status | trans }}</td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -502,6 +502,27 @@
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_mpk') }}'
                 });
+                $('#claim_akt').editable({
+                    type: 'text',
+                    title: '{% trans %}Act Number{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_akt') }}'
+                });
+                $('#claim_smeta').editable({
+                    type: 'text',
+                    title: '{% trans %}Smeta Number{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_smeta') }}'
+                });
+                $('#claim_fin_status').editable({
+                    type: 'select',
+                    title: '{% trans %}Finance Status{% endtrans %}'
+                    placement: 'right',
+                    value: '{{ entity.finStatus }}',
+                    source: {{ finStatuses | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_fin_status') }}'
+                });
             	$('#claim_type').editable({
                     type: 'select',
                     title: '{% trans %}Claim Type{% endtrans %}',
@@ -577,6 +598,26 @@
                         }
                     });
                 }
+                function updateClaimData(recId) {
+                    var recordId = recId || 0;
+                    $.ajax({
+                        url: "{{ path('claim_upd_data') }}",
+                        data: {
+                            claimId: {{ entity.id }},
+                            recordId: recordId
+                        },
+                        type: 'POST',
+                        success: function(response) {
+                            $('#incomeNDS').text(response.incomeNDS);
+                            $('#costsAllNDS').text(response.costsAllNDS);
+                            $('#profitability').text(response.profitabilitySUM + '/' + response.profitabilitySUMProc + '%');
+                            if (response.id != 0) {
+                                $('#link_costsN_' + response.id).text(response.costsN);
+                                $('#profitability_' + response.id).text(response.profitability + '/' + response.profitabilityProc + '%');
+                            }
+                        }
+                    });
+                }
                 $("form[name='{{ performerRuleForm.vars.name }}']").submit(function (e) {
                 	var formData = new FormData($(this)[0]);
                 	$.ajax({
@@ -629,7 +670,7 @@
                                     + '<td>' + response.costsN + '</td>'
                                     + '<td>' + response.costsNonNDS + '</td>'
                                     + '<td>' + response.costsNDS + '</td>'
-                                    + '<td>' + response.profitability + '</td>'
+                                    + '<td id="profitability_' + response.id + '">' + response.profitability + '</td>'
                                     + '<td>' + '</td>'
                                     + '</tr>');
                             $('#{{ financeForm.vars.name }}_mpk').val('');
@@ -637,6 +678,7 @@
                             $('#{{ financeForm.vars.name }}_incomeNDS').val('0');
                             $('#{{ financeForm.vars.name }}_costsNonNDS').val('0');
                             $('#{{ financeForm.vars.name }}_costsNDS').val('0');
+                            updateClaimData(response.id);
                             SD.unblockUI($('#fintable'));
                         },
                         error: function(response) {
@@ -647,6 +689,7 @@
                 });
                 $("form[name='costNalForm']").submit(function (e) {
                     var formData = new FormData($(this)[0]);
+                    var recordId = $(this).find('input[name="costNalForm[financeRecord]"]').val();
                     $.ajax({
                         url: "{{ path('claim_add_cost_nal') }}",
                         type: 'POST',
@@ -661,11 +704,7 @@
                                     + '<td>' + response.value + '</td>'
                                     + '<td>' + '</td>'
                                     + '</tr>');
-                            $('#link_costsN_' + response.id).text(response.costsN);
-                            $('#incomeNDS').text(response.incomeNDS);
-                            $('#costsAllNDS').text(response.costsAllNDS);
-                            $('#profitability').text(response.profitabilitySUM + '/' + response.profitabilitySUMProc + '%');
-                            $('#profitability_' + response.id).text(response.profitability + '/' + response.profitabilityProc + '%');
+                            updateClaimData(recordId);
                         }
                     });
                     return false;

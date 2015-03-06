@@ -49,6 +49,10 @@ claim_add_fin:
 claim_add_cost_nal:
         path:     /claim_add_cost_nal
         defaults: { _controller: "SDServiceDeskBundle:Claim:addCostNal" }
+
+claim_upd_data:
+        path:     /claim_upd_data
+        defaults: { _controller: "SDServiceDeskBundle:Claim:updateClaimData" }
     
 claim_add_rule:
     path:     /add_rule

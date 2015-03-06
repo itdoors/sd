@@ -65,11 +65,53 @@ class Claim
     protected $closedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="akt_date", type="datetime", nullable=true)
+     */
+    protected $aktDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="bill_date", type="datetime", nullable=true)
+     */
+    protected $billDate;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="text", type="text")
      */
     protected $text;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="akt", type="text", nullable=true)
+     */
+    protected $akt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="smeta", type="text", nullable=true)
+     */
+    protected $smeta;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="smeta_cost", type="text", nullable=true)
+     */
+    protected $smetaCost;
+
+    /**
+     * @var FinStatusType
+     *
+     * @ORM\Column(name="fin_status", type="finStatusType", nullable=true)
+     */
+    protected $finStatus;
 
     /**
      * @var string
@@ -591,6 +633,151 @@ class Claim
         return $this->financeRecords;
     }
 
+
+    /**
+     * Set aktDate
+     *
+     * @param \DateTime $aktDate
+     *
+     * @return Claim
+     */
+    public function setAktDate($aktDate)
+    {
+        $this->aktDate = $aktDate;
+
+        return $this;
+    }
+
+    /**
+     * Get aktDate
+     *
+     * @return \DateTime
+     */
+    public function getAktDate()
+    {
+        return $this->aktDate;
+    }
+
+    /**
+     * Set billDate
+     *
+     * @param \DateTime $billDate
+     *
+     * @return Claim
+     */
+    public function setBillDate($billDate)
+    {
+        $this->billDate = $billDate;
+
+        return $this;
+    }
+
+    /**
+     * Get billDate
+     *
+     * @return \DateTime
+     */
+    public function getBillDate()
+    {
+        return $this->billDate;
+    }
+
+    /**
+     * Set akt
+     *
+     * @param string $akt
+     *
+     * @return Claim
+     */
+    public function setAkt($akt)
+    {
+        $this->akt = $akt;
+
+        return $this;
+    }
+
+    /**
+     * Get akt
+     *
+     * @return string
+     */
+    public function getAkt()
+    {
+        return $this->akt;
+    }
+
+    /**
+     * Set smeta
+     *
+     * @param string $smeta
+     *
+     * @return Claim
+     */
+    public function setSmeta($smeta)
+    {
+        $this->smeta = $smeta;
+
+        return $this;
+    }
+
+    /**
+     * Get smeta
+     *
+     * @return string
+     */
+    public function getSmeta()
+    {
+        return $this->smeta;
+    }
+
+    /**
+     * Set smetaCost
+     *
+     * @param string $smetaCost
+     *
+     * @return Claim
+     */
+    public function setSmetaCost($smetaCost)
+    {
+        $this->smetaCost = $smetaCost;
+
+        return $this;
+    }
+
+    /**
+     * Get smetaCost
+     *
+     * @return string
+     */
+    public function getSmetaCost()
+    {
+        return $this->smetaCost;
+    }
+
+    /**
+     * Set finStatus
+     *
+     * @param \finStatusType $finStatus
+     *
+     * @return Claim
+     */
+    public function setFinStatus(\finStatusType $finStatus)
+    {
+        $this->finStatus = $finStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get finStatus
+     *
+     * @return \finStatusType
+     */
+    public function getFinStatus()
+    {
+        return $this->finStatus;
+    }
+
     protected $incomeNDS = 0;
 
     protected $costsAllNDS = 0;
@@ -673,30 +860,15 @@ final class ClaimType extends \ITDoors\DBAL\EnumType
     );
 }
 
-final class StatusType extends \ITDoors\DBAL\EnumType
+final class FinStatusType extends \ITDoors\DBAL\EnumType
 {
-    const DONE = 'sta_sclose_smclose_cclose';
-    const OPEN = 'sta_open';
-    const SEND = 'sta_sappointed_smwait';
-    const IN_PROGRESS = 'sta_sclose_smwait';
-    const SUBMITTING = 'sta_sclose_smwait_cwait';
-    const CREATING = 'sta_smeta_composу';
-    const MATCHED = 'sta_smeta_conform';
-    const CANCELED = 'sta_smeta_cancel';
-    const ESTIMATING = 'sta_smet';
-    const REJECTED = 'sta_sclose_smclose_cwait';
-    protected static $name = 'statusType';
+    const OPENED = 'opened';
+    const CLOSED = 'closed';
+
+    protected static $name = 'finStatusType';
 
     protected static $values = array(
-        self::DONE,
-        self::OPEN,
-        self::SEND,
-        self::IN_PROGRESS,
-        self::SUBMITTING,
-        self::CREATING,
-        self::MATCHED,
-        self::CANCELED,
-        self::ESTIMATING,
-        self::REJECTED
+        self::OPENED,
+        self::CLOSED
     );
 }
