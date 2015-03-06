@@ -273,8 +273,7 @@ class ClaimFinanceRecord
     {
         return round(
                 $this->getIncomeNDS() / 1.2 -
-                ($this->getCostsNSum() * $this->nds + $this->getCostsNSum()) *
-                $this->obnal + $this->getCostsNSum() -
+                ($this->getCostsNSum() * ($this->nds + 1)) * ($this->obnal + 1) -
                 $this->costsNonNDS -
                 $this->costsNDS / 1.2
                 , 2);

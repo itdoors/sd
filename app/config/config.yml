@@ -131,6 +131,7 @@ doctrine:
             statusType: SD\ServiceDeskBundle\Entity\StatusType
             costNalType: SD\ServiceDeskBundle\Entity\CostNalType
             contactType: Lists\IndividualBundle\Entity\ContactType
+            finStatusType: SD\ServiceDeskBundle\Entity\FinStatusType
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%

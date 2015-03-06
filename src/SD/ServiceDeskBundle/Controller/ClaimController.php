@@ -267,19 +267,52 @@ class ClaimController extends Controller
         $em->persist($entity);
         $em->flush();
 
-        $financeRecord = $entity->getFinanceRecord();
-
         $response = [];
-        $response['id'] = $financeRecord->getId();
+        $response['id'] = $entity->getFinanceRecord()->getId();
         $response['type'] = $entity->getType();
         $response['value'] = $entity->getValue();
-        $response['costsN'] = $financeRecord->getCostsNSum();
-        $response['incomeNDS'] = $financeRecord->getClaim()->getIncomeNDS();
-        $response['costsAllNDS'] = $financeRecord->getClaim()->getCostsAllNDS();
-        $response['profitability'] = $financeRecord->getProfitability();
-        $response['profitabilityProc'] = $financeRecord->getProfitabilityProc();
-        $response['profitabilitySUMProc'] = $financeRecord->getClaim()->getProfitabilityProc();
-        $response['profitabilitySUM'] = $financeRecord->getClaim()->getProfitability();
+
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Updates claim's data (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function updateClaimDataAction(Request $request)
+    {
+        $claimId = $request->get('claimId');
+        $recordId = $request->get('recordId');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em
+            ->getRepository('SDServiceDeskBundle:Claim')
+            ->find($claimId);
+        $em->persist($entity);
+        $em->flush();
+
+        if ($recordId != 0) {
+            $financeRecord = $em
+                ->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')
+                ->find($recordId);
+        }
+
+        $response = [];
+        $response['id'] = $recordId;
+        $response['incomeNDS'] = $entity->getIncomeNDS();
+        $response['costsAllNDS'] = $entity->getCostsAllNDS();
+        $response['profitabilitySUM'] = $entity->getProfitability();
+        $response['profitabilitySUMProc'] = $entity->getProfitabilityProc();
+
+        if ($financeRecord) {
+            $response['costsN'] = $financeRecord->getCostsNSum();
+            $response['profitability'] = $financeRecord->getProfitability();
+            $response['profitabilityProc'] = $financeRecord->getProfitabilityProc();
+        }
+
 
         return new JsonResponse($response);
     }
@@ -297,16 +330,18 @@ class ClaimController extends Controller
 
         $form = $this->createFinanceForm($entity);
         $form->handleRequest($request);
+        $entity->setStatus(StatusType::OPEN);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
         $em->flush();
 
         $response = [];
+        $response['id'] = $entity->getId();
         $response['mpk'] = $entity->getMpk();
         $response['work'] = $entity->getWork();
         $response['incomeNDS'] = $entity->getIncomeNDS();
-        $response['costsN'] = $entity->getCostsN();
+        $response['costsN'] = $entity->getCostsNSum();
         $response['costsNonNDS'] = $entity->getCostsNonNDS();
         $response['costsNDS'] = $entity->getCostsNDS();
         $response['profitability'] = $entity->getProfitability();
