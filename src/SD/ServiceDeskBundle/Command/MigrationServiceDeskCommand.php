@@ -86,7 +86,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             ');
         $stmt->execute();
 
-        //$this->createIndividuals();
+        $this->createIndividuals();
 
         /*
          * claim
