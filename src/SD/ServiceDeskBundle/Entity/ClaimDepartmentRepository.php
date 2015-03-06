@@ -17,7 +17,7 @@ class ClaimDepartmentRepository extends EntityRepository
      *
      * @return array
      */
-    public function findNotDone()
+    public function findNotDone($user)
     {
         $query = $this->createQueryBuilder('c')
             ->select('c as claim')
@@ -38,12 +38,17 @@ class ClaimDepartmentRepository extends EntityRepository
             ->leftJoin('reg.companystructure', 'cs')
             ->join('c.customer', 'cust')
             ->join('cust.individual', 'i')
-            ->where('c.closedAt is NULL')
+            ->where('c.closedAt is NULL');
+            if (!$user) {
+                $query = $query
+                    ->andWhere('i.u = :user')
+                    ->setParameter(':user', $user);
+            }
 //             ->andWhere('c.status != :rejected')
 //             ->setParameter('done', StatusType::DONE)
 //             ->setParameter('rejected', StatusType::REJECTED)
-            ->getQuery()
-            ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
+            $query->getQuery()
+                ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
 
         return $query->getResult();
     }

@@ -6,6 +6,8 @@
 
 namespace SD\ServiceDeskBundle\Command;
 
+use ITDoors\FileAccessBundle\Entity\ClaimFile;
+use ITDoors\FileAccessBundle\Entity\ClaimMessageFile;
 use Lists\IndividualBundle\Entity\Contact;
 use Lists\IndividualBundle\Entity\ContactType;
 use Lists\IndividualBundle\Entity\Individual;
@@ -16,9 +18,11 @@ use SD\BusinessRoleBundle\Entity\GriffinStaff;
 use SD\BusinessRoleBundle\Entity\Responsibility;
 use SD\ServiceDeskBundle\Entity\Claim;
 use SD\ServiceDeskBundle\Entity\ClaimDepartment;
+use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
 use SD\ServiceDeskBundle\Entity\ClaimMessage;
 use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
 use SD\ServiceDeskBundle\Entity\ClaimType;
+use SD\ServiceDeskBundle\Entity\CostNal;
 use SD\ServiceDeskBundle\Entity\ImportanceType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
 use SD\ServiceDeskBundle\Entity\StatusType;
@@ -123,9 +127,15 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             // need to ask about mpk
             $claimBillDate = $claim['bill_date'];
             $claimOrganizationTypeId = $claim['organization_type_id'];
+
             $claimOrganizationImportanceId = $claim['organization_importance_id'];
 
+            $stmtImportance = $conn->prepare('
+                SELECT importance_id FROM organization_importance WHERE id = '.$claimOrganizationImportanceId .'
+            ');
 
+            $stmtImportance->execute();
+            $importanceId = $stmtImportance->fetchAll()[0]['importance_id'];
 
             //new claim here
             $res = memory_get_usage ().'--'.'new claim';
@@ -167,12 +177,16 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     $claimType = ClaimType::ACT_COLLECTING;
                     break;
             }
+            //new claim here
+            $res = memory_get_usage ().'--'.'type: '.$claimType;
+            $output->writeln($res);
+
             $sd_claim->setType($claimType);
             $sd_claim->setStatus($claimStatus);
 
             $sd_claim->setImportance($doctrine
                     ->getRepository('SDServiceDeskBundle:ClaimImportance')
-                    ->find(1));
+                    ->find($importanceId));
 
             $sd_claim->setCreatedAt(new \DateTime($claimCreateDatetime));
             $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
@@ -197,6 +211,98 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $em->persist($sd_claim);
             $em->flush();
             $em->refresh($sd_claim);
+
+            //claim finances
+            $stmtFinance = $conn->prepare('
+              SELECT * FROM finance_claim WHERE claim_id = '.$claimId .'
+            ');
+            $stmtFinance->execute();
+
+            $finances = $stmtFinance->fetchAll();
+            foreach ($finances as $finance) {
+                $newFinance = new ClaimFinanceRecord();
+                $newFinance->setClaim($sd_claim);
+                //$newFinance->setCostsN();???
+                $finance['costs_nds'] ? $newFinance->setCostsNDS($finance['costs_nds']): '';
+                $finance['costs_nonnds'] ? $newFinance->setCostsNonNDS($finance['costs_nonnds']): '';
+                $finance['income_nds'] ? $newFinance->setIncomeNDS($finance['income_nds']): '';
+                $finance['income_nonnds'] ? $newFinance->setIncomeNonNDS($finance['income_nonnds']): '';
+                $finance['bill_number'] ? $newFinance->setBillNumber($finance['bill_number']): '';
+                //$newFinance->setProfitability();???
+                $finance['nds'] ? $newFinance->setNds($finance['nds']): '';
+                $finance['obnal'] ? $newFinance->setObnal($finance['obnal']): '';
+                $finance['is_closed'] ? $newFinance->setIsClosed($finance['is_closed']): '';
+                $finance['work'] ? $newFinance->setWork($finance['work']): '';
+                $res = memory_get_usage ().'--'.'finance record type '.$finance['status_id'];
+                $output->writeln($res);
+                switch ($finance['status_id']) {
+                    case 1:
+                        $financeType = StatusType::OPEN;
+                        break;
+                    case 4:
+                        $financeType = StatusType::SEND;
+                        break;
+                    case 5:
+                        $financeType = StatusType::IN_PROGRESS;
+                        break;
+                    case 6:
+                        $financeType = StatusType::SUBMITTING;
+                        break;
+                    case 7:
+                        $financeType = StatusType::REJECTED;
+                        break;
+                    case 8:
+                        $financeType = StatusType::DONE;
+                        break;
+                    case 9:
+                        $financeType = StatusType::ESTIMATING;
+                        break;
+                    case 10:
+                        $financeType = StatusType::CREATING;
+                        break;
+                    case 11:
+                        $financeType = StatusType::SUBMITTING;
+                        break;
+                    case 12:
+                        $financeType = StatusType::MATCHED;
+                        break;
+                    case 13:
+                        $financeType = StatusType::REJECTED;
+                        break;
+                }
+                $res = memory_get_usage ().'--'.'new finance record';
+                $output->writeln($res);
+
+                $financeType ? $newFinance->setStatus($financeType): '';
+                $finance['mpk'] ? $newFinance->setMpk($finance['mpk']): '';
+                $finance['payment_type'] ? $newFinance->setPaymentType($finance['payment_type']): '';
+                $finance['costs_beznalnonnds'] ? $newFinance->setCostsBeznalNonNDS($finance['costs_beznalnonnds']): '';
+
+                //claim finances
+                $stmtCostsN = $conn->prepare('
+                  SELECT * FROM fc_costsn LEFT JOIN fc_costsntypes ON fc_costsn.fc_costsn_types_id = fc_costsntypes.id WHERE finance_claim_id = '.$finance['id'] .'
+                ');
+                $stmtCostsN->execute();
+
+                $costsN = $stmtCostsN->fetchAll();
+                foreach ($costsN as $costN) {
+                    $res = memory_get_usage ().'--'.'new finance const nal: type='. $costN['name'];
+                    $output->writeln($res);
+
+                    $costs = new CostNal();
+                    $costs->setValue($costN['value']);
+                    $costs->setFinanceRecord($newFinance);
+                    if ($costN['name'] == null) {
+                        $costN['name'] = 'Інше';
+                    }
+                    if ($costN['name'] == 'Додаткові працівникі') {
+                        $costN['name'] = 'Додаткові працівники';
+                    }
+                    $costs->setType(trim($costN['name']));
+                    $em->persist($costs);
+                }
+                $em->persist($newFinance);
+            }
 
             $this->insertCommentMessage($sd_claim, $claimId, $output, $em);
             /*
@@ -282,7 +388,14 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     // new individual for client here
                     $sd_individual = $user->getIndividual();
+                    if (!$sd_individual) {
+                        $sd_individual = new Individual();
+                        $sd_individual->setLastName($userLastName);
+                        $sd_individual->setMiddleName($userMiddleName);
+                        $sd_individual->setFirstName($userFirstName);
+                        $em->persist($sd_individual);
 
+                    }
 
 
                     $res = memory_get_usage ().'--'.$userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
@@ -645,7 +758,24 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $res = memory_get_usage ().'--'.'new message--> '.$comment['description'];
             $em->persist($message);
             $output->writeln($res);
+            //files
+            $stmtFile = $conn->prepare('
+              SELECT * FROM attach WHERE comments_id = '.$comment['id'].'
+            ');
+            $stmtFile->execute();
+            $files = $stmtFile->fetchAll();
+            foreach ($files as $file) {
+                $newFile = new ClaimMessageFile();
+                $newFile->setClaimMessage($message);
+                $newFile->setOriginName($file['filename']);
+                $newFile->setRealName($file['filepath']);
+                $newFile->setCreatedAt(new \DateTime());
+                $res = memory_get_usage ().'--'.'new file--> comment:'.$comment['id'];
+                $output->writeln($res);
 
+                $em->persist($newFile);
+            }
+            $em->persist($message);
             if ($counter == 2000) {
                 $counter = 0;
                 $em->flush();

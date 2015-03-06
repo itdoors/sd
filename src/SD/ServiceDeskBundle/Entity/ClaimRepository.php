@@ -44,4 +44,14 @@ class ClaimRepository extends EntityRepository
 
         return $result[0];
     }
+
+    public function findAllFromUser($user) {
+        $result = $this->createQueryBuilder('c')
+            ->leftJoin('c.claimPerformerRules', 'cpr')
+            ->leftJoin('cpr.claimPerformer', 'cp')
+            ->leftJoin('cp.individual', 'i')
+            //->leftJoin('i.user', 'u')
+            ->where('i.u = :user')
+            ->setParameter(':user', $user);
+    }
 }

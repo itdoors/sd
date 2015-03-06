@@ -37,11 +37,18 @@ class ClaimController extends Controller
     public function archiveIndexAction()
     {
         $em = $this->getDoctrine()->getManager();
-    
-        $entities = $em
-            ->getRepository('SDServiceDeskBundle:Claim')
-            ->findAll();
-        
+
+        $user = $this->getUser();
+        if ($user->hasRole('DISPATCHER')) {
+            $entities = $em
+                ->getRepository('SDServiceDeskBundle:Claim')
+                ->findAll();
+        } else {
+            $entities = $em
+                ->getRepository('SDServiceDeskBundle:Claim')
+                ->findAllFromUser($user);
+        }
+
         $result = [];
         foreach ($entities as $entity) {
             $result[] = [
@@ -65,13 +72,20 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $user = $this->getUser();
+        if ($user->hasRole('DISPATCHER')) {
+            $userFilter = null;
+        } else {
+            $userFilter = $user;
+        }
+
         $entities1 = $em
             ->getRepository('SDServiceDeskBundle:ClaimOnce')
-            ->findNotDone();
+            ->findNotDone($userFilter);
 
         $entities2 = $em
             ->getRepository('SDServiceDeskBundle:ClaimDepartment')
-            ->findNotDone();
+            ->findNotDone($userFilter);
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => array_merge($entities1, $entities2)
@@ -703,6 +717,6 @@ class ClaimController extends Controller
      */
     private function randomString()
     {
-        return md5(rand(100, 200));
+        return sha1(time()+rand(0,10000));
     }
 }
