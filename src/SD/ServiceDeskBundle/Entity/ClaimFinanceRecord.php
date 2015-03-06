@@ -121,6 +121,20 @@ class ClaimFinanceRecord
     protected $costsBeznalNonNDS = 0;
 
     /**
+     * @var StatusType
+     *
+     * @ORM\Column(name="status", type="statusType")
+     */
+    protected $status;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="statusLastModified", type="datetime", nullable=true)
+     */
+    protected $statusLastModified;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -273,7 +287,10 @@ class ClaimFinanceRecord
      */
     public function getProfitabilityProc()
     {
-        return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
+        if ($this->getIncomeNDS() != 0)
+            return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
+        else
+            return 0;
     }
 
     /**
@@ -518,5 +535,54 @@ class ClaimFinanceRecord
         }
 
         return $costsNSum;
+    }
+
+    /**
+     * Set status
+     *
+     * @param statusType $status
+     *
+     * @return ClaimFinanceRecord
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        $this->setStatusLastModified(new \DateTime());
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return statusType 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set statusLastModified
+     *
+     * @param \DateTime $statusLastModified
+     *
+     * @return ClaimFinanceRecord
+     */
+    public function setStatusLastModified($statusLastModified)
+    {
+        $this->statusLastModified = $statusLastModified;
+    
+        return $this;
+    }
+
+    /**
+     * Get statusLastModified
+     *
+     * @return \DateTime 
+     */
+    public function getStatusLastModified()
+    {
+        return $this->statusLastModified;
     }
 }

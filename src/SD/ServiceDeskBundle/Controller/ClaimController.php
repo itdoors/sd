@@ -253,11 +253,19 @@ class ClaimController extends Controller
         $em->persist($entity);
         $em->flush();
 
+        $financeRecord = $entity->getFinanceRecord();
+
         $response = [];
-        $response['id'] = $entity->getFinanceRecord()->getId();
+        $response['id'] = $financeRecord->getId();
         $response['type'] = $entity->getType();
         $response['value'] = $entity->getValue();
-        $response['costsN'] = $entity->getFinanceRecord()->getCostsNSum();
+        $response['costsN'] = $financeRecord->getCostsNSum();
+        $response['incomeNDS'] = $financeRecord->getClaim()->getIncomeNDS();
+        $response['costsAllNDS'] = $financeRecord->getClaim()->getCostsAllNDS();
+        $response['profitability'] = $financeRecord->getProfitability();
+        $response['profitabilityProc'] = $financeRecord->getProfitabilityProc();
+        $response['profitabilitySUMProc'] = $financeRecord->getClaim()->getProfitabilityProc();
+        $response['profitabilitySUM'] = $financeRecord->getClaim()->getProfitability();
 
         return new JsonResponse($response);
     }
