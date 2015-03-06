@@ -1,3 +1,6 @@
-lists_individual_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ListsIndividualBundle:Default:index }
+ListsIndividualBundle_individual:
+        resource: "@ListsIndividualBundle/Resources/config/routing/individual.yml"
+        prefix:   /individual
+ListsIndividualBundle_contact:
+        resource: "@ListsIndividualBundle/Resources/config/routing/contact.yml"
+        prefix:   /contact

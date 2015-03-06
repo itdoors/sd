@@ -58,6 +58,7 @@ class Individual
     public function __construct()
     {
         $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->businessRoles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -284,5 +285,137 @@ class Individual
     public function __toString()
     {
         return $this->lastName.' '.$this->firstName;
+    }
+
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $user;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $businessRoles;
+
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     * 
+     * @return Individual
+     */
+    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add businessRole
+     *
+     * @param \SD\BusinessRoleBundle\Entity\BusinessRole $businessRole
+     * 
+     * @return Individual
+     */
+    public function addBusinessRole(\SD\BusinessRoleBundle\Entity\BusinessRole $businessRole)
+    {
+        $this->businessRoles[] = $businessRole;
+
+        return $this;
+    }
+
+    /**
+     * Remove businessRoles
+     *
+     * @param \SD\BusinessRoleBundle\Entity\BusinessRole $businessRole
+     */
+    public function removeBusinessRole(\SD\BusinessRoleBundle\Entity\BusinessRole $businessRole)
+    {
+        $this->businessRoles->removeElement($businessRole);
+    }
+
+    /**
+     * Get businessRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBusinessRoles()
+    {
+        return $this->businessRoles;
+    }
+
+    /**
+     * Add actions
+     *
+     * @param \Lists\CoachBundle\Entity\Action $actions
+     * 
+     * @return Individual
+     */
+    public function addAction(\Lists\CoachBundle\Entity\Action $actions)
+    {
+        $this->actions[] = $actions;
+
+        return $this;
+    }
+
+    /**
+     * Remove actions
+     *
+     * @param \Lists\CoachBundle\Entity\Action $actions
+     */
+    public function removeAction(\Lists\CoachBundle\Entity\Action $actions)
+    {
+        $this->actions->removeElement($actions);
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $contacts;
+
+    /**
+     * Add contact
+     *
+     * @param \Lists\IndividualBundle\Entity\Contact $contact
+     * 
+     * @return Individual
+     */
+    public function addContact(\Lists\IndividualBundle\Entity\Contact $contact)
+    {
+        $contact->setIndividual($this);
+        $this->contacts[] = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Remove contact
+     *
+     * @param \Lists\IndividualBundle\Entity\Contact $contact
+     */
+    public function removeContact(\Lists\IndividualBundle\Entity\Contact $contact)
+    {
+        $this->contacts->removeElement($contact);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
     }
 }

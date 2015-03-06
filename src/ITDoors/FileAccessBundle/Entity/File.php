@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
+ *  "claimFile" = "ClaimFile",
+ *  "claimMessageFile" = "ClaimMessageFile",
  *  "blogFile" = "BlogFile"})
  * @ORM\Entity
  */
@@ -61,6 +63,13 @@ class File
      * @ORM\Column(name="real_name", type="string", length=255)
      */
     protected $realName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    protected $description;
 
     /**
      * Get id
@@ -253,5 +262,29 @@ class File
         } else {
             return '';
         }
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * 
+     * @return File
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

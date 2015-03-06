@@ -378,6 +378,10 @@ sd_common_ajax_departments_by_city_id:
     pattern:  /ajax/departments_by_city_id
     defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByCityIdAjax }
     
+sd_common_ajax_departments_by_organizanization_id:
+    pattern:  /ajax/departments_by_organizanization_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByOrganizationIdAjax }
+
 sd_common_ajax_individuals_by_city_id:
     pattern:  /ajax/individuals_by_city_id
     defaults: { _controller: SDCommonBundle:Ajax:getIndividualsByCityIdAjax }

@@ -1,0 +1,746 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'SDServiceDeskBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% block title %}{% trans %}Claims{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Claims{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('claim') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.id }}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+    					<li role="presentation" class="active">
+    						<a href="#tab_1_1" aria-controls="tab_1_1" role="tab" data-toggle="tab">{% trans %}Main{% endtrans %}</a>
+    					</li>
+    					<li role="presentation">
+    						<a href="#tab_1_2" aria-controls="tab_1_2" role="tab" data-toggle="tab">{% trans %}Finance{% endtrans %}</a>
+    					</li>
+    				</ul>
+    				<div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="tab_1_1">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Number{% endtrans %}</td>
+                                                        <td>#{{ entity.id }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Claim Type{% endtrans %}</td>
+                                                        <td><a href="#" id="claim_type">{{ entity.type | trans}}</a></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Created{% endtrans %}</td>
+                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Closed{% endtrans %}</td>
+                                                        <td>{% if entity.closedAt %}{{ entity.closedAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Organization{% endtrans %}</td>
+                                                        <td>{{ entity.targetDepartment ? entity.targetDepartment.organization : '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Address{% endtrans %}</td>
+                                                        <td>
+                                                            {% if entity.targetDepartment %}
+                                                                {{ entity.targetDepartment.city }}, {{ entity.targetDepartment.address }}
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Scale{% endtrans %}</td>
+                                                        <td>{{ entity.scale ? entity.scale : 'empty' | trans }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {#<div class="margin-bottom-10">#}
+                                        {#{{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}#}
+                                    {#</div>#}
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                <tr>
+                                                    <td>{% trans %}Self Organization{% endtrans %}</td>
+                                                    <td>{{ entity.selfOrganization ? entity.selfOrganization : '' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
+                                                    <td><a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Claim Importance{% endtrans %}</td>
+                                                    <td><a href="#" id="claim_importance">{{ entity.importance | trans}}</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Claim Status{% endtrans %}</td>
+                                                    <td>
+                                                        <a href="#" id="claim_status">{{ entity.status | trans}}</a>
+                                                        {% if entity.statusLastModified %}{{ '('~entity.statusLastModified|date('d.m.y H:i')~')' }}{% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Costs{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Smeta Status{% endtrans %}</td>
+                                                    <td></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                        		</div>
+                        		<div class="col-md-4">
+                                    <div id="performers" class="panel panel-default">
+                            			<div class="panel-heading">
+                            				<h3 class="panel-title">{% trans %}Performers{% endtrans %}</h3>
+                            			</div>
+                            			<div class="panel-body" style="overflow: auto">
+                            			     <div id="performers_body">
+                                			     {% for rule in entity.claimPerformerRules %}
+                                			         <p>{{ rule.claimPerformer }}
+                                                         <a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canEditFinanceData {{ rule.canEditFinanceData ? 'green' : 'default' }}"><i class="fa fa-usd"></i></a>
+                                                         <a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canPostToClients {{ rule.canPostToClients ? 'green' : 'default' }}"><i class="fa fa-pencil"></i></a>
+                                                         <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
+                                			         </p>
+                                			     {% endfor %}
+                            			     </div>
+                            			     {{ form_start(performerRuleForm) }}
+                                			     <div class="input-group">
+                        				               {{ form_widget(performerRuleForm.claimPerformer, {'attr' : {'class' : 'form-control select2me', 'placeholder': 'Select...' | trans}}) }}
+                            							<span class="input-group-btn">
+                            							     <button class="btn btn-cl green" type="submit">{% trans %}Add{% endtrans %}</button>
+                            							</span>
+                        						</div>
+                    						{{ form_end(performerRuleForm) }}
+                            			</div>
+                            		</div>
+                        		</div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_1_2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                        <td>{{ entity.incomeNDS }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Act Number{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Smeta Number{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Finance Status{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{% trans %}Costs + NDS{% endtrans %}</td>
+                                                        <td>{{ entity.costsAllNDS }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Profitability{% endtrans %}</td>
+                                                        <td>{{ entity.profitability }}/{{ entity.profitabilityProc }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Act Date{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Preliminary Smeta Cost{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{% trans %}Bill Date{% endtrans %}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for record in entity.financeRecords %}
+                                <div class="modal fade bs-modal-lg" id="costsN_{{ record.id }}" tabindex="-1" role="basic" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">{% trans %}Costs (cash){% endtrans %}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>{% trans %}Cost{% endtrans %}</td>
+                                                                <td>{% trans %}Value{% endtrans %}</td>
+                                                                <td>{% trans %}Actions{% endtrans %}</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="costs_{{ record.id }}">
+                                                            {% for cost in record.costsN %}
+                                                                <tr>
+                                                                    <td>{{ cost.type }}</td>
+                                                                    <td>{{ cost.value }}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    {{ form_start(costNalForms[record.id], {'attr' : {'class' : 'form-horizontal'}}) }}
+                                                        <div class="form-body">
+                                                            <div class="form-group">
+                                                                <label class="required control-label col-md-3">{% trans %}Cost{% endtrans%}</label>
+                                                                <div class="col-md-9">
+                                                                    {{ form_widget(costNalForms[record.id].type, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="required control-label col-md-3">{% trans %}Value{% endtrans%}</label>
+                                                                <div class="col-md-9">
+                                                                    {{ form_widget(costNalForms[record.id].value, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-actions fluid">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="col-md-offset-4">
+                                                                            <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{ form_end(costNalForms[record.id]) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div id="works" class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{% trans %}Works{% endtrans %}</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table id="fintable" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <td>#</td>
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
+                                                    <td>{% trans %}Work{% endtrans %}</td>
+                                                    <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Costs (cash){% endtrans %}</td>
+                                                    <td>{% trans %}Costs (no-cash) - NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Costs + NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Profitability{% endtrans %}</td>
+                                                    <td>{% trans %}Status{% endtrans %}</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="fins">
+                                                {% for key,record in entity.financeRecords %}
+                                                    <tr>
+                                                        <td>{{ key + 1 }}</td>
+                                                        <td>{{ record.mpk ? record.mpk : '' }}</td>
+                                                        <td>{{ record.work ? record.work : '' }}</td>
+                                                        <td>{{ record.incomeNDS ? record.incomeNDS : '' }}</td>
+                                                        <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
+                                                        <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
+                                                        <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
+                                                        <td>{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
+                                                        <td>{% trans %}Status{% endtrans %}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                {#<tr>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td></td>#}
+                                                {#</tr>#}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {{ form_start(financeForm, {'attr' : {'class' : 'form-horizontal'}}) }}
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}MPK{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.mpk, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Work{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.work, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Profit + NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.incomeNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Costs (no-cash) - NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.costsNonNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Costs + NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.costsNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-actions fluid">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-offset-6">
+                                                            <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{ form_end(financeForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="messages" class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title">{% trans %}Messages{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+                 <div class="note note-success">
+                     <h5 class="block">{{ entity.customer }} {{ entity.createdAt|date('d-m-Y H:i:s') }}</h5>
+                         {{ entity.text | raw('html') }}
+                         {% if entity.files is not empty %}
+                              <h5><br>{% trans %}Files{% endtrans %}:</h5>
+                              {% for file in entity.files %}
+                                  <p>
+                                      <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ file.getLink() }}">{{ file.originName }} </a>
+                                      {{ file.description is empty ? '' : '('~file.description~')'}}
+                                  </p>
+                              {% endfor %}
+                        {% endif %}
+                 </div>
+                 {% for message in messages %}
+                     <div class="note note-{% if message.staffOnly %}info{% else %}success{% endif %}">
+                        <h5 class="block">
+                          <a href="{{ path('sd_user_show', { id : message.user.id }) }}">{{ message.user }}</a>
+                          {{ message.createdAt|date('d-m-Y H:i:s') }}
+                          {% if message.staffOnly %}<span class="badge badge-info">{% trans %}Staff Only{% endtrans%}</span>{% endif %}
+                        </h5>
+                        {{ message.text | raw('html') }}
+                        {% if message.files is not empty %}
+                          <h5><br>{% trans %}Files{% endtrans %}:</h5>
+                          {% for file in message.files %}
+                              <p>
+                                  <a href="javascript:;" class="doclink" timestamp="{{ date().timestamp }}" value="{{ file.getLink() }}">{{ file.originName }} </a>
+                                  {{ file.description is empty ? '' : '('~file.description~')'}}
+                              </p>
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                 {% endfor %}
+                 <div id="my_msg"></div>
+                 {{ form_start(form) }}
+                 {{ form_widget(form.text) }}
+                 <div class="row">
+                     <div class="col-md-2">
+                        <button id="add_msg" type="submit" class="btn btn-default margin-top-10">{% trans %}Send{% endtrans %}</button>
+                     </div>
+                     <div class="col-md-2 margin-top-20">
+                        {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
+                        <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
+                     </div>
+                     <div class="col-md-8 margin-top-10">
+                        {{ form_widget(form.files)|raw }}
+                     </div>
+                 </div>
+                 {{ form_end(form) }}
+            </div>
+        </div>
+		<script>
+            $(document).ready(function() {
+                $(document).on('click', '.canEditFinanceData', function() {
+                    var element = $(this);
+                    var canEditFinanceData = $(this).hasClass('green');
+                    $.ajax({
+                        data: {
+                            rule_id: element.attr('value'),
+                            canEditFinanceData: !canEditFinanceData
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_ch_rule') }}",
+                        beforeSend: function () {
+                            SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                            if (canEditFinanceData) {
+                                element.removeClass('green');
+                                element.addClass('default');
+                            } else {
+                                element.removeClass('default');
+                                element.addClass('green');
+                            }
+                            SD.unblockUI($('#performers'));
+                        },
+                        error: function(response) {
+                            SD.unblockUI($('#performers'));
+                        }
+                    });
+                });
+                $(document).on('click', '.canPostToClients', function() {
+                    var element = $(this);
+                    var canPostToClients = $(this).hasClass('green');
+                    $.ajax({
+                        data: {
+                            rule_id: element.attr('value'),
+                            canPostToClients: !canPostToClients
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_ch_rule') }}",
+                        beforeSend: function () {
+                            SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                            if (canPostToClients) {
+                                element.removeClass('green');
+                                element.addClass('default');
+                            } else {
+                                element.removeClass('default');
+                                element.addClass('green');
+                            }
+                            SD.unblockUI($('#performers'));
+                        },
+                        error: function(response) {
+                            SD.unblockUI($('#performers'));
+                        }
+                    });
+                });
+            	$('#claim_status').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Status{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.status }}',
+                    source: {{ statuses | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_status') }}'
+                });
+                $('#claim_mpk').editable({
+                    type: 'text',
+                    title: '{% trans %}MPK{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_mpk') }}'
+                });
+            	$('#claim_type').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Type{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.type }}',
+                    source: {{ types | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_type') }}'
+                });
+            	$('#claim_importance').editable({
+                    type: 'select',
+                    title: '{% trans %}Claim Importance{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.importance.id }}',
+                    source: {{ importances | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_importance') }}'
+                });
+            	$(document).on('click', '.remove-performer', function() {
+                    var p = $(this).closest('p');
+            		$.ajax({
+                        data: {
+                            rule_id: $(this).val()
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_rm_rule') }}",
+                        beforeSend: function () {
+                        	SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                        	p.remove();
+                        	SD.unblockUI($('#performers'));
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#performers'));
+                        }
+                    });
+                });
+            	$('.select2').select2({
+                    allowClear: true
+                });
+            	$('.doclink').click(function(){
+                	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+                	url += '?';
+                	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+                	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+                	window.location = url;
+                });
+                $('#{{ form.vars.name }}_text').summernote({
+                	lang: 'ru-RU',
+                    'disableDragAndDrop': true,
+                    'disableLinkTarget': true,
+                    'onblur': function() {
+                        /** Костыль для страховки */
+                        $('#{{ form.vars.name }}_text').text($('#{{ form.vars.name }}_text').code());
+                    },
+                    'onImageUpload': function(files, editor, welEditable) {
+                        sendFile(files[0],editor,welEditable);
+                    }
+                });
+                function sendFile(file,editor,welEditable) {
+                    data = new FormData();
+                    data.append("file", file);
+                    $.ajax({
+                        data: data,
+                        type: "POST",
+                        url: "{{ path('claim_upload') }}",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(url) {
+                                editor.insertImage(welEditable, url);
+                        }
+                    });
+                }
+                $("form[name='{{ performerRuleForm.vars.name }}']").submit(function (e) {
+                	var formData = new FormData($(this)[0]);
+                	$.ajax({
+                    	url: "{{ path('claim_add_rule') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                        	SD.blockUI($('#performers'));
+                        },
+                        success: function(response) {
+                        	$('#performers_body').append(
+                                	'<p>' + response.performer + ' '
+                                     + '<a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="' + response.id + '" class="btn btn-xs canEditFinanceData default"><i class="fa fa-usd"></i></a>' + ' '
+                                     + '<a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="' + response.id + '" class="btn btn-xs canPostToClients default"><i class="fa fa-pencil"></i></a>'
+                                	 + '<button type="button" class="close remove-performer" value="'
+                                	 + response.id + '" aria-label="Remove"></button></p>');
+                        	SD.unblockUI($('#performers'));
+                        	$("#performerRuleForm_claimPerformer option[value="+ response.performer_id +"]").remove();
+                        	$("#performerRuleForm_claimPerformer").select2('destroy');
+                        	$("#performerRuleForm_claimPerformer").select2();
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#performers'));
+                        }
+                	});
+                	return false;
+                });
+                $("form[name='{{ financeForm.vars.name }}']").submit(function (e) {
+                    var formData = new FormData($(this)[0]);
+                    $.ajax({
+                        url: "{{ path('claim_add_fin') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            SD.blockUI($('#fintable'));
+                        },
+                        success: function(response) {
+                            $('#fins').append(
+                                    '<tr>'
+                                    + '<td>' + (Number($('#fins tr').last().children().first().text()) + 1) + '</td>'
+                                    + '<td>' + response.mpk + '</td>'
+                                    + '<td>' + response.work + '</td>'
+                                    + '<td>' + response.incomeNDS + '</td>'
+                                    + '<td>' + response.costsN + '</td>'
+                                    + '<td>' + response.costsNonNDS + '</td>'
+                                    + '<td>' + response.costsNDS + '</td>'
+                                    + '<td>' + response.profitability + '</td>'
+                                    + '<td>' + '</td>'
+                                    + '</tr>');
+                            $('#{{ financeForm.vars.name }}_mpk').val('');
+                            $('#{{ financeForm.vars.name }}_work').val('');
+                            $('#{{ financeForm.vars.name }}_incomeNDS').val('0');
+                            $('#{{ financeForm.vars.name }}_costsNonNDS').val('0');
+                            $('#{{ financeForm.vars.name }}_costsNDS').val('0');
+                            SD.unblockUI($('#fintable'));
+                        },
+                        error: function(response) {
+                            SD.unblockUI($('#fintable'));
+                        }
+                    });
+                    return false;
+                });
+                $("form[name='costNalForm']").submit(function (e) {
+                    var formData = new FormData($(this)[0]);
+                    $.ajax({
+                        url: "{{ path('claim_add_cost_nal') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#costs_' + response.id).append(
+                                    '<tr>'
+                                    + '<td>' + response.type + '</td>'
+                                    + '<td>' + response.value + '</td>'
+                                    + '<td>' + '</td>'
+                                    + '</tr>');
+                            $('#link_costsN_' + response.id).text(response.costsN);
+                        }
+                    });
+                    return false;
+                });
+                $("form[name='{{ form.vars.name }}']").submit(function (e) {
+                	var formData = new FormData($(this)[0]);
+                    $.ajax({
+                    	url: "{{ path('claim_add_msg') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                        	SD.blockUI($("form[name='{{ form.vars.name }}']"));
+                        },
+                        success: function(response) {
+                        	var time = moment.unix(response.createdAt);
+                        	var createdAt = time.format('DD-MM-YYYY HH:mm:ss');
+                        	var aHTML = $('#{{ form.vars.name }}_text').code();
+                        	var staffOnly = response.staffOnly ? 'info' : 'success';
+                        	var badge = response.staffOnly ? '<span class="badge badge-info">{% trans %}Staff Only{% endtrans%}</span>' : '';
+                        	var messageBody = '<div id="' + response.createdAt + '" class="note note-' + staffOnly + '">\
+                                                   <h5 class="block"><a href="'+ response.userLink+ '">' + response.user + '</a> ' + createdAt + ' ' + badge + '</h5>'
+                                                       + aHTML;
+                           if (response.files != undefined) {
+                        	   messageBody += '<h5><br>{% trans %}Files{% endtrans %}:</h5>';
+                        	   response.files.forEach(function(file) {
+                        		   messageBody += '<p><a href="javascript:;" class="doclink" timestamp="'+response.createdAt+'" value="'+file.link+'">'+file.name+'</a> ('+file.description+')</p>';
+                        	   });
+                        	   messageBody += '</div>';
+                           }
+                        	$('#my_msg').append(messageBody);
+                        	$('#{{ form.vars.name }}_text').code('<p><br></p>');
+                        	
+                            var files = document.getElementById('{{ form.vars.name }}_files');
+                            while (files.childNodes.length > 1) {
+                            	files.removeChild(files.firstChild);
+                            }
+                        	
+                        	$('.doclink').click(function(){
+                            	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
+                            	url += '?';
+                            	url += encodeURI('path') + '=' + encodeURI($(this).attr('value')) + '&';
+                            	url += encodeURI('timestamp') + '=' + encodeURI($(this).attr('timestamp')) + '&';
+                            	window.location = url;
+                            });
+                        	SD.unblockUI($("form[name='{{ form.vars.name }}']"));
+                        	$('#' + response.createdAt).pulsate({
+                                color: "#bf1c56",
+                                reach: 40,
+                                speed: 100,
+                                repeat: 2
+                            });
+                        },
+                        error: function(response) {
+                        	$('#{{ form.vars.name }}_text').code('<p><br></p>');
+                        	$('#my_msg').prepend(
+                            '<div class="alert alert-warning alert-dismissable">\
+        						<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\
+        						{% trans %}<strong>Warning!</strong> Something went wrong. Please check.{% endtrans %}\
+        					</div>'
+        					);
+                        	SD.unblockUI($("form[name='{{ form.vars.name }}']"));
+                        }
+                    });
+                    return false;
+                });
+            });
+        </script>
+{% endblock %}

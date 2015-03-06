@@ -28,6 +28,7 @@ parameters:
         - pay_master
         - fos_user
         - stuff
+        - sd_claim
     sd.host: http://itdoors.jelastic.neohost.net
     # AMI CONFIG
     ami.host: 193.242.166.54

@@ -6292,6 +6292,32 @@ class AjaxController extends BaseFilterController
     /**
      * @return Response
      */
+    public function getDepartmentsByOrganizationIdAjaxAction()
+    {
+        $orgId = $this->get('request')->query->get('orgId');
+        $searchText = $this->get('request')->query->get('query');
+
+        $result = [];
+        $departments = $this
+            ->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->getDepartmentsForOrganizationQuery($searchText, $orgId);
+
+        foreach ($departments as $department) {
+            $result[] = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getCity() . ', ' . $department->getName(),
+                'text' => $department->getCity() . ', ' . $department->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
     public function departmentAction()
     {
 

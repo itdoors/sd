@@ -1,0 +1,30 @@
+contact:
+    path:     /
+    defaults: { _controller: "ListsIndividualBundle:Contact:index" }
+
+contact_show:
+    path:     /{id}/show
+    defaults: { _controller: "ListsIndividualBundle:Contact:show" }
+
+contact_new:
+    path:     /new
+    defaults: { _controller: "ListsIndividualBundle:Contact:new" }
+
+contact_create:
+    path:     /create
+    defaults: { _controller: "ListsIndividualBundle:Contact:create" }
+    requirements: { _method: post }
+
+contact_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ListsIndividualBundle:Contact:edit" }
+
+contact_update:
+    path:     /{id}/update
+    defaults: { _controller: "ListsIndividualBundle:Contact:update" }
+    requirements: { _method: post|put }
+
+contact_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ListsIndividualBundle:Contact:delete" }
+    requirements: { _method: post|delete }

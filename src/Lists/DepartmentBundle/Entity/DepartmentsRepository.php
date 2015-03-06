@@ -339,12 +339,36 @@ class DepartmentsRepository extends EntityRepository
     public function getDepartmentsForCityQuery($searchText, $cityId)
     {
         $sql = $this->createQueryBuilder('d')
-        ->innerJoin('d.city', 'c')
-        ->where('lower(d.name) LIKE :q')
-        ->orWhere('lower(d.address) LIKE :q')
-        ->andWhere('c.id = :cityId')
-        ->setParameter(':cityId', $cityId)
-        ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
+            ->innerJoin('d.city', 'c')
+            ->where('lower(d.name) LIKE :q')
+            ->orWhere('lower(d.address) LIKE :q')
+            ->andWhere('c.id = :cityId')
+            ->setParameter(':cityId', $cityId)
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
+
+    /**
+     * getDepartmentsForOrganizationQuery
+     *
+     * @param string  $searchText
+     * @param integer $orgId
+     *
+     * @return array
+     */
+    public function getDepartmentsForOrganizationQuery($searchText, $orgId)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->innerJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
+            ->where('lower(d.name) LIKE :q')
+            ->orWhere('lower(d.address) LIKE :q')
+            ->andWhere('o.id = :orgId')
+            ->orderBy('c.name', 'ASC')
+            ->addOrderBy('d.address', 'ASC')
+            ->setParameter(':orgId', $orgId)
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
 
         return $sql->getQuery()->getResult();
     }

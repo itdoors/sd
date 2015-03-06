@@ -1,0 +1,43 @@
+client:
+    path:     /
+    defaults: { _controller: "SDBusinessRoleBundle:Client:index" }
+
+client_show:
+    path:     /{id}/show
+    defaults: { _controller: "SDBusinessRoleBundle:Client:show" }
+
+client_new:
+    path:     /new
+    defaults: { _controller: "SDBusinessRoleBundle:Client:new" }
+
+client_create:
+    path:     /create
+    defaults: { _controller: "SDBusinessRoleBundle:Client:create" }
+    requirements: { _method: post }
+    
+client_create_person:
+    path:     /create_person
+    defaults: { _controller: "SDBusinessRoleBundle:Client:createPersonClient" }
+    requirements: { _method: post }
+
+client_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SDBusinessRoleBundle:Client:edit" }
+
+client_update:
+    path:     /{id}/update
+    defaults: { _controller: "SDBusinessRoleBundle:Client:update" }
+    requirements: { _method: post|put }
+
+client_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SDBusinessRoleBundle:Client:delete" }
+    requirements: { _method: post|delete }
+    
+clients_by_department_id:
+    pattern:  /ajax/clients_by_department_id
+    defaults: { _controller: "SDBusinessRoleBundle:Ajax:getClientsByDepartmentIdAjax" }
+    
+importances_by_organizanization_id:
+    pattern:  /ajax/importances_by_organizanization_id
+    defaults: { _controller: "SDBusinessRoleBundle:Ajax:getImportancesByOrganizationIdAjax" }

@@ -1060,6 +1060,66 @@
                             </a>
             </li>
             {% endif %}
+            <li{% if 
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('claim') or
+                (
+                    app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('claim_show',app.request.attributes.get('_route_params'))
+                ) or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('claim_new') or
+                (
+                    app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('claim_edit',app.request.attributes.get('_route_params'))
+                ) or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client') or
+                (
+                    app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client_show',app.request.attributes.get('_route_params'))
+                ) or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client_new') or
+                (
+                    app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client_new',app.request.attributes.get('_route_params'))
+                )
+                %} class="active open"{% endif %}>
+                <a href="javascript:;">
+                    <i class="icon-grid"></i>
+                    <span class="title">{% trans %}Service Desk{% endtrans %}</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul  class="sub-menu">
+                    <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('claim') %} class="active"{% endif %}>
+                        <a href="{{ path('claim') }}">
+                            <i class="icon-list"></i>
+                            <span class="title">{% trans %}Active Claims{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('claim_archive') %} class="active"{% endif %}>
+                        <a href="{{ path('claim_archive') }}">
+                            <i class="icon-layers"></i>
+                            <span class="title">{% trans %}Archive Claims{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('client') %} class="active"{% endif %}>
+                        <a href="{{ path('client') }}">
+                            <i class="icon-users"></i>
+                            <span class="title">{% trans %}Clients{% endtrans %}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
     </ul>
         <!-- END SIDEBAR MENU -->
     </div>

@@ -58,3 +58,16 @@ Lists\IndividualBundle\Entity\Individual:
         actions:
             targetEntity: Lists\CoachBundle\Entity\Action
             mappedBy: individuals
+    oneToMany:
+        businessRoles:
+            targetEntity: SD\BusinessRoleBundle\Entity\BusinessRole
+            mappedBy: individual
+        contacts:
+            targetEntity: Lists\IndividualBundle\Entity\Contact
+            mappedBy: individual
+            orphanRemoval: true
+            cascade: ["persist"]
+    oneToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            mappedBy: individual

@@ -204,5 +204,39 @@ Closed: Закрытые
 List project: Список проектов
 Add a file: Добавить файл
 State tenders: Гос. тендеры
+
+#Service Desk
+Active Claims: Активные
+Archive Claims: Архив
+Clients: Клиенты
+
+Add: Добавить
+
+#status
+sta_sclose_smclose_cclose: Выполнена
+sta_open: Открыта
+sta_sappointed_smwait: Передана
+sta_sclose_smwait: В работе
+sta_sclose_smwait_cwait: Утверждение
+sta_sclose_smclose_cwait: Отклонена
+sta_smeta_composу: Составление
+sta_smeta_approve: Утверждение
+sta_smeta_conform: Согласована
+sta_smeta_cancel: Отклонена
+sta_smet: На смете
+
+#type
+cleaning: Клининг
+tech: Техническое Обслуживание, ...  
+green_comfort_it: Озеленение, комфорт, IT   
+catering: Кейтеринг
+complaint: Жалоба
+opinion: Мнение
+other: Без рубрики  
+transportation: Перевозки, грузчики 
+property: Проперти
+pest: Контроль вредителей   
+act_collection: Сбор актов  
+
 Report: Рапорт
 Payers: Плательщики

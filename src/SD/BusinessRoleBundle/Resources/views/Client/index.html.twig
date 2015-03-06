@@ -1,0 +1,174 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDBusinessRoleBundle' %}
+{% block title %}{% trans %}Clients{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Clients{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('client') }}" title="{% trans %}Clients{% endtrans %}">{% trans %}Clients{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body">
+                <div class="table-toolbar">
+    				<div class="row">
+    					<div class="col-md-6">
+{#                                 {% if is_granted('ROLE_ARTICLEADMIN') %}#}
+    							<a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add person client{% endtrans %}">
+                                    <i class="fa fa-plus"></i> {% trans %}Физ.лицо{% endtrans %}
+                                </a>
+                                <a class="btn btn-cl green" href="{{ path('client_new') }}" title="{% trans %}Add company client{% endtrans %}">
+                                    <i class="fa fa-plus"></i> {% trans %}Company{% endtrans %}
+                                </a>
+{#                                 <a class="btn btn-cl green" href="{{ path('companyclient_new') }}" title="{% trans %}Add{% endtrans %}">#}
+{#                                     {% trans %}Add company client{% endtrans %}#}
+{#                                 </a>#}
+{#                                 {% endif %}#}
+    					</div>
+    				</div>
+    			</div>
+                <table class="table table-striped table-bordered table-hover" id="clients_table">
+                    <thead>
+                        <tr role="row" class="heading">
+                            <th width="10%">{% trans %}ID{% endtrans %}</th>
+                            <th width="15%">{% trans %}Last name{% endtrans %}</th>
+                            <th width="15%">{% trans %}Middle name{% endtrans %}</th>
+                            <th width="15%">{% trans %}First name{% endtrans %}</th>
+                            <th width="10%">{% trans %}Birthday{% endtrans %}</th>
+                            <th width="15%">{% trans %}INN{% endtrans %}</th>
+                            <th width="10%">{% trans %}Type{% endtrans %}</th>
+{#                         {% if is_granted('ROLE_ARTICLEADMIN') %}#}
+                            <th width="10%">{% trans %}Actions{% endtrans %}</th>
+{#                         {% endif %}#}
+                        </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                        {% for entity in entities %}
+                        <tr>
+                            <td>{{ entity.id }}</td>
+                            <td><a href="{{ path('client_show', { 'id': entity.id }) }}">{{ entity.individual.lastName }}</td>
+                            <td>{{ entity.individual.middleName }}</td>
+                            <td>{{ entity.individual.firstName }}</td>
+                            <td>{% if entity.individual.birthday %}{{ entity.individual.birthday|date('Y-m-d') }}{% endif %}</td>
+                            <td>{{ entity.individual.tin }}</td>
+                            <td>
+                                {% if entity.originOrganizations is defined %}
+									<span class="label label-success">{% trans %}Company{% endtrans %}</span>
+                                {% else %}
+                                    <span class="label label-default">{% trans %}Person{% endtrans %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('client_show', { 'id': entity.id }) }}">show </a>
+                                <a href="{{ path('client_edit', { 'id': entity.id }) }}">edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {       
+        	TableManaged.init();
+        });
+        var TableManaged = function () {
+            var initTable1 = function () {
+                var table = $('#clients_table');
+                table.dataTable({
+                	"language": {
+    	                "aria": {
+    	                    "sortAscending": ": activate to sort column ascending",
+    	                    "sortDescending": ": activate to sort column descending"
+    	                },
+    	                "emptyTable": "No data available in table",
+    	                "info": "Результаты с _START_ по _END_ из _TOTAL_ найденых",
+    	                "infoEmpty": "Ничего не найдено",
+    	                "infoFiltered": "(из _MAX_ записей)",
+    	                "lengthMenu": "Show _MENU_ entries",
+    	                "search": "Поиск:",
+    	                "zeroRecords": "Ничего не найдено",
+   	                	"search": "Поиск: ",
+       	                "lengthMenu": "  _MENU_ записей",
+       	                "paginate": {
+       	                    "previous":"Назад",
+       	                    "next": "Далее",
+       	                    "last": "В конец",
+       	                    "first": "В начало"
+       	                }
+    	            },
+                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                    "columns": [{
+                        "orderable": true
+                    }, {
+                        "orderable": true
+                    }, {
+                        "orderable": true
+                    }, {
+                        "orderable": true
+                    }, {
+                    	"orderable": true
+                    }, {
+                    	"orderable": true
+                    }, {
+                        "orderable": true
+                    }, {
+                    	"orderable": false
+                    }],
+                    "lengthMenu": [
+                        [5, 15, 20, -1],
+                        [5, 15, 20, "Все"] // change per page values here
+                    ],
+                    "pageLength": 15,            
+                    "pagingType": "bootstrap_full_number",
+                    "columnDefs": [{  // set default column settings
+                        'orderable': false,
+                        'targets': [0]
+                    }, {
+                        "searchable": false,
+                        "targets": [0]
+                    }],
+                    "order": [
+                        [1, "asc"]
+                    ] // set first column as a default sort by asc
+                });
+            }
+        
+            return {
+                init: function () {
+                    if (!jQuery().dataTable) {
+                        return;
+                    }
+                    initTable1();
+                }
+            };
+        }();
+    </script>
+{% endblock body %}

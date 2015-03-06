@@ -1,0 +1,79 @@
+claim:
+    path:     /
+    defaults: { _controller: "SDServiceDeskBundle:Claim:index" }
+    
+claim_archive:
+    path:     /archive
+    defaults: { _controller: "SDServiceDeskBundle:Claim:archiveIndex" }
+
+claim_show:
+    path:     /{id}/show
+    defaults: { _controller: "SDServiceDeskBundle:Claim:show" }
+
+claim_new:
+    path:     /new
+    defaults: { _controller: "SDServiceDeskBundle:Claim:new" }
+
+claim_create:
+    path:     /create
+    defaults: { _controller: "SDServiceDeskBundle:Claim:create" }
+    requirements: { _method: post }
+    
+claim_upload:
+    path:     /upload
+    defaults: { _controller: "SDServiceDeskBundle:Claim:upload" }
+    requirements: { _method: post }
+
+claim_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SDServiceDeskBundle:Claim:edit" }
+
+claim_update:
+    path:     /{id}/update
+    defaults: { _controller: "SDServiceDeskBundle:Claim:update" }
+    requirements: { _method: post|put }
+
+claim_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SDServiceDeskBundle:Claim:delete" }
+    requirements: { _method: post|delete }
+
+claim_add_msg:
+    path:     /add_msg
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addMsg" }
+
+claim_add_fin:
+    path:     /claim_add_fin
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addFinanceRecord" }
+
+claim_add_cost_nal:
+        path:     /claim_add_cost_nal
+        defaults: { _controller: "SDServiceDeskBundle:Claim:addCostNal" }
+    
+claim_add_rule:
+    path:     /add_rule
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addRule" }
+    
+claim_rm_rule:
+    path:     /rm_rule
+    defaults: { _controller: "SDServiceDeskBundle:Claim:removeRule" }
+
+claim_ch_rule:
+    path:     /claim_ch_rule
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeRule" }
+
+claim_ch_status:
+    path:     /ch_status
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeStatus" }
+
+claim_ch_mpk:
+    path:     /claim_ch_mpk
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeMPK" }
+    
+claim_ch_type:
+    path:     /ch_type
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeType" }
+    
+claim_ch_importance:
+    path:     /ch_importance
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeImportance" }    

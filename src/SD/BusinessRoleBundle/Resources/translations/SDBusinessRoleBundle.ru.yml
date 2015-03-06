@@ -1,0 +1,32 @@
+#Client
+Dashboard: Рабочий стол
+Add: Добавить
+add: добавить
+Edit: Изменить
+edit: изменить
+Cancel: Отмена
+Select...:  Выберите...
+Input...:  Введите...
+Clients: Клиенты
+Last name: Фамилия
+Middle name: Отчество
+First name: Имя
+Birthday: Дата рождения
+INN: ИНН
+Actions: Действия
+
+Type: Тип
+Add person client: Новый клиент-физ.лицо
+Add company client: Новый клиент-компания
+Company: Компания
+Person: Физ.лицо
+Select existing: Выбрать существующее
+Add new: Создать новое
+Passport: Пасспорт
+Address: Адрес
+Phone: Телефон
+
+Contacts: Контакты
+Origin organizations: Происхождение
+Granted organizations: Доступные организации
+Departments: Доступные отделения

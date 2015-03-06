@@ -1,0 +1,7 @@
+SDServiceDeskBundle_claim:
+        resource: "@SDServiceDeskBundle/Resources/config/routing/claim.yml"
+        prefix:   /claim
+        
+SDServiceDeskBundle_claimdepartment:
+        resource: "@SDServiceDeskBundle/Resources/config/routing/claimdepartment.yml"
+        prefix:   /claimdepartment

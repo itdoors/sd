@@ -65,6 +65,9 @@ SD\UserBundle\Entity\User:
         stuff:
             targetEntity: Stuff
             mappedBy: user
+        individual:
+            targetEntity: Lists\IndividualBundle\Entity\Individual
+            inversedBy: user
     oneToMany:
         organizationUsers:
             targetEntity: Lists\OrganizationBundle\Entity\OrganizationUser

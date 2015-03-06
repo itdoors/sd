@@ -1,0 +1,102 @@
+Dashboard: Рабочий стол
+Add: Добавить
+add: добавить
+Edit: Изменить
+edit: изменить
+Claims: Заявки
+Claim Type: Тип
+Text: Текст
+Files: Файлы
+Claim Status: Статус
+Claim Importance: Важность
+Created: Создана
+Closed: Дата закрытия
+Customer: Клиент
+Performers: Исполнители
+Curators: Кураторы
+Cancel: Отмена
+Send: Отправить
+Select...:  Выберите...
+Input...: Введите...
+Actions: Действия
+Messages: Сообщения
+Staff Only: Только персоналу
+Cause: Суть
+Target: Объект
+
+Address: Адрес
+City: Город
+Organization: Организация
+Companystructure: Отделение
+Self Organization: Организация-исполнитель
+Status: Статус
+Active: активна
+Disabled: неактивна
+Company: Компания
+Person: Физ.лицо
+Add person client: Новый клиент-физ.лицо
+Customer Type: Тип клиента
+Claim Target: Объект заявки
+
+<strong>Warning!</strong> Something went wrong. Please check.: <strong>Ошибка!</strong> Не получилось передать сообщение. Попробуйте позже.
+
+#status
+sta_sclose_smclose_cclose: Выполнена
+sta_open: Открыта
+sta_sappointed_smwait: Передана
+sta_sclose_smwait: В работе
+sta_sclose_smwait_cwait: Утверждение
+sta_sclose_smclose_cwait: Отклонена
+sta_smeta_composу: Составление
+sta_smeta_approve: Утверждение
+sta_smeta_conform: Согласована
+sta_smeta_cancel: Отклонена
+sta_smet: На смете
+
+#type
+cleaning: Клининг
+tech: Техническое Обслуживание, ...  
+green_comfort_it: Озеленение, комфорт, IT   
+catering: Кейтеринг
+complaint: Жалоба
+opinion: Мнение
+other: Без рубрики  
+transportation: Перевозки, грузчики 
+property: Проперти
+pest: Контроль вредителей   
+act_collection: Сбор актов  
+
+New Personal Claim: Новая заявка от физ.лица
+Personal Claim: От физ.лица
+New Company Claim: Новая заявка от клиента-компании
+Company Claim: От компании
+
+Main: Основное
+Finance: Финансы
+Number: Номер
+Scale: Масштаб
+empty: не задан
+MPK: МПК
+Profit + NDS: Доход с НДС
+Costs: Затраты
+Smeta Status: Статус сметы
+Docs: Документы
+Act Number: Номер акта
+Smeta Number: Номер сметы
+Finance Status: Финансовый статус
+Costs + NDS: Затраты (общие с НДС)
+Profitability: Рентабельность
+Act Date: Дата акта
+Preliminary Smeta Cost: Предварительная сметная стоимость
+Bill Date: Дата счёта
+Works: Работы
+Work: Работа
+Costs (cash): Затраты (нал)
+Costs (no-cash) - NDS: Затраты безнал без НДС
+Result: Итого
+Cost: Расходы
+Value: Количество
+
+
+Can post to clients: Может писать клиентам
+Can edit finance data: Может редактировать фин. данные
