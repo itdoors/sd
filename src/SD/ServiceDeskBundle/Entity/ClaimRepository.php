@@ -50,8 +50,14 @@ class ClaimRepository extends EntityRepository
             ->leftJoin('c.claimPerformerRules', 'cpr')
             ->leftJoin('cpr.claimPerformer', 'cp')
             ->leftJoin('cp.individual', 'i')
-            //->leftJoin('i.user', 'u')
-            ->where('i.u = :user')
+            ->leftJoin('i.user', 'u')
+            ->where('u = :user')
             ->setParameter(':user', $user);
+
+        $result =  $result->getQuery()
+            ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true)
+            ->getResult();
+
+        return $result;
     }
 }

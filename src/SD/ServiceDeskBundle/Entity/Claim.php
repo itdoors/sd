@@ -757,11 +757,11 @@ class Claim
     /**
      * Set finStatus
      *
-     * @param \finStatusType $finStatus
+     * @param string $finStatus
      *
      * @return Claim
      */
-    public function setFinStatus(\finStatusType $finStatus)
+    public function setFinStatus($finStatus)
     {
         $this->finStatus = $finStatus;
 
@@ -771,7 +771,7 @@ class Claim
     /**
      * Get finStatus
      *
-     * @return \finStatusType
+     * @return finStatusType
      */
     public function getFinStatus()
     {

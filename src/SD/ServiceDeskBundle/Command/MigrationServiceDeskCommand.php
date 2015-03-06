@@ -23,6 +23,7 @@ use SD\ServiceDeskBundle\Entity\ClaimMessage;
 use SD\ServiceDeskBundle\Entity\ClaimPerformerRule;
 use SD\ServiceDeskBundle\Entity\ClaimType;
 use SD\ServiceDeskBundle\Entity\CostNal;
+use SD\ServiceDeskBundle\Entity\FinStatusType;
 use SD\ServiceDeskBundle\Entity\ImportanceType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
 use SD\ServiceDeskBundle\Entity\StatusType;
@@ -115,6 +116,8 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $claimSmetaStatusId = $claim['smeta_status_id'];
             $claimSmetaNumber = $claim['smeta_number'];
             $claimSmetaCosts = $claim['smeta_costs'];
+            $claimAktDate = $claim['akt_date'];
+
             $claimMpk = $claim['mpk'];
 
             $stmtClaimStatus = $conn->prepare('
@@ -200,6 +203,23 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                 ->getRepository('ListsDepartmentBundle:Departments')
                 ->find($claimDepartmentId);
             $sd_claim->setTargetDepartment($department);
+
+            $sd_claim->setAkt($claimBillNumber);
+
+            if ($claimAktDate) {
+                $sd_claim->setAktDate(new \DateTime($claimAktDate));
+            }
+            if ($claimBillDate) {
+                $sd_claim->setBillDate(new \DateTime($claimBillDate));
+            }
+            $sd_claim->setSmeta($claimSmetaNumber);
+            $sd_claim->setSmetaCost($claimSmetaCosts);
+            if ($claimIsclosedstuff) {
+                $sd_claim->setFinStatus(FinStatusType::OPENED);
+            } else {
+                $sd_claim->setFinStatus(FinStatusType::CLOSED);
+            }
+
             //$sd_claim->setMessages();
             //$sd_claim->setCustomer();
             //$sd_claim->addClaimPerformerRules();

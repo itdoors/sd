@@ -41,13 +41,14 @@ class ClaimDepartmentRepository extends EntityRepository
             ->where('c.closedAt is NULL');
             if (!$user) {
                 $query = $query
-                    ->andWhere('i.u = :user')
+                    ->leftJoin('i.user', 'u')
+                    ->andWhere('u = :user')
                     ->setParameter(':user', $user);
             }
 //             ->andWhere('c.status != :rejected')
 //             ->setParameter('done', StatusType::DONE)
 //             ->setParameter('rejected', StatusType::REJECTED)
-            $query->getQuery()
+            $query = $query->getQuery()
                 ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
 
         return $query->getResult();
