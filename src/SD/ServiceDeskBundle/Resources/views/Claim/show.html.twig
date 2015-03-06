@@ -126,15 +126,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Profit + NDS{% endtrans %}</td>
-                                                    <td></td>
+                                                    <td>{{ entity.incomeNDS }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Costs{% endtrans %}</td>
-                                                    <td></td>
+                                                    <td>{{ entity.costsAllNDS }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Smeta Status{% endtrans %}</td>
-                                                    <td></td>
+                                                    <td><a href="#" id="claim_smeta_status"></a></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -190,7 +190,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Finance Status{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_fin_status">{{ entity.finStatus ? entity.finStatus : '' }}</a></td>
+                                                        <td><a href="#" id="claim_fin_status"></a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -212,15 +212,15 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Date{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_act_date">{{ entity.aktDate ? entity.aktDate|date('d.m.Y') : '' }}</a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Preliminary Smeta Cost{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_smeta_cost">{{ entity.smetaCost ? entity.smetaCost : '' }}</a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Bill Date{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td><a href="#" id="claim_bill_date">{{ entity.billDate ? entity.billDate|date('d.m.Y') : '' }}</a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -496,6 +496,15 @@
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_status') }}'
                 });
+                $('#claim_smeta_status').editable({
+                    type: 'select',
+                    title: '{% trans %}Smeta Status{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.smetaStatus }}',
+                    source: {{ statuses | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_smeta_status') }}'
+                });
                 $('#claim_mpk').editable({
                     type: 'text',
                     title: '{% trans %}MPK{% endtrans %}'
@@ -514,14 +523,40 @@
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_smeta') }}'
                 });
+                $('#claim_smeta_cost').editable({
+                    type: 'text',
+                    title: '{% trans %}Preliminary Smeta Cost{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_smeta_cost') }}'
+                });
                 $('#claim_fin_status').editable({
                     type: 'select',
-                    title: '{% trans %}Finance Status{% endtrans %}'
+                    title: '{% trans %}Finance Status{% endtrans %}',
                     placement: 'right',
                     value: '{{ entity.finStatus }}',
                     source: {{ finStatuses | join(',') | raw }}
                     ,pk: {{ entity.id }}
                     ,url: '{{ path('claim_ch_fin_status') }}'
+                });
+                $('#claim_act_date').editable({
+                    type: 'combodate',
+                    value: '{{ entity.aktDate ? entity.aktDate|date('d.m.Y') : '' }}',
+                    format: 'DD.MM.YYYY',
+                    viewformat: 'DD.MM.YYYY',
+                    template: 'DD / MM / YYYY',
+                    title: '{% trans %}Act Date{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_akt_date') }}'
+                });
+                $('#claim_bill_date').editable({
+                    type: 'combodate',
+                    value: '{{ entity.billDate ? entity.billDate|date('d.m.Y') : '' }}',
+                    format: 'DD.MM.YYYY',
+                    viewformat: 'DD.MM.YYYY',
+                    template: 'DD / MM / YYYY',
+                    title: '{% trans %}Bill Date{% endtrans %}'
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_bill_date') }}'
                 });
             	$('#claim_type').editable({
                     type: 'select',

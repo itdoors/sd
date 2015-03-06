@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use SD\ServiceDeskBundle\Entity\ClaimDepartment;
 use SD\ServiceDeskBundle\Form\ClaimDepartmentType;
 use SD\ServiceDeskBundle\Entity\StatusType;
+use SD\ServiceDeskBundle\Entity\FinStatusType;
 
 /**
  * ClaimDepartment controller.
@@ -58,6 +59,7 @@ class ClaimDepartmentController extends Controller
         $entity->setTargetDepartment($targetDepartment);
         $entity->setCreatedAt(new \DateTime());
         $entity->setStatus(StatusType::OPEN);
+        $entity->setFinStatus(FinStatusType::OPENED);
         $entity->setCustomer($em->getRepository('SDBusinessRoleBundle:CompanyClient')->find($form['customer']));
         $entity->setImportance($em->getRepository('SDServiceDeskBundle:ClaimImportance')->find($form['importance']));
         $entity->setType($form['type']);
