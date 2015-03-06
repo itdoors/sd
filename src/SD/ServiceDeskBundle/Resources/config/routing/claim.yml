@@ -80,4 +80,32 @@ claim_ch_type:
     
 claim_ch_importance:
     path:     /ch_importance
-    defaults: { _controller: "SDServiceDeskBundle:Claim:changeImportance" }    
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeImportance" }
+
+claim_ch_akt:
+    path:     /claim_ch_akt
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeAkt" }
+
+claim_ch_smeta:
+    path:     /claim_ch_smeta
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeSmeta" }
+
+claim_ch_fin_status:
+    path:     /claim_ch_fin_status
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinStatus" }
+
+claim_ch_akt_date:
+    path:     /claim_ch_akt_date
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeAktDate" }
+
+claim_ch_bill_date:
+    path:     /claim_ch_bill_date
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeBillDate" }
+
+claim_ch_smeta_cost:
+    path:     /claim_ch_smeta_cost
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeSmetaCost" }
+
+claim_ch_smeta_status:
+    path:     /claim_ch_smeta_status
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeSmetaStatus" }

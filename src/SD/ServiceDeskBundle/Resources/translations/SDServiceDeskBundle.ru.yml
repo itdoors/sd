@@ -97,6 +97,9 @@ Result: Итого
 Cost: Расходы
 Value: Количество
 
+opened: Открыта
+closed: Закрыта
+
 
 Can post to clients: Может писать клиентам
 Can edit finance data: Может редактировать фин. данные

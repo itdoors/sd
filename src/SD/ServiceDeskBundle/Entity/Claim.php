@@ -114,6 +114,20 @@ class Claim
     protected $finStatus;
 
     /**
+     * @var StatusType
+     *
+     * @ORM\Column(name="smeta_status", type="statusType", nullable=true)
+     */
+    protected $smetaStatus;
+
+    /**
+     * @var OrganizationType
+     *
+     * @ORM\Column(name="org_type", type="organizationType", nullable=true)
+     */
+    protected $organizationType;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="mpk", type="string", length=255, nullable=true)
@@ -757,11 +771,11 @@ class Claim
     /**
      * Set finStatus
      *
-     * @param \finStatusType $finStatus
+     * @param string $finStatus
      *
      * @return Claim
      */
-    public function setFinStatus(\finStatusType $finStatus)
+    public function setFinStatus($finStatus)
     {
         $this->finStatus = $finStatus;
 
@@ -776,6 +790,55 @@ class Claim
     public function getFinStatus()
     {
         return $this->finStatus;
+    }
+
+
+    /**
+     * Set smetaStatus
+     *
+     * @param statusType $smetaStatus
+     *
+     * @return Claim
+     */
+    public function setSmetaStatus($smetaStatus)
+    {
+        $this->smetaStatus = $smetaStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get smetaStatus
+     *
+     * @return statusType
+     */
+    public function getSmetaStatus()
+    {
+        return $this->smetaStatus;
+    }
+
+    /**
+     * Set organizationType
+     *
+     * @param organizationType $organizationType
+     *
+     * @return Claim
+     */
+    public function setOrganizationType($organizationType)
+    {
+        $this->organizationType = $organizationType;
+
+        return $this;
+    }
+
+    /**
+     * Get organizationType
+     *
+     * @return organizationType
+     */
+    public function getOrganizationType()
+    {
+        return $this->organizationType;
     }
 
     protected $incomeNDS = 0;

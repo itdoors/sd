@@ -4,6 +4,7 @@ namespace SD\ServiceDeskBundle\Controller;
 
 use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
 use SD\ServiceDeskBundle\Entity\CostNal;
+use SD\ServiceDeskBundle\Entity\FinStatusType;
 use SD\ServiceDeskBundle\Form\ClaimFinanceRecordType;
 use SD\ServiceDeskBundle\Form\CostNalType;
 use Symfony\Component\HttpFoundation\Request;
@@ -163,6 +164,160 @@ class ClaimController extends Controller
         $em->persist($entity);
         $em->flush();
     
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's akt (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeAktAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $akt = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setAkt($akt);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's smeta (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeSmetaAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $smeta = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setSmeta($smeta);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's finStatus (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinStatusAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $status = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setFinStatus($status);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's aktDate (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeAktDateAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $date = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setAktDate(new \DateTime($date));
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's billDate (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeBillDateAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $date = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setBillDate(new \DateTime($date));
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's smetaCost (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeSmetaCostAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $cost = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setSmetaCost($cost);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's smetaStatus (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeSmetaStatusAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $cost = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setSmetaStatus($cost);
+
+        $em->persist($entity);
+        $em->flush();
+
         return new JsonResponse();
     }
 
@@ -404,6 +559,7 @@ class ClaimController extends Controller
         $form->handleRequest($request);
         
         $entity->setStatus(StatusType::OPEN);
+        $entity->setFinStatus(FinStatusType::OPENED);
         $entity->setCreatedAt(new \DateTime());
 
         if ($form->isValid()) {
@@ -574,6 +730,14 @@ class ClaimController extends Controller
             ];
         }
 
+        $finStatuses = [];
+        foreach (\SD\ServiceDeskBundle\Entity\FinStatusType::values() as $value) {
+            $finStatuses[] = [
+                'value' => $value,
+                'text' => $this->get('translator')->trans($value)
+            ];
+        }
+
         return $this->render('SDServiceDeskBundle:Claim:show.html.twig', array(
             'entity' => $entity,
             'form' => $messageForm->createView(),
@@ -582,6 +746,7 @@ class ClaimController extends Controller
             'importances' => json_encode($importances),
             'statuses' => json_encode($statuses),
             'types' => json_encode($types),
+            'finStatuses' => json_encode($finStatuses),
             'costNalForms' => $costNalForms,
             'messages' => $messages
         ));
