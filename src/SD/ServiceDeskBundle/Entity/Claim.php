@@ -612,8 +612,8 @@ class Claim
         $costsAllNDS = 0;
         foreach ($this->financeRecords as $record) {
             $costsAllNDS += $record->getCostsNSum() *
-                            $record->getObnal() *
-                            $record->getNds();
+                            (1 + $record->getObnal()) *
+                            (1 + $record->getNds());
 
             $costsAllNDS += $record->getCostsNDS();
             $costsAllNDS += $record->getCostsNonNDS();
@@ -634,7 +634,10 @@ class Claim
 
     public function getProfitabilityProc()
     {
-        return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
+        if ($this->getIncomeNDS() != 0)
+            return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
+        else
+            return 0;
     }
 }
 

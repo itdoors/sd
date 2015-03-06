@@ -178,7 +178,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Profit + NDS{% endtrans %}</td>
-                                                        <td>{{ entity.incomeNDS }}</td>
+                                                        <td id="incomeNDS">{{ entity.incomeNDS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Number{% endtrans %}</td>
@@ -204,11 +204,11 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Costs + NDS{% endtrans %}</td>
-                                                        <td>{{ entity.costsAllNDS }}</td>
+                                                        <td id="costsAllNDS">{{ entity.costsAllNDS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Profitability{% endtrans %}</td>
-                                                        <td>{{ entity.profitability }}/{{ entity.profitabilityProc }}%</td>
+                                                        <td id="profitability">{{ entity.profitability }}/{{ entity.profitabilityProc }}%</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Date{% endtrans %}</td>
@@ -317,21 +317,10 @@
                                                         <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
                                                         <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
                                                         <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
-                                                        <td>{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
+                                                        <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
                                                         <td>{% trans %}Status{% endtrans %}</td>
                                                     </tr>
                                                 {% endfor %}
-                                                {#<tr>#}
-                                                    {#<td></td>#}
-                                                    {#<td></td>#}
-                                                    {#<td></td>#}
-                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
-                                                    {#<td></td>#}
-                                                    {#<td></td>#}
-                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
-                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
-                                                    {#<td></td>#}
-                                                {#</tr>#}
                                             </tbody>
                                         </table>
                                     </div>
@@ -673,6 +662,10 @@
                                     + '<td>' + '</td>'
                                     + '</tr>');
                             $('#link_costsN_' + response.id).text(response.costsN);
+                            $('#incomeNDS').text(response.incomeNDS);
+                            $('#costsAllNDS').text(response.costsAllNDS);
+                            $('#profitability').text(response.profitabilitySUM + '/' + response.profitabilitySUMProc + '%');
+                            $('#profitability_' + response.id).text(response.profitability + '/' + response.profitabilityProc + '%');
                         }
                     });
                     return false;
