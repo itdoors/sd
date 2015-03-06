@@ -178,11 +178,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Profit + NDS{% endtrans %}</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{% trans %}Docs{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td>{{ entity.incomeNDS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Number{% endtrans %}</td>
@@ -208,11 +204,11 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Costs + NDS{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td>{{ entity.costsAllNDS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Profitability{% endtrans %}</td>
-                                                        <td></td>
+                                                        <td>{{ entity.profitability }}/{{ entity.profitabilityProc }}%</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Date{% endtrans %}</td>
@@ -232,6 +228,65 @@
                                     </div>
                                 </div>
                             </div>
+                            {% for record in entity.financeRecords %}
+                                <div class="modal fade bs-modal-lg" id="costsN_{{ record.id }}" tabindex="-1" role="basic" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">{% trans %}Costs (cash){% endtrans %}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>{% trans %}Cost{% endtrans %}</td>
+                                                                <td>{% trans %}Value{% endtrans %}</td>
+                                                                <td>{% trans %}Actions{% endtrans %}</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="costs_{{ record.id }}">
+                                                            {% for cost in record.costsN %}
+                                                                <tr>
+                                                                    <td>{{ cost.type }}</td>
+                                                                    <td>{{ cost.value }}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    {{ form_start(costNalForms[record.id], {'attr' : {'class' : 'form-horizontal'}}) }}
+                                                        <div class="form-body">
+                                                            <div class="form-group">
+                                                                <label class="required control-label col-md-3">{% trans %}Cost{% endtrans%}</label>
+                                                                <div class="col-md-9">
+                                                                    {{ form_widget(costNalForms[record.id].type, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="required control-label col-md-3">{% trans %}Value{% endtrans%}</label>
+                                                                <div class="col-md-9">
+                                                                    {{ form_widget(costNalForms[record.id].value, {'attr' : {'class' : 'form-control input-medium'}}) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-actions fluid">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="col-md-offset-4">
+                                                                            <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{ form_end(costNalForms[record.id]) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                             <div id="works" class="panel panel-danger">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{% trans %}Works{% endtrans %}</h3>
@@ -259,59 +314,70 @@
                                                         <td>{{ record.mpk ? record.mpk : '' }}</td>
                                                         <td>{{ record.work ? record.work : '' }}</td>
                                                         <td>{{ record.incomeNDS ? record.incomeNDS : '' }}</td>
-                                                        <td>{{ record.costsN ? record.costsN : '' }}</td>
+                                                        <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
                                                         <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
                                                         <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
-                                                        <td>{{ record.profitability ? record.profitability : '' }}</td>
+                                                        <td>{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
                                                         <td>{% trans %}Status{% endtrans %}</td>
                                                     </tr>
                                                 {% endfor %}
+                                                {#<tr>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td>{% trans %}Result{% endtrans %}:</td>#}
+                                                    {#<td></td>#}
+                                                {#</tr>#}
                                             </tbody>
                                         </table>
-                                        {{ form_start(financeForm, {'attr' : {'class' : 'form-horizontal'}}) }}
-                                            <div class="form-body">
-                                                <div class="form-group">
-                                                    <label class="required control-label col-md-3">{% trans %}MPK{% endtrans%}</label>
-                                                    <div class="col-md-9">
-                                                        {{ form_widget(financeForm.mpk, {'attr' : {'class' : 'form-control input-medium'}}) }}
-                                                    </div>
+                                    </div>
+                                    {{ form_start(financeForm, {'attr' : {'class' : 'form-horizontal'}}) }}
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}MPK{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.mpk, {'attr' : {'class' : 'form-control input-medium'}}) }}
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="required control-label col-md-3">{% trans %}Work{% endtrans%}</label>
-                                                    <div class="col-md-9">
-                                                        {{ form_widget(financeForm.work, {'attr' : {'class' : 'form-control input-medium'}}) }}
-                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Work{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.work, {'attr' : {'class' : 'form-control input-medium'}}) }}
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="required control-label col-md-3">{% trans %}Profit + NDS{% endtrans%}</label>
-                                                    <div class="col-md-9">
-                                                        {{ form_widget(financeForm.incomeNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
-                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Profit + NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.incomeNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="required control-label col-md-3">{% trans %}Costs (no-cash) - NDS{% endtrans%}</label>
-                                                    <div class="col-md-9">
-                                                        {{ form_widget(financeForm.costsNonNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
-                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Costs (no-cash) - NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.costsNonNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="required control-label col-md-3">{% trans %}Costs + NDS{% endtrans%}</label>
-                                                    <div class="col-md-9">
-                                                        {{ form_widget(financeForm.costsNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
-                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="required control-label col-md-3">{% trans %}Costs + NDS{% endtrans%}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(financeForm.costsNDS, {'attr' : {'class' : 'form-control input-medium'}}) }}
                                                 </div>
-                                                <div class="form-actions fluid">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="col-md-offset-6">
-                                                                <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
-                                                            </div>
+                                            </div>
+                                            <div class="form-actions fluid">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-offset-6">
+                                                            <button type="submit" class="btn green"><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        {{ form_end(financeForm) }}
-                                    </div>
+                                        </div>
+                                    {{ form_end(financeForm) }}
                                 </div>
                             </div>
                         </div>
@@ -586,6 +652,27 @@
                         },
                         error: function(response) {
                             SD.unblockUI($('#fintable'));
+                        }
+                    });
+                    return false;
+                });
+                $("form[name='costNalForm']").submit(function (e) {
+                    var formData = new FormData($(this)[0]);
+                    $.ajax({
+                        url: "{{ path('claim_add_cost_nal') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#costs_' + response.id).append(
+                                    '<tr>'
+                                    + '<td>' + response.type + '</td>'
+                                    + '<td>' + response.value + '</td>'
+                                    + '<td>' + '</td>'
+                                    + '</tr>');
+                            $('#link_costsN_' + response.id).text(response.costsN);
                         }
                     });
                     return false;

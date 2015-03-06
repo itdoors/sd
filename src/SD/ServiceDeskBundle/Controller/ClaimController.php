@@ -3,7 +3,9 @@
 namespace SD\ServiceDeskBundle\Controller;
 
 use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
+use SD\ServiceDeskBundle\Entity\CostNal;
 use SD\ServiceDeskBundle\Form\ClaimFinanceRecordType;
+use SD\ServiceDeskBundle\Form\CostNalType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -226,6 +228,36 @@ class ClaimController extends Controller
         $response['id'] = $entity->getId();
         $response['performer_id'] = $entity->getClaimPerformer()->getId();
         $response['performer'] = $entity->getClaimPerformer()->__toString();
+
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Adds CostNal to the claim's financeRecord (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addCostNalAction(Request $request)
+    {
+        $entity = (new CostNal())->setFinanceRecord(new ClaimFinanceRecord());
+
+        $form = $this->createForm(new CostNalType(), $entity, array(
+            'action' => $this->generateUrl('claim_add_cost_nal'),
+            'method' => 'POST',
+        ));
+        $form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
+
+        $response = [];
+        $response['id'] = $entity->getFinanceRecord()->getId();
+        $response['type'] = $entity->getType();
+        $response['value'] = $entity->getValue();
+        $response['costsN'] = $entity->getFinanceRecord()->getCostsNSum();
 
         return new JsonResponse($response);
     }
@@ -466,6 +498,14 @@ class ClaimController extends Controller
         $messageForm = $this->createMessageForm((new ClaimMessage())->setClaim($entity));
         $financeForm = $this->createFinanceForm((new ClaimFinanceRecord())->setClaim($entity));
         $performerRuleForm = $this->createPerformerRuleForm((new ClaimPerformerRule())->setClaim($entity));
+        $costNalForms = [];
+        foreach ($entity->getFinanceRecords() as $record) {
+            $form = $this->createForm(new CostNalType(), (new CostNal())->setFinanceRecord($record), array(
+                'action' => $this->generateUrl('claim_add_cost_nal'),
+                'method' => 'POST',
+            ));
+            $costNalForms[$record->getId()] = $form->createView();
+        }
         
         $statuses = [];
         foreach (\SD\ServiceDeskBundle\Entity\StatusType::values() as $value) {
@@ -499,6 +539,7 @@ class ClaimController extends Controller
             'importances' => json_encode($importances),
             'statuses' => json_encode($statuses),
             'types' => json_encode($types),
+            'costNalForms' => $costNalForms,
             'messages' => $messages
         ));
     }

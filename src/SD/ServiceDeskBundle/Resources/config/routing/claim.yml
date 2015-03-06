@@ -45,6 +45,10 @@ claim_add_msg:
 claim_add_fin:
     path:     /claim_add_fin
     defaults: { _controller: "SDServiceDeskBundle:Claim:addFinanceRecord" }
+
+claim_add_cost_nal:
+        path:     /claim_add_cost_nal
+        defaults: { _controller: "SDServiceDeskBundle:Claim:addCostNal" }
     
 claim_add_rule:
     path:     /add_rule

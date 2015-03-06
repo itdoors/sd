@@ -30,11 +30,11 @@ class ClaimFinanceRecord
     protected $claim;
 
     /**
-     * @var double
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="costs_n", type="float")
+     * @ORM\OneToMany(targetEntity="SD\ServiceDeskBundle\Entity\CostNal", mappedBy="financeRecord")
      */
-    protected $costsN = 0;
+    protected $costsN;
 
     /**
      * @var double
@@ -53,16 +53,16 @@ class ClaimFinanceRecord
     /**
      * @var double
      *
-     * @ORM\Column(name="income_nds", type="float")
+     * @ORM\Column(name="income_nonnds", type="float")
      */
-    protected $incomeNDS = 0;
+    protected $incomeNonNDS = 0;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="income_nonnds", type="float")
+     * @ORM\Column(name="income_nds", type="float")
      */
-    protected $incomeNonNDS = 0;
+    protected $incomeNDS = 0;
 
     /**
      * @var string
@@ -70,13 +70,6 @@ class ClaimFinanceRecord
      * @ORM\Column(name="bill_number", type="string", length=100, nullable=true)
      */
     protected $billNumber;
-
-    /**
-     * @var double
-     *
-     * @ORM\Column(name="profitability", type="float")
-     */
-    protected $profitability = 0;
 
     /**
      * @var double
@@ -135,30 +128,6 @@ class ClaimFinanceRecord
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set costsN
-     *
-     * @param float $costsN
-     *
-     * @return ClaimFinanceRecord
-     */
-    public function setCostsN($costsN)
-    {
-        $this->costsN = $costsN;
-    
-        return $this;
-    }
-
-    /**
-     * Get costsN
-     *
-     * @return float 
-     */
-    public function getCostsN()
-    {
-        return $this->costsN;
     }
 
     /**
@@ -282,27 +251,29 @@ class ClaimFinanceRecord
     }
 
     /**
-     * Set profitability
-     *
-     * @param float $profitability
-     *
-     * @return ClaimFinanceRecord
-     */
-    public function setProfitability($profitability)
-    {
-        $this->profitability = $profitability;
-    
-        return $this;
-    }
-
-    /**
      * Get profitability
      *
      * @return float 
      */
     public function getProfitability()
     {
-        return $this->profitability;
+        return round(
+                $this->getIncomeNDS() / 1.2 -
+                ($this->getCostsNSum() * $this->nds + $this->getCostsNSum()) *
+                $this->obnal + $this->getCostsNSum() -
+                $this->costsNonNDS -
+                $this->costsNDS / 1.2
+                , 2);
+    }
+
+    /**
+     * Get profitability
+     *
+     * @return float
+     */
+    public function getProfitabilityProc()
+    {
+        return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
     }
 
     /**
@@ -495,5 +466,57 @@ class ClaimFinanceRecord
     public function getClaim()
     {
         return $this->claim;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->costsN = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add costsN
+     *
+     * @param \SD\ServiceDeskBundle\Entity\CostNal $costsN
+     *
+     * @return ClaimFinanceRecord
+     */
+    public function addCostsN(\SD\ServiceDeskBundle\Entity\CostNal $costsN)
+    {
+        $this->costsN[] = $costsN;
+    
+        return $this;
+    }
+
+    /**
+     * Remove costsN
+     *
+     * @param \SD\ServiceDeskBundle\Entity\CostNal $costsN
+     */
+    public function removeCostsN(\SD\ServiceDeskBundle\Entity\CostNal $costsN)
+    {
+        $this->costsN->removeElement($costsN);
+    }
+
+    /**
+     * Get costsN
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCostsN()
+    {
+        return $this->costsN;
+    }
+
+    public function getCostsNSum()
+    {
+        $costsNSum = 0;
+        foreach ($this->costsN as $cost) {
+            $costsNSum += $cost->getValue();
+        }
+
+        return $costsNSum;
     }
 }

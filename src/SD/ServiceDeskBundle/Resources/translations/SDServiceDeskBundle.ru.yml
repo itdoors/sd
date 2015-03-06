@@ -93,6 +93,9 @@ Works: Работы
 Work: Работа
 Costs (cash): Затраты (нал)
 Costs (no-cash) - NDS: Затраты безнал без НДС
+Result: Итого
+Cost: Расходы
+Value: Количество
 
 
 Can post to clients: Может писать клиентам

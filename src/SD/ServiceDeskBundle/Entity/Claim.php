@@ -590,6 +590,52 @@ class Claim
     {
         return $this->financeRecords;
     }
+
+    protected $incomeNDS = 0;
+
+    protected $costsAllNDS = 0;
+
+    protected $profitability = 0;
+
+    public function getIncomeNDS()
+    {
+        $incomeNDS = 0;
+        foreach ($this->financeRecords as $record) {
+            $incomeNDS += $record->getIncomeNDS();
+        }
+
+        return $incomeNDS;
+    }
+
+    public function getCostsAllNDS()
+    {
+        $costsAllNDS = 0;
+        foreach ($this->financeRecords as $record) {
+            $costsAllNDS += $record->getCostsNSum() *
+                            $record->getObnal() *
+                            $record->getNds();
+
+            $costsAllNDS += $record->getCostsNDS();
+            $costsAllNDS += $record->getCostsNonNDS();
+        }
+
+        return $costsAllNDS;
+    }
+
+    public function getProfitability()
+    {
+        $profitability = 0;
+        foreach ($this->financeRecords as $record) {
+            $profitability += $record->getProfitability();
+        }
+
+        return $profitability;
+    }
+
+    public function getProfitabilityProc()
+    {
+        return round($this->getProfitability() / ($this->getIncomeNDS() / 1.2), 2) * 100;
+    }
 }
 
 // @codingStandardsIgnoreStart
