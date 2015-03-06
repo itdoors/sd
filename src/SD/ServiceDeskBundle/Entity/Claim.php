@@ -796,7 +796,7 @@ class Claim
     /**
      * Set smetaStatus
      *
-     * @param statusType $smetaStatus
+     * @param string $smetaStatus
      *
      * @return Claim
      */

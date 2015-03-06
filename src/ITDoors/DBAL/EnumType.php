@@ -24,7 +24,7 @@ abstract class EnumType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (!in_array($value, static::$values)) {
-            throw new \InvalidArgumentException("Invalid '".static::$name."' value.");
+            throw new \InvalidArgumentException("Invalid '".static::$name."' value in ".static::$name." enum.");
         }
         return $value;
     }

@@ -26,6 +26,7 @@ use SD\ServiceDeskBundle\Entity\CostNal;
 use SD\ServiceDeskBundle\Entity\FinStatusType;
 use SD\ServiceDeskBundle\Entity\ImportanceType;
 use SD\ServiceDeskBundle\Entity\OrganizationGrantedForOrder;
+use SD\ServiceDeskBundle\Entity\OrganizationType;
 use SD\ServiceDeskBundle\Entity\StatusType;
 use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -85,7 +86,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             ');
         $stmt->execute();
 
-        $this->createIndividuals();
+        //$this->createIndividuals();
 
         /*
          * claim
@@ -194,6 +195,17 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $sd_claim->setCreatedAt(new \DateTime($claimCreateDatetime));
             $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
 
+            $claimOrganizationType = OrganizationType::NETWORK;
+            if ($claimOrganizationTypeId == 1) {
+                $claimOrganizationType = OrganizationType::NETWORK;
+            } elseif ($claimOrganizationTypeId == 2) {
+                $claimOrganizationType = OrganizationType::LOCAL;
+            } elseif ($claimOrganizationTypeId == 3) {
+                $claimOrganizationType = OrganizationType::ONCE;
+            }
+            $sd_claim->setOrganizationType($claimOrganizationType);
+
+
             if ($claimDescription == null) {
                 $claimDescription = '';
             }
@@ -214,6 +226,47 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             }
             $sd_claim->setSmeta($claimSmetaNumber);
             $sd_claim->setSmetaCost($claimSmetaCosts);
+
+
+            $smetaStatus = StatusType::NONE;
+            switch ($claimSmetaStatusId) {
+                case 1:
+                    $smetaStatus = StatusType::OPEN;
+                    break;
+                case 4:
+                    $smetaStatus = StatusType::SEND;
+                    break;
+                case 5:
+                    $smetaStatus = StatusType::IN_PROGRESS;
+                    break;
+                case 6:
+                    $smetaStatus = StatusType::SUBMITTING;
+                    break;
+                case 7:
+                    $smetaStatus = StatusType::REJECTED;
+                    break;
+                case 8:
+                    $smetaStatus = StatusType::DONE;
+                    break;
+                case 9:
+                    $smetaStatus = StatusType::ESTIMATING;
+                    break;
+                case 10:
+                    $smetaStatus = StatusType::CREATING;
+                    break;
+                case 11:
+                    $smetaStatus = StatusType::SUBMITTING;
+                    break;
+                case 12:
+                    $smetaStatus = StatusType::MATCHED;
+                    break;
+                case 13:
+                    $smetaStatus = StatusType::REJECTED;
+                    break;
+            }
+
+
+            $sd_claim->setSmetaStatus($smetaStatus);
             if ($claimIsclosedstuff) {
                 $sd_claim->setFinStatus(FinStatusType::OPENED);
             } else {
@@ -255,6 +308,9 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                 $finance['work'] ? $newFinance->setWork($finance['work']): '';
                 $res = memory_get_usage ().'--'.'finance record type '.$finance['status_id'];
                 $output->writeln($res);
+                if ($finance['status_id'] == null) {
+                    $financeType = StatusType::OPEN;
+                }
                 switch ($finance['status_id']) {
                     case 1:
                         $financeType = StatusType::OPEN;
