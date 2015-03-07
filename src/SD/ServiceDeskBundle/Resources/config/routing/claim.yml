@@ -47,12 +47,16 @@ claim_add_fin:
     defaults: { _controller: "SDServiceDeskBundle:Claim:addFinanceRecord" }
 
 claim_add_cost_nal:
-        path:     /claim_add_cost_nal
-        defaults: { _controller: "SDServiceDeskBundle:Claim:addCostNal" }
+    path:     /claim_add_cost_nal
+    defaults: { _controller: "SDServiceDeskBundle:Claim:addCostNal" }
+
+claim_del_cost_nal:
+    path:     /claim_del_cost_nal
+    defaults: { _controller: "SDServiceDeskBundle:Claim:deleteCostNal" }
 
 claim_upd_data:
-        path:     /claim_upd_data
-        defaults: { _controller: "SDServiceDeskBundle:Claim:updateClaimData" }
+    path:     /claim_upd_data
+    defaults: { _controller: "SDServiceDeskBundle:Claim:updateClaimData" }
     
 claim_add_rule:
     path:     /add_rule
@@ -109,3 +113,23 @@ claim_ch_smeta_cost:
 claim_ch_smeta_status:
     path:     /claim_ch_smeta_status
     defaults: { _controller: "SDServiceDeskBundle:Claim:changeSmetaStatus" }
+
+claim_ch_fin_record_status:
+    path:     /claim_ch_fin_record_status
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinRecordStatus" }
+
+claim_ch_fin_record_work:
+    path:     /claim_ch_fin_record_work
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinRecordWork" }
+
+claim_ch_fin_record_incomeNDS:
+    path:     /claim_ch_fin_record_incomeNDS
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinRecordIncomeNDS" }
+
+claim_ch_fin_record_costsNonNDS:
+    path:     /claim_ch_fin_record_costsNonNDS
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinRecordCostsNonNDS" }
+
+claim_ch_fin_record_costsNDS:
+    path:     /claim_ch_fin_record_costsNDS
+    defaults: { _controller: "SDServiceDeskBundle:Claim:changeFinRecordCostsNDS" }

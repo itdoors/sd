@@ -321,6 +321,117 @@ class ClaimController extends Controller
         return new JsonResponse();
     }
 
+
+    /**
+     * Changes claim's finRecord status (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinRecordStatusAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $status = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')->find($id);
+        $entity->setStatus($status);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's finRecord work (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinRecordWorkAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $work = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')->find($id);
+        $entity->setWork($work);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Changes claim's finRecord incomeNDS (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinRecordIncomeNDSAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $incomeNDS = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')->find($id);
+        $entity->setIncomeNDS($incomeNDS);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(['id' => $id]);
+    }
+
+    /**
+     * Changes claim's finRecord costsNonNDS (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinRecordCostsNonNDSAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $costsNonNDS = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')->find($id);
+        $entity->setCostsNonNDS($costsNonNDS);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(['id' => $id]);
+    }
+
+    /**
+     * Changes claim's finRecord costsNDS (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeFinRecordCostsNDSAction(Request $request)
+    {
+        $id = $request->get('pk');
+        $costsNDS = $request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SDServiceDeskBundle:ClaimFinanceRecord')->find($id);
+        $entity->setCostsNDS($costsNDS);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(['id' => $id]);
+    }
+
     /**
      * Adds message to the claim (via ajax).
      * 
@@ -409,11 +520,33 @@ class ClaimController extends Controller
         $em->flush();
 
         $response = [];
-        $response['id'] = $entity->getFinanceRecord()->getId();
+        $response['recordId'] = $entity->getFinanceRecord()->getId();
+        $response['costId'] = $entity->getId();
         $response['type'] = $entity->getType();
         $response['value'] = $entity->getValue();
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Removes CostNal of the claim's financeRecord (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function deleteCostNalAction(Request $request)
+    {
+        $costId = $request->get('cost_id');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em
+            ->getRepository('SDServiceDeskBundle:CostNal')
+            ->find($costId);
+        $em->remove($entity);
+        $em->flush();
+
+        return new JsonResponse();
     }
 
     /**

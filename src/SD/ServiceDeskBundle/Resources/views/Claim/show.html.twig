@@ -251,7 +251,7 @@
                                                                 <tr>
                                                                     <td>{{ cost.type }}</td>
                                                                     <td>{{ cost.value }}</td>
-                                                                    <td></td>
+                                                                    <td><a href="javascript:;" class="del_fin_record_cost" cost="{{ cost.id }}" record="{{ record.id }}">{% trans %}Delete{% endtrans %}</a></td>
                                                                 </tr>
                                                             {% endfor %}
                                                         </tbody>
@@ -312,13 +312,79 @@
                                                     <tr>
                                                         <td>{{ key + 1 }}</td>
                                                         <td>{{ record.mpk ? record.mpk : '' }}</td>
-                                                        <td>{{ record.work ? record.work : '' }}</td>
-                                                        <td>{{ record.incomeNDS ? record.incomeNDS : '' }}</td>
-                                                        <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
-                                                        <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
-                                                        <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
+                                                        <td><a class="record_data" record="{{ record.id }}" href="#" id="fin_record_work_{{ record.id }}">{{ record.work ? record.work : '' }}</a></td>
+                                                        <td><a class="record_data" record="{{ record.id }}" href="#" id="fin_record_incomeNDS_{{ record.id }}">{{ record.incomeNDS ? record.incomeNDS : '' }}</a></td>
+                                                        <td class="record_data" record="{{ record.id }}"><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
+                                                        <td class="record_data" record="{{ record.id }}"><a href="#" id="fin_record_costsNonNDS_{{ record.id }}">{{ record.costsNonNDS ? record.costsNonNDS : '' }}</a></td>
+                                                        <td class="record_data" record="{{ record.id }}"><a href="#" id="fin_record_costsNDS_{{ record.id }}">{{ record.costsNDS ? record.costsNDS : '' }}</a></td>
                                                         <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
-                                                        <td>{{ record.status | trans }}</td>
+                                                        <td><a href="#" id="fin_record_status_{{ record.id }}"></a></td>
+                                                        <script>
+                                                            $(document).ready(function() {
+                                                                function updateClaimData(recId) {
+                                                                    var recordId = recId || 0;
+                                                                    $.ajax({
+                                                                        url: "{{ path('claim_upd_data') }}",
+                                                                        data: {
+                                                                            claimId: {{ entity.id }},
+                                                                            recordId: recordId
+                                                                        },
+                                                                        type: 'POST',
+                                                                        success: function(response) {
+                                                                            $('#incomeNDS').text(response.incomeNDS);
+                                                                            $('#costsAllNDS').text(response.costsAllNDS);
+                                                                            $('#profitability').text(response.profitabilitySUM + '/' + response.profitabilitySUMProc + '%');
+                                                                            if (response.id != 0) {
+                                                                                $('#link_costsN_' + response.id).text(response.costsN);
+                                                                                $('#profitability_' + response.id).text(response.profitability + '/' + response.profitabilityProc + '%');
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                                $('#fin_record_status_{{ record.id }}').editable({
+                                                                    type: 'select',
+                                                                    title: '{% trans %}Status{% endtrans %}',
+                                                                    placement: 'right',
+                                                                    value: '{{ record.status }}',
+                                                                    source: {{ statuses | join(',') | raw }}
+                                                                    ,pk: {{ record.id }}
+                                                                    ,url: '{{ path('claim_ch_fin_record_status') }}'
+                                                                });
+                                                                $('#fin_record_work_{{ record.id }}').editable({
+                                                                    type: 'text',
+                                                                    title: '{% trans %}Work{% endtrans %}'
+                                                                    ,pk: {{ record.id }}
+                                                                    ,url: '{{ path('claim_ch_fin_record_work') }}'
+                                                                });
+                                                                $('#fin_record_incomeNDS_{{ record.id }}').editable({
+                                                                    type: 'text',
+                                                                    title: '{% trans %}Profit + NDS{% endtrans %}'
+                                                                    ,pk: {{ record.id }}
+                                                                    ,url: '{{ path('claim_ch_fin_record_incomeNDS') }}'
+                                                                    ,success: function(response, newValue) {
+                                                                        updateClaimData(response.id);
+                                                                    }
+                                                                });
+                                                                $('#fin_record_costsNonNDS_{{ record.id }}').editable({
+                                                                    type: 'text',
+                                                                    title: '{% trans %}Costs (no-cash) - NDS{% endtrans %}'
+                                                                    ,pk: {{ record.id }}
+                                                                    ,url: '{{ path('claim_ch_fin_record_costsNonNDS') }}'
+                                                                    ,success: function(response, newValue) {
+                                                                        updateClaimData(response.id);
+                                                                    }
+                                                                });
+                                                                $('#fin_record_costsNDS_{{ record.id }}').editable({
+                                                                    type: 'text',
+                                                                    title: '{% trans %}Costs + NDS{% endtrans %}'
+                                                                    ,pk: {{ record.id }}
+                                                                    ,url: '{{ path('claim_ch_fin_record_costsNDS') }}'
+                                                                    ,success: function(response, newValue) {
+                                                                        updateClaimData(response.id);
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -431,6 +497,23 @@
         </div>
 		<script>
             $(document).ready(function() {
+                $(document).on('save', '.record_data', function() {
+                    updateClaimData($(this).attr('record'));
+                });
+                $(document).on('click', '.del_fin_record_cost', function() {
+                    var element = $(this);
+                    $.ajax({
+                        data: {
+                            cost_id: element.attr('cost')
+                        },
+                        type: "POST",
+                        url: "{{ path('claim_del_cost_nal') }}",
+                        success: function(response) {
+                            element.closest('tr').remove();
+                            updateClaimData(element.attr('record'));
+                        }
+                    });
+                });
                 $(document).on('click', '.canEditFinanceData', function() {
                     var element = $(this);
                     var canEditFinanceData = $(this).hasClass('green');
@@ -490,6 +573,15 @@
             	$('#claim_status').editable({
                     type: 'select',
                     title: '{% trans %}Claim Status{% endtrans %}',
+                    placement: 'right',
+                    value: '{{ entity.status }}',
+                    source: {{ statuses | join(',') | raw }}
+                    ,pk: {{ entity.id }}
+                    ,url: '{{ path('claim_ch_status') }}'
+                });
+                $('#fin_record_status').editable({
+                    type: 'select',
+                    title: '{% trans %}Status{% endtrans %}',
                     placement: 'right',
                     value: '{{ entity.status }}',
                     source: {{ statuses | join(',') | raw }}
@@ -733,11 +825,13 @@
                         contentType: false,
                         processData: false,
                         success: function(response) {
-                            $('#costs_' + response.id).append(
+                            $('#costs_' + response.recordId).append(
                                     '<tr>'
                                     + '<td>' + response.type + '</td>'
                                     + '<td>' + response.value + '</td>'
-                                    + '<td>' + '</td>'
+                                    + '<td><a href="javascript:;" class="del_fin_record_cost" cost="'
+                                    + response.costId + '" record="' + response.recordId + '">'
+                                    + '{% trans %}Delete{% endtrans %}</a></td>'
                                     + '</tr>');
                             updateClaimData(recordId);
                         }
