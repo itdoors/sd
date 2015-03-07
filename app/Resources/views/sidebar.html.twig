@@ -18,6 +18,7 @@
                 <span class="selected"></span>
             </a>
         </li>
+        {% if not app.user.hasRole('ROLE_CLAIM_CLIENT') %}
         {% if is_granted('ROLE_PROJECT_STATE_TENDER_ADMIN') or is_granted('ROLE_PROJECT_STATE_TENDER') or is_granted('ROLE_PROJECT_STATE_TENDER_DIRECTOR') %}
             {% set classOpen = '' %}
             <li{% if 
@@ -713,7 +714,7 @@
                     </ul>
                 </li>
             {% endif %}
-        {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}
+            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}
                 <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
                             or
@@ -1060,6 +1061,7 @@
                             </a>
             </li>
             {% endif %}
+        {% endif %}
             <li{% if 
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('claim') or
                 (
@@ -1094,6 +1096,7 @@
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('client_new',app.request.attributes.get('_route_params'))
                 )
                 %} class="active open"{% endif %}>
+
                 <a href="javascript:;">
                     <i class="icon-grid"></i>
                     <span class="title">{% trans %}Service Desk{% endtrans %}</span>
@@ -1112,12 +1115,14 @@
                             <span class="title">{% trans %}Archive Claims{% endtrans %}</span>
                         </a>
                     </li>
+                    {% if is_granted('ROLE_DISPATCHER') or is_granted('ROLE_SUPERVISOR') %}
                     <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('client') %} class="active"{% endif %}>
                         <a href="{{ path('client') }}">
                             <i class="icon-users"></i>
                             <span class="title">{% trans %}Clients{% endtrans %}</span>
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </li>
     </ul>

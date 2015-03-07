@@ -621,7 +621,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     //}
                 } else {
-                    if (in_array($claimUser['user_id'], $usersInside) || $claimUser['userkey'] == 'supervisor') {
+                    if (in_array($claimUser['user_id'], $usersInside) || $claimUser['userkey'] == 'supervisor' || $claimUser['userkey'] == 'dispatcher') {
                         continue;
                     }
                     $usersInside[] = $claimUser['user_id'];

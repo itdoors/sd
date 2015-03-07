@@ -45,6 +45,11 @@ class AccessService
         //->getUser();
         $checkOper = $user->hasRole('ROLE_OPER');
 
+        $checkClient = $user->hasRole('ROLE_CLAIM_CLIENT');
+        if ($checkClient) {
+            return array();
+        }
+
         $checkSuperviser = $user->hasRole('ROLE_SUPERVISOR');
 
         if ($checkSuperviser) {
