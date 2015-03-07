@@ -46,10 +46,19 @@ class ClaimController extends Controller
             $entities = $em
                 ->getRepository('SDServiceDeskBundle:Claim')
                 ->findAll();
+
+            $result = [];
+            foreach ($entities as $key => $entity) {
+                $result[] = [
+                    'claim' => $entity,
+                    'firstName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getFirstName() : '',
+                    'lastName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getLastName() : ''
+                ];
+            }
         } else {
             $accessService = $this->get('access.service');
 
-            $allowedDepartments =$accessService->getAllowedDepartmentsId(null, false);
+            $allowedDepartments = $accessService->getAllowedDepartmentsId(null, false);
 
             $entities1 = $em
                 ->getRepository('SDServiceDeskBundle:ClaimOnce')
@@ -59,12 +68,12 @@ class ClaimController extends Controller
                 ->getRepository('SDServiceDeskBundle:ClaimDepartment')
                 ->findWithFilter($user, $allowedDepartments);
 
-            $entities = array_merge($entities1, $entities2);
+            $result  = array_merge($entities1, $entities2);
         }
 
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
-            'entities' => $entities
+            'entities' => $result
         ));
     }
 
