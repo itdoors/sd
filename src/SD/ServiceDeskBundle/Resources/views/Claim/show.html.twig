@@ -125,7 +125,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{% trans %}Profit + NDS{% endtrans %}</td>
+                                                    <td>{% trans %}Price{% endtrans %}</td>
                                                     <td>{{ entity.incomeNDS }}</td>
                                                 </tr>
                                                 <tr>
@@ -312,11 +312,11 @@
                                                     <tr>
                                                         <td>{{ key + 1 }}</td>
                                                         <td>{{ record.mpk ? record.mpk : '' }}</td>
-                                                        <td><a class="record_data" record="{{ record.id }}" href="#" id="fin_record_work_{{ record.id }}">{{ record.work ? record.work : '' }}</a></td>
-                                                        <td><a class="record_data" record="{{ record.id }}" href="#" id="fin_record_incomeNDS_{{ record.id }}">{{ record.incomeNDS ? record.incomeNDS : '' }}</a></td>
-                                                        <td class="record_data" record="{{ record.id }}"><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
-                                                        <td class="record_data" record="{{ record.id }}"><a href="#" id="fin_record_costsNonNDS_{{ record.id }}">{{ record.costsNonNDS ? record.costsNonNDS : '' }}</a></td>
-                                                        <td class="record_data" record="{{ record.id }}"><a href="#" id="fin_record_costsNDS_{{ record.id }}">{{ record.costsNDS ? record.costsNDS : '' }}</a></td>
+                                                        <td><a href="#" id="fin_record_work_{{ record.id }}">{{ record.work ? record.work : '' }}</a></td>
+                                                        <td><a href="#" id="fin_record_incomeNDS_{{ record.id }}">{{ record.incomeNDS ? record.incomeNDS : '' }}</a></td>
+                                                        <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
+                                                        <td><a href="#" id="fin_record_costsNonNDS_{{ record.id }}">{{ record.costsNonNDS ? record.costsNonNDS : '' }}</a></td>
+                                                        <td><a href="#" id="fin_record_costsNDS_{{ record.id }}">{{ record.costsNDS ? record.costsNDS : '' }}</a></td>
                                                         <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
                                                         <td><a href="#" id="fin_record_status_{{ record.id }}"></a></td>
                                                         <script>
@@ -497,9 +497,6 @@
         </div>
 		<script>
             $(document).ready(function() {
-                $(document).on('save', '.record_data', function() {
-                    updateClaimData($(this).attr('record'));
-                });
                 $(document).on('click', '.del_fin_record_cost', function() {
                     var element = $(this);
                     $.ajax({
@@ -792,19 +789,137 @@
                                     '<tr>'
                                     + '<td>' + (Number($('#fins tr').last().children().first().text()) + 1) + '</td>'
                                     + '<td>' + response.mpk + '</td>'
-                                    + '<td>' + response.work + '</td>'
-                                    + '<td>' + response.incomeNDS + '</td>'
-                                    + '<td>' + response.costsN + '</td>'
-                                    + '<td>' + response.costsNonNDS + '</td>'
-                                    + '<td>' + response.costsNDS + '</td>'
+                                    + '<td><a href="#" id="fin_record_work_' + response.id + '">' + response.work + '</a></td>'
+                                    + '<td><a href="#" id="fin_record_incomeNDS_' + response.id + '">' + response.incomeNDS + '</a></td>'
+                                    + '<td><a data-toggle="modal" id="link_costsN_' + response.id + '" href="#costsN_' + response.id + '">' + response.costsN + '</a></td>'
+                                    + '<td><a href="#" id="fin_record_costsNonNDS_' + response.id + '">' + response.costsNonNDS + '</a></td>'
+                                    + '<td><a href="#" id="fin_record_costsNDS_' + response.id + '">' + response.costsNDS + '</a></td>'
                                     + '<td id="profitability_' + response.id + '">' + response.profitability + '</td>'
-                                    + '<td>' + '</td>'
+                                    + '<td><a href="#" id="fin_record_status_' + response.id + '"></a></td>'
                                     + '</tr>');
                             $('#{{ financeForm.vars.name }}_mpk').val('');
                             $('#{{ financeForm.vars.name }}_work').val('');
                             $('#{{ financeForm.vars.name }}_incomeNDS').val('0');
                             $('#{{ financeForm.vars.name }}_costsNonNDS').val('0');
                             $('#{{ financeForm.vars.name }}_costsNDS').val('0');
+                            $('#fin_record_status_' + response.id).editable({
+                                type: 'select',
+                                title: '{% trans %}Status{% endtrans %}',
+                                placement: 'right',
+                                value: response.status,
+                                source: {{ statuses | join(',') | raw }}
+                                ,pk: response.id
+                                ,url: '{{ path('claim_ch_fin_record_status') }}'
+                            });
+                            $('#fin_record_work_' + response.id).editable({
+                                type: 'text',
+                                title: '{% trans %}Work{% endtrans %}'
+                                ,pk: response.id
+                                ,url: '{{ path('claim_ch_fin_record_work') }}'
+                            });
+                            $('#fin_record_incomeNDS_' + response.id).editable({
+                                type: 'text',
+                                title: '{% trans %}Profit + NDS{% endtrans %}'
+                                ,pk: response.id
+                                ,url: '{{ path('claim_ch_fin_record_incomeNDS') }}'
+                                ,success: function(response, newValue) {
+                                    updateClaimData(response.id);
+                                }
+                            });
+                            $('#fin_record_costsNonNDS_' + response.id).editable({
+                                type: 'text',
+                                title: '{% trans %}Costs (no-cash) - NDS{% endtrans %}'
+                                ,pk: response.id
+                                ,url: '{{ path('claim_ch_fin_record_costsNonNDS') }}'
+                                ,success: function(response, newValue) {
+                                    updateClaimData(response.id);
+                                }
+                            });
+                            $('#fin_record_costsNDS_' + response.id).editable({
+                                type: 'text',
+                                title: '{% trans %}Costs + NDS{% endtrans %}'
+                                ,pk: response.id
+                                ,url: '{{ path('claim_ch_fin_record_costsNDS') }}'
+                                ,success: function(response, newValue) {
+                                    updateClaimData(response.id);
+                                }
+                            });
+                            $(document.body).append(
+                                '<div class="modal fade bs-modal-lg" id="costsN_' + response.id + '" tabindex="-1" role="basic" aria-hidden="true">'
+                                    +'<div class="modal-dialog modal-lg">'
+                                        +'<div class="modal-content">'
+                                            +'<div class="modal-header">'
+                                                +'<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>'
+                                                +'<h4 class="modal-title">{% trans %}Costs (cash){% endtrans %}</h4>'
+                                            +'</div>'
+                                            +'<div class="modal-body">'
+                                                +'<div class="table-responsive">'
+                                                    +'<table class="table table-striped table-bordered table-hover">'
+                                                        +'<thead>'
+                                                            +'<tr>'
+                                                                +'<td>{% trans %}Cost{% endtrans %}</td>'
+                                                                +'<td>{% trans %}Value{% endtrans %}</td>'
+                                                                +'<td>{% trans %}Actions{% endtrans %}</td>'
+                                                            +'</tr>'
+                                                        +'</thead>'
+                                                        +'<tbody id="costs_' + response.id + '"></tbody>'
+                                                    +'</table>'
+                                                    +'<form name="costNalForm" method="post" action="{{ path('claim_add_cost_nal') }}" class="form-horizontal">'
+                                                        +'<div class="form-body">'
+                                                            +'<div class="form-group">'
+                                                                +'<label class="required control-label col-md-3">Расходы</label>'
+                                                                +'<div class="col-md-9">'
+                                                                    +'<select id="costNalForm_type" name="costNalForm[type]" required="required" class="form-control input-medium"><option value="" selected="selected"></option><option value="Транспорт/бензин">Транспорт/бензин</option><option value="Товар/матеріали">Товар/матеріали</option><option value="Додаткові працівники">Додаткові працівники</option><option value="Інше">Інше</option><option value="Доплата нашому працівнику">Доплата нашому працівнику</option></select>'
+                                                                +'</div>'
+                                                            +'</div>'
+                                                            +'<div class="form-group">'
+                                                                +'<label class="required control-label col-md-3">Количество</label>'
+                                                                +'<div class="col-md-9">'
+                                                                    +'<input type="text" id="costNalForm_value" name="costNalForm[value]" required="required" class="form-control input-medium" value="0">'
+                                                                +'</div>'
+                                                            +'</div>'
+                                                            +'<div class="form-actions fluid">'
+                                                                +'<div class="row">'
+                                                                    +'<div class="col-md-12">'
+                                                                        +'<div class="col-md-offset-4">'
+                                                                            +'<button type="submit" class="btn green"><i class="fa fa-plus"></i> Добавить</button>'
+                                                                        +'</div>'
+                                                                    +'</div>'
+                                                                +'</div>'
+                                                            +'</div>'
+                                                        +'</div>'
+                                                        +'<input type="hidden" id="costNalForm_financeRecord" name="costNalForm[financeRecord]" value="' + response.id + '"><input type="hidden" id="costNalForm__token" name="costNalForm[_token]" value="GdW0NjK5bZI8hFG-kMNQH6cH0L6yv3TIj-5-WiIMS2s">'
+                                                    +'</form>'
+                                                +'</div>'
+                                            +'</div>'
+                                        +'</div>'
+                                    +'</div>'
+                                +'</div>'
+                            );
+                            $("form[name='costNalForm']").submit(function (e) {
+                                var formData = new FormData($(this)[0]);
+                                var recordId = $(this).find('input[name="costNalForm[financeRecord]"]').val();
+                                $.ajax({
+                                    url: "{{ path('claim_add_cost_nal') }}",
+                                    type: 'POST',
+                                    data: formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function(response) {
+                                        $('#costs_' + response.recordId).append(
+                                                '<tr>'
+                                                + '<td>' + response.type + '</td>'
+                                                + '<td>' + response.value + '</td>'
+                                                + '<td><a href="javascript:;" class="del_fin_record_cost" cost="'
+                                                + response.costId + '" record="' + response.recordId + '">'
+                                                + '{% trans %}Delete{% endtrans %}</a></td>'
+                                                + '</tr>');
+                                        updateClaimData(recordId);
+                                    }
+                                });
+                                return false;
+                            });
                             updateClaimData(response.id);
                             SD.unblockUI($('#fintable'));
                         },
@@ -868,12 +983,12 @@
                            }
                         	$('#my_msg').append(messageBody);
                         	$('#{{ form.vars.name }}_text').code('<p><br></p>');
-                        	
+
                             var files = document.getElementById('{{ form.vars.name }}_files');
                             while (files.childNodes.length > 1) {
                             	files.removeChild(files.firstChild);
                             }
-                        	
+
                         	$('.doclink').click(function(){
                             	var url = '{{ url('it_doors_file_access_get_if_authenticated') }}';
                             	url += '?';

@@ -619,6 +619,7 @@ class ClaimController extends Controller
         $response['costsNonNDS'] = $entity->getCostsNonNDS();
         $response['costsNDS'] = $entity->getCostsNDS();
         $response['profitability'] = $entity->getProfitability();
+        $response['status'] = $entity->getStatus();
 
         return new JsonResponse($response);
     }
