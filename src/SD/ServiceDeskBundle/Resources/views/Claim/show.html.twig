@@ -406,28 +406,32 @@
                                             <thead>
                                                 <tr>
                                                     <td>#</td>
-                                                    <td>{% trans %}MPK{% endtrans %}</td>
                                                     <td>{% trans %}Work{% endtrans %}</td>
+                                                    {% if access.name != 'client' %}
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
                                                     <td>{% trans %}Profit + NDS{% endtrans %}</td>
                                                     <td>{% trans %}Costs (cash){% endtrans %}</td>
                                                     <td>{% trans %}Costs (no-cash) - NDS{% endtrans %}</td>
                                                     <td>{% trans %}Costs + NDS{% endtrans %}</td>
                                                     <td>{% trans %}Profitability{% endtrans %}</td>
                                                     <td>{% trans %}Status{% endtrans %}</td>
+                                                    {% endif %}
                                                 </tr>
                                             </thead>
                                             <tbody id="fins">
                                                 {% for key,record in entity.financeRecords %}
                                                     <tr>
                                                         <td>{{ key + 1 }}</td>
-                                                        <td>{{ record.mpk ? record.mpk : '' }}</td>
                                                         <td>{{ record.work ? record.work : '' }}</td>
+                                                        {% if access.name != 'client' %}
+                                                        <td>{{ record.mpk ? record.mpk : '' }}</td>
                                                         <td>{{ record.incomeNDS ? record.incomeNDS : '' }}</td>
                                                         <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
                                                         <td>{{ record.costsNonNDS ? record.costsNonNDS : '' }}</td>
                                                         <td>{{ record.costsNDS ? record.costsNDS : '' }}</td>
                                                         <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
                                                         <td>{{ record.status | trans }}</td>
+                                                        {% endif %}
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
