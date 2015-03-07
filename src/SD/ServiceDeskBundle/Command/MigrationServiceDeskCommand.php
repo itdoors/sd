@@ -464,6 +464,14 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
 
                     $user = $doctrine->getRepository('SDUserBundle:User')
                         ->find($claimUser['user_id']);
+                    if (!$user->hasGroup('CLAIM_CLIENT')) {
+                        $gm = $this->getContainer()->get('fos_user.group_manager');
+                        $groupFOS = $gm->findGroupByName('CLAIM_CLIENT');
+                        if (!$groupFOS) {
+                            $groupFOS = $gm->createGroup('CLAIM_CLIENT');
+                        }
+                        $user->addGroup($groupFOS);
+                    }
 
                     // new individual for client here
                     $sd_individual = $user->getIndividual();
