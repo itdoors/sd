@@ -68,7 +68,7 @@ class HolidayService
         $users = $em->getRepository('SDUserBundle:User')->getOnlyStuff()->getQuery()->getResult();
 
         foreach ($users as $user) {
-            if ($user->getEmail() && $user->getId() == 384) {
+            if ($user->getEmail()) {
                 $textForSend = $text;
                 if ($user->hasRole('ROLE_GOS_TENDER') && $grafikService->isWorkDay(time())) {
                     $textForSend .= $this->getTenders($user);
