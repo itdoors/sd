@@ -2,6 +2,7 @@
 
 namespace SD\ServiceDeskBundle\Controller;
 
+use SD\ServiceDeskBundle\Classes\ClaimAccessFactory;
 use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
 use SD\ServiceDeskBundle\Entity\CostNal;
 use SD\ServiceDeskBundle\Entity\FinStatusType;
@@ -712,6 +713,11 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+
+        $user = $this->getUser();
+
+        $access = ClaimAccessFactory::createAccess($user, $entity);
+
         if ($entity instanceof ClaimDepartment) {
             $entity = $em->getRepository('SDServiceDeskBundle:ClaimDepartment')->findClaim($id);
         } else {
@@ -780,8 +786,21 @@ class ClaimController extends Controller
             'types' => json_encode($types),
             'finStatuses' => json_encode($finStatuses),
             'costNalForms' => $costNalForms,
-            'messages' => $messages
+            'messages' => $messages,
+            'access' => $access
         ));
+    }
+
+    public function closeAction(Request $request) {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setClosedAt(new \DateTime());
+        $em->persist($entity);
+        $em->flush();
+
+        return new Response();
     }
 
     /**

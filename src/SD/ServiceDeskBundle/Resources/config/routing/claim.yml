@@ -14,6 +14,10 @@ claim_new:
     path:     /new
     defaults: { _controller: "SDServiceDeskBundle:Claim:new" }
 
+claim_close:
+    path:     /close
+    defaults: { _controller: "SDServiceDeskBundle:Claim:close" }
+
 claim_create:
     path:     /create
     defaults: { _controller: "SDServiceDeskBundle:Claim:create" }

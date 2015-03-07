@@ -754,7 +754,6 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $individual->setMiddleName($user['middle_name']);
             $em->persist($individual);
 
-
             if ($stuff) {
                 $stuff = $stuff[0];
                 $contact = new Contact();
