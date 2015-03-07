@@ -40,27 +40,31 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getUser();
-        if ($user->hasRole('ROLE_DISPATCHER')) {
+
+
+        if ($user->hasRole('ROLE_DISPATCHER') || $user->hasRole('ROLE_SUPERVISOR')) {
             $entities = $em
                 ->getRepository('SDServiceDeskBundle:Claim')
                 ->findAll();
         } else {
-            $entities = $em
-                ->getRepository('SDServiceDeskBundle:Claim')
-                ->findAllFromUser($user);
+            $accessService = $this->get('access.service');
+
+            $allowedDepartments =$accessService->getAllowedDepartmentsId(null, false);
+
+            $entities1 = $em
+                ->getRepository('SDServiceDeskBundle:ClaimOnce')
+                ->findWithFilter($user);
+
+            $entities2 = $em
+                ->getRepository('SDServiceDeskBundle:ClaimDepartment')
+                ->findWithFilter($user, $allowedDepartments);
+
+            $entities = array_merge($entities1, $entities2);
         }
 
-        $result = [];
-        foreach ($entities as $entity) {
-            $result[] = [
-                'claim' => $entity,
-                'firstName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getFirstName() : '',
-                'lastName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getLastName() : ''
-            ];
-        }
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
-            'entities' => $result
+            'entities' => $entities
         ));
     }
 
@@ -74,18 +78,24 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getUser();
-        if ($user->hasRole('ROLE_DISPATCHER')) {
+        if ($user->hasRole('ROLE_DISPATCHER') || $user->hasRole('ROLE_SUPERVISOR')) {
             $userFilter = null;
+
+            $allowedDepartments = null;
         } else {
             $userFilter = $user;
+
+            $accessService = $this->get('access.service');
+            $allowedDepartments =$accessService->getAllowedDepartmentsId(null, false);
+            //var_dump($allowedDepartments);
         }
         $entities1 = $em
             ->getRepository('SDServiceDeskBundle:ClaimOnce')
-            ->findNotDone($userFilter);
+            ->findWithFilter($userFilter, true);
 
         $entities2 = $em
             ->getRepository('SDServiceDeskBundle:ClaimDepartment')
-            ->findNotDone($userFilter);
+            ->findWithFilter($userFilter, $allowedDepartments, true);
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => array_merge($entities1, $entities2)

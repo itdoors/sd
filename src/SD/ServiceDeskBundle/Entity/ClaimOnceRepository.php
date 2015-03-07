@@ -17,7 +17,7 @@ class ClaimOnceRepository extends EntityRepository
      *
      * @return array
      */
-    public function findNotDone()
+    public function findWithFilter($user, $closed = false)
     {
         $query = $this->createQueryBuilder('c')
             ->select('c as claim')
@@ -27,12 +27,25 @@ class ClaimOnceRepository extends EntityRepository
             ->addSelect('i.lastName')
             ->leftJoin('c.importance', 'im')
             ->join('c.customer', 'cust')
-            ->join('cust.individual', 'i')
-            ->where('c.closedAt is NULL')
+            ->join('cust.individual', 'i');
+        if ($closed) {
+            $query = $query
+                ->where('c.closedAt is NULL');
+        }
+        if ($user) {
+            $query = $query
+                ->leftJoin('c.claimPerformerRules', 'cpr')
+                ->leftJoin('cpr.claimPerformer', 'performer')
+                ->leftJoin('performer.individual', 'performer_individual')
+                ->leftJoin('performer_individual.user', 'performer_user')
+                ->andWhere('performer_user = :user')
+                ->setParameter(':user', $user);
+        }
+
 //             ->andWhere('c.status != :rejected')
 //             ->setParameter('done', StatusType::DONE)
 //             ->setParameter('rejected', StatusType::REJECTED)
-            ->getQuery()
+        $query = $query->getQuery()
             ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true);
 
         return $query->getResult();

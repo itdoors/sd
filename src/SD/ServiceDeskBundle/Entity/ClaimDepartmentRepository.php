@@ -17,8 +17,35 @@ class ClaimDepartmentRepository extends EntityRepository
      *
      * @return array
      */
-    public function findNotDone($user)
+    public function findWithFilter($user, $allowedDepartments, $closed = false)
     {
+
+        $addFilterString = '';
+        $userFilter = false;
+        $departmentFilter = false;
+        if ($user) {
+            $addFilterString = 'performer_user = :user';
+            $userFilter = true;
+        }
+
+        if ($allowedDepartments != null) {
+            if (count($allowedDepartments) > 0) {
+                if ($userFilter) {
+                    $addFilterString .= ' OR ';
+                }
+                $addFilterString .= 'd.id IN (:departments)';
+                $departmentFilter = true;
+                    //->setParameter(':departments', $allowedDepartments);
+            }
+        } else {
+            if ($userFilter) {
+                $addFilterString .= ' OR ';
+            }
+            $addFilterString .= 'd.id > 0'; // all departments
+            $departmentFilter = false;
+        }
+
+
         $query = $this->createQueryBuilder('c')
             ->select('c as claim')
             ->addSelect('im')
@@ -37,13 +64,28 @@ class ClaimDepartmentRepository extends EntityRepository
             ->leftJoin('ct.region', 'reg')
             ->leftJoin('reg.companystructure', 'cs')
             ->join('c.customer', 'cust')
-            ->join('cust.individual', 'i')
-            ->where('c.closedAt is NULL');
-            if ($user) {
+            ->join('cust.individual', 'i');
+
+            if ($closed) {
                 $query = $query
-                    ->leftJoin('i.user', 'u')
-                    ->andWhere('u = :user')
-                    ->setParameter(':user', $user);
+                    ->where('c.closedAt is NULL');
+            }
+
+            if ($userFilter || $departmentFilter) {
+                $query = $query
+                    ->leftJoin('c.claimPerformerRules', 'cpr')
+                    ->leftJoin('cpr.claimPerformer', 'performer')
+                    ->leftJoin('performer.individual', 'performer_individual')
+                    ->leftJoin('performer_individual.user', 'performer_user')
+                    ->andWhere($addFilterString);
+                if ($userFilter) {
+                    $query = $query
+                        ->setParameter(':user', $user);
+                }
+                if ($departmentFilter) {
+                    $query = $query
+                        ->setParameter(':departments', $allowedDepartments);
+                }
             }
 //             ->andWhere('c.status != :rejected')
 //             ->setParameter('done', StatusType::DONE)
