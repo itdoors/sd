@@ -39,7 +39,7 @@ class ClaimDepartmentRepository extends EntityRepository
             ->join('c.customer', 'cust')
             ->join('cust.individual', 'i')
             ->where('c.closedAt is NULL');
-            if (!$user) {
+            if ($user) {
                 $query = $query
                     ->leftJoin('i.user', 'u')
                     ->andWhere('u = :user')

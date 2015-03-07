@@ -193,8 +193,11 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                     ->find($importanceId));
 
             $sd_claim->setCreatedAt(new \DateTime($claimCreateDatetime));
-            $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
-
+            if ($claimCloseDatetime != null) {
+                $sd_claim->setClosedAt(new \DateTime($claimCloseDatetime));
+            } else {
+                $sd_claim->setClosedAt(null);
+            }
             $claimOrganizationType = OrganizationType::NETWORK;
             if ($claimOrganizationTypeId == 1) {
                 $claimOrganizationType = OrganizationType::NETWORK;

@@ -40,7 +40,7 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getUser();
-        if ($user->hasRole('DISPATCHER')) {
+        if ($user->hasRole('ROLE_DISPATCHER')) {
             $entities = $em
                 ->getRepository('SDServiceDeskBundle:Claim')
                 ->findAll();
@@ -74,12 +74,11 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getUser();
-        if ($user->hasRole('DISPATCHER')) {
+        if ($user->hasRole('ROLE_DISPATCHER')) {
             $userFilter = null;
         } else {
             $userFilter = $user;
         }
-
         $entities1 = $em
             ->getRepository('SDServiceDeskBundle:ClaimOnce')
             ->findNotDone($userFilter);
