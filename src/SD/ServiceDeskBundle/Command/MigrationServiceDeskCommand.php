@@ -469,8 +469,11 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         $groupFOS = $gm->findGroupByName('CLAIM_CLIENT');
                         if (!$groupFOS) {
                             $groupFOS = $gm->createGroup('CLAIM_CLIENT');
+                            $groupFOS->addRole('ROLE_CLAIM_CLIENT');
+                            $em->persist($groupFOS);
                         }
                         $user->addGroup($groupFOS);
+                        $em->persist($user);
                     }
 
                     // new individual for client here
@@ -483,7 +486,6 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
                         $em->persist($sd_individual);
 
                     }
-
 
                     $res = memory_get_usage ().'--'.$userMiddleName.' - '.$userLastName.' - '.$userFirstName.' - '.$clientOrganizationId;
                     $output->writeln($res);
