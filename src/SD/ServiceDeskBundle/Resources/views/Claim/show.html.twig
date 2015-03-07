@@ -538,7 +538,7 @@
                      <div class="col-md-2 margin-top-20">
                          {% if access.canPostToClient() %}
                              {% if access.name == 'client' %}
-                                 {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control hidden', 'checked': 'unchecked'}}) }}
+                                 {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control hidden', 'checked': 'unchecked', 'value':0 }}) }}
                              {% else %}
                                  {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
                                  <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
