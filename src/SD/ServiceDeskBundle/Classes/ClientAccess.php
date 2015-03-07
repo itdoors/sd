@@ -43,10 +43,10 @@ class ClientAccess extends BasicAccess
     /**
      * @return bool
      */
-    public function canPost()
+    public function canPostToClient()
     {
 
-        return false;
+        return true;
     }
 
 }

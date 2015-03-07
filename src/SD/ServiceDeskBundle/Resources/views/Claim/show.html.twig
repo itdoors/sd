@@ -541,8 +541,8 @@
                                  {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control hidden', 'checked': 'unchecked'}}) }}
                              {% else %}
                                  {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
+                                 <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
                              {% endif %}
-                            <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
                          {% else %}
                              <style>
                                  .hidden{
