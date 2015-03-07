@@ -49,7 +49,13 @@
     						<a href="#tab_1_1" aria-controls="tab_1_1" role="tab" data-toggle="tab">{% trans %}Main{% endtrans %}</a>
     					</li>
     					<li role="presentation">
-    						<a href="#tab_1_2" aria-controls="tab_1_2" role="tab" data-toggle="tab">{% trans %}Finance{% endtrans %}</a>
+    						<a href="#tab_1_2" aria-controls="tab_1_2" role="tab" data-toggle="tab">
+                                {% if access.name == 'client' %}
+                                    {% trans %}Works{% endtrans %}
+                                {% else %}
+                                    {% trans %}Finance{% endtrans %}
+                                {% endif %}
+                            </a>
     					</li>
     				</ul>
     				<div class="tab-content">
@@ -62,19 +68,27 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Number{% endtrans %}</td>
-                                                        <td>#{{ entity.id }}</td>
+                                                        <td>#{{ entity.id }} {{ access.name }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Claim Type{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_type">{{ entity.type | trans}}</a></td>
+                                                        <td>
+                                                            {% if access.canEditMainInfo() %}
+                                                                <a href="#" id="claim_type">{{ entity.type | trans}}</a>
+                                                            {% else %}
+                                                                {{ entity.type | trans}}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Created{% endtrans %}</td>
-                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i:s') }}{% endif %}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Closed{% endtrans %}</td>
-                                                        <td>{% if entity.closedAt %}{{ entity.closedAt|date('d.m.y H:i') }}{% endif %}</td>
+                                                        <td>{% if entity.closedAt %}
+                                                                <span style="color: red;"> {{ entity.closedAt|date('d.m.y H:i') }}</span>
+                                                            {% endif %}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Organization{% endtrans %}</td>
@@ -96,6 +110,34 @@
                                             </table>
                                         </div>
                                     </div>
+                                    {% if access.canCloseClaim() and not entity.closedAt %}
+                                    <button class="btn red" data-id="{{ entity.id }}" data-url="{{ path('claim_close') }}" id="close_button">{% trans %}Close claim{% endtrans %}</button>
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#close_button').on('click', function () {
+                                                var element = this;
+                                                var id = $(this).data('id');
+                                                var url = $(this).data('url');
+                                                $.ajax({
+                                                    data: {
+                                                        id: id
+                                                    },
+                                                    type: "POST",
+                                                    url: url,
+                                                    beforeSend: function () {
+                                                        SD.blockUI($('#close_button'));
+                                                    },
+                                                    success: function (response) {
+                                                        document.location.reload();
+                                                    },
+                                                    error: function (response) {
+                                                        SD.unblockUI($('#close_button'));
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+                                    {% endif %}
                                     {#<div class="margin-bottom-10">#}
                                         {#{{ include ('ITDoorsHistoryBundle:History:connection.html.twig', { modelName: 'sd_claim', modelId : entity.id }) }}#}
                                     {#</div>#}
@@ -111,16 +153,33 @@
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}MPK{% endtrans %}</td>
-                                                    <td><a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a></td>
+                                                    <td>
+                                                        {% if access.canEditMainInfo() %}
+                                                            <a href="#" id="claim_mpk">{{ entity.mpk ? entity.mpk : '' }}</a>
+                                                        {% else %}
+                                                            {{ entity.mpk ? entity.mpk : '' }}
+                                                        {% endif %}
+
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Claim Importance{% endtrans %}</td>
-                                                    <td><a href="#" id="claim_importance">{{ entity.importance | trans}}</a></td>
+                                                    <td>
+                                                        {% if access.canEditMainInfo() %}
+                                                            <a href="#" id="claim_importance">{{ entity.importance | trans}}</a>
+                                                        {% else %}
+                                                            {{ entity.importance | trans}}
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Claim Status{% endtrans %}</td>
                                                     <td>
-                                                        <a href="#" id="claim_status">{{ entity.status | trans}}</a>
+                                                        {% if access.canEditMainInfo() %}
+                                                            <a href="#" id="claim_status">{{ entity.status | trans}}</a>
+                                                        {% else %}
+                                                            {{ entity.status | trans}}
+                                                        {% endif %}
                                                         {% if entity.statusLastModified %}{{ '('~entity.statusLastModified|date('d.m.y H:i')~')' }}{% endif %}
                                                     </td>
                                                 </tr>
@@ -134,7 +193,13 @@
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Smeta Status{% endtrans %}</td>
-                                                    <td><a href="#" id="claim_smeta_status"></a></td>
+                                                    <td>
+                                                        {% if access.canEditMainInfo() %}
+                                                            <a href="#" id="claim_smeta_status"></a>
+                                                        {% else %}
+                                                            {{ entity.smetaStatus | trans}}
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -150,12 +215,15 @@
                             			     <div id="performers_body">
                                 			     {% for rule in entity.claimPerformerRules %}
                                 			         <p>{{ rule.claimPerformer }}
-                                                         <a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canEditFinanceData {{ rule.canEditFinanceData ? 'green' : 'default' }}"><i class="fa fa-usd"></i></a>
-                                                         <a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canPostToClients {{ rule.canPostToClients ? 'green' : 'default' }}"><i class="fa fa-pencil"></i></a>
-                                                         <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
+                                                         {% if access.canEditPerformers() %}
+                                                             <a href="#" title="{% trans %}Can edit finance data{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canEditFinanceData {{ rule.canEditFinanceData ? 'green' : 'default' }}"><i class="fa fa-usd"></i></a>
+                                                             <a href="#" title="{% trans %}Can post to clients{% endtrans%}" value="{{ rule.id }}" class="btn btn-xs canPostToClients {{ rule.canPostToClients ? 'green' : 'default' }}"><i class="fa fa-pencil"></i></a>
+                                                             <button type="button" class="close remove-performer" value="{{ rule.id }}" aria-label="Remove"></button>
+                                                         {% endif %}
                                 			         </p>
                                 			     {% endfor %}
                             			     </div>
+                                             {% if access.canEditPerformers() %}
                             			     {{ form_start(performerRuleForm) }}
                                 			     <div class="input-group">
                         				               {{ form_widget(performerRuleForm.claimPerformer, {'attr' : {'class' : 'form-control select2me', 'placeholder': 'Select...' | trans}}) }}
@@ -164,12 +232,14 @@
                             							</span>
                         						</div>
                     						{{ form_end(performerRuleForm) }}
+                                            {% endif %}
                             			</div>
                             		</div>
                         		</div>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab_1_2">
+                            {% if access.canSeeFinances() %}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div>
@@ -182,15 +252,33 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Number{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_akt">{{ entity.akt ? entity.akt : '' }}</a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_akt">{{ entity.akt ? entity.akt : '' }}</a>
+                                                            {% else %}
+                                                                {{ entity.akt ? entity.akt : '' }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Smeta Number{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_smeta">{{ entity.smeta ? entity.smeta : '' }}</a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_smeta">{{ entity.smeta ? entity.smeta : '' }}</a>
+                                                            {% else %}
+                                                                {{ entity.smeta ? entity.smeta : '' }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Finance Status{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_fin_status"></a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_fin_status"></a>
+                                                            {% else %}
+                                                                {{ entity.finStatus | trans}}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -212,15 +300,33 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Act Date{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_act_date">{{ entity.aktDate ? entity.aktDate|date('d.m.Y') : '' }}</a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_act_date">{{ entity.aktDate ? entity.aktDate|date('d.m.Y') : '' }}</a>
+                                                            {% else %}
+                                                                {{ entity.aktDate ? entity.aktDate|date('d.m.Y') : '' }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Preliminary Smeta Cost{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_smeta_cost">{{ entity.smetaCost ? entity.smetaCost : '' }}</a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_smeta_cost">{{ entity.smetaCost ? entity.smetaCost : '' }}</a>
+                                                            {% else %}
+                                                                {{ entity.smetaCost ? entity.smetaCost : '' }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Bill Date{% endtrans %}</td>
-                                                        <td><a href="#" id="claim_bill_date">{{ entity.billDate ? entity.billDate|date('d.m.Y') : '' }}</a></td>
+                                                        <td>
+                                                            {% if access.canEditFinances() %}
+                                                                <a href="#" id="claim_bill_date">{{ entity.billDate ? entity.billDate|date('d.m.Y') : '' }}</a>
+                                                            {% else %}
+                                                                {{ entity.billDate ? entity.billDate|date('d.m.Y') : '' }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -228,6 +334,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                             {% for record in entity.financeRecords %}
                                 <div class="modal fade bs-modal-lg" id="costsN_{{ record.id }}" tabindex="-1" role="basic" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
@@ -256,6 +363,7 @@
                                                             {% endfor %}
                                                         </tbody>
                                                     </table>
+                                                    {% if access.canEditFinances() %}
                                                     {{ form_start(costNalForms[record.id], {'attr' : {'class' : 'form-horizontal'}}) }}
                                                         <div class="form-body">
                                                             <div class="form-group">
@@ -281,6 +389,7 @@
                                                             </div>
                                                         </div>
                                                     {{ form_end(costNalForms[record.id]) }}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -297,14 +406,16 @@
                                             <thead>
                                                 <tr>
                                                     <td>#</td>
-                                                    <td>{% trans %}MPK{% endtrans %}</td>
                                                     <td>{% trans %}Work{% endtrans %}</td>
+                                                    {% if access.name != 'client' %}
+                                                    <td>{% trans %}MPK{% endtrans %}</td>
                                                     <td>{% trans %}Profit + NDS{% endtrans %}</td>
                                                     <td>{% trans %}Costs (cash){% endtrans %}</td>
                                                     <td>{% trans %}Costs (no-cash) - NDS{% endtrans %}</td>
                                                     <td>{% trans %}Costs + NDS{% endtrans %}</td>
                                                     <td>{% trans %}Profitability{% endtrans %}</td>
                                                     <td>{% trans %}Status{% endtrans %}</td>
+                                                    {% endif %}
                                                 </tr>
                                             </thead>
                                             <tbody id="fins">
@@ -312,6 +423,7 @@
                                                     <tr>
                                                         <td>{{ key + 1 }}</td>
                                                         <td>{{ record.mpk ? record.mpk : '' }}</td>
+                                                        {% if access.name != 'client' %}
                                                         <td><a href="#" id="fin_record_work_{{ record.id }}">{{ record.work ? record.work : '' }}</a></td>
                                                         <td><a href="#" id="fin_record_incomeNDS_{{ record.id }}">{{ record.incomeNDS ? record.incomeNDS : '' }}</a></td>
                                                         <td><a data-toggle="modal" id="link_costsN_{{ record.id }}" href="#costsN_{{ record.id }}">{{ record.costsNSum }}</a></td>
@@ -319,6 +431,7 @@
                                                         <td><a href="#" id="fin_record_costsNDS_{{ record.id }}">{{ record.costsNDS ? record.costsNDS : '' }}</a></td>
                                                         <td id="profitability_{{ record.id }}">{{ record.profitability }}/{{ record.profitabilityProc }}%</td>
                                                         <td><a href="#" id="fin_record_status_{{ record.id }}"></a></td>
+                                                        {% endif %}
                                                         <script>
                                                             $(document).ready(function() {
                                                                 function updateClaimData(recId) {
@@ -390,6 +503,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    {% if access.canEditWorks() %}
                                     {{ form_start(financeForm, {'attr' : {'class' : 'form-horizontal'}}) }}
                                         <div class="form-body">
                                             <div class="form-group">
@@ -433,6 +547,7 @@
                                             </div>
                                         </div>
                                     {{ form_end(financeForm) }}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -459,6 +574,7 @@
                         {% endif %}
                  </div>
                  {% for message in messages %}
+                     {% if access.name != 'client' or message.staffOnly != true %}
                      <div class="note note-{% if message.staffOnly %}info{% else %}success{% endif %}">
                         <h5 class="block">
                           <a href="{{ path('sd_user_show', { id : message.user.id }) }}">{{ message.user }}</a>
@@ -476,6 +592,7 @@
                           {% endfor %}
                         {% endif %}
                     </div>
+                    {% endif %}
                  {% endfor %}
                  <div id="my_msg"></div>
                  {{ form_start(form) }}
@@ -485,8 +602,22 @@
                         <button id="add_msg" type="submit" class="btn btn-default margin-top-10">{% trans %}Send{% endtrans %}</button>
                      </div>
                      <div class="col-md-2 margin-top-20">
-                        {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
-                        <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
+                         {% if access.canPostToClient() %}
+                             {% if access.name == 'client' %}
+                                 {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control hidden', 'checked': 'unchecked', 'value':0 }}) }}
+                             {% else %}
+                                 {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control'}}) }}
+                                 <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
+                             {% endif %}
+                         {% else %}
+                             <style>
+                                 .hidden{
+                                     display: none;
+                                 }
+                             </style>
+                             {{ form_widget(form.staffOnly, {'attr' : {'class' : 'form-control hidden', 'checked': 'checked'}}) }}
+                             <label class="required control-label">{% trans %}Staff Only{% endtrans%}</label>
+                         {% endif %}
                      </div>
                      <div class="col-md-8 margin-top-10">
                         {{ form_widget(form.files)|raw }}
@@ -623,9 +754,9 @@
                     title: '{% trans %}Finance Status{% endtrans %}',
                     placement: 'right',
                     value: '{{ entity.finStatus }}',
-                    source: {{ finStatuses | join(',') | raw }}
-                    ,pk: {{ entity.id }}
-                    ,url: '{{ path('claim_ch_fin_status') }}'
+                    source: {{ finStatuses | join(',') | raw }},
+                    pk: {{ entity.id }},
+                    url: '{{ path('claim_ch_fin_status') }}'
                 });
                 $('#claim_act_date').editable({
                     type: 'combodate',

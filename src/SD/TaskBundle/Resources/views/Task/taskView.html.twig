@@ -890,10 +890,10 @@
                         <button id="task_set_performing_controller" data-stage="performing" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Re-make{% endtrans %}</button>
                     {% endif %}
                     {% if access.canSignUp %}
-                        <button id="task_sign_up" data-status="1" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Sign up{% endtrans %}</button>
+                        <button id="task_sign_up" data-status="1" class="signUpButton btn btn-circle btn-sm green" style="margin-top:5px;">{% trans %}Sign up{% endtrans %}</button>
                     {% endif %}
                     {% if access.canRefuseSignUp %}
-                        <button id="task_sign_up" data-status="0" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Refuse sign up{% endtrans %}</button>
+                        <button id="task_sign_up" data-status="0" class="signUpButton btn btn-circle btn-sm red" style="margin-top:5px;">{% trans %}Refuse sign up{% endtrans %}</button>
                     {% endif %}
                     {% if access.canAddResolution %}
                         <button id="task_add_resolution" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Add resolution{% endtrans %}</button>

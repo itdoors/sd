@@ -180,7 +180,6 @@ class AjaxController extends Controller
         $access= $service->checkAccess($this->getUser(), $object);
         
         $method = 'canEdit'.$className;
-        var_dump($method);die;
         if (!$access->$method()) {
             throw $this->createAccessDeniedException();
         }
@@ -209,7 +208,7 @@ class AjaxController extends Controller
                 $value = null;
             }
         }
-        if (in_array($name, array('square', 'pf'))) {
+        if (in_array($name, array('square', 'pf', 'summaWithVAT'))) {
             if (!empty($value)) {
                 $value = str_replace(',', '.', str_replace(' ', '', $value));
             } else {

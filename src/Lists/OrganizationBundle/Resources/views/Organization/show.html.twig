@@ -7,7 +7,9 @@
 			<i class="fa fa-home"></i>
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 		</li>
+{#
 		<li><a href="{{ path('lists_organization_index', {type:'my'}) }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
+#}
 		<li><a href="{{ path('lists_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
 	</ul>
 {% endblock %}

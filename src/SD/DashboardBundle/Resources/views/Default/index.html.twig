@@ -42,5 +42,7 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'SDDashboardBundle:Default:items.html.twig' %}
+    {% if not is_granted('ROLE_CLAIM_CLIENT') %}
+        {% include 'SDDashboardBundle:Default:items.html.twig' %}
+    {% endif %}
 {% endblock %}

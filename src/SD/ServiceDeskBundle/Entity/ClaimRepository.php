@@ -44,4 +44,20 @@ class ClaimRepository extends EntityRepository
 
         return $result[0];
     }
+
+    public function findAllFromUser($user, $allowedDepartments) {
+        $result = $this->createQueryBuilder('c')
+            ->leftJoin('c.claimPerformerRules', 'cpr')
+            ->leftJoin('cpr.claimPerformer', 'cp')
+            ->leftJoin('cp.individual', 'i')
+            ->leftJoin('i.user', 'u')
+            ->where('u = :user')
+            ->setParameter(':user', $user);
+
+        $result =  $result->getQuery()
+            ->setHint(Query::HINT_FORCE_PARTIAL_LOAD, true)
+            ->getResult();
+
+        return $result;
+    }
 }

@@ -452,8 +452,8 @@ class OrganizationController extends BaseController
                 $organizationUser->setUser($u);
                 $em->persist($organizationUser);
 
-                $serviceHandlingUser = $this->container->get('lists_handling.user.service');
-                $serviceHandlingUser->changeManagerProject($organizationId, $userId);
+                $serviceProject = $this->container->get('lists_project.service');
+                $serviceProject->changeManagerProject($organizationId, $userId);
             }
         }
         if ($this->getUser()->hasRole('ROLE_HRADMIN') && !empty($departmensIds)) {
@@ -469,6 +469,8 @@ class OrganizationController extends BaseController
                 $department = $em
                     ->getRepository('ListsDepartmentBundle:Departments')
                     ->find($departmenId);
+                $department->setOpermanager($u);
+                $em->persist($department);
                 $stuffDepartments = $em
                     ->getRepository('SDUserBundle:StuffDepartments')
                     ->findBy(array (

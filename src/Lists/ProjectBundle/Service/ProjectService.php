@@ -194,92 +194,6 @@ class ProjectService
                     'entity'=>'Lists\ProjectBundle\Entity\Project',
                     'data' => $project
                 ));
-//            $form
-//            ->get('planned')
-//                ->add('contact', 'entity', array(
-//                    'class' => 'ListsContactBundle:ModelContact',
-//                    'required' => true,
-//                    'query_builder' => function (\Lists\ContactBundle\Entity\ModelContactRepository $repository) use ($organizationId) {
-//                        return $repository->createQueryBuilder('mc')
-//                            ->leftJoin('mc.owner', 'owner')
-//                            ->where('mc.modelName = :modelName')
-//                            ->andWhere('mc.modelId = :modelId')
-//                            ->setParameter(':modelName', \Lists\ContactBundle\Entity\ModelContactRepository::MODEL_ORGANIZATION)
-//                            ->setParameter(':modelId', $organizationId);
-//                    }
-//                ));
-//        $form
-//            ->add('usersFromOurSide', 'entity', array(
-//                'class' => 'ListsHandlingBundle:HandlingUser',
-//                'empty_value' => '',
-//                'required' => false,
-//                'multiple' => true,
-//                'mapped' => false,
-//                'query_builder' => function (HandlingUserRepository $repository) use ($handlingId) {
-//                        return $repository->createQueryBuilder('hu')
-//                            ->innerJoin('hu.handling', 'h')
-//                            ->leftJoin('hu.lookup', 'l')
-//                            ->innerJoin('hu.user', 'u')
-//                            ->innerJoin('u.stuff', 's')
-//                            ->where('h.id = :handlingId')
-//                            ->setParameter(':handlingId', $handlingId);
-//                }
-//            ));
-//
-//        $form
-//            ->add('contactMany', 'entity', array(
-//                'class' => 'ListsContactBundle:ModelContact',
-//                'empty_value' => '',
-//                'required' => false,
-//                'mapped' => false,
-//                'multiple' => true,
-//                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-//                        return $repository->createQueryBuilder('mc')
-//                            ->leftJoin('mc.owner', 'owner')
-//                            ->where('mc.modelName = :modelName')
-//                            ->andWhere('mc.modelId = :modelId')
-//                            ->andWhere('owner.id in (:ownerIds)')
-//                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-//                            ->setParameter(':modelId', $organizationId)
-//                            ->setParameter(':ownerIds', $userIds);
-//                }
-//            ));
-//
-//         $form
-//            ->add('contactnext', 'entity', array(
-//                'class' => 'ListsContactBundle:ModelContact',
-//                'empty_value' => '',
-//                'required' => false,
-//                'mapped' => false,
-//                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-//                        return $repository->createQueryBuilder('mc')
-//                            ->leftJoin('mc.owner', 'owner')
-//                            ->where('mc.modelName = :modelName')
-//                            ->andWhere('mc.modelId = :modelId')
-//                            ->andWhere('owner.id in (:ownerIds)')
-//                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-//                            ->setParameter(':modelId', $organizationId)
-//                            ->setParameter(':ownerIds', $userIds);
-//                }
-//            ));
-//
-//        $form
-//            ->add('status', 'entity', array(
-//                'class' => 'ListsHandlingBundle:HandlingStatus',
-//                'data' => $handling->getStatus(),
-//                'empty_value' => '',
-//                'mapped' => false,
-//                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-//                        return $repository->createQueryBuilder('s')
-//                            ->orderBy('s.sortorder', 'ASC');
-//                }
-//            ));
-//
-//        $form
-//            ->add('mindate', 'hidden', array(
-//                'data' => $defaultData['mindate'],
-//                'mapped' => false
-//        ));
     }
     /**
      * Add form defaults depending on defaults)
@@ -513,5 +427,53 @@ class ProjectService
             $this->em->flush();
         }
     }
-    
+    /**
+     * Save form
+     *
+     * @param integer $organizationId
+     * @param integer $userId
+     */
+    public function changeManagerProject($organizationId, $userId)
+    {
+        $projects = $this->em->getRepository('ListsProjectBundle:Project')
+                ->findBy(array('organization' => $organizationId));
+        foreach ($projects as $project) {
+            $this->changeManagerProjectOne($project, $userId);
+        }
+    }
+    /**
+     * Save form
+     *
+     * @param Project $project
+     * @param integer $userId
+     */
+    public function changeManagerProjectOne($project, $userId)
+    {
+        if (!$project->isManagerProject()) {
+            $part = $project->getMaxPart();
+            $user = $this->em->getRepository('SDUserBundle:User')->find($userId);
+            $managerProject = $project->getManagerProject();
+
+            if ($project->isManager($user)) {
+                $manager = $this->em->getRepository('ListsProjectBindle:ManagerType')
+                        ->findOneBy(array(
+                            'user' => $user,
+                            'project' => $project
+                        ));
+                $part += $manager->getPart();
+                $this->em->remove($manager);
+                $this->em->flush();
+            }
+            if (!$managerProject) {
+                $managerProject = new \Lists\ProjectBundle\Entity\ManagerProjectType();
+                $managerProject->setUser($user);
+                $managerProject->setProject($project);
+                $managerProject->setPart($part);
+            } else {
+                $managerProject->setUser($user);
+            }
+            $this->em->persist($managerProject);
+            $this->em->flush();
+        }
+    }
 }

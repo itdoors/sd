@@ -1,0 +1,79 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<div class="navigation">
+        {{ ajax_paginator_render(
+                    pagination, namespase, {
+                            'datatable_ajax': 'ITDoorsAjax.updateList'
+                        }
+                    )
+        }}
+    </div>
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th title="{% trans %}Ownership{% endtrans %}">{% trans %}Ownership short{% endtrans %} </th>
+                <th>{% trans %}Name{% endtrans %} </th>
+                <th>{% trans %}Short Name{% endtrans %} </th>
+                <th>{% trans %}Edrpou{% endtrans %} </th>
+                <th>{% trans %}View{% endtrans %} </th>
+                <th>{% trans %}City{% endtrans %} </th>
+                <th>{% trans %}Region{% endtrans %} </th>
+                <th>{% trans %}Scope{% endtrans %} </th>
+                <th>{% trans %}Managers{% endtrans %} </th>
+                {#% if isShowProject %}
+                <th>{% trans %}Actions{% endtrans %} </th>
+                {% endif %#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>
+                        {% if isShowUrl %}
+                        <a
+                            href="{{ path('lists_organization_show', { id: item.organizationId }) }}">
+                            {{ item.organizationId|e }}
+                        </a>
+                        {% else %}
+                            {{ item.organizationId|e }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.ownershipShortname|e }}</td>
+                    <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.organizationShortname|e }}</td>
+                    <td>{{ item.edrpou|e }}</td>
+                    <td>{{ item.viewNames|e }}</td>
+                    <td>{{ item.cityName|e }}</td>
+                    <td>{{ item.regionName|e }}</td>
+                    <td>{{ item.scopeName|e }}</td>
+                    <td>{{ item.fullNames|e }}</td>
+                    {#% if isShowProject %}
+                        {% set role = 'sales' %}
+                        {% if is_granted('ROLE_SALESADMIN') %}
+                            {% set role = 'sales_admin' %}
+                        {% elseif is_granted('ROLE_DOGOVORADMIN') %}
+                            {% set role = 'dogovor_admin' %}
+                        {% endif %}
+                        <td>
+                            <a
+                                class="btn default btn-xs green-stripe"
+                                href="{{ path('lists_handling_add_organization_filter', {'organizationId': item.organizationId}) }}">
+                                {% trans %}Projects{% endtrans %}
+                            </a>
+                        </td>
+                    {% endif %#}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+    <div class="navigation">
+        {{ ajax_paginator_render(
+                    pagination, namespase, {
+                            'datatable_ajax': 'ITDoorsAjax.updateList'
+                        }
+                    )
+        }}
+    </div>

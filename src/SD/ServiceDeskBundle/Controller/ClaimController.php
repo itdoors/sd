@@ -2,6 +2,7 @@
 
 namespace SD\ServiceDeskBundle\Controller;
 
+use SD\ServiceDeskBundle\Classes\ClaimAccessFactory;
 use SD\ServiceDeskBundle\Entity\ClaimFinanceRecord;
 use SD\ServiceDeskBundle\Entity\CostNal;
 use SD\ServiceDeskBundle\Entity\FinStatusType;
@@ -38,19 +39,39 @@ class ClaimController extends Controller
     public function archiveIndexAction()
     {
         $em = $this->getDoctrine()->getManager();
-    
-        $entities = $em
-            ->getRepository('SDServiceDeskBundle:Claim')
-            ->findAll();
-        
-        $result = [];
-        foreach ($entities as $entity) {
-            $result[] = [
-                'claim' => $entity,
-                'firstName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getFirstName() : '',
-                'lastName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getLastName() : ''
-            ];
+
+        $user = $this->getUser();
+
+
+        if ($user->hasRole('ROLE_DISPATCHER') || $user->hasRole('ROLE_SUPERVISOR')) {
+            $entities = $em
+                ->getRepository('SDServiceDeskBundle:Claim')
+                ->findAll();
+
+            $result = [];
+            foreach ($entities as $key => $entity) {
+                $result[] = [
+                    'claim' => $entity,
+                    'firstName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getFirstName() : '',
+                    'lastName' => $entity->getCustomer() ? $entity->getCustomer()->getIndividual()->getLastName() : ''
+                ];
+            }
+        } else {
+            $accessService = $this->get('access.service');
+
+            $allowedDepartments = $accessService->getAllowedDepartmentsId(null, false);
+
+            $entities1 = $em
+                ->getRepository('SDServiceDeskBundle:ClaimOnce')
+                ->findWithFilter($user);
+
+            $entities2 = $em
+                ->getRepository('SDServiceDeskBundle:ClaimDepartment')
+                ->findWithFilter($user, $allowedDepartments);
+
+            $result  = array_merge($entities1, $entities2);
         }
+
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => $result
@@ -66,13 +87,25 @@ class ClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $user = $this->getUser();
+        if ($user->hasRole('ROLE_DISPATCHER') || $user->hasRole('ROLE_SUPERVISOR')) {
+            $userFilter = null;
+
+            $allowedDepartments = null;
+        } else {
+            $userFilter = $user;
+
+            $accessService = $this->get('access.service');
+            $allowedDepartments =$accessService->getAllowedDepartmentsId(null, false);
+            //var_dump($allowedDepartments);
+        }
         $entities1 = $em
             ->getRepository('SDServiceDeskBundle:ClaimOnce')
-            ->findNotDone();
+            ->findWithFilter($userFilter, true);
 
         $entities2 = $em
             ->getRepository('SDServiceDeskBundle:ClaimDepartment')
-            ->findNotDone();
+            ->findWithFilter($userFilter, $allowedDepartments, true);
 
         return $this->render('SDServiceDeskBundle:Claim:index.html.twig', array(
             'entities' => array_merge($entities1, $entities2)
@@ -814,6 +847,11 @@ class ClaimController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+
+        $user = $this->getUser();
+
+        $access = ClaimAccessFactory::createAccess($user, $entity);
+
         if ($entity instanceof ClaimDepartment) {
             $entity = $em->getRepository('SDServiceDeskBundle:ClaimDepartment')->findClaim($id);
         } else {
@@ -882,8 +920,21 @@ class ClaimController extends Controller
             'types' => json_encode($types),
             'finStatuses' => json_encode($finStatuses),
             'costNalForms' => $costNalForms,
-            'messages' => $messages
+            'messages' => $messages,
+            'access' => $access
         ));
+    }
+
+    public function closeAction(Request $request) {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('SDServiceDeskBundle:Claim')->find($id);
+        $entity->setClosedAt(new \DateTime());
+        $em->persist($entity);
+        $em->flush();
+
+        return new Response();
     }
 
     /**
@@ -1037,6 +1088,6 @@ class ClaimController extends Controller
      */
     private function randomString()
     {
-        return md5(rand(100, 200));
+        return sha1(time()+rand(0,10000));
     }
 }

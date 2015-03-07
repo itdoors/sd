@@ -785,7 +785,7 @@ class Claim
     /**
      * Get finStatus
      *
-     * @return \finStatusType
+     * @return finStatusType
      */
     public function getFinStatus()
     {
@@ -796,7 +796,7 @@ class Claim
     /**
      * Set smetaStatus
      *
-     * @param statusType $smetaStatus
+     * @param string $smetaStatus
      *
      * @return Claim
      */
