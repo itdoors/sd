@@ -24,7 +24,7 @@ class ClaimDepartmentRepository extends EntityRepository
         $userFilter = false;
         $departmentFilter = false;
         if ($user) {
-            $addFilterString = 'performer_user = :user';
+            $addFilterString = 'performer_user = :user OR customer_user = :user';
             $userFilter = true;
         }
 
@@ -64,7 +64,8 @@ class ClaimDepartmentRepository extends EntityRepository
             ->leftJoin('ct.region', 'reg')
             ->leftJoin('reg.companystructure', 'cs')
             ->join('c.customer', 'cust')
-            ->join('cust.individual', 'i');
+            ->join('cust.individual', 'i')
+            ->leftJoin('i.user', 'customer_user');
 
             if ($closed) {
                 $query = $query
