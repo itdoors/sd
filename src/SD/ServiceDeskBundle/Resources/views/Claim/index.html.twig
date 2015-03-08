@@ -88,16 +88,16 @@
                                 {% endif %}
                             </td>
                             {% endif %}
-                            <td>{{ entity['claim'].targetDepartment is not empty ? entity['claim'].targetDepartment.city | default('') : '' }}</td>
-                            <td>{{ entity['claim'].targetDepartment is not empty ? entity['claim'].targetDepartment.address | default('') : '' }}</td>
-                            <td>{{ entity['claim'].targetDepartment is not empty ? entity['claim'].targetDepartment.organization | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.city | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.address | default('') : '' }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.organization | default('') : '' }}</td>
                             {% if not isClient %}
-                            <td>{{ entity['claim'].targetDepartment is not empty ? entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
+                            <td>{{ entity['claim'].targetDepartment is defined ? entity['claim'].targetDepartment.city.region.companystructure | join('<br>') }}</td>
                             {% endif %}
                             <td>{{ entity['claim'].type  | trans }}</td>
                             <td>{{ entity['claim'].status | trans }}</td>
                             <td>{{ entity['claim'].importance.name | default('') }}</td>
-                            <td>{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('d-m-Y') }}{% endif %}</td>
+                            <td data-order="{{ entity['claim'].createdAt|date('U') }}">{% if entity['claim'].createdAt %}{{ entity['claim'].createdAt|date('d-m-y H:i') }}{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
