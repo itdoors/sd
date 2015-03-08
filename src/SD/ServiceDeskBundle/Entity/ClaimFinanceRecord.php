@@ -83,7 +83,7 @@ class ClaimFinanceRecord
      *
      * @ORM\Column(name="obnal", type="float")
      */
-    protected $obnal = 0.12;
+    protected $obnal = 0.15;
 
     /**
      * @var boolean
