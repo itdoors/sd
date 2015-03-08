@@ -12,36 +12,36 @@ use Doctrine\ORM\Mapping as ORM;
 class ClaimOnce extends Claim
 {
     /**
-     * @var \Lists\IndividualBundle\Entity\Individual
+     * @var \SD\ServiceDeskBundle\Entity\ClaimTarget
      *
-     * @ORM\ManyToOne(targetEntity="Lists\IndividualBundle\Entity\Individual")
+     * @ORM\ManyToOne(targetEntity="SD\ServiceDeskBundle\Entity\ClaimTarget")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="targetIndividual_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="claim_target_id", referencedColumnName="id")
      * })
      */
-    private $targetIndividual;
+    protected $claimTarget;
 
     /**
-     * Set targetIndividual
+     * Set claimTarget
      *
-     * @param \Lists\IndividualBundle\Entity\Individual $targetIndividual
-     * 
+     * @param \SD\ServiceDeskBundle\Entity\ClaimTarget $claimTarget
+     *
      * @return ClaimOnce
      */
-    public function setTargetIndividual(\Lists\IndividualBundle\Entity\Individual $targetIndividual = null)
+    public function setClaimTarget(\SD\ServiceDeskBundle\Entity\ClaimTarget $claimTarget = null)
     {
-        $this->targetIndividual = $targetIndividual;
-
+        $this->claimTarget = $claimTarget;
+    
         return $this;
     }
 
     /**
-     * Get targetIndividual
+     * Get claimTarget
      *
-     * @return \Lists\IndividualBundle\Entity\Individual 
+     * @return \SD\ServiceDeskBundle\Entity\ClaimTarget 
      */
-    public function getTargetIndividual()
+    public function getClaimTarget()
     {
-        return $this->targetIndividual;
+        return $this->claimTarget;
     }
 }

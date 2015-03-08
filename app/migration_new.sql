@@ -109,3 +109,14 @@ ALTER TABLE sd_claim ADD smeta_cost TEXT DEFAULT NULL;
 ALTER TABLE sd_claim ADD fin_status VARCHAR(50) DEFAULT NULL;
 ALTER TABLE sd_claim ADD smeta_status VARCHAR(50) DEFAULT NULL;
 ALTER TABLE sd_claim ADD org_type VARCHAR(50) DEFAULT NULL;
+
+CREATE TABLE sd_claim_target (id SERIAL NOT NULL, discr VARCHAR(255) NOT NULL, type VARCHAR(50) DEFAULT NULL, PRIMARY KEY(id));
+CREATE TABLE sd_claim_targets_clients (target_id INT NOT NULL, client_id INT NOT NULL, PRIMARY KEY(target_id, client_id));
+CREATE INDEX IDX_99980690158E0B66 ON sd_claim_targets_clients (target_id);
+CREATE INDEX IDX_9998069019EB6921 ON sd_claim_targets_clients (client_id);
+ALTER TABLE sd_claim_targets_clients ADD CONSTRAINT FK_99980690158E0B66 FOREIGN KEY (target_id) REFERENCES sd_claim_target (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE sd_claim_targets_clients ADD CONSTRAINT FK_9998069019EB6921 FOREIGN KEY (client_id) REFERENCES sd_business_role (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE sd_claim ADD claim_target_id INT DEFAULT NULL;
+ALTER TABLE sd_claim DROP targetindividual_id;
+ALTER TABLE sd_claim ADD CONSTRAINT FK_A497B2F464FE7E09 FOREIGN KEY (claim_target_id) REFERENCES sd_claim_target (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A497B2F464FE7E09 ON sd_claim (claim_target_id);
