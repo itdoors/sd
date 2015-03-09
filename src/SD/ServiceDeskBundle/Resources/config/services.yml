@@ -1,5 +1,6 @@
 parameters:
     sd_service_desk.dep.form.add.class: SD\ServiceDeskBundle\Form\ClaimDepartmentType
+    sd_service_desk.claim.form.add.class: SD\ServiceDeskBundle\Form\ClaimType
 
 services:
     sd_service_desk.dep.form.add:
@@ -7,3 +8,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: sd_servicedeskbundle_claimdepartment }
+
+    sd_service_desk.claim.form.add:
+        class: %sd_service_desk.claim.form.add.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: sd_servicedeskbundle_claim }

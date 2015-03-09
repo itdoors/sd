@@ -125,7 +125,7 @@ class Claim
      *
      * @ORM\Column(name="org_type", type="organizationType", nullable=true)
      */
-    protected $organizationType;
+    protected $organizationType = OrganizationType::ONCE;
 
     /**
      * @var string

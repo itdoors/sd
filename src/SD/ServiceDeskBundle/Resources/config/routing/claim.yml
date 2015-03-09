@@ -46,6 +46,10 @@ claim_add_msg:
     path:     /add_msg
     defaults: { _controller: "SDServiceDeskBundle:Claim:addMsg" }
 
+claim_new_immovable_target:
+    path:     /claim_new_immovable_target
+    defaults: { _controller: "SDServiceDeskBundle:Claim:newImmovableTarget" }
+
 claim_add_fin:
     path:     /claim_add_fin
     defaults: { _controller: "SDServiceDeskBundle:Claim:addFinanceRecord" }

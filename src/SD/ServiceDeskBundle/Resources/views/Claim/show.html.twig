@@ -92,13 +92,15 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Organization{% endtrans %}</td>
-                                                        <td>{{ entity.targetDepartment ? entity.targetDepartment.organization : '' }}</td>
+                                                        <td>{{ entity.targetDepartment is defined ? entity.targetDepartment.organization : '' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Address{% endtrans %}</td>
                                                         <td>
-                                                            {% if entity.targetDepartment %}
+                                                            {% if entity.targetDepartment  is defined %}
                                                                 {{ entity.targetDepartment.city }}, {{ entity.targetDepartment.address }}
+                                                            {% elseif entity.claimTarget is defined %}
+                                                                {{ entity.claimTarget }}
                                                             {% endif %}
                                                         </td>
                                                     </tr>

@@ -120,3 +120,6 @@ ALTER TABLE sd_claim ADD claim_target_id INT DEFAULT NULL;
 ALTER TABLE sd_claim DROP targetindividual_id;
 ALTER TABLE sd_claim ADD CONSTRAINT FK_A497B2F464FE7E09 FOREIGN KEY (claim_target_id) REFERENCES sd_claim_target (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_A497B2F464FE7E09 ON sd_claim (claim_target_id);
+
+ALTER TABLE sd_claim_target ADD street TEXT DEFAULT NULL;
+ALTER TABLE sd_claim_target ADD bld TEXT DEFAULT NULL;

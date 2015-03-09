@@ -44,4 +44,8 @@ class ClaimOnce extends Claim
     {
         return $this->claimTarget;
     }
+
+    public function __toString () {
+        return (string) $this->getId();
+    }
 }

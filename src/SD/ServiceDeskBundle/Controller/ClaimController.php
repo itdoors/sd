@@ -24,6 +24,8 @@ use SD\ServiceDeskBundle\Entity\StatusType;
 use SD\BusinessRoleBundle\Entity\Client;
 use Lists\IndividualBundle\Entity\Individual;
 use SD\ServiceDeskBundle\Entity\ClaimOnce;
+use SD\ServiceDeskBundle\Entity\ImmovableClaimTarget;
+use SD\ServiceDeskBundle\Form\ImmovableClaimTargetType;
 
 /**
  * Claim controller.
@@ -532,6 +534,31 @@ class ClaimController extends Controller
     }
 
     /**
+     * Adds new ImmovableTarget to the claim (via ajax).
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function newImmovableTargetAction(Request $request)
+    {
+        $entity = new ImmovableClaimTarget();
+
+        $form = $this->createImmovableTargetForm($entity);
+        $form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
+
+        $response = [];
+        $response['id'] = $entity->getId();
+        $response['name'] = $entity->__toString();
+
+        return new JsonResponse($response);
+    }
+
+    /**
      * Adds CostNal to the claim's financeRecord (via ajax).
      *
      * @param Request $request
@@ -752,8 +779,25 @@ class ClaimController extends Controller
      */
     private function createCreateForm(Claim $entity)
     {
-        $form = $this->createForm(new ClaimType(), $entity, array(
+        $form = $this->createForm(new ClaimType($this->container), $entity, array(
             'action' => $this->generateUrl('claim_create'),
+            'method' => 'POST',
+        ));
+
+        return $form;
+    }
+
+    /**
+     * Creates a form to create a ImmovableClaimTarget entity.
+     *
+     * @param ImmovableClaimTarget $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createImmovableTargetForm(ImmovableClaimTarget $entity)
+    {
+        $form = $this->createForm(new ImmovableClaimTargetType(), $entity, array(
+            'action' => $this->generateUrl('claim_new_immovable_target'),
             'method' => 'POST',
         ));
 
@@ -818,9 +862,10 @@ class ClaimController extends Controller
      */
     public function newAction()
     {
-        $entity = new Claim();
+        $entity = new ClaimOnce();
         $form   = $this->createCreateForm($entity);
         $newClient = (new Client())->setIndividual(new Individual());
+        $newTargetForm = $this->createImmovableTargetForm(new ImmovableClaimTarget());
         $newClientForm = $this->createForm('clientAddForm', $newClient, array(
             'action' => $this->generateUrl('client_create'),
             'method' => 'POST',
@@ -831,7 +876,8 @@ class ClaimController extends Controller
         return $this->render('SDServiceDeskBundle:Claim:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-            'indForm' => $newClientForm->createView()
+            'indForm' => $newClientForm->createView(),
+            'newTargetForm' => $newTargetForm->createView()
         ));
     }
 
