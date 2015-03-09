@@ -82,7 +82,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Created{% endtrans %}</td>
-                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i:s') }}{% endif %}</td>
+                                                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('d.m.y H:i') }}{% endif %}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Closed{% endtrans %}</td>
@@ -111,7 +111,7 @@
                                         </div>
                                     </div>
                                     {% if access.canCloseClaim() and not entity.closedAt %}
-                                    <button class="btn red" data-id="{{ entity.id }}" data-url="{{ path('claim_close') }}" id="close_button">{% trans %}Close claim{% endtrans %}</button>
+                                    <button class="btn red margin-bottom-10" data-id="{{ entity.id }}" data-url="{{ path('claim_close') }}" id="close_button">{% trans %}Close claim{% endtrans %}</button>
                                     <script>
                                         $(document).ready(function() {
                                             $('#close_button').on('click', function () {
@@ -190,6 +190,14 @@
                                                 <tr>
                                                     <td>{% trans %}Costs{% endtrans %}</td>
                                                     <td>{{ entity.costsAllNDS }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{% trans %}Works{% endtrans %}</td>
+                                                    <td>
+                                                        {% for key,record in entity.financeRecords %}
+                                                            {{ key + 1 }}. {{ record.work }}<br>
+                                                        {% endfor %}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>{% trans %}Smeta Status{% endtrans %}</td>
