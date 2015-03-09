@@ -547,6 +547,11 @@ class ClaimController extends Controller
         $form = $this->createImmovableTargetForm($entity);
         $form->handleRequest($request);
 
+        $fullAddress = explode(',', $entity->getAddress());
+        $f = $request->request->get('immovableClaimTargetForm');
+        $entity->setCity($fullAddress[1]);
+        $entity->setAddress($fullAddress[0] . ', ' . $f['bld']);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
         $em->flush();

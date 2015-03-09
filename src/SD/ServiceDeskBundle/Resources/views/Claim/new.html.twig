@@ -63,7 +63,7 @@
                 $(document).ready(function() {
                     initialize();
                     function initialize() {
-                        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('immovableClaimTargetForm_street'), { types: ['geocode'] });
+                        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('immovableClaimTargetForm_address'), { types: ['geocode'] });
                     }
                     {#SD.select2('#' + '{{ form.vars.name }}' + '_claimTarget', {});#}
                     $('.itdoors-date-picker').datepicker({
@@ -261,8 +261,8 @@
                                 <div class="form-group">
                                     <label class="required control-label col-md-3">{% trans %}Street{% endtrans%}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(newTargetForm.street, {'attr' : {'class' : 'form-control autocomplete', 'placeholder': 'Input...' | trans}}) }}
-                                        {% if newTargetForm.street.vars.errors|length %}{{ form_errors(newTargetForm.street) }}{% endif %}
+                                        {{ form_widget(newTargetForm.address, {'attr' : {'class' : 'form-control autocomplete', 'placeholder': 'Input...' | trans}}) }}
+                                        {% if newTargetForm.address.vars.errors|length %}{{ form_errors(newTargetForm.address) }}{% endif %}
                                     </div>
                                 </div>
                                 <div class="form-group">

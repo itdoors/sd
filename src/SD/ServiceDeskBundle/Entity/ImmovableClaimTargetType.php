@@ -4,9 +4,9 @@ namespace SD\ServiceDeskBundle\Entity;
 
 final class ImmovableClaimTargetType extends \ITDoors\DBAL\EnumType
 {
-    const HOUSE = 'house';
-    const VILLA = 'villa';
-    const FLAT = 'flat';
+    const HOUSE = 'Дом';
+    const VILLA = 'Дача';
+    const FLAT = 'Квартира';
 
     protected static $name = 'immovableClaimTargetType';
 

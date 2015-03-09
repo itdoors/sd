@@ -21,16 +21,16 @@ class ImmovableClaimTarget extends ClaimTarget
     /**
      * @var string
      *
-     * @ORM\Column(name="street", type="text", nullable=true)
+     * @ORM\Column(name="city", type="text", nullable=true)
      */
-    protected $street;
+    protected $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="bld", type="text", nullable=true)
+     * @ORM\Column(name="address", type="text", nullable=true)
      */
-    protected $bld;
+    protected $address;
 
     /**
      * Set type
@@ -57,60 +57,55 @@ class ImmovableClaimTarget extends ClaimTarget
     }
 
     /**
-     * Set street
+     * Set city
      *
-     * @param string $street
+     * @param string $city
      *
      * @return ImmovableClaimTarget
      */
-    public function setStreet($street)
+    public function setCity($city)
     {
-        $this->street = $street;
+        $this->city = $city;
     
         return $this;
     }
 
     /**
-     * Get street
+     * Get city
      *
      * @return string 
      */
-    public function getStreet()
+    public function getCity()
     {
-        return $this->street;
+        return $this->city;
     }
 
     /**
-     * Set bld
+     * Set address
      *
-     * @param string $bld
+     * @param string $address
      *
      * @return ImmovableClaimTarget
      */
-    public function setBld($bld)
+    public function setAddress($address)
     {
-        $this->bld = $bld;
+        $this->address = $address;
     
         return $this;
     }
 
     /**
-     * Get bld
+     * Get address
      *
      * @return string 
      */
-    public function getBld()
+    public function getAddress()
     {
-        return $this->bld;
+        return $this->address;
     }
 
-    /**
-     * __toString
-     *
-     * @return string
-     */
     public function __toString()
     {
-        return $this->bld . ', ' . $this->street;
+        return $this->city . ', ' . $this->address . ' (' . $this->type . ')';
     }
 }

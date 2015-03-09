@@ -19,8 +19,8 @@ class ImmovableClaimTargetType extends AbstractType
     {
         $builder
             ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ImmovableClaimTargetType::values()))
-            ->add('street', 'text')
-            ->add('bld', 'text')
+            ->add('address', 'text')
+            ->add('bld', 'text', array('mapped' => false))
         ;
     }
 

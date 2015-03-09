@@ -23,9 +23,11 @@ class ClaimOnceRepository extends EntityRepository
             ->select('c as claim')
             ->addSelect('im')
             ->addSelect('cust')
+            ->addSelect('tar')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
             ->leftJoin('c.importance', 'im')
+            ->leftJoin('c.claimTarget', 'tar')
             ->join('c.customer', 'cust')
             ->join('cust.individual', 'i');
         if ($closed) {
