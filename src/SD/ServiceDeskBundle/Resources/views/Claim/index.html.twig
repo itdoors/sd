@@ -176,9 +176,15 @@
                         "searchable": false,
                         "targets": [0]
                     }],
+                    {% if not isClient %}
                     "order": [
-                        [0, "desc"]
-                    ] // set first column as a default sort by asc
+                        [9, "desc"]
+                    ]
+                    {% else %}
+                    "order": [
+                        [7, "desc"]
+                    ]
+                    {% endif %}
                 });
             };
         
