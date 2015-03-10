@@ -95,6 +95,10 @@
                                                         <td>{{ entity.targetDepartment is defined ? entity.targetDepartment.organization : '' }}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td>{% trans %}Come Time{% endtrans %}</td>
+                                                        <td>{% if entity.comeTime %}{{ entity.comeTime|date('d.m.y H:i') }}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
                                                         <td>{% trans %}Address{% endtrans %}</td>
                                                         <td>
                                                             {% if entity.targetDepartment  is defined %}

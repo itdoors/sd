@@ -67,6 +67,13 @@ class Claim
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="come_time", type="datetime", nullable=true)
+     */
+    protected $comeTime;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="closedAt", type="datetime", nullable=true)
      */
     protected $closedAt;
@@ -871,6 +878,30 @@ class Claim
     public function getOldId()
     {
         return $this->oldId;
+    }
+
+    /**
+     * Set comeTime
+     *
+     * @param \DateTime $comeTime
+     *
+     * @return Claim
+     */
+    public function setComeTime($comeTime)
+    {
+        $this->comeTime = $comeTime;
+
+        return $this;
+    }
+
+    /**
+     * Get comeTime
+     *
+     * @return \DateTime
+     */
+    public function getComeTime()
+    {
+        return $this->comeTime;
     }
 
     protected $incomeNDS = 0;

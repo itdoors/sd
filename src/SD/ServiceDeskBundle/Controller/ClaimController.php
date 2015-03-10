@@ -754,25 +754,21 @@ class ClaimController extends Controller
     public function createAction(Request $request)
     {
         $entity = new ClaimOnce();
+        $f = $request->request->get('sd_servicedeskbundle_claim');
+        $entity->setComeTime(new \DateTime($f['comeTime']));
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        
+
         $entity->setStatus(StatusType::OPEN);
         $entity->setFinStatus(FinStatusType::OPENED);
         $entity->setCreatedAt(new \DateTime());
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
 
-            return $this->redirect($this->generateUrl('claim_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('SDServiceDeskBundle:Claim:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        return $this->redirect($this->generateUrl('claim_show', array('id' => $entity->getId())));
     }
 
     /**

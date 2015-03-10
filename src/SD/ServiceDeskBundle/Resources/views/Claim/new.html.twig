@@ -29,6 +29,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}} " />
 
 {% endblock %}
@@ -41,6 +42,8 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
 
@@ -74,6 +77,13 @@
                         language: 'ru',
                         startView: 'decade',
                         weekStart: 1
+                    });
+                    $('.form_datetime').datetimepicker({
+                        autoclose: true,
+                        isRTL: Metronic.isRTL(),
+                        format: "dd.mm.yyyy hh:ii",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru'
                     });
                     $('#' + '{{ form.vars.name }}' + '_createdAt').datepicker( "setDate", new Date());
                     $('.textear-edit').summernote({
@@ -171,6 +181,13 @@
             {{ form_start(form, {'attr' : {'class' : 'form-horizontal'}}) }}
             <div class="form-body">
                 <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Self Organization{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.selfOrganization, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
+                        {% if form.selfOrganization.vars.errors|length %}{{ form_errors(form.selfOrganization) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Claim Target{% endtrans%}</label>
                     <div class="col-md-9">
                         {{ form_widget(form.claimTarget, {'attr' : {'class' : 'form-control input-large input-inline select2me', 'placeholder': 'Select...' | trans}}) }}
@@ -202,6 +219,13 @@
                     <div class="col-md-9">
                         {{ form_widget(form.importance, {'attr' : {'class' : 'form-control input-large select2me', 'data-placeholder': 'Select...' | trans}}) }}
                         {% if form.importance.vars.errors|length %}{{ form_errors(form.importance) }}{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Come Time{% endtrans%}</label>
+                    <div class="col-md-3">
+                            {{ form_widget(form.comeTime, {'attr' : {'class' : 'form-control form_datetime'}}) }}
+                            {% if form.comeTime.vars.errors|length %}{{ form_errors(form.comeTime) }}{% endif %}
                     </div>
                 </div>
                 <div class="form-group">

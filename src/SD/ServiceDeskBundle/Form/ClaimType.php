@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * ClaimType
  */
@@ -42,6 +44,20 @@ class ClaimType extends AbstractType
 //                    )),
 //                )
 //            ))
+            ->add('selfOrganization', 'entity', array(
+                'class' => 'ListsOrganizationBundle:Organization',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('o')
+                        ->where('o.isSelf = true')
+                        ->orderBy('o.id', 'ASC');
+                }
+            ))
+            ->add('comeTime', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'dd.mm.yyyy hh:ii',
+                'mapped' => false,
+                'required' => false
+            ))
             ->add('claimTarget')
             ->add('type', 'choice', array('choices'   => \SD\ServiceDeskBundle\Entity\ClaimType::values()))
             ->add('importance')

@@ -57,6 +57,7 @@ class ClaimDepartmentController extends Controller
         }
 
         $entity->setTargetDepartment($targetDepartment);
+        $entity->setComeTime(new \DateTime($form['comeTime']));
         $entity->setCreatedAt(new \DateTime());
         $entity->setStatus(StatusType::OPEN);
         $entity->setFinStatus(FinStatusType::OPENED);

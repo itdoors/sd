@@ -87,6 +87,12 @@ class ClaimDepartmentType extends AbstractType
                     )),
                 )
             ))
+            ->add('comeTime', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'dd.mm.yyyy hh:ii',
+                'mapped' => false,
+                'required' => false
+            ))
             ->add('files', 'collection', array(
                 'required' => false,
                 'type'=> new \SD\ServiceDeskBundle\Form\ClaimFileForm(),
