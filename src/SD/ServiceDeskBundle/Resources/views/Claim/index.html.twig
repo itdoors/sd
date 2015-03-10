@@ -73,7 +73,7 @@
                     <tbody role="alert" aria-live="polite" aria-relevant="all">
                         {% for entity in entities %}
                         <tr>
-                            <td><a href="{{ path('claim_show', { 'id': entity['claim'].id }) }}">{{ entity['claim'].id }}</a></td>
+                            <td><a href="{{ path('claim_show', { 'id': entity['claim'].id }) }}">{{ entity['claim'].oldId ? entity['claim'].oldId : entity['claim'].id }}</a></td>
                             {% if not isClient %}
                             <td>
                                 {% if entity['claim'].customer %}
@@ -177,7 +177,7 @@
                         "targets": [0]
                     }],
                     "order": [
-                        [1, "asc"]
+                        [0, "desc"]
                     ] // set first column as a default sort by asc
                 });
             };

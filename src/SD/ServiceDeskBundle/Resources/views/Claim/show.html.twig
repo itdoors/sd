@@ -18,7 +18,7 @@
             <a href="{{ path('claim') }}" title="{% trans %}Claims{% endtrans %}">{% trans %}Claims{% endtrans %}</a>
         </li>
         <li>
-            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.id }}</a>
+            <a href="{{ path('client_show', { 'id': entity.customer.id }) }}">{{ entity.oldId ? entity.oldId : entity.id }}</a>
         </li>
     </ul>
 {% endblock %}
@@ -68,7 +68,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{% trans %}Number{% endtrans %}</td>
-                                                        <td>#{{ entity.id }} {{ access.name }}</td>
+                                                        <td>#{{ entity.oldId ? entity.oldId : entity.id }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{% trans %}Claim Type{% endtrans %}</td>

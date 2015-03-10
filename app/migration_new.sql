@@ -123,3 +123,4 @@ CREATE INDEX IDX_A497B2F464FE7E09 ON sd_claim (claim_target_id);
 
 ALTER TABLE sd_claim_target ADD city TEXT DEFAULT NULL;
 ALTER TABLE sd_claim_target ADD address TEXT DEFAULT NULL;
+ALTER TABLE sd_claim ADD old_id INT DEFAULT NULL;

@@ -185,6 +185,7 @@ class MigrationServiceDeskCommand extends ContainerAwareCommand
             $res = memory_get_usage ().'--'.'type: '.$claimType;
             $output->writeln($res);
 
+            $sd_claim->setOldId($claim['id']);
             $sd_claim->setType($claimType);
             $sd_claim->setStatus($claimStatus);
 

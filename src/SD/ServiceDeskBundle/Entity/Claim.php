@@ -30,6 +30,13 @@ class Claim
     protected $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
+     */
+    protected $oldId;
+
+    /**
      * @var ClaimType
      *
      * @ORM\Column(name="type", type="claimType")
@@ -839,6 +846,31 @@ class Claim
     public function getOrganizationType()
     {
         return $this->organizationType;
+    }
+
+
+    /**
+     * Set oldId
+     *
+     * @param integer $oldId
+     *
+     * @return Claim
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+
+        return $this;
+    }
+
+    /**
+     * Get oldId
+     *
+     * @return integer
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
     }
 
     protected $incomeNDS = 0;
