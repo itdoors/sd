@@ -102,14 +102,16 @@ class ProjectService
             if (empty($isParticipation)) {
                 $projectStateTender->setUserClosed($this->user);
                 $projectStateTender->setReasonClosed('Не участвуем');
-            } else {
+            } else {                
                 $status = $this->em->getRepository('ListsProjectBundle:StatusProjectStateTender')
                     ->findOneBy(array('alias' => 'collecting_documents'));
-                $projectStateTender->setStatusProjectStateTender($status);
+                $projectStateTender->setStatus($status);
             }
+            
             $projectStateTender->setReason($reason);
             $this->em->persist($projectStateTender);
             $this->em->flush();
+            
         }
     }
     /**
